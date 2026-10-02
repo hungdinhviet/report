@@ -32,7 +32,7 @@ body {
 
 .topbar {
     height: 54px;
-    background: #ffffff;
+    background: #fff;
     border-bottom: 1px solid #dcdfe4;
     display: flex;
     align-items: center;
@@ -62,7 +62,7 @@ button:hover {
 
 button.primary {
     background: #1976d2;
-    color: white;
+    color: #fff;
     border-color: #1976d2;
 }
 
@@ -91,7 +91,7 @@ button.primary:hover {
     position: absolute;
     inset: 0;
     overflow: auto;
-    background: white;
+    background: #fff;
 }
 
 /* =========================================================
@@ -105,13 +105,6 @@ table {
     width: max-content;
     min-width: 100%;
 }
-
-/*
-   QUAN TRỌNG:
-   Không sticky toàn bộ THEAD.
-   Sticky riêng từng ô giúp 2 hàng
-   header + search khớp chính xác.
-*/
 
 thead {
     position: relative;
@@ -151,6 +144,7 @@ th {
     height: 38px;
     min-height: 38px;
     max-height: 38px;
+
     padding: 0 8px;
 
     position: sticky;
@@ -268,8 +262,10 @@ td {
     position: absolute;
     top: 0;
     right: -3px;
+
     width: 7px;
     height: 100%;
+
     cursor: col-resize;
     z-index: 100;
 }
@@ -277,6 +273,112 @@ td {
 .resize-handle:hover {
     background: rgba(25,118,210,.3);
 }
+
+/* =========================================================
+   FREEZE COLUMNS
+   FIX QUAN TRỌNG
+========================================================= */
+
+/*
+   Body của cột cố định
+   nằm trên các cột đang cuộn.
+*/
+tbody .frozen-column {
+    position: sticky !important;
+    z-index: 90 !important;
+    background: #fff;
+}
+
+
+/*
+   Header của cột cố định
+   nằm trên body.
+*/
+thead .frozen-column.header-cell {
+    position: sticky !important;
+    z-index: 110 !important;
+    background: #f1f3f5;
+}
+
+
+/*
+   Search của cột cố định
+   cũng nằm trên các cột đang cuộn.
+*/
+thead .frozen-column.search-cell {
+    position: sticky !important;
+    z-index: 109 !important;
+    background: #fafafa;
+}
+
+
+/*
+   Filter + frozen
+*/
+thead th.filtered.frozen-column.header-cell {
+    background: #c8f7c5 !important;
+    z-index: 110 !important;
+}
+
+
+/*
+   Sort + frozen
+*/
+thead th.sorted.frozen-column.header-cell {
+    background: #d8ebff !important;
+    z-index: 110 !important;
+}
+
+
+/*
+   Filter + Sort + Frozen
+*/
+thead th.filtered.sorted.frozen-column.header-cell {
+    background: #bdecc4 !important;
+    z-index: 110 !important;
+}
+
+
+/*
+   Header thường
+*/
+thead .header-cell {
+    z-index: 80;
+}
+
+
+/*
+   Search thường
+*/
+thead .search-cell {
+    z-index: 79;
+}
+
+
+/*
+   Cột cố định ở header
+   ưu tiên cao nhất.
+*/
+thead tr.header-row th.frozen-column {
+    z-index: 120 !important;
+}
+
+
+/*
+   Cột cố định ở search
+*/
+thead tr.search-row th.frozen-column {
+    z-index: 119 !important;
+}
+
+
+/*
+   Body frozen vẫn thấp hơn header.
+*/
+tbody td.frozen-column {
+    z-index: 90 !important;
+}
+
 
 /* =========================================================
    FILTER MENU
@@ -289,7 +391,7 @@ td {
     width: 330px;
     max-height: 560px;
 
-    background: white;
+    background: #fff;
 
     border: 1px solid #cfd4da;
     border-radius: 7px;
@@ -297,7 +399,6 @@ td {
     box-shadow: 0 8px 30px rgba(0,0,0,.18);
 
     display: none;
-
     overflow: hidden;
 }
 
@@ -369,16 +470,13 @@ td {
 
 .filter-sort-section {
     border-top: 1px solid #e2e5e9;
-
     padding: 8px;
-
     background: #fafafa;
 }
 
 .filter-sort-title {
     font-size: 12px;
     font-weight: 700;
-
     margin-bottom: 6px;
 }
 
@@ -397,7 +495,6 @@ td {
     display: flex;
     align-items: center;
     gap: 7px;
-
     margin-top: 8px;
 }
 
@@ -458,7 +555,7 @@ td {
 
     overflow-y: auto;
 
-    background: white;
+    background: #fff;
 
     border: 1px solid #d0d4d8;
     border-radius: 8px;
@@ -492,21 +589,17 @@ td {
 
 .settings-section {
     padding: 13px 15px;
-
     border-bottom: 1px solid #e2e5e9;
 }
 
 .settings-section h3 {
     margin: 0 0 10px 0;
-
     font-size: 14px;
 }
 
 .settings-help {
     font-size: 11px;
-
     color: #777;
-
     margin-bottom: 8px;
 }
 
@@ -515,14 +608,12 @@ td {
     border-radius: 5px;
 
     max-height: 180px;
-
     overflow-y: auto;
 }
 
 .column-option {
     display: flex;
     align-items: center;
-
     gap: 7px;
 
     padding: 6px 8px;
@@ -537,15 +628,12 @@ td {
 .setting-row {
     display: flex;
     align-items: center;
-
     gap: 8px;
-
     margin-bottom: 9px;
 }
 
 .setting-row label {
     min-width: 105px;
-
     font-size: 13px;
 }
 
@@ -568,25 +656,20 @@ td {
     align-items: center;
 
     font-size: 13px;
-
     margin-bottom: 8px;
 }
 
 .color-row {
     display: flex;
     align-items: center;
-
     gap: 8px;
-
     margin-bottom: 8px;
 }
 
 .color-row input[type="color"] {
     width: 45px;
     height: 30px;
-
     border: none;
-
     padding: 0;
 }
 
@@ -608,7 +691,7 @@ td {
 
     z-index: 12000;
 
-    background: white;
+    background: #fff;
 
     border: 1px solid #cfd4da;
     border-radius: 5px;
@@ -622,10 +705,8 @@ td {
 
 .context-menu button {
     width: 100%;
-
     border: none;
     border-radius: 0;
-
     text-align: left;
 }
 
@@ -668,34 +749,6 @@ td {
 }
 
 /* =========================================================
-   FREEZE COLUMNS
-========================================================= */
-
-.frozen-column {
-    position: sticky !important;
-}
-
-tbody .frozen-column {
-    background: white;
-}
-
-thead .frozen-column {
-    background: #f1f3f5;
-}
-
-thead th.filtered.frozen-column {
-    background: #c8f7c5 !important;
-}
-
-thead th.sorted.frozen-column {
-    background: #d8ebff !important;
-}
-
-thead th.filtered.sorted.frozen-column {
-    background: #bdecc4 !important;
-}
-
-/* =========================================================
    MOBILE
 ========================================================= */
 
@@ -712,7 +765,6 @@ thead th.filtered.sorted.frozen-column {
     .settings-panel {
         left: 5px;
         right: 5px;
-
         width: auto;
     }
 
@@ -755,7 +807,7 @@ thead th.filtered.sorted.frozen-column {
 
 
 <!-- =======================================================
-     MAIN TABLE
+     MAIN
 ======================================================= -->
 
 <div class="main">
@@ -819,15 +871,11 @@ thead th.filtered.sorted.frozen-column {
 
     <div class="filter-buttons">
 
-        <button
-            onclick="selectAllFilterValues()"
-        >
+        <button onclick="selectAllFilterValues()">
             Chọn tất cả
         </button>
 
-        <button
-            onclick="clearFilterValues()"
-        >
+        <button onclick="clearFilterValues()">
             Bỏ chọn
         </button>
 
@@ -838,7 +886,6 @@ thead th.filtered.sorted.frozen-column {
         id="filterValues"
     ></div>
 
-
     <div class="filter-sort-section">
 
         <div class="filter-sort-title">
@@ -847,21 +894,15 @@ thead th.filtered.sorted.frozen-column {
 
         <div class="sort-buttons">
 
-            <button
-                onclick="setCurrentSort('asc')"
-            >
+            <button onclick="setCurrentSort('asc')">
                 ▲ Tăng dần
             </button>
 
-            <button
-                onclick="setCurrentSort('desc')"
-            >
+            <button onclick="setCurrentSort('desc')">
                 ▼ Giảm dần
             </button>
 
-            <button
-                onclick="removeCurrentSort()"
-            >
+            <button onclick="removeCurrentSort()">
                 ✕ Bỏ sort
             </button>
 
@@ -882,9 +923,7 @@ thead th.filtered.sorted.frozen-column {
                 placeholder="VD: 1"
             >
 
-            <button
-                onclick="applyCurrentPriority()"
-            >
+            <button onclick="applyCurrentPriority()">
                 Áp dụng
             </button>
 
@@ -892,12 +931,9 @@ thead th.filtered.sorted.frozen-column {
 
     </div>
 
-
     <div class="filter-footer">
 
-        <button
-            onclick="cancelFilter()"
-        >
+        <button onclick="cancelFilter()">
             Hủy
         </button>
 
@@ -967,7 +1003,6 @@ thead th.filtered.sorted.frozen-column {
         <h3>
             2. Định dạng
         </h3>
-
 
         <div class="setting-row">
 
@@ -1192,9 +1227,7 @@ thead th.filtered.sorted.frozen-column {
 
         <div class="settings-buttons">
 
-            <button
-                onclick="resetAllSettings()"
-            >
+            <button onclick="resetAllSettings()">
                 Khôi phục cài đặt
             </button>
 
@@ -1221,9 +1254,7 @@ thead th.filtered.sorted.frozen-column {
     id="contextMenu"
 >
 
-    <button
-        onclick="renameFromContextMenu()"
-    >
+    <button onclick="renameFromContextMenu()">
         ✏ Đổi tên cột
     </button>
 
@@ -1245,7 +1276,7 @@ const SHEET_CSV_URL =
 ========================================================= */
 
 const STORAGE_KEY =
-    "report_google_sheet_table_v8";
+    "report_google_sheet_table_v9";
 
 
 /* =========================================================
@@ -1350,19 +1381,11 @@ document.addEventListener(
         await refreshData();
 
 
-        /*
-           Tự động cập nhật mỗi 5 phút
-        */
-
         setInterval(
             refreshData,
             5 * 60 * 1000
         );
 
-
-        /*
-           Click ngoài filter menu
-        */
 
         document.addEventListener(
             "click",
@@ -1399,10 +1422,6 @@ document.addEventListener(
         );
 
 
-        /*
-           Chuột phải header
-        */
-
         document.addEventListener(
             "contextmenu",
             function(event) {
@@ -1432,11 +1451,13 @@ document.addEventListener(
 
 
                 menu.style.left =
-                    event.clientX + "px";
+                    event.clientX +
+                    "px";
 
 
                 menu.style.top =
-                    event.clientY + "px";
+                    event.clientY +
+                    "px";
 
 
                 menu.classList.add(
@@ -1490,11 +1511,7 @@ function loadStorage() {
             );
 
 
-        if (!raw) {
-
-            return;
-
-        }
+        if (!raw) return;
 
 
         const data =
@@ -2179,11 +2196,7 @@ function parseVietnameseDate(
         ).trim();
 
 
-    if (!text) {
-
-        return null;
-
-    }
+    if (!text) return null;
 
 
     let match =
@@ -2216,8 +2229,7 @@ function parseVietnameseDate(
 
         if (
             date.getFullYear() === year &&
-            date.getMonth() ===
-                month - 1 &&
+            date.getMonth() === month - 1 &&
             date.getDate() === day
         ) {
 
@@ -2321,16 +2333,12 @@ function formatDateValue(
         );
 
 
-    const year =
-        date.getFullYear();
-
-
     return (
         day +
         "/" +
         month +
         "/" +
-        year
+        date.getFullYear()
     );
 
 }
@@ -2360,11 +2368,7 @@ function parseVietnameseNumber(
         ).trim();
 
 
-    if (!text) {
-
-        return null;
-
-    }
+    if (!text) return null;
 
 
     text =
@@ -2378,12 +2382,6 @@ function parseVietnameseNumber(
                 ""
             );
 
-
-    /*
-       100.000.000,1
-       →
-       100000000.1
-    */
 
     if (
         text.includes(".") &&
@@ -2402,7 +2400,6 @@ function parseVietnameseNumber(
                 );
 
     }
-
     else if (
         text.includes(",")
     ) {
@@ -2414,7 +2411,6 @@ function parseVietnameseNumber(
             );
 
     }
-
     else {
 
         const parts =
@@ -2431,13 +2427,7 @@ function parseVietnameseNumber(
         }
         else if (
             parts.length === 2 &&
-            parts[1].length === 3 &&
-            /^\d+$/.test(
-                parts[0]
-            ) &&
-            /^\d+$/.test(
-                parts[1]
-            )
+            parts[1].length === 3
         ) {
 
             text =
@@ -2459,99 +2449,11 @@ function parseVietnameseNumber(
         Number(text);
 
 
-    if (
-        Number.isFinite(
-            number
-        )
-    ) {
-
-        return number;
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   DETECT NUMERIC COLUMN
-========================================================= */
-
-function isNumericColumn(
-    index
-) {
-
-    const header =
-        headers[index];
-
-
-    if (
-        DATE_COLUMNS.has(
-            header
-        )
-    ) {
-
-        return false;
-
-    }
-
-
-    const values =
-        rows
-            .map(
-                row =>
-                    String(
-                        row[header] ??
-                        ""
-                    ).trim()
-            )
-            .filter(
-                value =>
-                    value !== ""
-            )
-            .slice(
-                0,
-                100
-            );
-
-
-    if (
-        values.length === 0
-    ) {
-
-        return false;
-
-    }
-
-
-    let numericCount =
-        0;
-
-
-    values.forEach(
-        value => {
-
-            if (
-                parseVietnameseNumber(
-                    value
-                ) !== null
-            ) {
-
-                numericCount++;
-
-            }
-
-        }
-    );
-
-
-    return (
-        numericCount /
-        values.length >=
-        0.8
-    );
+    return Number.isFinite(
+        number
+    )
+        ? number
+        : null;
 
 }
 
@@ -2609,150 +2511,61 @@ function getSortValue(
         originalHeader;
 
 
+    const raw =
+        row[sortHeader] ??
+        row[originalHeader] ??
+        "";
+
+
+    const numeric =
+        parseVietnameseNumber(
+            raw
+        );
+
+
     if (
-        row[sortHeader] !==
-        undefined
+        numeric !== null &&
+        !DATE_COLUMNS.has(
+            originalHeader
+        )
     ) {
 
-        const sortRaw =
-            row[sortHeader];
-
-
-        const numeric =
-            parseVietnameseNumber(
-                sortRaw
-            );
-
-
-        if (
-            numeric !== null
-        ) {
-
-            return {
-
-                type: "number",
-
-                value: numeric
-
-            };
-
-        }
-
-
-        const date =
-            parseVietnameseDate(
-                sortRaw
-            );
-
-
-        if (date) {
-
-            return {
-
-                type: "date",
-
-                value:
-                    date.getTime()
-
-            };
-
-        }
-
-
         return {
-
-            type: "text",
-
-            value:
-                String(
-                    sortRaw
-                ).toLowerCase()
-
+            type: "number",
+            value: numeric
         };
 
     }
 
 
-    const raw =
-        row[
-            originalHeader
-        ] ??
-        "";
+    const date =
+        parseVietnameseDate(
+            raw
+        );
 
 
-    if (
-        DATE_COLUMNS.has(
-            originalHeader
-        )
-    ) {
+    if (date) {
 
-        const date =
-            parseVietnameseDate(
-                raw
-            );
-
-
-        if (date) {
-
-            return {
-
-                type: "date",
-
-                value:
-                    date.getTime()
-
-            };
-
-        }
-
-    }
-
-
-    if (
-        isNumericColumn(
-            columnIndex
-        )
-    ) {
-
-        const number =
-            parseVietnameseNumber(
-                raw
-            );
-
-
-        if (
-            number !== null
-        ) {
-
-            return {
-
-                type: "number",
-
-                value: number
-
-            };
-
-        }
+        return {
+            type: "date",
+            value: date.getTime()
+        };
 
     }
 
 
     return {
-
         type: "text",
-
-        value:
-            String(
-                raw
-            ).toLowerCase()
-
+        value: String(
+            raw
+        ).toLowerCase()
     };
 
 }
 
 
 /* =========================================================
-   SORT ROWS
+   SORT
 ========================================================= */
 
 function sortRows(
@@ -2855,15 +2668,12 @@ function sortRows(
                     );
 
 
-                let result =
-                    0;
+                let result = 0;
 
 
                 if (
-                    av.type ===
-                        "number" &&
-                    bv.type ===
-                        "number"
+                    av.type === "number" &&
+                    bv.type === "number"
                 ) {
 
                     result =
@@ -2872,10 +2682,8 @@ function sortRows(
 
                 }
                 else if (
-                    av.type ===
-                        "date" &&
-                    bv.type ===
-                        "date"
+                    av.type === "date" &&
+                    bv.type === "date"
                 ) {
 
                     result =
@@ -2894,11 +2702,8 @@ function sortRows(
                             ),
                             "vi",
                             {
-                                numeric:
-                                    true,
-
-                                sensitivity:
-                                    "base"
+                                numeric: true,
+                                sensitivity: "base"
                             }
                         );
 
@@ -2911,7 +2716,7 @@ function sortRows(
 
                     return (
                         order.direction ===
-                            "asc"
+                        "asc"
                     )
                         ? result
                         : -result;
@@ -2930,7 +2735,7 @@ function sortRows(
 
 
 /* =========================================================
-   FILTER ROWS
+   FILTER
 ========================================================= */
 
 function filterRows(
@@ -2939,10 +2744,6 @@ function filterRows(
 
     return data.filter(
         row => {
-
-            /*
-               VALUE FILTER
-            */
 
             for (
                 const [
@@ -2962,11 +2763,7 @@ function filterRows(
 
                 if (
                     !headers[index]
-                ) {
-
-                    continue;
-
-                }
+                ) continue;
 
 
                 const raw =
@@ -2979,9 +2776,7 @@ function filterRows(
                 const selectedStrings =
                     selected.map(
                         value =>
-                            String(
-                                value
-                            )
+                            String(value)
                     );
 
 
@@ -2998,10 +2793,6 @@ function filterRows(
             }
 
 
-            /*
-               SEARCH FILTER
-            */
-
             for (
                 const [
                     indexString,
@@ -3014,18 +2805,13 @@ function filterRows(
 
                 const text =
                     String(
-                        search ||
-                        ""
+                        search || ""
                     )
                         .trim()
                         .toLowerCase();
 
 
-                if (!text) {
-
-                    continue;
-
-                }
+                if (!text) continue;
 
 
                 const index =
@@ -3036,19 +2822,14 @@ function filterRows(
 
                 if (
                     !headers[index]
-                ) {
-
-                    continue;
-
-                }
+                ) continue;
 
 
                 const raw =
                     displayValue(
                         row[
                             headers[index]
-                        ] ??
-                        "",
+                        ] ?? "",
                         index
                     )
                         .toLowerCase();
@@ -3093,39 +2874,28 @@ function isColumnFiltered(
         selectedFilters[index];
 
 
-    if (!selected) {
+    if (!selected) return false;
 
-        return false;
 
-    }
+    const a =
+        selected
+            .map(String)
+            .sort()
+            .join("|");
+
+
+    const b =
+        allValues
+            .map(String)
+            .sort()
+            .join("|");
 
 
     if (
-        selected.length ===
-        allValues.length
+        a === b
     ) {
 
-        const a =
-            selected
-                .map(String)
-                .sort()
-                .join("|");
-
-
-        const b =
-            allValues
-                .map(String)
-                .sort()
-                .join("|");
-
-
-        if (
-            a === b
-        ) {
-
-            return false;
-
-        }
+        return false;
 
     }
 
@@ -3134,14 +2904,7 @@ function isColumnFiltered(
         defaultFilters[index]
     ) {
 
-        const a =
-            selected
-                .map(String)
-                .sort()
-                .join("|");
-
-
-        const b =
+        const d =
             defaultFilters[index]
                 .map(String)
                 .sort()
@@ -3149,7 +2912,7 @@ function isColumnFiltered(
 
 
         if (
-            a === b
+            a === d
         ) {
 
             return false;
@@ -3174,8 +2937,7 @@ function isColumnSearchActive(
 
     return Boolean(
         String(
-            searchValues[index] ||
-            ""
+            searchValues[index] || ""
         ).trim()
     );
 
@@ -3200,7 +2962,7 @@ function renderTable() {
 
 
 /* =========================================================
-   RENDER HEAD
+   RENDER HEADER
 ========================================================= */
 
 function renderHead() {
@@ -3244,16 +3006,8 @@ function renderHead() {
                 HIDDEN_COLUMNS.has(
                     header
                 )
-            ) {
+            ) return;
 
-                return;
-
-            }
-
-
-            /*
-               HEADER
-            */
 
             const th =
                 document.createElement(
@@ -3335,14 +3089,11 @@ function renderHead() {
 
                 sortInfo.textContent =
                     "S" +
-                    sortOrders[
-                        index
-                    ].priority +
+                    sortOrders[index]
+                        .priority +
                     (
-                        sortOrders[
-                            index
-                        ].direction ===
-                            "asc"
+                        sortOrders[index]
+                            .direction === "asc"
                             ? " ▲"
                             : " ▼"
                     );
@@ -3433,12 +3184,8 @@ function renderHead() {
 
 
             if (
-                isColumnFiltered(
-                    index
-                ) ||
-                isColumnSearchActive(
-                    index
-                )
+                isColumnFiltered(index) ||
+                isColumnSearchActive(index)
             ) {
 
                 th.classList.add(
@@ -3497,14 +3244,11 @@ function renderHead() {
 
 
             input.value =
-                searchValues[
-                    index
-                ] ||
+                searchValues[index] ||
                 "";
 
 
-            let searchTimer =
-                null;
+            let searchTimer = null;
 
 
             input.addEventListener(
@@ -3528,9 +3272,7 @@ function renderHead() {
 
                                 saveStorage();
 
-
                                 renderBody();
-
 
                                 updateHeaderClasses();
 
@@ -3617,11 +3359,7 @@ function renderBody() {
                         HIDDEN_COLUMNS.has(
                             header
                         )
-                    ) {
-
-                        return;
-
-                    }
+                    ) return;
 
 
                     const td =
@@ -3636,8 +3374,7 @@ function renderBody() {
 
                     td.textContent =
                         displayValue(
-                            row[header] ??
-                                "",
+                            row[header] ?? "",
                             index
                         );
 
@@ -3686,10 +3423,7 @@ function getColumnFormat(
 
         ...DEFAULT_FORMAT,
 
-        ...(
-            columnFormats[index] ||
-            {}
-        )
+        ...(columnFormats[index] || {})
 
     };
 
@@ -3757,7 +3491,7 @@ function applyCellFormat(
 
 
 /* =========================================================
-   HEADER CLASS UPDATE
+   HEADER CLASSES
 ========================================================= */
 
 function updateHeaderClasses() {
@@ -3774,11 +3508,7 @@ function updateHeaderClasses() {
                 );
 
 
-            if (!th) {
-
-                return;
-
-            }
+            if (!th) return;
 
 
             th.classList.remove(
@@ -3788,12 +3518,8 @@ function updateHeaderClasses() {
 
 
             if (
-                isColumnFiltered(
-                    index
-                ) ||
-                isColumnSearchActive(
-                    index
-                )
+                isColumnFiltered(index) ||
+                isColumnSearchActive(index)
             ) {
 
                 th.classList.add(
@@ -3848,12 +3574,6 @@ function openFilterMenu(
             ];
 
 
-    const menu =
-        document.getElementById(
-            "filterMenu"
-        );
-
-
     document.getElementById(
         "filterTitle"
     ).textContent =
@@ -3868,18 +3588,20 @@ function openFilterMenu(
         "";
 
 
-    const priority =
+    document.getElementById(
+        "sortPriorityInput"
+    ).value =
         sortOrders[index]?.priority ??
         "";
 
 
-    document.getElementById(
-        "sortPriorityInput"
-    ).value =
-        priority;
-
-
     renderFilterValues();
+
+
+    const menu =
+        document.getElementById(
+            "filterMenu"
+        );
 
 
     const rect =
@@ -3891,8 +3613,7 @@ function openFilterMenu(
 
 
     let top =
-        rect.bottom +
-        5;
+        rect.bottom + 5;
 
 
     if (
@@ -3954,18 +3675,12 @@ function renderFilterValues() {
         );
 
 
-    container.innerHTML =
-        "";
+    container.innerHTML = "";
 
 
     if (
-        currentFilterColumn ===
-        null
-    ) {
-
-        return;
-
-    }
+        currentFilterColumn === null
+    ) return;
 
 
     const index =
@@ -4137,19 +3852,14 @@ function renderFilterValues() {
 
 
 /* =========================================================
-   SELECT ALL
+   FILTER BUTTONS
 ========================================================= */
 
 function selectAllFilterValues() {
 
     if (
-        currentFilterColumn ===
-        null
-    ) {
-
-        return;
-
-    }
+        currentFilterColumn === null
+    ) return;
 
 
     temporaryFilterValues =
@@ -4163,10 +3873,6 @@ function selectAllFilterValues() {
 }
 
 
-/* =========================================================
-   CLEAR
-========================================================= */
-
 function clearFilterValues() {
 
     temporaryFilterValues =
@@ -4178,20 +3884,11 @@ function clearFilterValues() {
 }
 
 
-/* =========================================================
-   APPLY FILTER
-========================================================= */
-
 function applyFilter() {
 
     if (
-        currentFilterColumn ===
-        null
-    ) {
-
-        return;
-
-    }
+        currentFilterColumn === null
+    ) return;
 
 
     selectedFilters[
@@ -4214,15 +3911,10 @@ function applyFilter() {
 
     renderBody();
 
-
     updateHeaderClasses();
 
 }
 
-
-/* =========================================================
-   CANCEL
-========================================================= */
 
 function cancelFilter() {
 
@@ -4236,7 +3928,7 @@ function cancelFilter() {
 
 
 /* =========================================================
-   SORT
+   SORT MENU
 ========================================================= */
 
 function setCurrentSort(
@@ -4244,13 +3936,8 @@ function setCurrentSort(
 ) {
 
     if (
-        currentFilterColumn ===
-        null
-    ) {
-
-        return;
-
-    }
+        currentFilterColumn === null
+    ) return;
 
 
     let priority =
@@ -4262,9 +3949,7 @@ function setCurrentSort(
 
 
     if (
-        !Number.isFinite(
-            priority
-        ) ||
+        !Number.isFinite(priority) ||
         priority < 1
     ) {
 
@@ -4301,7 +3986,6 @@ function setCurrentSort(
     ] = {
 
         direction,
-
         priority
 
     };
@@ -4318,34 +4002,21 @@ function setCurrentSort(
 
     renderBody();
 
-
     renderHead();
 
 }
 
 
-/* =========================================================
-   REMOVE SORT
-========================================================= */
-
 function removeCurrentSort() {
 
     if (
-        currentFilterColumn ===
-        null
-    ) {
-
-        return;
-
-    }
+        currentFilterColumn === null
+    ) return;
 
 
     delete sortOrders[
         currentFilterColumn
     ];
-
-
-    saveStorage();
 
 
     document.getElementById(
@@ -4354,46 +4025,33 @@ function removeCurrentSort() {
         "";
 
 
-    renderBody();
+    saveStorage();
 
+
+    renderBody();
 
     renderHead();
 
 }
 
 
-/* =========================================================
-   APPLY PRIORITY
-========================================================= */
-
 function applyCurrentPriority() {
 
     if (
-        currentFilterColumn ===
-        null
-    ) {
-
-        return;
-
-    }
-
-
-    const input =
-        document.getElementById(
-            "sortPriorityInput"
-        );
+        currentFilterColumn === null
+    ) return;
 
 
     const priority =
         Number(
-            input.value
+            document.getElementById(
+                "sortPriorityInput"
+            ).value
         );
 
 
     if (
-        !Number.isInteger(
-            priority
-        ) ||
+        !Number.isInteger(priority) ||
         priority < 1
     ) {
 
@@ -4417,8 +4075,7 @@ function applyCurrentPriority() {
             currentFilterColumn
         ] = {
 
-            direction:
-                "asc",
+            direction: "asc",
 
             priority
 
@@ -4440,14 +4097,13 @@ function applyCurrentPriority() {
 
     renderBody();
 
-
     renderHead();
 
 }
 
 
 /* =========================================================
-   RESET FILTER
+   RESET
 ========================================================= */
 
 function resetUserFilters() {
@@ -4465,13 +4121,9 @@ function resetUserFilters() {
         .forEach(
             index => {
 
-                selectedFilters[
-                    index
-                ] =
+                selectedFilters[index] =
                     [
-                        ...defaultFilters[
-                            index
-                        ]
+                        ...defaultFilters[index]
                     ];
 
             }
@@ -4480,14 +4132,13 @@ function resetUserFilters() {
 
     saveStorage();
 
-
     renderTable();
 
 }
 
 
 /* =========================================================
-   COLUMN WIDTH
+   WIDTH
 ========================================================= */
 
 function applyColumnWidths() {
@@ -4502,11 +4153,7 @@ function applyColumnWidths() {
                 HIDDEN_COLUMNS.has(
                     header
                 )
-            ) {
-
-                return;
-
-            }
+            ) return;
 
 
             const width =
@@ -4524,18 +4171,15 @@ function applyColumnWidths() {
                 cell => {
 
                     cell.style.width =
-                        width +
-                        "px";
+                        width + "px";
 
 
                     cell.style.minWidth =
-                        width +
-                        "px";
+                        width + "px";
 
 
                     cell.style.maxWidth =
-                        width +
-                        "px";
+                        width + "px";
 
                 }
             );
@@ -4557,6 +4201,8 @@ function startResize(
 ) {
 
     event.preventDefault();
+
+    event.stopPropagation();
 
 
     const startX =
@@ -4588,9 +4234,7 @@ function startResize(
             );
 
 
-        columnWidths[
-            index
-        ] =
+        columnWidths[index] =
             Math.round(
                 newWidth
             );
@@ -4699,7 +4343,7 @@ function closeSettings(
 
 
 /* =========================================================
-   COLUMN SETTINGS
+   SETTINGS COLUMNS
 ========================================================= */
 
 function renderColumnSettings() {
@@ -4710,8 +4354,7 @@ function renderColumnSettings() {
         );
 
 
-    selector.innerHTML =
-        "";
+    selector.innerHTML = "";
 
 
     headers.forEach(
@@ -4724,11 +4367,7 @@ function renderColumnSettings() {
                 HIDDEN_COLUMNS.has(
                     header
                 )
-            ) {
-
-                return;
-
-            }
+            ) return;
 
 
             const label =
@@ -4791,8 +4430,7 @@ function renderColumnSettings() {
         );
 
 
-    renameSelect.innerHTML =
-        "";
+    renameSelect.innerHTML = "";
 
 
     headers.forEach(
@@ -4805,11 +4443,7 @@ function renderColumnSettings() {
                 HIDDEN_COLUMNS.has(
                     header
                 )
-            ) {
-
-                return;
-
-            }
+            ) return;
 
 
             const option =
@@ -4841,10 +4475,6 @@ function renderColumnSettings() {
 }
 
 
-/* =========================================================
-   SELECTED FORMAT COLUMNS
-========================================================= */
-
 function getSelectedFormatColumns() {
 
     return Array.from(
@@ -4861,10 +4491,6 @@ function getSelectedFormatColumns() {
 
 }
 
-
-/* =========================================================
-   LOAD FORMAT
-========================================================= */
 
 function loadFormatFromFirstSelected() {
 
@@ -4894,11 +4520,7 @@ function loadFormatFromFirstSelected() {
     if (
         index === -1 ||
         index === undefined
-    ) {
-
-        return;
-
-    }
+    ) return;
 
 
     const format =
@@ -4945,16 +4567,11 @@ function loadFormatFromFirstSelected() {
         );
 
 
-    if (
-        format.textColor
-    ) {
-
-        document.getElementById(
-            "formatTextColor"
-        ).value =
-            format.textColor;
-
-    }
+    document.getElementById(
+        "formatTextColor"
+    ).value =
+        format.textColor ||
+        "#222222";
 
 
     document.getElementById(
@@ -4965,23 +4582,14 @@ function loadFormatFromFirstSelected() {
         );
 
 
-    if (
-        format.bgColor
-    ) {
-
-        document.getElementById(
-            "formatBgColor"
-        ).value =
-            format.bgColor;
-
-    }
+    document.getElementById(
+        "formatBgColor"
+    ).value =
+        format.bgColor ||
+        "#ffffff";
 
 }
 
-
-/* =========================================================
-   APPLY FORMAT
-========================================================= */
 
 function applyFormatting() {
 
@@ -5035,18 +4643,6 @@ function applyFormatting() {
         ).checked;
 
 
-    const enableTextColor =
-        document.getElementById(
-            "enableTextColor"
-        ).checked;
-
-
-    const enableBgColor =
-        document.getElementById(
-            "enableBgColor"
-        ).checked;
-
-
     const textColor =
         document.getElementById(
             "formatTextColor"
@@ -5059,12 +4655,22 @@ function applyFormatting() {
         ).value;
 
 
+    const enableTextColor =
+        document.getElementById(
+            "enableTextColor"
+        ).checked;
+
+
+    const enableBgColor =
+        document.getElementById(
+            "enableBgColor"
+        ).checked;
+
+
     selected.forEach(
         index => {
 
-            columnFormats[
-                index
-            ] = {
+            columnFormats[index] = {
 
                 fontSize,
 
@@ -5094,7 +4700,6 @@ function applyFormatting() {
 
     saveStorage();
 
-
     renderBody();
 
 
@@ -5113,15 +4718,11 @@ function applyFormatting() {
 
 function renameSelectedColumn() {
 
-    const select =
-        document.getElementById(
-            "renameColumnSelect"
-        );
-
-
     const index =
         Number(
-            select.value
+            document.getElementById(
+                "renameColumnSelect"
+            ).value
         );
 
 
@@ -5147,9 +4748,7 @@ function renameSelectedColumn() {
     }
 
 
-    columnNames[
-        index
-    ] =
+    columnNames[index] =
         newName;
 
 
@@ -5157,7 +4756,6 @@ function renameSelectedColumn() {
 
 
     renderTable();
-
 
     renderColumnSettings();
 
@@ -5174,10 +4772,6 @@ function renameSelectedColumn() {
 
 }
 
-
-/* =========================================================
-   DIRECT RENAME
-========================================================= */
 
 function renameColumnDirect(
     index
@@ -5198,41 +4792,26 @@ function renameColumnDirect(
 
     if (
         newName === null
-    ) {
-
-        return;
-
-    }
+    ) return;
 
 
     const trimmed =
         newName.trim();
 
 
-    if (!trimmed) {
-
-        return;
-
-    }
+    if (!trimmed) return;
 
 
-    columnNames[
-        index
-    ] =
+    columnNames[index] =
         trimmed;
 
 
     saveStorage();
 
-
     renderTable();
 
 }
 
-
-/* =========================================================
-   CONTEXT RENAME
-========================================================= */
 
 function renameFromContextMenu() {
 
@@ -5245,11 +4824,7 @@ function renameFromContextMenu() {
 
     if (
         contextColumn === null
-    ) {
-
-        return;
-
-    }
+    ) return;
 
 
     renameColumnDirect(
@@ -5258,10 +4833,6 @@ function renameFromContextMenu() {
 
 }
 
-
-/* =========================================================
-   RESET COLUMN NAME
-========================================================= */
 
 function resetSelectedColumnName() {
 
@@ -5273,17 +4844,13 @@ function resetSelectedColumnName() {
         );
 
 
-    columnNames[
-        index
-    ] =
+    columnNames[index] =
         headers[index];
 
 
     saveStorage();
 
-
     renderTable();
-
 
     renderColumnSettings();
 
@@ -5296,22 +4863,16 @@ function resetSelectedColumnName() {
 
 function changeFreezeCount() {
 
-    const input =
-        document.getElementById(
-            "freezeCount"
-        );
-
-
     let count =
         Number(
-            input.value
+            document.getElementById(
+                "freezeCount"
+            ).value
         );
 
 
     if (
-        !Number.isInteger(
-            count
-        ) ||
+        !Number.isInteger(count) ||
         count < 0
     ) {
 
@@ -5340,12 +4901,13 @@ function changeFreezeCount() {
         count;
 
 
-    input.value =
+    document.getElementById(
+        "freezeCount"
+    ).value =
         count;
 
 
     saveStorage();
-
 
     applyFreezeColumns();
 
@@ -5381,17 +4943,40 @@ function applyFreezeColumns() {
             );
 
 
-    let left =
-        0;
+    /*
+       Xóa trạng thái cũ trước
+    */
+
+    document.querySelectorAll(
+        ".frozen-column"
+    )
+        .forEach(
+            cell => {
+
+                cell.classList.remove(
+                    "frozen-column"
+                );
+
+
+                cell.style.left =
+                    "";
+
+            }
+        );
+
+
+    /*
+       Tính left cho từng cột frozen.
+    */
+
+    let left = 0;
 
 
     frozenIndices.forEach(
         index => {
 
             const width =
-                columnWidths[
-                    index
-                ] ||
+                columnWidths[index] ||
                 150;
 
 
@@ -5410,58 +4995,13 @@ function applyFreezeColumns() {
 
 
                     cell.style.left =
-                        left +
-                        "px";
+                        left + "px";
 
                 }
             );
 
 
             left += width;
-
-        }
-    );
-
-
-    headers.forEach(
-        header => {
-
-            const index =
-                headers.indexOf(
-                    header
-                );
-
-
-            if (
-                frozenIndices.includes(
-                    index
-                )
-            ) {
-
-                return;
-
-            }
-
-
-            const cells =
-                document.querySelectorAll(
-                    `[data-column="${index}"]`
-                );
-
-
-            cells.forEach(
-                cell => {
-
-                    cell.classList.remove(
-                        "frozen-column"
-                    );
-
-
-                    cell.style.left =
-                        "";
-
-                }
-            );
 
         }
     );
@@ -5479,11 +5019,7 @@ function resetAllSettings() {
         !confirm(
             "Khôi phục toàn bộ cài đặt trên trình duyệt này?"
         )
-    ) {
-
-        return;
-
-    }
+    ) return;
 
 
     columnNames = {};
@@ -5507,13 +5043,9 @@ function resetAllSettings() {
         .forEach(
             index => {
 
-                selectedFilters[
-                    index
-                ] =
+                selectedFilters[index] =
                     [
-                        ...defaultFilters[
-                            index
-                        ]
+                        ...defaultFilters[index]
                     ];
 
             }
@@ -5525,9 +5057,7 @@ function resetAllSettings() {
 
     initializeColumnNames();
 
-
     renderTable();
-
 
     renderColumnSettings();
 
@@ -5588,8 +5118,7 @@ function showError(
         );
 
 
-    thead.innerHTML =
-        "";
+    thead.innerHTML = "";
 
 
     tbody.innerHTML =
@@ -5607,7 +5136,7 @@ function showError(
 
 
 /* =========================================================
-   RENAME SELECT CHANGE
+   RENAME SELECT
 ========================================================= */
 
 document.addEventListener(
@@ -5639,7 +5168,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   COLUMN FORMAT SELECT CHANGE
+   FORMAT SELECT
 ========================================================= */
 
 document.addEventListener(
