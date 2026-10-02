@@ -3,19 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Report</title>
+<title>Report - Google Sheet</title>
 
 <style>
-
 *{
     box-sizing:border-box;
 }
 
-html,
-body{
+html,body{
     margin:0;
-    padding:0;
     width:100%;
     height:100%;
     font-family:Arial,Helvetica,sans-serif;
@@ -27,29 +23,29 @@ body{
     overflow:hidden;
 }
 
-/* =========================
+/* =========================================================
    TOP BAR
-========================= */
+========================================================= */
 
 .topbar{
     height:52px;
-    background:#ffffff;
-    border-bottom:1px solid #ddd;
     display:flex;
     align-items:center;
     gap:8px;
     padding:0 12px;
+    background:#fff;
+    border-bottom:1px solid #ddd;
     position:relative;
-    z-index:1000;
+    z-index:3000;
 }
 
 .title{
     font-size:18px;
-    font-weight:700;
+    font-weight:bold;
     margin-right:10px;
 }
 
-button{
+.topbar button{
     border:1px solid #ccc;
     background:#fff;
     border-radius:5px;
@@ -58,18 +54,14 @@ button{
     font-size:13px;
 }
 
-button:hover{
-    background:#f1f3f5;
+.topbar button:hover{
+    background:#f0f2f4;
 }
 
-button.primary{
+.topbar button.primary{
     background:#1677ff;
-    color:#fff;
     border-color:#1677ff;
-}
-
-button.primary:hover{
-    background:#0d65df;
+    color:#fff;
 }
 
 .status{
@@ -78,9 +70,9 @@ button.primary:hover{
     color:#666;
 }
 
-/* =========================
-   TABLE AREA
-========================= */
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-container{
     position:absolute;
@@ -91,10 +83,6 @@ button.primary:hover{
     overflow:auto;
     background:#fff;
 }
-
-/* =========================
-   TABLE
-========================= */
 
 table{
     border-collapse:separate;
@@ -107,17 +95,16 @@ table{
 thead{
     position:sticky;
     top:0;
-    z-index:500;
+    z-index:1000;
 }
 
 thead th{
     position:relative;
-    background:#f8f9fa;
-    border-right:1px solid #d8d8d8;
-    border-bottom:1px solid #bbb;
-    min-width:80px;
     padding:0;
     vertical-align:top;
+    background:#f8f9fa;
+    border-right:1px solid #d5d5d5;
+    border-bottom:1px solid #aaa;
 }
 
 .header-main{
@@ -125,10 +112,10 @@ thead th{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:4px;
+    gap:5px;
     padding:0 7px;
-    font-weight:700;
     font-size:14px;
+    font-weight:bold;
     white-space:nowrap;
     overflow:hidden;
 }
@@ -139,60 +126,63 @@ thead th{
     cursor:pointer;
 }
 
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:3px;
+    flex-shrink:0;
+}
+
 .header-arrow{
-    font-size:11px;
+    font-size:10px;
     color:#777;
-    flex-shrink:0;
 }
 
-.header-sort{
+.sort-badge{
     font-size:11px;
-    color:#1677ff;
     font-weight:bold;
-    flex-shrink:0;
 }
 
-.header-sort.asc{
+.sort-badge.asc{
     color:#1677ff;
 }
 
-.header-sort.desc{
+.sort-badge.desc{
     color:#e67e22;
 }
 
-/* cột đang filter/search */
+.filter-badge{
+    font-size:9px;
+    font-weight:bold;
+    background:#19a34a;
+    color:#fff;
+    border-radius:8px;
+    padding:1px 4px;
+}
 
 th.active-filter .header-main{
     background:#dff5df;
     color:#087f23;
 }
 
-/* cột đang sort */
-
 th.active-sort .header-main{
     background:#e7f0ff;
 }
-
-/* cột vừa filter vừa sort */
 
 th.active-filter.active-sort .header-main{
     background:#d8f2df;
     color:#087f23;
 }
 
-/* =========================
+/* =========================================================
    SEARCH
-========================= */
-
-.search-row{
-    height:36px;
-    background:#fff;
-}
+========================================================= */
 
 .search-cell{
+    height:36px;
     padding:4px;
-    border-top:1px solid #ddd;
     border-right:1px solid #ddd;
+    border-bottom:1px solid #ddd;
     background:#fff;
 }
 
@@ -201,93 +191,43 @@ th.active-filter.active-sort .header-main{
     height:27px;
     border:1px solid #ccc;
     border-radius:4px;
-    padding:4px 7px;
+    padding:3px 6px;
     outline:none;
     font-size:12px;
 }
 
 .search-input:focus{
     border-color:#1677ff;
-    box-shadow:0 0 0 2px rgba(22,119,255,.1);
 }
 
-/* =========================
+/* =========================================================
    BODY
-========================= */
+========================================================= */
 
 tbody td{
-    border-right:1px solid #e1e1e1;
-    border-bottom:1px solid #e1e1e1;
-    padding:7px 8px;
-    font-size:14px;
-    vertical-align:middle;
+    padding:6px 8px;
+    border-right:1px solid #e0e0e0;
+    border-bottom:1px solid #e5e5e5;
+    font-size:13px;
     background:#fff;
-    overflow-wrap:anywhere;
-    word-break:break-word;
-}
-
-/* zebra */
-
-tbody tr:nth-child(even) td{
-    background:#fafafa;
-}
-
-tbody tr:hover td{
-    background:#f1f7ff;
-}
-
-/* wrap */
-
-tbody td.wrap-text{
-    white-space:normal;
-}
-
-/* nowrap */
-
-tbody td.no-wrap{
-    white-space:nowrap;
+    vertical-align:middle;
     overflow:hidden;
     text-overflow:ellipsis;
 }
 
-/* =========================
-   STICKY COLUMNS
-========================= */
-
-.sticky-col{
-    position:sticky !important;
-    z-index:300;
-    background:#fff !important;
+tbody tr:hover td{
+    background:#f6faff;
 }
 
-thead .sticky-col{
-    z-index:700;
-    background:#f8f9fa !important;
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#777;
 }
 
-thead th.active-filter.sticky-col .header-main{
-    background:#dff5df !important;
-}
-
-thead th.active-sort.sticky-col .header-main{
-    background:#e7f0ff !important;
-}
-
-thead th.active-filter.active-sort.sticky-col .header-main{
-    background:#d8f2df !important;
-}
-
-tbody tr:nth-child(even) td.sticky-col{
-    background:#fafafa !important;
-}
-
-tbody tr:hover td.sticky-col{
-    background:#f1f7ff !important;
-}
-
-/* =========================
-   RESIZE HANDLE
-========================= */
+/* =========================================================
+   RESIZE
+========================================================= */
 
 .resize-handle{
     position:absolute;
@@ -296,152 +236,211 @@ tbody tr:hover td.sticky-col{
     width:7px;
     height:100%;
     cursor:col-resize;
-    z-index:800;
+    z-index:50;
 }
 
 .resize-handle:hover{
-    background:rgba(22,119,255,.25);
+    background:#1677ff;
 }
 
-/* =========================
-   DROPDOWN MENU
-========================= */
+/* =========================================================
+   DROPDOWN FILTER
+========================================================= */
 
-.menu{
+.filter-menu{
     position:fixed;
-    z-index:5000;
-    width:300px;
+    width:310px;
     max-height:520px;
     background:#fff;
-    border:1px solid #ccc;
-    border-radius:7px;
-    box-shadow:0 5px 25px rgba(0,0,0,.18);
+    border:1px solid #bbb;
+    box-shadow:0 5px 20px rgba(0,0,0,.18);
+    border-radius:6px;
+    z-index:99999;
     display:none;
     overflow:hidden;
 }
 
-.menu.show{
+.filter-menu.show{
     display:block;
 }
 
-.menu-header{
+.filter-title{
     padding:10px;
-    font-weight:700;
-    border-bottom:1px solid #eee;
-    background:#fafafa;
+    border-bottom:1px solid #ddd;
+    font-weight:bold;
+    font-size:13px;
+    background:#f7f7f7;
 }
 
-.menu-search{
-    padding:8px;
-    border-bottom:1px solid #eee;
-}
-
-.menu-search input{
-    width:100%;
-    height:30px;
-    border:1px solid #ccc;
-    border-radius:4px;
-    padding:5px 8px;
-}
-
-.menu-buttons{
+.filter-tools{
     display:flex;
     gap:5px;
-    padding:7px 8px;
-    border-bottom:1px solid #eee;
+    padding:8px;
+    border-bottom:1px solid #ddd;
 }
 
-.menu-buttons button{
+.filter-tools button{
     flex:1;
-    padding:6px 5px;
-    font-size:12px;
+    padding:6px 4px;
+    font-size:11px;
+    border:1px solid #ccc;
+    background:#fff;
+    border-radius:4px;
+    cursor:pointer;
 }
 
-.value-list{
-    max-height:280px;
+.filter-tools button:hover{
+    background:#f0f2f4;
+}
+
+.filter-search{
+    padding:7px;
+    border-bottom:1px solid #ddd;
+}
+
+.filter-search input{
+    width:100%;
+    height:28px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    padding:4px 7px;
+}
+
+.filter-values{
+    max-height:260px;
     overflow:auto;
     padding:5px 8px;
 }
 
-.value-item{
+.filter-value{
     display:flex;
     align-items:center;
     gap:7px;
     padding:5px 3px;
-    font-size:13px;
-}
-
-.value-item:hover{
-    background:#f5f5f5;
-}
-
-.value-item input{
-    width:15px;
-    height:15px;
-}
-
-.menu-footer{
-    display:flex;
-    gap:6px;
-    padding:8px;
-    border-top:1px solid #eee;
-}
-
-.menu-footer button{
-    flex:1;
-}
-
-/* =========================
-   CONTEXT MENU
-========================= */
-
-.context-menu{
-    position:fixed;
-    z-index:6000;
-    width:230px;
-    background:#fff;
-    border:1px solid #ccc;
-    border-radius:6px;
-    box-shadow:0 5px 20px rgba(0,0,0,.2);
-    display:none;
-    overflow:hidden;
-}
-
-.context-menu.show{
-    display:block;
-}
-
-.context-item{
-    padding:9px 12px;
-    font-size:13px;
+    font-size:12px;
     cursor:pointer;
+    border-radius:3px;
 }
 
-.context-item:hover{
+.filter-value:hover{
     background:#f2f5f8;
 }
 
-.context-separator{
-    height:1px;
-    background:#eee;
+.filter-value input{
+    cursor:pointer;
 }
 
-/* =========================
+.filter-value-text{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.filter-sort-section{
+    border-top:1px solid #ddd;
+    padding:8px;
+    background:#fafafa;
+}
+
+.filter-sort-title{
+    font-size:11px;
+    color:#666;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+.sort-row{
+    display:flex;
+    gap:5px;
+    margin-bottom:6px;
+}
+
+.sort-row button{
+    flex:1;
+    padding:6px;
+    font-size:11px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    background:#fff;
+    cursor:pointer;
+}
+
+.sort-row button:hover{
+    background:#edf4ff;
+}
+
+.sort-priority-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:4px;
+}
+
+.sort-priority-row label{
+    font-size:11px;
+    color:#555;
+}
+
+.sort-priority-row input{
+    width:60px;
+    height:27px;
+    border:1px solid #bbb;
+    border-radius:4px;
+    padding:3px 6px;
+}
+
+.filter-footer{
+    display:flex;
+    gap:6px;
+    padding:8px;
+    border-top:1px solid #ddd;
+    background:#fff;
+}
+
+.filter-footer button{
+    flex:1;
+    padding:7px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    background:#fff;
+    cursor:pointer;
+    font-size:11px;
+}
+
+.filter-footer .apply{
+    background:#1677ff;
+    color:#fff;
+    border-color:#1677ff;
+}
+
+/* =========================================================
    SETTINGS PANEL
-========================= */
+========================================================= */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.28);
+    z-index:9000;
+    display:none;
+}
+
+.overlay.show{
+    display:block;
+}
 
 .settings-panel{
     position:fixed;
-    top:58px;
-    right:10px;
-    width:340px;
+    top:55px;
+    right:15px;
+    width:430px;
     max-height:calc(100vh - 70px);
     overflow:auto;
     background:#fff;
     border:1px solid #ccc;
     border-radius:8px;
-    box-shadow:0 8px 30px rgba(0,0,0,.2);
-    z-index:4000;
+    box-shadow:0 8px 30px rgba(0,0,0,.25);
+    z-index:10000;
     display:none;
 }
 
@@ -449,286 +448,403 @@ tbody tr:hover td.sticky-col{
     display:block;
 }
 
-.settings-title{
+.settings-header{
+    position:sticky;
+    top:0;
+    z-index:2;
+    background:#fff;
+    padding:14px;
+    border-bottom:1px solid #ddd;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.settings-header strong{
+    font-size:16px;
+}
+
+.settings-body{
     padding:12px;
+}
+
+.setting-section{
+    border:1px solid #ddd;
+    border-radius:6px;
+    margin-bottom:12px;
+    padding:10px;
+}
+
+.setting-section-title{
     font-weight:bold;
-    border-bottom:1px solid #eee;
+    font-size:13px;
+    margin-bottom:9px;
 }
 
-.settings-section{
-    padding:10px 12px;
-    border-bottom:1px solid #eee;
+.column-select-list{
+    max-height:180px;
+    overflow:auto;
+    border:1px solid #ccc;
+    border-radius:4px;
 }
 
-.settings-section-title{
+.column-select-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:7px;
     font-size:12px;
-    color:#666;
-    margin-bottom:8px;
-    font-weight:bold;
+    cursor:pointer;
+}
+
+.column-select-item:hover{
+    background:#f3f5f7;
 }
 
 .setting-row{
     display:flex;
     align-items:center;
-    justify-content:space-between;
-    gap:10px;
+    gap:8px;
     margin-bottom:8px;
 }
 
 .setting-row label{
-    font-size:13px;
+    width:110px;
+    font-size:12px;
+    color:#444;
 }
 
-.setting-row input[type="number"]{
-    width:90px;
+.setting-row select,
+.setting-row input[type="number"],
+.setting-row input[type="text"]{
+    flex:1;
     height:30px;
     border:1px solid #ccc;
     border-radius:4px;
     padding:4px 7px;
+    font-size:12px;
 }
 
-.setting-row select{
-    width:130px;
+.setting-row input[type="color"]{
+    width:50px;
     height:30px;
     border:1px solid #ccc;
-    border-radius:4px;
+    padding:1px;
 }
 
-.color-input{
-    width:55px;
-    height:30px;
-    padding:2px;
-    border:1px solid #ccc;
-    border-radius:4px;
+.setting-check{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    margin:6px 0;
 }
 
-.settings-footer{
-    padding:10px 12px;
+.settings-actions{
     display:flex;
     gap:7px;
 }
 
-.settings-footer button{
+.settings-actions button{
     flex:1;
+    padding:8px;
+    border:1px solid #ccc;
+    background:#fff;
+    border-radius:4px;
+    cursor:pointer;
 }
 
-/* =========================
+.settings-actions .primary{
+    background:#1677ff;
+    color:#fff;
+    border-color:#1677ff;
+}
+
+/* =========================================================
    RENAME DIALOG
-========================= */
-
-.dialog-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.25);
-    z-index:7000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-}
-
-.dialog-overlay.show{
-    display:flex;
-}
+========================================================= */
 
 .dialog{
-    width:380px;
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:360px;
     background:#fff;
     border-radius:8px;
     box-shadow:0 10px 40px rgba(0,0,0,.3);
-    padding:18px;
+    z-index:20000;
+    display:none;
 }
 
-.dialog h3{
-    margin:0 0 14px;
-    font-size:17px;
+.dialog.show{
+    display:block;
 }
 
-.dialog input{
+.dialog-header{
+    padding:13px;
+    border-bottom:1px solid #ddd;
+    font-weight:bold;
+}
+
+.dialog-body{
+    padding:15px;
+}
+
+.dialog-body input{
     width:100%;
-    height:36px;
+    height:35px;
     border:1px solid #bbb;
     border-radius:5px;
-    padding:7px 9px;
-    font-size:14px;
-}
-
-.dialog-buttons{
-    margin-top:15px;
-    display:flex;
-    justify-content:flex-end;
-    gap:8px;
-}
-
-/* =========================
-   RESIZE INFO
-========================= */
-
-.resize-info{
-    position:fixed;
-    z-index:9000;
-    display:none;
-    background:#222;
-    color:#fff;
     padding:5px 8px;
-    border-radius:4px;
-    font-size:12px;
-    pointer-events:none;
 }
 
-/* =========================
-   TOAST
-========================= */
+.dialog-footer{
+    display:flex;
+    gap:7px;
+    padding:10px 15px;
+    border-top:1px solid #ddd;
+}
 
-.toast{
+.dialog-footer button{
+    flex:1;
+}
+
+/* =========================================================
+   CONTEXT MENU
+========================================================= */
+
+.context-menu{
     position:fixed;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#222;
-    color:#fff;
-    padding:9px 15px;
+    background:#fff;
+    border:1px solid #ccc;
     border-radius:5px;
-    font-size:13px;
-    z-index:10000;
-    opacity:0;
-    pointer-events:none;
-    transition:.2s;
+    box-shadow:0 5px 18px rgba(0,0,0,.2);
+    z-index:20000;
+    display:none;
+    min-width:180px;
+    overflow:hidden;
 }
 
-.toast.show{
-    opacity:1;
+.context-menu.show{
+    display:block;
 }
 
-/* =========================
+.context-menu button{
+    width:100%;
+    display:block;
+    border:0;
+    border-radius:0;
+    text-align:left;
+    background:#fff;
+    padding:9px 12px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.context-menu button:hover{
+    background:#edf4ff;
+}
+
+/* =========================================================
    LOADING
-========================= */
+========================================================= */
 
 .loading{
     position:fixed;
-    inset:52px 0 0 0;
-    background:rgba(255,255,255,.7);
-    z-index:2000;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    z-index:30000;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:8px;
+    padding:18px 25px;
+    box-shadow:0 8px 30px rgba(0,0,0,.2);
     display:none;
-    align-items:center;
-    justify-content:center;
-    font-size:15px;
 }
 
 .loading.show{
-    display:flex;
+    display:block;
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* =========================================================
+   FREEZE
+========================================================= */
+
+.freeze-cell{
+    position:sticky !important;
+    z-index:600 !important;
+    background:#fff !important;
+}
+
+thead .freeze-cell{
+    z-index:1200 !important;
+}
+
+thead .freeze-cell .header-main{
+    background:#f8f9fa;
+}
+
+th.active-filter.freeze-cell .header-main{
+    background:#dff5df;
+}
+
+th.active-sort.freeze-cell .header-main{
+    background:#e7f0ff;
+}
+
+th.active-filter.active-sort.freeze-cell .header-main{
+    background:#d8f2df;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:700px){
-
-    .title{
-        display:none;
-    }
-
-    .topbar{
-        gap:5px;
-    }
-
-    .status{
-        display:none;
-    }
-
     .settings-panel{
-        left:10px;
+        width:calc(100vw - 20px);
         right:10px;
-        width:auto;
     }
 
+    .filter-menu{
+        width:calc(100vw - 20px);
+        max-width:310px;
+    }
 }
-
 </style>
 </head>
 
 <body>
 
+<!-- =======================================================
+     TOP BAR
+======================================================= -->
+
 <div class="topbar">
 
     <div class="title">
-        Theo dõi gói cước
+        📊 Report
     </div>
 
-    <button id="refreshButton" class="primary">
-        🔄 Làm mới
+    <button onclick="resetAll()">
+        ↺ Reset
     </button>
 
-    <button id="resetButton">
-        ↺ Tổng / Reset
+    <button onclick="refreshData()" class="primary">
+        ⟳ Refresh
     </button>
 
-    <button id="freezeButton">
-        📌 Cố định cột
-    </button>
-
-    <button id="settingsButton">
-        ⚙️ Cài đặt
+    <button onclick="openSettings()">
+        ⚙ Cài đặt
     </button>
 
     <div class="status" id="status">
-        Đang tải...
+        Đang tải dữ liệu...
     </div>
 
 </div>
 
+<!-- =======================================================
+     TABLE
+======================================================= -->
+
 <div class="table-container" id="tableContainer">
-
     <table id="dataTable">
-
         <thead id="tableHead"></thead>
-
         <tbody id="tableBody"></tbody>
-
     </table>
-
 </div>
 
+<!-- =======================================================
+     FILTER MENU
+======================================================= -->
 
-<!-- FILTER MENU -->
+<div class="filter-menu" id="filterMenu">
 
-<div class="menu" id="filterMenu">
-
-    <div class="menu-header" id="filterMenuTitle">
+    <div class="filter-title" id="filterTitle">
         Bộ lọc
     </div>
 
-    <div class="menu-search">
+    <div class="filter-tools">
 
-        <input
-            id="filterValueSearch"
-            type="text"
-            placeholder="Tìm giá trị..."
-        >
-
-    </div>
-
-    <div class="menu-buttons">
-
-        <button id="selectAllButton">
+        <button onclick="selectAllFilterValues()">
             Chọn tất cả
         </button>
 
-        <button id="deselectAllButton">
+        <button onclick="clearAllFilterValues()">
             Bỏ chọn
         </button>
 
     </div>
 
-    <div class="value-list" id="valueList"></div>
+    <div class="filter-search">
 
-    <div class="menu-footer">
+        <input
+            id="filterSearch"
+            type="text"
+            placeholder="Tìm trong danh sách..."
+            oninput="renderFilterValues()"
+        >
 
-        <button id="clearColumnFilterButton">
-            Xóa lọc
+    </div>
+
+    <div class="filter-values" id="filterValues"></div>
+
+    <!-- SORT -->
+
+    <div class="filter-sort-section">
+
+        <div class="filter-sort-title">
+            SẮP XẾP CỘT NÀY
+        </div>
+
+        <div class="sort-row">
+
+            <button onclick="sortCurrentColumn('asc')">
+                ▲ Tăng dần
+            </button>
+
+            <button onclick="sortCurrentColumn('desc')">
+                ▼ Giảm dần
+            </button>
+
+            <button onclick="removeCurrentSort()">
+                ✕ Bỏ sort
+            </button>
+
+        </div>
+
+        <div class="sort-priority-row">
+
+            <label>
+                Ưu tiên sort:
+            </label>
+
+            <input
+                id="sortPriorityInput"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="VD: 1"
+            >
+
+            <button onclick="applySortPriority()">
+                Áp dụng
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="filter-footer">
+
+        <button onclick="cancelFilter()">
+            Hủy
         </button>
 
-        <button id="applyFilterButton" class="primary">
+        <button class="apply" onclick="applyFilter()">
             Áp dụng
         </button>
 
@@ -736,286 +852,364 @@ tbody tr:hover td.sticky-col{
 
 </div>
 
+<!-- =======================================================
+     SETTINGS OVERLAY
+======================================================= -->
 
-<!-- CONTEXT MENU -->
+<div class="overlay" id="settingsOverlay" onclick="closeSettings()"></div>
 
-<div class="context-menu" id="contextMenu">
-
-    <div
-        class="context-item"
-        id="renameColumnButton"
-    >
-        ✏️ Đổi tên cột
-    </div>
-
-    <div
-        class="context-item"
-        id="columnSettingsButton"
-    >
-        ⚙️ Định dạng cột
-    </div>
-
-    <div class="context-separator"></div>
-
-    <div
-        class="context-item"
-        id="sortAscButton"
-    >
-        ▲ Sort tăng dần
-    </div>
-
-    <div
-        class="context-item"
-        id="sortDescButton"
-    >
-        ▼ Sort giảm dần
-    </div>
-
-    <div
-        class="context-item"
-        id="removeSortButton"
-    >
-        ✕ Bỏ sort cột này
-    </div>
-
-</div>
-
-
-<!-- SETTINGS -->
+<!-- =======================================================
+     SETTINGS PANEL
+======================================================= -->
 
 <div class="settings-panel" id="settingsPanel">
 
-    <div class="settings-title">
-        ⚙️ Cài đặt website
-    </div>
+    <div class="settings-header">
 
-    <div class="settings-section">
+        <strong>
+            ⚙ Cài đặt
+        </strong>
 
-        <div class="settings-section-title">
-            Hiển thị
-        </div>
-
-        <div class="setting-row">
-
-            <label>
-                Wrap Text
-            </label>
-
-            <input
-                type="checkbox"
-                id="globalWrap"
-            >
-
-        </div>
-
-        <div class="setting-row">
-
-            <label>
-                Số cột cố định
-            </label>
-
-            <input
-                type="number"
-                id="freezeCount"
-                min="0"
-                value="0"
-            >
-
-        </div>
+        <button onclick="closeSettings()">
+            ✕
+        </button>
 
     </div>
 
-    <div class="settings-section">
+    <div class="settings-body">
 
-        <div class="settings-section-title">
-            Cột đang chọn
-        </div>
+        <!-- CHỌN CỘT -->
 
-        <div class="setting-row">
+        <div class="setting-section">
 
-            <label>
-                Căn lề
-            </label>
+            <div class="setting-section-title">
+                1. Chọn cột cần chỉnh
+            </div>
 
-            <select id="columnAlign">
+            <div
+                class="column-select-list"
+                id="columnSelectList">
+            </div>
 
-                <option value="left">
-                    Trái
-                </option>
-
-                <option value="center">
-                    Giữa
-                </option>
-
-                <option value="right">
-                    Phải
-                </option>
-
-            </select>
+            <div style="font-size:11px;color:#777;margin-top:7px;">
+                Có thể chọn nhiều cột cùng lúc.
+            </div>
 
         </div>
 
-        <div class="setting-row">
+        <!-- ĐỊNH DẠNG -->
 
-            <label>
-                Cỡ chữ
+        <div class="setting-section">
+
+            <div class="setting-section-title">
+                2. Định dạng cột
+            </div>
+
+            <div class="setting-row">
+
+                <label>
+                    Căn lề
+                </label>
+
+                <select id="formatAlign">
+
+                    <option value="unchanged">
+                        Không thay đổi
+                    </option>
+
+                    <option value="left">
+                        Trái
+                    </option>
+
+                    <option value="center">
+                        Giữa
+                    </option>
+
+                    <option value="right">
+                        Phải
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="setting-row">
+
+                <label>
+                    Cỡ chữ
+                </label>
+
+                <input
+                    id="formatFontSize"
+                    type="number"
+                    min="8"
+                    max="40"
+                    placeholder="Không thay đổi"
+                >
+
+            </div>
+
+            <label class="setting-check">
+
+                <input
+                    id="formatBold"
+                    type="checkbox"
+                >
+
+                Chữ đậm
+
             </label>
 
-            <input
-                type="number"
-                id="columnFontSize"
-                min="8"
-                max="40"
-                value="14"
-            >
+            <label class="setting-check">
+
+                <input
+                    id="formatItalic"
+                    type="checkbox"
+                >
+
+                Chữ nghiêng
+
+            </label>
+
+            <label class="setting-check">
+
+                <input
+                    id="formatWrap"
+                    type="checkbox"
+                >
+
+                Xuống dòng / Wrap text
+
+            </label>
+
+            <label class="setting-check">
+
+                <input
+                    id="changeTextColor"
+                    type="checkbox"
+                >
+
+                Đổi màu chữ
+
+            </label>
+
+            <div class="setting-row">
+
+                <label>
+                    Màu chữ
+                </label>
+
+                <input
+                    id="formatTextColor"
+                    type="color"
+                    value="#222222"
+                >
+
+            </div>
+
+            <label class="setting-check">
+
+                <input
+                    id="changeBgColor"
+                    type="checkbox"
+                >
+
+                Đổi màu nền
+
+            </label>
+
+            <div class="setting-row">
+
+                <label>
+                    Màu nền
+                </label>
+
+                <input
+                    id="formatBgColor"
+                    type="color"
+                    value="#ffffff"
+                >
+
+            </div>
+
+            <div class="settings-actions">
+
+                <button
+                    class="primary"
+                    onclick="applyFormatting()">
+                    Áp dụng cho cột đã chọn
+                </button>
+
+                <button
+                    onclick="resetSelectedFormatting()">
+                    Reset định dạng
+                </button>
+
+            </div>
 
         </div>
 
-        <div class="setting-row">
+        <!-- ĐỔI TÊN -->
 
-            <label>
-                In đậm
-            </label>
+        <div class="setting-section">
 
-            <input
-                type="checkbox"
-                id="columnBold"
-            >
+            <div class="setting-section-title">
+                3. Đổi tên cột
+            </div>
 
-        </div>
+            <div class="setting-row">
 
-        <div class="setting-row">
+                <label>
+                    Cột
+                </label>
 
-            <label>
-                In nghiêng
-            </label>
+                <select id="renameColumnSelect"></select>
 
-            <input
-                type="checkbox"
-                id="columnItalic"
-            >
+            </div>
 
-        </div>
+            <div class="setting-row">
 
-        <div class="setting-row">
+                <label>
+                    Tên mới
+                </label>
 
-            <label>
-                Màu chữ
-            </label>
+                <input
+                    id="renameColumnInput"
+                    type="text"
+                    placeholder="Nhập tên muốn hiển thị"
+                >
 
-            <input
-                type="color"
-                id="columnTextColor"
-                class="color-input"
-                value="#222222"
-            >
+            </div>
 
-        </div>
+            <div class="settings-actions">
 
-        <div class="setting-row">
+                <button
+                    class="primary"
+                    onclick="renameColumn()">
+                    Lưu tên cột
+                </button>
 
-            <label>
-                Màu nền
-            </label>
+                <button
+                    onclick="resetColumnName()">
+                    Tên gốc
+                </button>
 
-            <input
-                type="color"
-                id="columnBgColor"
-                class="color-input"
-                value="#ffffff"
-            >
+            </div>
 
         </div>
 
-        <div class="setting-row">
+        <!-- FREEZE -->
 
-            <label>
-                Wrap Text
-            </label>
+        <div class="setting-section">
 
-            <input
-                type="checkbox"
-                id="columnWrap"
-            >
+            <div class="setting-section-title">
+                4. Cố định cột
+            </div>
+
+            <div class="setting-row">
+
+                <label>
+                    Số cột cố định
+                </label>
+
+                <select id="freezeCount">
+
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+
+                </select>
+
+            </div>
+
+            <button
+                class="primary"
+                style="width:100%;"
+                onclick="applyFreeze()">
+                Áp dụng cố định cột
+            </button>
 
         </div>
 
     </div>
 
-    <div class="settings-footer">
+</div>
 
-        <button id="resetColumnSettings">
-            Khôi phục cột
+<!-- =======================================================
+     CONTEXT MENU
+======================================================= -->
+
+<div class="context-menu" id="contextMenu">
+
+    <button onclick="contextRename()">
+        ✏ Đổi tên cột
+    </button>
+
+    <button onclick="contextSort('asc')">
+        ▲ Sort tăng dần
+    </button>
+
+    <button onclick="contextSort('desc')">
+        ▼ Sort giảm dần
+    </button>
+
+    <button onclick="contextRemoveSort()">
+        ✕ Bỏ sort
+    </button>
+
+</div>
+
+<!-- =======================================================
+     RENAME DIALOG
+======================================================= -->
+
+<div class="dialog" id="renameDialog">
+
+    <div class="dialog-header">
+        Đổi tên cột
+    </div>
+
+    <div class="dialog-body">
+
+        <input
+            id="renameDialogInput"
+            type="text"
+            placeholder="Tên cột mới"
+        >
+
+    </div>
+
+    <div class="dialog-footer">
+
+        <button onclick="closeRenameDialog()">
+            Hủy
         </button>
 
         <button
-            id="closeSettings"
             class="primary"
-        >
-            Đóng
+            onclick="saveRenameDialog()">
+            Lưu
         </button>
 
     </div>
 
 </div>
 
+<!-- =======================================================
+     LOADING
+======================================================= -->
 
-<!-- RENAME -->
-
-<div
-    class="dialog-overlay"
-    id="renameDialog"
->
-
-    <div class="dialog">
-
-        <h3>
-            ✏️ Đổi tên cột
-        </h3>
-
-        <input
-            id="renameInput"
-            type="text"
-            placeholder="Tên cột mới..."
-        >
-
-        <div class="dialog-buttons">
-
-            <button id="renameCancel">
-                Hủy
-            </button>
-
-            <button
-                id="renameSave"
-                class="primary"
-            >
-                Lưu
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<div
-    class="resize-info"
-    id="resizeInfo"
-></div>
-
-<div
-    class="loading"
-    id="loading"
->
+<div class="loading" id="loading">
     Đang tải dữ liệu...
 </div>
-
-<div
-    class="toast"
-    id="toast"
-></div>
-
 
 <script>
 
@@ -1030,238 +1224,175 @@ const SHEET_GID =
     "616860962";
 
 const CSV_URL =
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
+    "https://docs.google.com/spreadsheets/d/" +
+    SHEET_ID +
+    "/gviz/tq?tqx=out%3Acsv&gid=" +
+    SHEET_GID;
 
 
 /* =========================================================
-   SETTINGS STORAGE
+   STORAGE
 ========================================================= */
 
 const STORAGE_KEY =
-    "report_google_sheet_table_v4";
+    "report_google_sheet_table_v6";
 
 
 /* =========================================================
-   DATA
+   HIDDEN HELPER COLUMNS
 ========================================================= */
 
-let originalHeaders = [];
+const HIDDEN_COLUMNS = [
+    "Sort_DATA",
+    "Sort_NM",
+    "Sort_NgM"
+];
+
+
+/* =========================================================
+   SORT BY MAPPING
+========================================================= */
+
+const SORT_BY_MAP = {
+
+    "DATA":"Sort_DATA",
+
+    "Thoại nội mạng":"Sort_NM",
+
+    "Thoại ngoại mạng":"Sort_NgM"
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let headers = [];
 
 let originalData = [];
 
-let displayData = [];
+let displayedData = [];
 
-let columnNames = [];
+let columnNames = {};
 
-let columnWidths = [];
+let columnWidths = {};
 
-let columnSettings = {};
-
-let searchValues = {};
+let columnFormats = {};
 
 let selectedFilters = {};
 
+let defaultFilters = {};
+
+let searchTexts = {};
+
 let sortOrders = [];
+
+let filterOrders = [];
 
 let freezeCount = 0;
 
-let globalWrap = true;
+let currentFilterColumn = null;
 
-let currentColumn = -1;
+let temporaryFilterValues = new Set();
 
-let currentFilterColumn = -1;
+let temporaryFilterSearch = "";
 
-let currentContextColumn = -1;
-
-let resizing = false;
-
-let resizeColumn = -1;
-
-let resizeStartX = 0;
-
-let resizeStartWidth = 0;
+let currentContextColumn = null;
 
 
 /* =========================================================
-   DEFAULT FILTERS
+   DEFAULT FILTER COLUMNS
 ========================================================= */
 
-let defaultFilters = {};
+const DEFAULT_UPDATE_COLUMN =
+    "Ngày update";
+
+const DEFAULT_STOP_COLUMN =
+    "Dừng gói";
 
 
 /* =========================================================
-   DOM
+   LOAD STORAGE
 ========================================================= */
 
-const tableHead =
-    document.getElementById("tableHead");
+function loadStorage(){
 
-const tableBody =
-    document.getElementById("tableBody");
+    try{
 
-const tableContainer =
-    document.getElementById("tableContainer");
+        const saved =
+            JSON.parse(
+                localStorage.getItem(STORAGE_KEY)
+            );
 
-const status =
-    document.getElementById("status");
+        if(!saved) return;
 
-const loading =
-    document.getElementById("loading");
+        columnNames =
+            saved.columnNames || {};
 
-const filterMenu =
-    document.getElementById("filterMenu");
+        columnWidths =
+            saved.columnWidths || {};
 
-const valueList =
-    document.getElementById("valueList");
+        columnFormats =
+            saved.columnFormats || {};
 
-const filterValueSearch =
-    document.getElementById("filterValueSearch");
+        selectedFilters =
+            saved.selectedFilters || {};
 
-const contextMenu =
-    document.getElementById("contextMenu");
+        searchTexts =
+            saved.searchTexts || {};
 
-const settingsPanel =
-    document.getElementById("settingsPanel");
+        sortOrders =
+            saved.sortOrders || [];
 
-const renameDialog =
-    document.getElementById("renameDialog");
+        filterOrders =
+            saved.filterOrders || [];
 
-const renameInput =
-    document.getElementById("renameInput");
+        freezeCount =
+            saved.freezeCount || 0;
 
-const resizeInfo =
-    document.getElementById("resizeInfo");
+    }catch(e){
 
-const toast =
-    document.getElementById("toast");
+        console.warn(
+            "Không đọc được localStorage",
+            e
+        );
 
+    }
 
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer = null;
-
-function showToast(message){
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    clearTimeout(toastTimer);
-
-    toastTimer =
-        setTimeout(() => {
-
-            toast.classList.remove("show");
-
-        }, 1800);
 }
 
 
 /* =========================================================
-   SAVE / LOAD SETTINGS
+   SAVE STORAGE
 ========================================================= */
 
-function saveSettings(){
+function saveStorage(){
 
-    const settings = {
+    const data = {
 
         columnNames,
 
         columnWidths,
 
-        columnSettings,
-
-        searchValues,
+        columnFormats,
 
         selectedFilters,
 
+        searchTexts,
+
         sortOrders,
 
-        freezeCount,
+        filterOrders,
 
-        globalWrap
+        freezeCount
 
     };
 
     localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify(settings)
+        JSON.stringify(data)
     );
-}
-
-
-function loadSettings(){
-
-    try{
-
-        const raw =
-            localStorage.getItem(STORAGE_KEY);
-
-        if(!raw){
-            return;
-        }
-
-        const settings =
-            JSON.parse(raw);
-
-        if(
-            Array.isArray(settings.columnNames)
-        ){
-            columnNames =
-                settings.columnNames;
-        }
-
-        if(
-            Array.isArray(settings.columnWidths)
-        ){
-            columnWidths =
-                settings.columnWidths;
-        }
-
-        if(settings.columnSettings){
-            columnSettings =
-                settings.columnSettings;
-        }
-
-        if(settings.searchValues){
-            searchValues =
-                settings.searchValues;
-        }
-
-        if(settings.selectedFilters){
-            selectedFilters =
-                settings.selectedFilters;
-        }
-
-        if(Array.isArray(settings.sortOrders)){
-            sortOrders =
-                settings.sortOrders;
-        }
-
-        if(
-            Number.isInteger(settings.freezeCount)
-        ){
-            freezeCount =
-                settings.freezeCount;
-        }
-
-        if(
-            typeof settings.globalWrap === "boolean"
-        ){
-            globalWrap =
-                settings.globalWrap;
-        }
-
-    }catch(error){
-
-        console.error(
-            "Không thể đọc settings",
-            error
-        );
-
-    }
 
 }
 
@@ -1276,27 +1407,24 @@ function parseCSV(text){
 
     let row = [];
 
-    let cell = "";
+    let value = "";
 
     let insideQuotes = false;
 
-    for(
-        let i = 0;
-        i < text.length;
-        i++
-    ){
+    for(let i=0;i<text.length;i++){
 
         const char = text[i];
 
-        const next = text[i + 1];
+        const next = text[i+1];
 
         if(char === '"' && insideQuotes && next === '"'){
 
-            cell += '"';
+            value += '"';
 
             i++;
 
             continue;
+
         }
 
         if(char === '"'){
@@ -1305,57 +1433,62 @@ function parseCSV(text){
                 !insideQuotes;
 
             continue;
+
         }
 
-        if(
-            char === "," &&
-            !insideQuotes
-        ){
+        if(char === ',' && !insideQuotes){
 
-            row.push(cell);
+            row.push(value);
 
-            cell = "";
+            value = "";
 
             continue;
+
         }
 
         if(
-            (char === "\n" || char === "\r") &&
+            (char === '\n' || char === '\r') &&
             !insideQuotes
         ){
 
             if(
-                char === "\r" &&
-                next === "\n"
+                char === '\r' &&
+                next === '\n'
             ){
 
                 i++;
 
             }
 
-            row.push(cell);
+            row.push(value);
 
-            rows.push(row);
+            value = "";
+
+            if(row.length > 1 || row[0] !== ""){
+
+                rows.push(row);
+
+            }
 
             row = [];
 
-            cell = "";
-
             continue;
+
         }
 
-        cell += char;
+        value += char;
 
     }
 
-    if(
-        cell.length > 0 ||
-        row.length > 0
-    ){
+    if(value !== "" || row.length){
 
-        row.push(cell);
+        row.push(value);
 
-        rows.push(row);
+        if(row.length > 1 || row[0] !== ""){
+
+            rows.push(row);
+
+        }
 
     }
 
@@ -1365,100 +1498,486 @@ function parseCSV(text){
 
 
 /* =========================================================
-   NORMALIZE
+   LOAD DATA
 ========================================================= */
 
-function normalize(value){
+async function refreshData(){
 
-    if(value === null ||
-       value === undefined){
+    showLoading(true);
 
-        return "";
+    setStatus("Đang tải dữ liệu...");
+
+    try{
+
+        const response =
+            await fetch(
+                CSV_URL +
+                "&_=" +
+                Date.now()
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+        const text =
+            await response.text();
+
+        const rows =
+            parseCSV(text);
+
+        if(!rows.length){
+
+            throw new Error(
+                "Google Sheet không có dữ liệu"
+            );
+
+        }
+
+        headers =
+            rows[0].map(
+                x => String(x || "").trim()
+            );
+
+        originalData =
+            rows
+                .slice(1)
+                .map(row => {
+
+                    const obj = {};
+
+                    headers.forEach(
+                        (header,index) => {
+
+                            obj[index] =
+                                row[index] !== undefined
+                                    ? row[index]
+                                    : "";
+
+                        }
+                    );
+
+                    return obj;
+
+                });
+
+        initializeColumnNames();
+
+        initializeDefaults();
+
+        cleanupState();
+
+        renderColumnSettings();
+
+        applyAll();
+
+        setStatus(
+            "Đã cập nhật " +
+            originalData.length.toLocaleString("vi-VN") +
+            " dòng"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        setStatus(
+            "Lỗi tải dữ liệu"
+        );
+
+        alert(
+            "Không tải được Google Sheet.\n\n" +
+            error.message
+        );
+
+    }finally{
+
+        showLoading(false);
 
     }
-
-    return String(value)
-        .trim()
-        .toLowerCase();
 
 }
 
 
 /* =========================================================
-   FIND COLUMN
+   INITIAL COLUMN NAMES
 ========================================================= */
 
-function findColumn(...names){
+function initializeColumnNames(){
 
-    for(
-        let i = 0;
-        i < originalHeaders.length;
-        i++
-    ){
-
-        const h =
-            normalize(originalHeaders[i]);
-
-        for(
-            const name of names
-        ){
+    headers.forEach(
+        (header,index) => {
 
             if(
-                h === normalize(name)
+                columnNames[index] === undefined
             ){
 
-                return i;
+                columnNames[index] =
+                    header;
 
             }
 
         }
-
-    }
-
-    return -1;
+    );
 
 }
 
 
 /* =========================================================
-   SPECIAL SORT COLUMN
+   HIDDEN COLUMN
+========================================================= */
+
+function isHiddenColumn(index){
+
+    return HIDDEN_COLUMNS.includes(
+        headers[index]
+    );
+
+}
+
+
+/* =========================================================
+   VISIBLE COLUMNS
+========================================================= */
+
+function getVisibleIndexes(){
+
+    const result = [];
+
+    headers.forEach(
+        (header,index) => {
+
+            if(!isHiddenColumn(index)){
+
+                result.push(index);
+
+            }
+
+        }
+    );
+
+    return result;
+
+}
+
+
+/* =========================================================
+   COLUMN INDEX
+========================================================= */
+
+function getColumnIndex(name){
+
+    return headers.indexOf(name);
+
+}
+
+
+/* =========================================================
+   GET DISPLAY NAME
+========================================================= */
+
+function getDisplayName(index){
+
+    return (
+        columnNames[index] ||
+        headers[index]
+    );
+
+}
+
+
+/* =========================================================
+   UNIQUE VALUES
+========================================================= */
+
+function getUniqueValues(index){
+
+    const set = new Set();
+
+    originalData.forEach(row => {
+
+        set.add(
+            String(row[index] ?? "")
+        );
+
+    });
+
+    return Array.from(set);
+
+}
+
+
+/* =========================================================
+   DEFAULT FILTER
+========================================================= */
+
+function buildDefaultFilter(index){
+
+    const header =
+        headers[index];
+
+    const values =
+        getUniqueValues(index);
+
+    if(header === DEFAULT_UPDATE_COLUMN){
+
+        return new Set(
+            values.filter(
+                value =>
+                    String(value).trim() !== ""
+            )
+        );
+
+    }
+
+    if(header === DEFAULT_STOP_COLUMN){
+
+        if(values.includes("")){
+
+            return new Set([""]);
+
+        }
+
+        return new Set();
+
+    }
+
+    return null;
+
+}
+
+
+/* =========================================================
+   INITIALIZE DEFAULT FILTERS
+========================================================= */
+
+function initializeDefaults(){
+
+    defaultFilters = {};
+
+    headers.forEach(
+        (header,index) => {
+
+            if(isHiddenColumn(index))
+                return;
+
+            const defaults =
+                buildDefaultFilter(index);
+
+            if(defaults !== null){
+
+                defaultFilters[index] =
+                    defaults;
+
+                if(
+                    !Object.prototype.hasOwnProperty.call(
+                        selectedFilters,
+                        index
+                    )
+                ){
+
+                    selectedFilters[index] =
+                        Array.from(defaults);
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLEANUP STATE
+========================================================= */
+
+function cleanupState(){
+
+    const validIndexes =
+        new Set(
+            headers.map(
+                (_,i) => String(i)
+            )
+        );
+
+    Object.keys(columnNames)
+        .forEach(key => {
+
+            if(!validIndexes.has(String(key))){
+
+                delete columnNames[key];
+
+            }
+
+        });
+
+    Object.keys(selectedFilters)
+        .forEach(key => {
+
+            if(!validIndexes.has(String(key))){
+
+                delete selectedFilters[key];
+
+            }
+
+        });
+
+    Object.keys(searchTexts)
+        .forEach(key => {
+
+            if(!validIndexes.has(String(key))){
+
+                delete searchTexts[key];
+
+            }
+
+        });
+
+    sortOrders =
+        sortOrders.filter(
+            item =>
+                validIndexes.has(
+                    String(item.column)
+                )
+        );
+
+    filterOrders =
+        filterOrders.filter(
+            index =>
+                validIndexes.has(
+                    String(index)
+                )
+        );
+
+}
+
+
+/* =========================================================
+   APPLY ALL
+========================================================= */
+
+function applyAll(){
+
+    let rows =
+        [...originalData];
+
+    /* FILTER */
+
+    rows =
+        rows.filter(row => {
+
+            for(const key of Object.keys(selectedFilters)){
+
+                const index =
+                    Number(key);
+
+                const selected =
+                    selectedFilters[key];
+
+                if(!Array.isArray(selected))
+                    continue;
+
+                const value =
+                    String(
+                        row[index] ?? ""
+                    );
+
+                if(
+                    !selected.includes(value)
+                ){
+
+                    return false;
+
+                }
+
+            }
+
+            return true;
+
+        });
+
+    /* SEARCH */
+
+    rows =
+        rows.filter(row => {
+
+            for(const key of Object.keys(searchTexts)){
+
+                const index =
+                    Number(key);
+
+                const search =
+                    String(
+                        searchTexts[key] || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                if(!search)
+                    continue;
+
+                const value =
+                    String(
+                        row[index] ?? ""
+                    )
+                    .toLowerCase();
+
+                if(!value.includes(search)){
+
+                    return false;
+
+                }
+
+            }
+
+            return true;
+
+        });
+
+    /* SORT */
+
+    rows =
+        sortRows(rows);
+
+    displayedData =
+        rows;
+
+    renderTable();
+
+    saveStorage();
+
+}
+
+
+/* =========================================================
+   GET SORT COLUMN
 ========================================================= */
 
 function getSortColumn(index){
 
-    const name =
-        normalize(originalHeaders[index]);
+    const sourceName =
+        headers[index];
 
-    if(name === "data"){
+    const helperName =
+        SORT_BY_MAP[sourceName];
 
-        return findColumn(
-            "Sort_DATA",
-            "Sort DATA"
-        );
+    if(helperName){
 
-    }
+        const helperIndex =
+            headers.indexOf(helperName);
 
-    if(
-        name === "thoại nội mạng" ||
-        name === "thoai noi mang"
-    ){
+        if(helperIndex >= 0){
 
-        return findColumn(
-            "Sort_NM",
-            "Sort NM"
-        );
+            return helperIndex;
 
-    }
-
-    if(
-        name === "thoại ngoại mạng" ||
-        name === "thoai ngoai mang"
-    ){
-
-        return findColumn(
-            "Sort_NgM",
-            "Sort NgM"
-        );
+        }
 
     }
 
@@ -1468,84 +1987,130 @@ function getSortColumn(index){
 
 
 /* =========================================================
-   HIDDEN COLUMNS
+   SORT VALUE
 ========================================================= */
 
-function isHiddenColumn(index){
+function compareValues(a,b){
 
-    const name =
-        normalize(originalHeaders[index]);
+    if(a === "" && b === "")
+        return 0;
 
-    return [
-        "sort_data",
-        "sort data",
-        "sort_nm",
-        "sort nm",
-        "sort_ngm",
-        "sort ngm"
-    ].includes(name);
+    if(a === "")
+        return 1;
+
+    if(b === "")
+        return -1;
+
+    const na =
+        Number(
+            String(a)
+                .replace(/,/g,"")
+                .replace(/\s/g,"")
+        );
+
+    const nb =
+        Number(
+            String(b)
+                .replace(/,/g,"")
+                .replace(/\s/g,"")
+        );
+
+    if(
+        !Number.isNaN(na) &&
+        !Number.isNaN(nb)
+    ){
+
+        return na - nb;
+
+    }
+
+    return String(a)
+        .localeCompare(
+            String(b),
+            "vi",
+            {
+                numeric:true,
+                sensitivity:"base"
+            }
+        );
 
 }
 
 
 /* =========================================================
-   DATE UPDATE DISPLAY
+   SORT ROWS
 ========================================================= */
 
-function findDateUpdateColumn(){
+function sortRows(rows){
 
-    return findColumn(
-        "Ngày update",
-        "Ngay update",
-        "Ngày cập nhật",
-        "Ngay cap nhat"
+    if(!sortOrders.length)
+        return rows;
+
+    const orders =
+        [...sortOrders]
+            .sort(
+                (a,b) =>
+                    Number(a.priority) -
+                    Number(b.priority)
+            );
+
+    return rows.sort(
+        (a,b) => {
+
+            for(const order of orders){
+
+                const sourceColumn =
+                    Number(order.column);
+
+                const sortColumn =
+                    getSortColumn(
+                        sourceColumn
+                    );
+
+                const result =
+                    compareValues(
+                        a[sortColumn],
+                        b[sortColumn]
+                    );
+
+                if(result !== 0){
+
+                    return order.direction === "desc"
+                        ? -result
+                        : result;
+
+                }
+
+            }
+
+            return 0;
+
+        }
     );
 
 }
 
 
+/* =========================================================
+   FORMAT UPDATE DATE
+========================================================= */
+
 function formatUpdateDate(value){
 
-    if(
-        value === null ||
-        value === undefined ||
-        String(value).trim() === ""
-    ){
+    const text =
+        String(value ?? "").trim();
 
+    if(!text)
         return "";
 
-    }
+    let date =
+        new Date(text);
 
-    const text =
-        String(value).trim();
+    if(Number.isNaN(date.getTime())){
 
-    let date = null;
-
-    /* yyyy-mm-dd */
-
-    let match =
-        text.match(
-            /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
-        );
-
-    if(match){
-
-        date =
-            new Date(
-                Number(match[1]),
-                Number(match[2]) - 1,
-                Number(match[3])
-            );
-
-    }
-
-    /* dd/mm/yyyy */
-
-    if(!date){
-
-        match =
+        const match =
             text.match(
-                /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
+                /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/
             );
 
         if(match){
@@ -1561,7 +2126,7 @@ function formatUpdateDate(value){
 
     }
 
-    if(!date){
+    if(Number.isNaN(date.getTime())){
 
         return text;
 
@@ -1571,728 +2136,171 @@ function formatUpdateDate(value){
         new Date();
 
     let months =
-        (
-            now.getFullYear() -
-            date.getFullYear()
-        ) * 12 +
-        (
-            now.getMonth() -
-            date.getMonth()
-        );
+        (now.getFullYear() -
+            date.getFullYear()) * 12 +
+        (now.getMonth() -
+            date.getMonth());
 
-    if(months < 0){
-
+    if(months < 0)
         months = 0;
 
+    if(months === 0){
+
+        return "0 tháng";
+
     }
 
-    return String(months).padStart(2, "0")
-        + " tháng";
+    return String(months).padStart(
+        2,
+        "0"
+    ) + " tháng";
 
 }
 
 
 /* =========================================================
-   DEFAULT FILTER
+   GET CELL DISPLAY VALUE
 ========================================================= */
 
-function buildDefaultFilters(){
-
-    defaultFilters = {};
-
-    const dateColumn =
-        findDateUpdateColumn();
-
-    if(dateColumn >= 0){
-
-        defaultFilters[dateColumn] = {
-            type:"not-empty"
-        };
-
-    }
-
-    const stopColumn =
-        findColumn(
-            "Dừng gói",
-            "Dung goi"
-        );
-
-    if(stopColumn >= 0){
-
-        defaultFilters[stopColumn] = {
-            type:"empty"
-        };
-
-    }
-
-}
-
-
-/* =========================================================
-   CHECK DEFAULT FILTER
-========================================================= */
-
-function passesDefaultFilter(
-    row,
-    column
+function getCellDisplayValue(
+    index,
+    value
 ){
 
-    const rule =
-        defaultFilters[column];
+    const header =
+        headers[index];
 
-    if(!rule){
-
-        return true;
-
-    }
-
-    const value =
-        row[column] ?? "";
-
-    const empty =
-        String(value).trim() === "";
-
-    if(rule.type === "empty"){
-
-        return empty;
-
-    }
-
-    if(rule.type === "not-empty"){
-
-        return !empty;
-
-    }
-
-    return true;
-
-}
-
-
-/* =========================================================
-   INITIALIZE COLUMNS
-========================================================= */
-
-function initializeColumns(){
-
-    if(
-        !Array.isArray(columnNames) ||
-        columnNames.length !== originalHeaders.length
-    ){
-
-        columnNames =
-            [...originalHeaders];
-
-    }else{
-
-        for(
-            let i = 0;
-            i < originalHeaders.length;
-            i++
-        ){
-
-            if(
-                !columnNames[i] ||
-                columnNames[i].trim() === ""
-            ){
-
-                columnNames[i] =
-                    originalHeaders[i];
-
-            }
-
-        }
-
-    }
-
-
-    if(
-        !Array.isArray(columnWidths) ||
-        columnWidths.length !== originalHeaders.length
-    ){
-
-        const old =
-            Array.isArray(columnWidths)
-                ? columnWidths
-                : [];
-
-        columnWidths =
-            originalHeaders.map(
-                (_, i) =>
-                    old[i] || 160
-            );
-
-    }
-
-
-    for(
-        let i = 0;
-        i < originalHeaders.length;
-        i++
-    ){
-
-        if(
-            !columnSettings[i]
-        ){
-
-            columnSettings[i] = {
-
-                align:"left",
-
-                fontSize:14,
-
-                bold:false,
-
-                italic:false,
-
-                textColor:"#222222",
-
-                bgColor:"#ffffff",
-
-                wrap:true
-
-            };
-
-        }
-
-    }
-
-
-    if(freezeCount > originalHeaders.length){
-
-        freezeCount =
-            originalHeaders.length;
-
-    }
-
-}
-
-
-/* =========================================================
-   DISPLAY VALUE
-========================================================= */
-
-function getDisplayValue(
-    value,
-    column
-){
-
-    const dateColumn =
-        findDateUpdateColumn();
-
-    if(
-        column === dateColumn
-    ){
+    if(header === DEFAULT_UPDATE_COLUMN){
 
         return formatUpdateDate(value);
 
     }
 
-    return value ?? "";
-
-}
-
-
-/* =========================================================
-   FILTER VALUES
-========================================================= */
-
-function getColumnValues(column){
-
-    const values = new Set();
-
-    for(
-        const row of originalData
-    ){
-
-        const value =
-            getDisplayValue(
-                row[column],
-                column
-            );
-
-        values.add(
-            String(value)
-        );
-
-    }
-
-    return Array.from(values)
-        .sort(
-            (a,b) =>
-                a.localeCompare(
-                    b,
-                    "vi",
-                    {
-                        numeric:true,
-                        sensitivity:"base"
-                    }
-                )
-        );
-
-}
-
-
-/* =========================================================
-   ACTIVE FILTER
-========================================================= */
-
-function hasUserFilter(column){
-
-    const filter =
-        selectedFilters[column];
-
-    return (
-        Array.isArray(filter) &&
-        filter.length > 0
-    );
-
-}
-
-
-function hasSearch(column){
-
-    return (
-        searchValues[column] &&
-        searchValues[column].trim() !== ""
-    );
-
-}
-
-
-function isActiveFilter(column){
-
-    return (
-        hasUserFilter(column) ||
-        hasSearch(column) ||
-        defaultFilters[column]
-    );
-
-}
-
-
-/* =========================================================
-   FILTER + SORT
-========================================================= */
-
-function recalculateData(){
-
-    const result = [];
-
-    for(
-        let rowIndex = 0;
-        rowIndex < originalData.length;
-        rowIndex++
-    ){
-
-        const row =
-            originalData[rowIndex];
-
-        let valid = true;
-
-
-        /* default filter */
-
-        for(
-            const key of Object.keys(
-                defaultFilters
-            )
-        ){
-
-            const column =
-                Number(key);
-
-            if(
-                !passesDefaultFilter(
-                    row,
-                    column
-                )
-            ){
-
-                valid = false;
-
-                break;
-
-            }
-
-        }
-
-        if(!valid){
-
-            continue;
-
-        }
-
-
-        /* user filter */
-
-        for(
-            const key of Object.keys(
-                selectedFilters
-            )
-        ){
-
-            const column =
-                Number(key);
-
-            const values =
-                selectedFilters[column];
-
-            if(
-                !Array.isArray(values) ||
-                values.length === 0
-            ){
-
-                continue;
-
-            }
-
-            const value =
-                String(
-                    getDisplayValue(
-                        row[column],
-                        column
-                    )
-                );
-
-            if(
-                !values.includes(value)
-            ){
-
-                valid = false;
-
-                break;
-
-            }
-
-        }
-
-        if(!valid){
-
-            continue;
-
-        }
-
-
-        /* search */
-
-        for(
-            const key of Object.keys(
-                searchValues
-            )
-        ){
-
-            const column =
-                Number(key);
-
-            const search =
-                normalize(
-                    searchValues[column]
-                );
-
-            if(!search){
-
-                continue;
-
-            }
-
-            const value =
-                normalize(
-                    getDisplayValue(
-                        row[column],
-                        column
-                    )
-                );
-
-            if(
-                !value.includes(search)
-            ){
-
-                valid = false;
-
-                break;
-
-            }
-
-        }
-
-        if(valid){
-
-            result.push({
-                row,
-                originalIndex:rowIndex
-            });
-
-        }
-
-    }
-
-
-    /* =====================================================
-       MULTI SORT
-    ===================================================== */
-
-    if(sortOrders.length > 0){
-
-        result.sort(
-            (a,b) => {
-
-                for(
-                    const sort of sortOrders
-                ){
-
-                    const displayColumn =
-                        sort.column;
-
-                    const actualSortColumn =
-                        getSortColumn(
-                            displayColumn
-                        );
-
-                    const av =
-                        a.row[actualSortColumn];
-
-                    const bv =
-                        b.row[actualSortColumn];
-
-                    const cmp =
-                        compareValues(
-                            av,
-                            bv
-                        );
-
-                    if(cmp !== 0){
-
-                        return (
-                            sort.direction === "asc"
-                                ? cmp
-                                : -cmp
-                        );
-
-                    }
-
-                }
-
-                return (
-                    a.originalIndex -
-                    b.originalIndex
-                );
-
-            }
-        );
-
-    }
-
-
-    displayData =
-        result.map(
-            item => item.row
-        );
-
-
-    renderTableBody();
-
-    updateStatus();
-
-}
-
-
-/* =========================================================
-   COMPARE
-========================================================= */
-
-function compareValues(a,b){
-
-    const aa =
-        String(a ?? "").trim();
-
-    const bb =
-        String(b ?? "").trim();
-
-    if(aa === bb){
-
-        return 0;
-
-    }
-
-    if(aa === ""){
-
-        return -1;
-
-    }
-
-    if(bb === ""){
-
-        return 1;
-
-    }
-
-    const na =
-        Number(
-            aa.replace(
-                /[^\d.-]/g,
-                ""
-            )
-        );
-
-    const nb =
-        Number(
-            bb.replace(
-                /[^\d.-]/g,
-                ""
-            )
-        );
-
     if(
-        !Number.isNaN(na) &&
-        !Number.isNaN(nb) &&
-        aa.match(/\d/) &&
-        bb.match(/\d/)
+        value === null ||
+        value === undefined
     ){
 
-        return na - nb;
+        return "";
 
     }
 
-    return aa.localeCompare(
-        bb,
-        "vi",
-        {
-            numeric:true,
-            sensitivity:"base"
-        }
-    );
+    return String(value);
 
 }
 
 
 /* =========================================================
-   RENDER HEADER
+   RENDER TABLE
 ========================================================= */
 
-function renderHeader(){
+function renderTable(){
 
-    tableHead.innerHTML = "";
+    const thead =
+        document.getElementById(
+            "tableHead"
+        );
 
-    const row =
+    const tbody =
+        document.getElementById(
+            "tableBody"
+        );
+
+    thead.innerHTML = "";
+
+    tbody.innerHTML = "";
+
+    const visibleIndexes =
+        getVisibleIndexes();
+
+    /* HEADER */
+
+    const headerRow =
         document.createElement("tr");
 
-    for(
-        let column = 0;
-        column < originalHeaders.length;
-        column++
-    ){
+    visibleIndexes.forEach(
+        index => {
 
-        if(
-            isHiddenColumn(column)
-        ){
+            const th =
+                document.createElement("th");
 
-            continue;
+            th.dataset.index =
+                index;
 
-        }
+            const activeFilter =
+                isColumnFiltered(index);
 
-        const th =
-            document.createElement("th");
-
-        th.dataset.column =
-            column;
-
-        th.style.width =
-            columnWidths[column] + "px";
-
-        th.style.minWidth =
-            columnWidths[column] + "px";
-
-        const sortIndex =
-            sortOrders.findIndex(
-                s =>
-                    s.column === column
-            );
-
-        const activeFilter =
-            isActiveFilter(column);
-
-        const activeSort =
-            sortIndex >= 0;
-
-        if(activeFilter){
-
-            th.classList.add(
-                "active-filter"
-            );
-
-        }
-
-        if(activeSort){
-
-            th.classList.add(
-                "active-sort"
-            );
-
-        }
-
-
-        /* HEADER */
-
-        const headerMain =
-            document.createElement("div");
-
-        headerMain.className =
-            "header-main";
-
-
-        const title =
-            document.createElement("div");
-
-        title.className =
-            "header-title";
-
-        title.textContent =
-            columnNames[column];
-
-
-        const right =
-            document.createElement("div");
-
-        right.style.display =
-            "flex";
-
-        right.style.alignItems =
-            "center";
-
-        right.style.gap =
-            "4px";
-
-
-        if(activeSort){
-
-            const sortBadge =
-                document.createElement("span");
-
-            sortBadge.className =
-                "header-sort " +
-                (
-                    sortOrders[sortIndex]
-                        .direction === "asc"
-                        ? "asc"
-                        : "desc"
+            const sort =
+                sortOrders.find(
+                    item =>
+                        Number(item.column) === index
                 );
 
-            const number =
-                sortIndex + 1;
+            const activeSort =
+                !!sort;
 
-            sortBadge.textContent =
-                `${number} ${
-                    sortOrders[sortIndex].direction === "asc"
-                        ? "▲"
-                        : "▼"
-                }`;
+            if(activeFilter){
 
-            right.appendChild(
-                sortBadge
-            );
+                th.classList.add(
+                    "active-filter"
+                );
 
-        }else{
+            }
+
+            if(activeSort){
+
+                th.classList.add(
+                    "active-sort"
+                );
+
+            }
+
+            const main =
+                document.createElement("div");
+
+            main.className =
+                "header-main";
+
+            const title =
+                document.createElement("div");
+
+            title.className =
+                "header-title";
+
+            title.textContent =
+                getDisplayName(index);
+
+            title.title =
+                getDisplayName(index);
+
+            title.onclick =
+                event => {
+
+                    event.stopPropagation();
+
+                    openFilter(
+                        index,
+                        th
+                    );
+
+                };
+
+            title.ondblclick =
+                event => {
+
+                    event.stopPropagation();
+
+                    openRenameDialog(
+                        index
+                    );
+
+                };
+
+            const right =
+                document.createElement("div");
+
+            right.className =
+                "header-right";
 
             const arrow =
                 document.createElement("span");
@@ -2307,501 +2315,302 @@ function renderHeader(){
                 arrow
             );
 
-        }
+            if(activeFilter){
 
+                const filterBadge =
+                    document.createElement("span");
 
-        headerMain.appendChild(
-            title
-        );
+                filterBadge.className =
+                    "filter-badge";
 
-        headerMain.appendChild(
-            right
-        );
+                const fPriority =
+                    getFilterPriority(index);
 
+                filterBadge.textContent =
+                    fPriority
+                        ? "F" + fPriority
+                        : "✓";
 
-        /* CLICK */
-
-        headerMain.addEventListener(
-            "click",
-            event => {
-
-                if(
-                    event.target.closest(
-                        ".resize-handle"
-                    )
-                ){
-
-                    return;
-
-                }
-
-                openFilterMenu(
-                    column,
-                    event
+                right.appendChild(
+                    filterBadge
                 );
 
             }
-        );
 
+            if(activeSort){
 
-        /* RIGHT CLICK */
+                const badge =
+                    document.createElement("span");
 
-        headerMain.addEventListener(
-            "contextmenu",
-            event => {
-
-                event.preventDefault();
-
-                openContextMenu(
-                    column,
-                    event.clientX,
-                    event.clientY
-                );
-
-            }
-        );
-
-
-        th.appendChild(
-            headerMain
-        );
-
-
-        /* RESIZE */
-
-        const resizeHandle =
-            document.createElement("div");
-
-        resizeHandle.className =
-            "resize-handle";
-
-        resizeHandle.addEventListener(
-            "mousedown",
-            event => {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-                startResize(
-                    event,
-                    column
-                );
-
-            }
-        );
-
-        th.appendChild(
-            resizeHandle
-        );
-
-
-        row.appendChild(
-            th
-        );
-
-    }
-
-
-    /* SEARCH ROW */
-
-    const searchRow =
-        document.createElement("tr");
-
-    searchRow.className =
-        "search-row";
-
-
-    for(
-        let column = 0;
-        column < originalHeaders.length;
-        column++
-    ){
-
-        if(
-            isHiddenColumn(column)
-        ){
-
-            continue;
-
-        }
-
-        const td =
-            document.createElement("th");
-
-        td.className =
-            "search-cell";
-
-        td.style.width =
-            columnWidths[column] + "px";
-
-        td.style.minWidth =
-            columnWidths[column] + "px";
-
-
-        const input =
-            document.createElement("input");
-
-        input.className =
-            "search-input";
-
-        input.placeholder =
-            "🔎 Tìm...";
-
-        input.value =
-            searchValues[column] || "";
-
-
-        let timer = null;
-
-        input.addEventListener(
-            "input",
-            () => {
-
-                clearTimeout(timer);
-
-                timer =
-                    setTimeout(
-                        () => {
-
-                            searchValues[column] =
-                                input.value;
-
-                            saveSettings();
-
-                            recalculateData();
-
-                            renderHeader();
-
-                            applyStickyColumns();
-
-                        },
-                        150
+                badge.className =
+                    "sort-badge " +
+                    (
+                        sort.direction === "asc"
+                            ? "asc"
+                            : "desc"
                     );
 
-            }
-        );
-
-
-        input.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-            }
-        );
-
-
-        td.appendChild(
-            input
-        );
-
-        searchRow.appendChild(
-            td
-        );
-
-    }
-
-
-    tableHead.appendChild(
-        row
-    );
-
-    tableHead.appendChild(
-        searchRow
-    );
-
-
-    applyStickyColumns();
-
-}
-
-
-/* =========================================================
-   RENDER BODY
-========================================================= */
-
-function renderTableBody(){
-
-    tableBody.innerHTML = "";
-
-    const fragment =
-        document.createDocumentFragment();
-
-    for(
-        let rowIndex = 0;
-        rowIndex < displayData.length;
-        rowIndex++
-    ){
-
-        const row =
-            displayData[rowIndex];
-
-        const tr =
-            document.createElement("tr");
-
-
-        for(
-            let column = 0;
-            column < originalHeaders.length;
-            column++
-        ){
-
-            if(
-                isHiddenColumn(column)
-            ){
-
-                continue;
-
-            }
-
-            const td =
-                document.createElement("td");
-
-            const setting =
-                columnSettings[column] || {};
-
-
-            td.textContent =
-                getDisplayValue(
-                    row[column],
-                    column
-                );
-
-
-            td.style.textAlign =
-                setting.align || "left";
-
-            td.style.fontSize =
-                (setting.fontSize || 14) + "px";
-
-            td.style.fontWeight =
-                setting.bold
-                    ? "700"
-                    : "400";
-
-            td.style.fontStyle =
-                setting.italic
-                    ? "italic"
-                    : "normal";
-
-            td.style.color =
-                setting.textColor ||
-                "#222222";
-
-            td.style.backgroundColor =
-                setting.bgColor ||
-                "#ffffff";
-
-
-            const wrap =
-                setting.wrap !== undefined
-                    ? setting.wrap
-                    : globalWrap;
-
-
-            if(wrap){
-
-                td.classList.add(
-                    "wrap-text"
-                );
-
-            }else{
-
-                td.classList.add(
-                    "no-wrap"
-                );
-
-            }
-
-
-            td.style.width =
-                columnWidths[column] + "px";
-
-            td.style.minWidth =
-                columnWidths[column] + "px";
-
-            td.style.maxWidth =
-                columnWidths[column] + "px";
-
-
-            tr.appendChild(td);
-
-        }
-
-
-        fragment.appendChild(
-            tr
-        );
-
-    }
-
-
-    tableBody.appendChild(
-        fragment
-    );
-
-
-    applyStickyColumns();
-
-}
-
-
-/* =========================================================
-   STICKY
-========================================================= */
-
-function applyStickyColumns(){
-
-    const visibleColumns = [];
-
-    for(
-        let i = 0;
-        i < originalHeaders.length;
-        i++
-    ){
-
-        if(
-            !isHiddenColumn(i)
-        ){
-
-            visibleColumns.push(i);
-
-        }
-
-    }
-
-
-    let left = 0;
-
-
-    for(
-        let visibleIndex = 0;
-        visibleIndex < visibleColumns.length;
-        visibleIndex++
-    ){
-
-        const column =
-            visibleColumns[visibleIndex];
-
-        const elements =
-            document.querySelectorAll(
-                `[data-column="${column}"]`
-            );
-
-
-        if(
-            visibleIndex < freezeCount
-        ){
-
-            elements.forEach(
-                element => {
-
-                    element.classList.add(
-                        "sticky-col"
+                badge.textContent =
+                    String(sort.priority) +
+                    (
+                        sort.direction === "asc"
+                            ? " ▲"
+                            : " ▼"
                     );
 
-                    element.style.left =
-                        left + "px";
-
-                }
-            );
-
-            left +=
-                columnWidths[column];
-
-        }else{
-
-            elements.forEach(
-                element => {
-
-                    element.classList.remove(
-                        "sticky-col"
-                    );
-
-                    element.style.left =
-                        "";
-
-                }
-            );
-
-        }
-
-    }
-
-
-    /* tbody cells */
-
-    const bodyRows =
-        tableBody.querySelectorAll("tr");
-
-    bodyRows.forEach(
-        row => {
-
-            let visibleIndex = 0;
-
-            const cells =
-                Array.from(
-                    row.children
+                right.appendChild(
+                    badge
                 );
 
-            cells.forEach(
-                cell => {
+            }
 
-                    while(
-                        visibleIndex <
-                        visibleColumns.length &&
-                        isHiddenColumn(
-                            visibleColumns[visibleIndex]
-                        )
-                    ){
+            main.appendChild(
+                title
+            );
 
-                        visibleIndex++;
+            main.appendChild(
+                right
+            );
 
-                    }
+            th.appendChild(
+                main
+            );
 
-                    if(
-                        visibleIndex <
-                        freezeCount
-                    ){
+            /* SEARCH */
 
-                        const column =
-                            visibleColumns[
-                                visibleIndex
-                            ];
+            const search =
+                document.createElement("div");
 
-                        cell.classList.add(
-                            "sticky-col"
-                        );
+            search.className =
+                "search-cell";
 
-                        let offset = 0;
+            const input =
+                document.createElement("input");
 
-                        for(
-                            let x = 0;
-                            x < visibleIndex;
-                            x++
-                        ){
+            input.className =
+                "search-input";
 
-                            offset +=
-                                columnWidths[
-                                    visibleColumns[x]
-                                ];
+            input.placeholder =
+                "Tìm kiếm...";
+
+            input.value =
+                searchTexts[index] || "";
+
+            input.oninput =
+                debounce(
+                    event => {
+
+                        const value =
+                            event.target.value;
+
+                        if(value){
+
+                            searchTexts[index] =
+                                value;
+
+                        }else{
+
+                            delete searchTexts[index];
 
                         }
 
-                        cell.style.left =
-                            offset + "px";
+                        applyAll();
 
-                    }
+                    },
+                    120
+                );
 
-                    visibleIndex++;
+            input.onclick =
+                event => {
 
-                }
+                    event.stopPropagation();
+
+                };
+
+            search.appendChild(
+                input
+            );
+
+            th.appendChild(
+                search
+            );
+
+            /* RESIZE */
+
+            const resize =
+                document.createElement("div");
+
+            resize.className =
+                "resize-handle";
+
+            resize.onmousedown =
+                event => {
+
+                    startResize(
+                        event,
+                        index,
+                        th
+                    );
+
+                };
+
+            th.appendChild(
+                resize
+            );
+
+            th.oncontextmenu =
+                event => {
+
+                    event.preventDefault();
+
+                    currentContextColumn =
+                        index;
+
+                    openContextMenu(
+                        event.clientX,
+                        event.clientY
+                    );
+
+                };
+
+            headerRow.appendChild(
+                th
             );
 
         }
     );
+
+    thead.appendChild(
+        headerRow
+    );
+
+
+    /* BODY */
+
+    if(!displayedData.length){
+
+        const row =
+            document.createElement("tr");
+
+        const cell =
+            document.createElement("td");
+
+        cell.colSpan =
+            visibleIndexes.length || 1;
+
+        cell.className =
+            "empty";
+
+        cell.textContent =
+            "Không có dữ liệu phù hợp";
+
+        row.appendChild(
+            cell
+        );
+
+        tbody.appendChild(
+            row
+        );
+
+        applyWidthsAndFreeze();
+
+        return;
+
+    }
+
+
+    displayedData.forEach(
+        rowData => {
+
+            const tr =
+                document.createElement("tr");
+
+            visibleIndexes.forEach(
+                index => {
+
+                    const td =
+                        document.createElement("td");
+
+                    td.dataset.index =
+                        index;
+
+                    const value =
+                        getCellDisplayValue(
+                            index,
+                            rowData[index]
+                        );
+
+                    td.textContent =
+                        value;
+
+                    applyCellFormat(
+                        td,
+                        index
+                    );
+
+                    tr.appendChild(
+                        td
+                    );
+
+                }
+            );
+
+            tbody.appendChild(
+                tr
+            );
+
+        }
+    );
+
+    applyWidthsAndFreeze();
+
+}
+
+
+/* =========================================================
+   COLUMN FILTER STATE
+========================================================= */
+
+function isColumnFiltered(index){
+
+    if(
+        Object.prototype.hasOwnProperty.call(
+            selectedFilters,
+            index
+        )
+    ){
+
+        const selected =
+            selectedFilters[index];
+
+        const all =
+            getUniqueValues(index);
+
+        return !sameArray(
+            selected,
+            all
+        );
+
+    }
+
+    return false;
+
+}
+
+
+/* =========================================================
+   FILTER PRIORITY
+========================================================= */
+
+function getFilterPriority(index){
+
+    const position =
+        filterOrders.indexOf(index);
+
+    if(position < 0)
+        return null;
+
+    return position + 1;
 
 }
 
@@ -2810,45 +2619,119 @@ function applyStickyColumns(){
    OPEN FILTER
 ========================================================= */
 
-function openFilterMenu(
-    column,
-    event
-){
+function openFilter(index, element){
 
     currentFilterColumn =
-        column;
+        index;
 
-    filterMenu.style.display =
-        "block";
+    const allValues =
+        getUniqueValues(index);
 
-    filterMenu.classList.add(
+    if(
+        Object.prototype.hasOwnProperty.call(
+            selectedFilters,
+            index
+        )
+    ){
+
+        temporaryFilterValues =
+            new Set(
+                selectedFilters[index]
+            );
+
+    }else{
+
+        temporaryFilterValues =
+            new Set(
+                allValues
+            );
+
+    }
+
+    temporaryFilterSearch =
+        "";
+
+    document.getElementById(
+        "filterSearch"
+    ).value = "";
+
+    document.getElementById(
+        "filterTitle"
+    ).textContent =
+        "Lọc: " +
+        getDisplayName(index);
+
+    const sort =
+        sortOrders.find(
+            item =>
+                Number(item.column) === index
+        );
+
+    document.getElementById(
+        "sortPriorityInput"
+    ).value =
+        sort
+            ? sort.priority
+            : "";
+
+    renderFilterValues();
+
+    const menu =
+        document.getElementById(
+            "filterMenu"
+        );
+
+    menu.classList.add(
         "show"
     );
 
-    filterMenu.style.left =
-        Math.min(
-            event.clientX,
-            window.innerWidth - 310
-        ) + "px";
+    const rect =
+        element.getBoundingClientRect();
 
-    filterMenu.style.top =
-        Math.min(
-            event.clientY + 5,
-            window.innerHeight - 540
-        ) + "px";
+    let left =
+        rect.left;
 
+    let top =
+        rect.bottom + 3;
 
-    document.getElementById(
-        "filterMenuTitle"
-    ).textContent =
-        `Lọc: ${columnNames[column]}`;
+    const menuWidth =
+        310;
 
+    const menuHeight =
+        520;
 
-    filterValueSearch.value =
-        "";
+    if(
+        left + menuWidth >
+        window.innerWidth - 10
+    ){
 
+        left =
+            window.innerWidth -
+            menuWidth -
+            10;
 
-    renderFilterValues();
+    }
+
+    if(
+        top + menuHeight >
+        window.innerHeight - 10
+    ){
+
+        top =
+            rect.top -
+            menuHeight -
+            3;
+
+    }
+
+    if(top < 10)
+        top = 10;
+
+    menu.style.left =
+        left + "px";
+
+    menu.style.top =
+        top + "px";
 
 }
 
@@ -2859,313 +2742,1619 @@ function openFilterMenu(
 
 function renderFilterValues(){
 
-    valueList.innerHTML = "";
+    const container =
+        document.getElementById(
+            "filterValues"
+        );
 
-    if(currentFilterColumn < 0){
+    container.innerHTML = "";
 
+    if(currentFilterColumn === null)
         return;
 
-    }
-
-    const column =
-        currentFilterColumn;
-
-    let values =
-        getColumnValues(column);
-
-
     const search =
-        normalize(
-            filterValueSearch.value
+        String(
+            document.getElementById(
+                "filterSearch"
+            ).value || ""
+        )
+        .toLowerCase()
+        .trim();
+
+    const values =
+        getUniqueValues(
+            currentFilterColumn
         );
 
+    values.forEach(
+        value => {
 
-    if(search){
-
-        values =
-            values.filter(
-                value =>
-                    normalize(
+            const display =
+                value === ""
+                    ? "(Trống)"
+                    : getCellDisplayValue(
+                        currentFilterColumn,
                         value
-                    ).includes(search)
+                    );
+
+            if(
+                search &&
+                !display
+                    .toLowerCase()
+                    .includes(search)
+            ){
+
+                return;
+
+            }
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+            label.className =
+                "filter-value";
+
+            const checkbox =
+                document.createElement(
+                    "input"
+                );
+
+            checkbox.type =
+                "checkbox";
+
+            checkbox.checked =
+                temporaryFilterValues.has(
+                    value
+                );
+
+            checkbox.onchange =
+                () => {
+
+                    if(checkbox.checked){
+
+                        temporaryFilterValues.add(
+                            value
+                        );
+
+                    }else{
+
+                        temporaryFilterValues.delete(
+                            value
+                        );
+
+                    }
+
+                };
+
+            const text =
+                document.createElement(
+                    "span"
+                );
+
+            text.className =
+                "filter-value-text";
+
+            text.textContent =
+                display;
+
+            label.appendChild(
+                checkbox
             );
 
-    }
-
-
-    let selected =
-        selectedFilters[column];
-
-
-    if(!Array.isArray(selected)){
-
-        selected =
-            [...values];
-
-    }
-
-
-    for(
-        const value of values
-    ){
-
-        const label =
-            document.createElement(
-                "label"
+            label.appendChild(
+                text
             );
 
-        label.className =
-            "value-item";
-
-
-        const checkbox =
-            document.createElement(
-                "input"
+            container.appendChild(
+                label
             );
 
-        checkbox.type =
-            "checkbox";
-
-        checkbox.value =
-            value;
-
-        checkbox.checked =
-            selected.includes(
-                value
-            );
-
-
-        label.appendChild(
-            checkbox
-        );
-
-
-        const text =
-            document.createElement(
-                "span"
-            );
-
-        text.textContent =
-            value === ""
-                ? "(Trống)"
-                : value;
-
-
-        label.appendChild(
-            text
-        );
-
-
-        valueList.appendChild(
-            label
-        );
-
-    }
+        }
+    );
 
 }
 
 
 /* =========================================================
-   FILTER BUTTONS
+   SELECT ALL FILTER VALUES
 ========================================================= */
 
-document.getElementById(
-    "selectAllButton"
-).addEventListener(
-    "click",
-    () => {
+function selectAllFilterValues(){
 
-        const checkboxes =
-            valueList.querySelectorAll(
-                "input[type=checkbox]"
-            );
+    if(currentFilterColumn === null)
+        return;
 
-        checkboxes.forEach(
-            checkbox => {
-
-                checkbox.checked =
-                    true;
-
-            }
+    temporaryFilterValues =
+        new Set(
+            getUniqueValues(
+                currentFilterColumn
+            )
         );
 
-    }
-);
+    renderFilterValues();
+
+}
 
 
-document.getElementById(
-    "deselectAllButton"
-).addEventListener(
-    "click",
-    () => {
+/* =========================================================
+   CLEAR ALL FILTER VALUES
+========================================================= */
 
-        const checkboxes =
-            valueList.querySelectorAll(
-                "input[type=checkbox]"
-            );
+function clearAllFilterValues(){
 
-        checkboxes.forEach(
-            checkbox => {
+    temporaryFilterValues =
+        new Set();
 
-                checkbox.checked =
-                    false;
+    renderFilterValues();
 
-            }
-        );
-
-    }
-);
-
-
-filterValueSearch.addEventListener(
-    "input",
-    renderFilterValues
-);
+}
 
 
 /* =========================================================
    APPLY FILTER
 ========================================================= */
 
-document.getElementById(
-    "applyFilterButton"
-).addEventListener(
-    "click",
-    () => {
+function applyFilter(){
 
-        const checkboxes =
-            valueList.querySelectorAll(
-                "input[type=checkbox]"
-            );
+    if(currentFilterColumn === null)
+        return;
 
-        const values = [];
+    const index =
+        currentFilterColumn;
 
-        checkboxes.forEach(
-            checkbox => {
+    const allValues =
+        getUniqueValues(index);
 
-                if(checkbox.checked){
-
-                    values.push(
-                        checkbox.value
-                    );
-
-                }
-
-            }
+    const selected =
+        Array.from(
+            temporaryFilterValues
         );
 
+    if(
+        selected.length ===
+        allValues.length
+    ){
 
-        const allValues =
-            getColumnValues(
-                currentFilterColumn
+        /*
+         * Chọn tất cả:
+         * lưu toàn bộ giá trị để filter
+         * thực sự hiển thị full dữ liệu.
+         */
+
+        selectedFilters[index] =
+            selected;
+
+    }else{
+
+        selectedFilters[index] =
+            selected;
+
+    }
+
+    /*
+     * Ghi nhận thứ tự filter.
+     */
+
+    const defaultValues =
+        defaultFilters[index];
+
+    const selectedSet =
+        new Set(selected);
+
+    let differsFromDefault =
+        true;
+
+    if(defaultValues){
+
+        differsFromDefault =
+            !sameArray(
+                Array.from(defaultValues),
+                selected
             );
 
+    }
 
-        if(
-            values.length === 0
-        ){
+    if(
+        selected.length ===
+        allValues.length &&
+        !defaultValues
+    ){
 
-            selectedFilters[
-                currentFilterColumn
-            ] = [];
+        const pos =
+            filterOrders.indexOf(index);
 
-        }else if(
-            values.length ===
-            allValues.length
-        ){
+        if(pos >= 0){
 
-            delete selectedFilters[
-                currentFilterColumn
-            ];
-
-        }else{
-
-            selectedFilters[
-                currentFilterColumn
-            ] =
-                values;
+            filterOrders.splice(
+                pos,
+                1
+            );
 
         }
 
+    }else{
 
-        saveSettings();
+        if(
+            !filterOrders.includes(index)
+        ){
 
-        closeFilterMenu();
+            filterOrders.push(index);
 
-        recalculateData();
-
-        renderHeader();
-
-        showToast(
-            "Đã áp dụng bộ lọc"
-        );
+        }
 
     }
-);
+
+    closeFilter();
+
+    applyAll();
+
+}
 
 
 /* =========================================================
-   CLEAR COLUMN FILTER
+   CANCEL FILTER
 ========================================================= */
 
-document.getElementById(
-    "clearColumnFilterButton"
-).addEventListener(
-    "click",
-    () => {
+function cancelFilter(){
 
-        delete selectedFilters[
-            currentFilterColumn
-        ];
+    closeFilter();
 
-        saveSettings();
-
-        closeFilterMenu();
-
-        recalculateData();
-
-        renderHeader();
-
-    }
-);
+}
 
 
 /* =========================================================
    CLOSE FILTER
 ========================================================= */
 
-function closeFilterMenu(){
+function closeFilter(){
 
-    filterMenu.classList.remove(
+    document.getElementById(
+        "filterMenu"
+    ).classList.remove(
         "show"
     );
 
-    filterMenu.style.display =
-        "none";
+    currentFilterColumn =
+        null;
 
 }
 
+
+/* =========================================================
+   SORT CURRENT COLUMN
+========================================================= */
+
+function sortCurrentColumn(direction){
+
+    if(currentFilterColumn === null)
+        return;
+
+    const index =
+        currentFilterColumn;
+
+    let existing =
+        sortOrders.find(
+            item =>
+                Number(item.column) === index
+        );
+
+    if(existing){
+
+        existing.direction =
+            direction;
+
+    }else{
+
+        /*
+         * Nếu chưa nhập priority,
+         * tự lấy số lớn nhất + 1.
+         */
+
+        const max =
+            sortOrders.length
+                ? Math.max(
+                    ...sortOrders.map(
+                        x =>
+                            Number(
+                                x.priority
+                            ) || 0
+                    )
+                )
+                : 0;
+
+        sortOrders.push({
+
+            column:index,
+
+            direction,
+
+            priority:max + 1
+
+        });
+
+    }
+
+    normalizeSortPriorities();
+
+    closeFilter();
+
+    applyAll();
+
+}
+
+
+/* =========================================================
+   REMOVE CURRENT SORT
+========================================================= */
+
+function removeCurrentSort(){
+
+    if(currentFilterColumn === null)
+        return;
+
+    const index =
+        currentFilterColumn;
+
+    sortOrders =
+        sortOrders.filter(
+            item =>
+                Number(item.column) !== index
+        );
+
+    normalizeSortPriorities();
+
+    closeFilter();
+
+    applyAll();
+
+}
+
+
+/* =========================================================
+   APPLY SORT PRIORITY
+========================================================= */
+
+function applySortPriority(){
+
+    if(currentFilterColumn === null)
+        return;
+
+    const index =
+        currentFilterColumn;
+
+    const input =
+        document.getElementById(
+            "sortPriorityInput"
+        );
+
+    const priority =
+        Number(
+            input.value
+        );
+
+    if(
+        !Number.isInteger(priority) ||
+        priority < 1
+    ){
+
+        alert(
+            "Vui lòng nhập số ưu tiên từ 1 trở lên."
+        );
+
+        return;
+
+    }
+
+    let existing =
+        sortOrders.find(
+            item =>
+                Number(item.column) === index
+        );
+
+    if(!existing){
+
+        existing = {
+
+            column:index,
+
+            direction:"asc",
+
+            priority
+
+        };
+
+        sortOrders.push(
+            existing
+        );
+
+    }else{
+
+        existing.priority =
+            priority;
+
+    }
+
+    normalizeSortPriorities();
+
+    closeFilter();
+
+    applyAll();
+
+}
+
+
+/* =========================================================
+   NORMALIZE SORT PRIORITIES
+========================================================= */
+
+function normalizeSortPriorities(){
+
+    /*
+     * Cho phép người dùng nhập số tùy ý.
+     *
+     * Nếu:
+     *
+     * Giá = 1
+     * DATA = 3
+     * Chu kỳ = 2
+     *
+     * thứ tự sẽ là:
+     *
+     * Giá → Chu kỳ → DATA
+     *
+     * Sau đó chuẩn hóa thành:
+     *
+     * Giá = 1
+     * Chu kỳ = 2
+     * DATA = 3
+     */
+
+    sortOrders.sort(
+        (a,b) =>
+            Number(a.priority) -
+            Number(b.priority)
+    );
+
+    sortOrders.forEach(
+        (item,index) => {
+
+            item.priority =
+                index + 1;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SAME ARRAY
+========================================================= */
+
+function sameArray(a,b){
+
+    if(!Array.isArray(a) ||
+       !Array.isArray(b)){
+
+        return false;
+
+    }
+
+    if(a.length !== b.length)
+        return false;
+
+    const x =
+        [...a].map(String).sort();
+
+    const y =
+        [...b].map(String).sort();
+
+    return x.every(
+        (value,index) =>
+            value === y[index]
+    );
+
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function openSettings(){
+
+    renderColumnSettings();
+
+    document.getElementById(
+        "settingsOverlay"
+    ).classList.add("show");
+
+    document.getElementById(
+        "settingsPanel"
+    ).classList.add("show");
+
+    document.getElementById(
+        "freezeCount"
+    ).value =
+        freezeCount;
+
+}
+
+
+function closeSettings(){
+
+    document.getElementById(
+        "settingsOverlay"
+    ).classList.remove("show");
+
+    document.getElementById(
+        "settingsPanel"
+    ).classList.remove("show");
+
+}
+
+
+/* =========================================================
+   RENDER SETTINGS COLUMNS
+========================================================= */
+
+function renderColumnSettings(){
+
+    const list =
+        document.getElementById(
+            "columnSelectList"
+        );
+
+    const renameSelect =
+        document.getElementById(
+            "renameColumnSelect"
+        );
+
+    list.innerHTML = "";
+
+    renameSelect.innerHTML = "";
+
+    getVisibleIndexes()
+        .forEach(index => {
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+            label.className =
+                "column-select-item";
+
+            const checkbox =
+                document.createElement(
+                    "input"
+                );
+
+            checkbox.type =
+                "checkbox";
+
+            checkbox.dataset.index =
+                index;
+
+            checkbox.className =
+                "format-column-checkbox";
+
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+            span.textContent =
+                getDisplayName(index);
+
+            label.appendChild(
+                checkbox
+            );
+
+            label.appendChild(
+                span
+            );
+
+            list.appendChild(
+                label
+            );
+
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                index;
+
+            option.textContent =
+                getDisplayName(index);
+
+            renameSelect.appendChild(
+                option
+            );
+
+        });
+
+    updateRenameInput();
+
+}
+
+
+/* =========================================================
+   RENAME INPUT
+========================================================= */
+
+function updateRenameInput(){
+
+    const select =
+        document.getElementById(
+            "renameColumnSelect"
+        );
+
+    const input =
+        document.getElementById(
+            "renameColumnInput"
+        );
+
+    if(!select.value){
+
+        input.value =
+            "";
+
+        return;
+
+    }
+
+    const index =
+        Number(select.value);
+
+    input.value =
+        getDisplayName(index);
+
+}
+
+
+document.getElementById(
+    "renameColumnSelect"
+).addEventListener(
+    "change",
+    updateRenameInput
+);
+
+
+/* =========================================================
+   APPLY FORMATTING
+========================================================= */
+
+function applyFormatting(){
+
+    const checked =
+        Array.from(
+            document.querySelectorAll(
+                ".format-column-checkbox:checked"
+            )
+        );
+
+    if(!checked.length){
+
+        alert(
+            "Vui lòng chọn ít nhất một cột."
+        );
+
+        return;
+
+    }
+
+    const align =
+        document.getElementById(
+            "formatAlign"
+        ).value;
+
+    const fontSize =
+        document.getElementById(
+            "formatFontSize"
+        ).value;
+
+    const bold =
+        document.getElementById(
+            "formatBold"
+        ).checked;
+
+    const italic =
+        document.getElementById(
+            "formatItalic"
+        ).checked;
+
+    const wrap =
+        document.getElementById(
+            "formatWrap"
+        ).checked;
+
+    const changeTextColor =
+        document.getElementById(
+            "changeTextColor"
+        ).checked;
+
+    const textColor =
+        document.getElementById(
+            "formatTextColor"
+        ).value;
+
+    const changeBgColor =
+        document.getElementById(
+            "changeBgColor"
+        ).checked;
+
+    const bgColor =
+        document.getElementById(
+            "formatBgColor"
+        ).value;
+
+
+    checked.forEach(
+        checkbox => {
+
+            const index =
+                Number(
+                    checkbox.dataset.index
+                );
+
+            if(!columnFormats[index]){
+
+                columnFormats[index] = {};
+
+            }
+
+            const format =
+                columnFormats[index];
+
+            if(align !== "unchanged"){
+
+                format.align =
+                    align;
+
+            }
+
+            if(fontSize){
+
+                format.fontSize =
+                    Number(fontSize);
+
+            }
+
+            /*
+             * Checkbox được hiểu là:
+             * tick = áp dụng.
+             */
+
+            format.bold =
+                bold;
+
+            format.italic =
+                italic;
+
+            format.wrap =
+                wrap;
+
+            if(changeTextColor){
+
+                format.textColor =
+                    textColor;
+
+            }
+
+            if(changeBgColor){
+
+                format.bgColor =
+                    bgColor;
+
+            }
+
+        }
+    );
+
+    saveStorage();
+
+    renderTable();
+
+}
+
+
+/* =========================================================
+   RESET SELECTED FORMATTING
+========================================================= */
+
+function resetSelectedFormatting(){
+
+    const checked =
+        Array.from(
+            document.querySelectorAll(
+                ".format-column-checkbox:checked"
+            )
+        );
+
+    if(!checked.length){
+
+        alert(
+            "Vui lòng chọn ít nhất một cột."
+        );
+
+        return;
+
+    }
+
+    checked.forEach(
+        checkbox => {
+
+            const index =
+                Number(
+                    checkbox.dataset.index
+                );
+
+            delete columnFormats[index];
+
+        }
+    );
+
+    saveStorage();
+
+    renderTable();
+
+}
+
+
+/* =========================================================
+   APPLY CELL FORMAT
+========================================================= */
+
+function applyCellFormat(td,index){
+
+    const format =
+        columnFormats[index] || {};
+
+    td.style.textAlign =
+        format.align || "left";
+
+    if(format.fontSize){
+
+        td.style.fontSize =
+            format.fontSize + "px";
+
+    }
+
+    td.style.fontWeight =
+        format.bold
+            ? "bold"
+            : "normal";
+
+    td.style.fontStyle =
+        format.italic
+            ? "italic"
+            : "normal";
+
+    td.style.whiteSpace =
+        format.wrap
+            ? "normal"
+            : "nowrap";
+
+    td.style.overflow =
+        "hidden";
+
+    td.style.textOverflow =
+        format.wrap
+            ? "clip"
+            : "ellipsis";
+
+    if(format.textColor){
+
+        td.style.color =
+            format.textColor;
+
+    }
+
+    if(format.bgColor){
+
+        td.style.backgroundColor =
+            format.bgColor;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENAME COLUMN
+========================================================= */
+
+function renameColumn(){
+
+    const select =
+        document.getElementById(
+            "renameColumnSelect"
+        );
+
+    const input =
+        document.getElementById(
+            "renameColumnInput"
+        );
+
+    if(!select.value)
+        return;
+
+    const index =
+        Number(select.value);
+
+    const newName =
+        input.value.trim();
+
+    if(!newName){
+
+        alert(
+            "Tên cột không được để trống."
+        );
+
+        return;
+
+    }
+
+    columnNames[index] =
+        newName;
+
+    saveStorage();
+
+    renderColumnSettings();
+
+    renderTable();
+
+}
+
+
+/* =========================================================
+   RESET COLUMN NAME
+========================================================= */
+
+function resetColumnName(){
+
+    const select =
+        document.getElementById(
+            "renameColumnSelect"
+        );
+
+    if(!select.value)
+        return;
+
+    const index =
+        Number(select.value);
+
+    columnNames[index] =
+        headers[index];
+
+    saveStorage();
+
+    renderColumnSettings();
+
+    renderTable();
+
+}
+
+
+/* =========================================================
+   RENAME DIALOG
+========================================================= */
+
+function openRenameDialog(index){
+
+    currentContextColumn =
+        index;
+
+    const dialog =
+        document.getElementById(
+            "renameDialog"
+        );
+
+    const input =
+        document.getElementById(
+            "renameDialogInput"
+        );
+
+    input.value =
+        getDisplayName(index);
+
+    dialog.classList.add(
+        "show"
+    );
+
+    setTimeout(
+        () => input.select(),
+        50
+    );
+
+}
+
+
+function closeRenameDialog(){
+
+    document.getElementById(
+        "renameDialog"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+function saveRenameDialog(){
+
+    if(currentContextColumn === null)
+        return;
+
+    const input =
+        document.getElementById(
+            "renameDialogInput"
+        );
+
+    const name =
+        input.value.trim();
+
+    if(!name){
+
+        alert(
+            "Tên cột không được để trống."
+        );
+
+        return;
+
+    }
+
+    columnNames[
+        currentContextColumn
+    ] =
+        name;
+
+    saveStorage();
+
+    closeRenameDialog();
+
+    renderColumnSettings();
+
+    renderTable();
+
+}
+
+
+/* =========================================================
+   CONTEXT MENU
+========================================================= */
+
+function openContextMenu(x,y){
+
+    const menu =
+        document.getElementById(
+            "contextMenu"
+        );
+
+    menu.classList.add(
+        "show"
+    );
+
+    const width =
+        190;
+
+    const height =
+        180;
+
+    if(
+        x + width >
+        window.innerWidth
+    ){
+
+        x =
+            window.innerWidth -
+            width -
+            10;
+
+    }
+
+    if(
+        y + height >
+        window.innerHeight
+    ){
+
+        y =
+            window.innerHeight -
+            height -
+            10;
+
+    }
+
+    menu.style.left =
+        x + "px";
+
+    menu.style.top =
+        y + "px";
+
+}
+
+
+function closeContextMenu(){
+
+    document.getElementById(
+        "contextMenu"
+    ).classList.remove(
+        "show"
+    );
+
+}
+
+
+function contextRename(){
+
+    if(currentContextColumn === null)
+        return;
+
+    closeContextMenu();
+
+    openRenameDialog(
+        currentContextColumn
+    );
+
+}
+
+
+function contextSort(direction){
+
+    if(currentContextColumn === null)
+        return;
+
+    const index =
+        currentContextColumn;
+
+    let existing =
+        sortOrders.find(
+            item =>
+                Number(item.column) === index
+        );
+
+    if(existing){
+
+        existing.direction =
+            direction;
+
+    }else{
+
+        const max =
+            sortOrders.length
+                ? Math.max(
+                    ...sortOrders.map(
+                        x =>
+                            Number(
+                                x.priority
+                            ) || 0
+                    )
+                )
+                : 0;
+
+        sortOrders.push({
+
+            column:index,
+
+            direction,
+
+            priority:max + 1
+
+        });
+
+    }
+
+    normalizeSortPriorities();
+
+    closeContextMenu();
+
+    applyAll();
+
+}
+
+
+function contextRemoveSort(){
+
+    if(currentContextColumn === null)
+        return;
+
+    sortOrders =
+        sortOrders.filter(
+            item =>
+                Number(item.column) !==
+                currentContextColumn
+        );
+
+    normalizeSortPriorities();
+
+    closeContextMenu();
+
+    applyAll();
+
+}
+
+
+/* =========================================================
+   RESIZE COLUMNS
+========================================================= */
+
+function startResize(
+    event,
+    index,
+    th
+){
+
+    event.preventDefault();
+
+    const startX =
+        event.clientX;
+
+    const startWidth =
+        th.getBoundingClientRect().width;
+
+    function onMove(e){
+
+        const newWidth =
+            Math.max(
+                50,
+                startWidth +
+                (
+                    e.clientX -
+                    startX
+                )
+            );
+
+        columnWidths[index] =
+            newWidth;
+
+        applyWidthsAndFreeze();
+
+    }
+
+    function onUp(){
+
+        document.removeEventListener(
+            "mousemove",
+            onMove
+        );
+
+        document.removeEventListener(
+            "mouseup",
+            onUp
+        );
+
+        saveStorage();
+
+    }
+
+    document.addEventListener(
+        "mousemove",
+        onMove
+    );
+
+    document.addEventListener(
+        "mouseup",
+        onUp
+    );
+
+}
+
+
+/* =========================================================
+   APPLY WIDTHS
+========================================================= */
+
+function applyWidthsAndFreeze(){
+
+    const table =
+        document.getElementById(
+            "dataTable"
+        );
+
+    const visibleIndexes =
+        getVisibleIndexes();
+
+    visibleIndexes.forEach(
+        index => {
+
+            const width =
+                columnWidths[index] ||
+                150;
+
+            const cells =
+                table.querySelectorAll(
+                    '[data-index="' +
+                    index +
+                    '"]'
+                );
+
+            cells.forEach(
+                cell => {
+
+                    cell.style.width =
+                        width + "px";
+
+                    cell.style.minWidth =
+                        width + "px";
+
+                    cell.style.maxWidth =
+                        width + "px";
+
+                }
+            );
+
+        }
+    );
+
+    applyFreezePositions();
+
+}
+
+
+/* =========================================================
+   FREEZE
+========================================================= */
+
+function applyFreeze(){
+
+    freezeCount =
+        Number(
+            document.getElementById(
+                "freezeCount"
+            ).value
+        ) || 0;
+
+    saveStorage();
+
+    applyFreezePositions();
+
+}
+
+
+function applyFreezePositions(){
+
+    const table =
+        document.getElementById(
+            "dataTable"
+        );
+
+    const visibleIndexes =
+        getVisibleIndexes();
+
+    const freezeIndexes =
+        visibleIndexes.slice(
+            0,
+            freezeCount
+        );
+
+    let left =
+        0;
+
+    freezeIndexes.forEach(
+        index => {
+
+            const cells =
+                table.querySelectorAll(
+                    '[data-index="' +
+                    index +
+                    '"]'
+                );
+
+            cells.forEach(
+                cell => {
+
+                    cell.classList.add(
+                        "freeze-cell"
+                    );
+
+                    cell.style.left =
+                        left + "px";
+
+                }
+            );
+
+            const width =
+                columnWidths[index] ||
+                150;
+
+            left +=
+                width;
+
+        }
+    );
+
+    visibleIndexes
+        .slice(freezeCount)
+        .forEach(
+            index => {
+
+                const cells =
+                    table.querySelectorAll(
+                        '[data-index="' +
+                        index +
+                        '"]'
+                    );
+
+                cells.forEach(
+                    cell => {
+
+                        cell.classList.remove(
+                            "freeze-cell"
+                        );
+
+                        cell.style.left =
+                            "";
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   RESET ALL
+========================================================= */
+
+function resetAll(){
+
+    /*
+     * Reset:
+     * - Search
+     * - Sort
+     * - Filter về DEFAULT
+     *
+     * Không xóa:
+     * - đổi tên cột
+     * - độ rộng
+     * - định dạng
+     * - freeze
+     */
+
+    searchTexts = {};
+
+    sortOrders = [];
+
+    filterOrders = [];
+
+    selectedFilters = {};
+
+    /*
+     * Khôi phục DEFAULT FILTER
+     */
+
+    Object.keys(defaultFilters)
+        .forEach(
+            key => {
+
+                selectedFilters[key] =
+                    Array.from(
+                        defaultFilters[key]
+                    );
+
+            }
+        );
+
+    saveStorage();
+
+    renderTable();
+
+    setStatus(
+        "Đã reset về bộ lọc mặc định"
+    );
+
+}
+
+
+/* =========================================================
+   DEBOUNCE
+========================================================= */
+
+function debounce(
+    fn,
+    delay
+){
+
+    let timer;
+
+    return function(...args){
+
+        clearTimeout(
+            timer
+        );
+
+        timer =
+            setTimeout(
+                () => fn.apply(
+                    this,
+                    args
+                ),
+                delay
+            );
+
+    };
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(text){
+
+    document.getElementById(
+        "status"
+    ).textContent =
+        text;
+
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function showLoading(show){
+
+    document.getElementById(
+        "loading"
+    ).classList.toggle(
+        "show",
+        show
+    );
+
+}
+
+
+/* =========================================================
+   CLICK OUTSIDE
+========================================================= */
 
 document.addEventListener(
     "click",
     event => {
 
+        const filterMenu =
+            document.getElementById(
+                "filterMenu"
+            );
+
         if(
-            !event.target.closest(
-                "#filterMenu"
+            filterMenu.classList.contains(
+                "show"
+            ) &&
+            !filterMenu.contains(
+                event.target
             ) &&
             !event.target.closest(
-                ".header-main"
+                "th"
             )
         ){
 
-            closeFilterMenu();
+            closeFilter();
 
         }
 
+        const contextMenu =
+            document.getElementById(
+                "contextMenu"
+            );
+
         if(
-            !event.target.closest(
-                "#contextMenu"
+            contextMenu.classList.contains(
+                "show"
+            ) &&
+            !contextMenu.contains(
+                event.target
             )
         ){
 
@@ -3178,971 +4367,24 @@ document.addEventListener(
 
 
 /* =========================================================
-   CONTEXT MENU
+   ESC
 ========================================================= */
 
-function openContextMenu(
-    column,
-    x,
-    y
-){
-
-    currentContextColumn =
-        column;
-
-    contextMenu.style.left =
-        Math.min(
-            x,
-            window.innerWidth - 240
-        ) + "px";
-
-    contextMenu.style.top =
-        Math.min(
-            y,
-            window.innerHeight - 230
-        ) + "px";
-
-    contextMenu.classList.add(
-        "show"
-    );
-
-}
-
-
-function closeContextMenu(){
-
-    contextMenu.classList.remove(
-        "show"
-    );
-
-}
-
-
-/* =========================================================
-   SORT
-========================================================= */
-
-function setSort(
-    column,
-    direction
-){
-
-    const existing =
-        sortOrders.find(
-            s =>
-                s.column === column
-        );
-
-
-    if(existing){
-
-        existing.direction =
-            direction;
-
-    }else{
-
-        sortOrders.push({
-
-            column,
-
-            direction
-
-        });
-
-    }
-
-
-    saveSettings();
-
-    closeContextMenu();
-
-    recalculateData();
-
-    renderHeader();
-
-    showToast(
-        `Sort ưu tiên ${sortOrders.findIndex(
-            s => s.column === column
-        ) + 1}`
-    );
-
-}
-
-
-function removeSort(column){
-
-    sortOrders =
-        sortOrders.filter(
-            s =>
-                s.column !== column
-        );
-
-    saveSettings();
-
-    closeContextMenu();
-
-    recalculateData();
-
-    renderHeader();
-
-}
-
-
-/* =========================================================
-   CONTEXT ACTIONS
-========================================================= */
-
-document.getElementById(
-    "sortAscButton"
-).addEventListener(
-    "click",
-    () => {
-
-        setSort(
-            currentContextColumn,
-            "asc"
-        );
-
-    }
-);
-
-
-document.getElementById(
-    "sortDescButton"
-).addEventListener(
-    "click",
-    () => {
-
-        setSort(
-            currentContextColumn,
-            "desc"
-        );
-
-    }
-);
-
-
-document.getElementById(
-    "removeSortButton"
-).addEventListener(
-    "click",
-    () => {
-
-        removeSort(
-            currentContextColumn
-        );
-
-    }
-);
-
-
-/* =========================================================
-   RENAME
-========================================================= */
-
-document.getElementById(
-    "renameColumnButton"
-).addEventListener(
-    "click",
-    () => {
-
-        const column =
-            currentContextColumn;
-
-        closeContextMenu();
-
-        renameInput.value =
-            columnNames[column];
-
-        renameDialog.classList.add(
-            "show"
-        );
-
-        renameInput.focus();
-
-        renameInput.select();
-
-    }
-);
-
-
-document.getElementById(
-    "renameCancel"
-).addEventListener(
-    "click",
-    () => {
-
-        renameDialog.classList.remove(
-            "show"
-        );
-
-    }
-);
-
-
-document.getElementById(
-    "renameSave"
-).addEventListener(
-    "click",
-    () => {
-
-        const name =
-            renameInput.value.trim();
-
-        if(!name){
-
-            return;
-
-        }
-
-        columnNames[
-            currentContextColumn
-        ] = name;
-
-        saveSettings();
-
-        renameDialog.classList.remove(
-            "show"
-        );
-
-        renderHeader();
-
-        renderTableBody();
-
-        showToast(
-            "Đã đổi tên cột"
-        );
-
-    }
-);
-
-
-renameInput.addEventListener(
+document.addEventListener(
     "keydown",
     event => {
 
-        if(event.key === "Enter"){
-
-            document.getElementById(
-                "renameSave"
-            ).click();
-
-        }
-
         if(event.key === "Escape"){
 
-            document.getElementById(
-                "renameCancel"
-            ).click();
+            closeFilter();
+
+            closeContextMenu();
+
+            closeRenameDialog();
+
+            closeSettings();
 
         }
-
-    }
-);
-
-
-/* =========================================================
-   COLUMN SETTINGS
-========================================================= */
-
-function openColumnSettings(
-    column
-){
-
-    currentColumn =
-        column;
-
-    const setting =
-        columnSettings[column];
-
-
-    document.getElementById(
-        "columnAlign"
-    ).value =
-        setting.align || "left";
-
-
-    document.getElementById(
-        "columnFontSize"
-    ).value =
-        setting.fontSize || 14;
-
-
-    document.getElementById(
-        "columnBold"
-    ).checked =
-        !!setting.bold;
-
-
-    document.getElementById(
-        "columnItalic"
-    ).checked =
-        !!setting.italic;
-
-
-    document.getElementById(
-        "columnTextColor"
-    ).value =
-        setting.textColor || "#222222";
-
-
-    document.getElementById(
-        "columnBgColor"
-    ).value =
-        setting.bgColor || "#ffffff";
-
-
-    document.getElementById(
-        "columnWrap"
-    ).checked =
-        setting.wrap !== false;
-
-
-    settingsPanel.classList.add(
-        "show"
-    );
-
-}
-
-
-document.getElementById(
-    "columnSettingsButton"
-).addEventListener(
-    "click",
-    () => {
-
-        const column =
-            currentContextColumn;
-
-        closeContextMenu();
-
-        openColumnSettings(
-            column
-        );
-
-    }
-);
-
-
-/* =========================================================
-   LIVE COLUMN SETTINGS
-========================================================= */
-
-function updateCurrentColumnSetting(){
-
-    if(currentColumn < 0){
-
-        return;
-
-    }
-
-    const setting =
-        columnSettings[currentColumn];
-
-
-    setting.align =
-        document.getElementById(
-            "columnAlign"
-        ).value;
-
-
-    setting.fontSize =
-        Number(
-            document.getElementById(
-                "columnFontSize"
-            ).value
-        ) || 14;
-
-
-    setting.bold =
-        document.getElementById(
-            "columnBold"
-        ).checked;
-
-
-    setting.italic =
-        document.getElementById(
-            "columnItalic"
-        ).checked;
-
-
-    setting.textColor =
-        document.getElementById(
-            "columnTextColor"
-        ).value;
-
-
-    setting.bgColor =
-        document.getElementById(
-            "columnBgColor"
-        ).value;
-
-
-    setting.wrap =
-        document.getElementById(
-            "columnWrap"
-        ).checked;
-
-
-    saveSettings();
-
-    renderTableBody();
-
-}
-
-
-[
-    "columnAlign",
-    "columnFontSize",
-    "columnBold",
-    "columnItalic",
-    "columnTextColor",
-    "columnBgColor",
-    "columnWrap"
-].forEach(
-    id => {
-
-        document.getElementById(
-            id
-        ).addEventListener(
-            "input",
-            updateCurrentColumnSetting
-        );
-
-        document.getElementById(
-            id
-        ).addEventListener(
-            "change",
-            updateCurrentColumnSetting
-        );
-
-    }
-);
-
-
-/* =========================================================
-   RESET COLUMN SETTINGS
-========================================================= */
-
-document.getElementById(
-    "resetColumnSettings"
-).addEventListener(
-    "click",
-    () => {
-
-        if(currentColumn < 0){
-
-            return;
-
-        }
-
-        columnSettings[
-            currentColumn
-        ] = {
-
-            align:"left",
-
-            fontSize:14,
-
-            bold:false,
-
-            italic:false,
-
-            textColor:"#222222",
-
-            bgColor:"#ffffff",
-
-            wrap:true
-
-        };
-
-        saveSettings();
-
-        openColumnSettings(
-            currentColumn
-        );
-
-        renderTableBody();
-
-        showToast(
-            "Đã khôi phục định dạng cột"
-        );
-
-    }
-);
-
-
-/* =========================================================
-   SETTINGS PANEL
-========================================================= */
-
-document.getElementById(
-    "settingsButton"
-).addEventListener(
-    "click",
-    () => {
-
-        settingsPanel.classList.toggle(
-            "show"
-        );
-
-        document.getElementById(
-            "globalWrap"
-        ).checked =
-            globalWrap;
-
-        document.getElementById(
-            "freezeCount"
-        ).value =
-            freezeCount;
-
-    }
-);
-
-
-document.getElementById(
-    "closeSettings"
-).addEventListener(
-    "click",
-    () => {
-
-        settingsPanel.classList.remove(
-            "show"
-        );
-
-    }
-);
-
-
-/* =========================================================
-   GLOBAL WRAP
-========================================================= */
-
-document.getElementById(
-    "globalWrap"
-).addEventListener(
-    "change",
-    event => {
-
-        globalWrap =
-            event.target.checked;
-
-        saveSettings();
-
-        renderTableBody();
-
-    }
-);
-
-
-/* =========================================================
-   FREEZE
-========================================================= */
-
-document.getElementById(
-    "freezeCount"
-).addEventListener(
-    "change",
-    event => {
-
-        freezeCount =
-            Math.max(
-                0,
-                Number(
-                    event.target.value
-                ) || 0
-            );
-
-        if(
-            freezeCount >
-            originalHeaders.length
-        ){
-
-            freezeCount =
-                originalHeaders.length;
-
-        }
-
-        saveSettings();
-
-        applyStickyColumns();
-
-    }
-);
-
-
-document.getElementById(
-    "freezeButton"
-).addEventListener(
-    "click",
-    () => {
-
-        settingsPanel.classList.add(
-            "show"
-        );
-
-        document.getElementById(
-            "freezeCount"
-        ).focus();
-
-    }
-);
-
-
-/* =========================================================
-   RESET FILTERS
-========================================================= */
-
-document.getElementById(
-    "resetButton"
-).addEventListener(
-    "click",
-    () => {
-
-        selectedFilters = {};
-
-        searchValues = {};
-
-        sortOrders = [];
-
-        saveSettings();
-
-        recalculateData();
-
-        renderHeader();
-
-        showToast(
-            "Đã reset filter, search và sort"
-        );
-
-    }
-);
-
-
-/* =========================================================
-   RESIZE
-========================================================= */
-
-function startResize(
-    event,
-    column
-){
-
-    resizing = true;
-
-    resizeColumn =
-        column;
-
-    resizeStartX =
-        event.clientX;
-
-    resizeStartWidth =
-        columnWidths[column];
-
-
-    resizeInfo.style.display =
-        "block";
-
-    resizeInfo.textContent =
-        `${resizeStartWidth}px`;
-
-
-    document.body.style.cursor =
-        "col-resize";
-
-}
-
-
-document.addEventListener(
-    "mousemove",
-    event => {
-
-        if(!resizing){
-
-            return;
-
-        }
-
-        const delta =
-            event.clientX -
-            resizeStartX;
-
-        const newWidth =
-            Math.max(
-                40,
-                resizeStartWidth +
-                delta
-            );
-
-        columnWidths[
-            resizeColumn
-        ] = newWidth;
-
-
-        resizeInfo.textContent =
-            `${Math.round(newWidth)} px`;
-
-        resizeInfo.style.left =
-            (event.clientX + 12) + "px";
-
-        resizeInfo.style.top =
-            (event.clientY + 12) + "px";
-
-
-        updateColumnWidthVisual(
-            resizeColumn,
-            newWidth
-        );
-
-        applyStickyColumns();
-
-    }
-);
-
-
-document.addEventListener(
-    "mouseup",
-    () => {
-
-        if(!resizing){
-
-            return;
-
-        }
-
-        resizing = false;
-
-        resizeInfo.style.display =
-            "none";
-
-        document.body.style.cursor =
-            "";
-
-        saveSettings();
-
-    }
-);
-
-
-/* =========================================================
-   UPDATE WIDTH
-========================================================= */
-
-function updateColumnWidthVisual(
-    column,
-    width
-){
-
-    document
-        .querySelectorAll(
-            `[data-column="${column}"]`
-        )
-        .forEach(
-            element => {
-
-                element.style.width =
-                    width + "px";
-
-                element.style.minWidth =
-                    width + "px";
-
-                element.style.maxWidth =
-                    width + "px";
-
-            }
-        );
-
-
-    const visibleColumns = [];
-
-    for(
-        let i = 0;
-        i < originalHeaders.length;
-        i++
-    ){
-
-        if(!isHiddenColumn(i)){
-
-            visibleColumns.push(i);
-
-        }
-
-    }
-
-
-    let left = 0;
-
-    for(
-        let i = 0;
-        i < Math.min(
-            freezeCount,
-            visibleColumns.length
-        );
-        i++
-    ){
-
-        const c =
-            visibleColumns[i];
-
-        document
-            .querySelectorAll(
-                `[data-column="${c}"]`
-            )
-            .forEach(
-                element => {
-
-                    element.style.left =
-                        left + "px";
-
-                }
-            );
-
-        left +=
-            columnWidths[c];
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD GOOGLE SHEET
-========================================================= */
-
-async function loadData(){
-
-    loading.classList.add(
-        "show"
-    );
-
-    status.textContent =
-        "Đang tải dữ liệu...";
-
-
-    try{
-
-        const response =
-            await fetch(
-                CSV_URL +
-                "&_=" +
-                Date.now()
-            );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
-        }
-
-
-        const text =
-            await response.text();
-
-
-        const rows =
-            parseCSV(text);
-
-
-        if(
-            rows.length < 1
-        ){
-
-            throw new Error(
-                "Google Sheet không có dữ liệu"
-            );
-
-        }
-
-
-        originalHeaders =
-            rows[0].map(
-                h =>
-                    String(h || "").trim()
-            );
-
-
-        originalData =
-            rows
-                .slice(1)
-                .filter(
-                    row =>
-                        row.some(
-                            value =>
-                                String(
-                                    value ?? ""
-                                ).trim() !== ""
-                        )
-                );
-
-
-        loadSettings();
-
-        initializeColumns();
-
-        buildDefaultFilters();
-
-        renderHeader();
-
-        recalculateData();
-
-        updateStatus();
-
-        saveSettings();
-
-
-        showToast(
-            "Đã cập nhật dữ liệu"
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        status.textContent =
-            "❌ Lỗi tải dữ liệu";
-
-        showToast(
-            "Không thể tải Google Sheet"
-        );
-
-    }finally{
-
-        loading.classList.remove(
-            "show"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-function updateStatus(){
-
-    status.textContent =
-        `${displayData.length.toLocaleString("vi-VN")} dòng`;
-
-}
-
-
-/* =========================================================
-   REFRESH
-========================================================= */
-
-document.getElementById(
-    "refreshButton"
-).addEventListener(
-    "click",
-    () => {
-
-        loadData();
 
     }
 );
@@ -4155,7 +4397,7 @@ document.getElementById(
 setInterval(
     () => {
 
-        loadData();
+        refreshData();
 
     },
     5 * 60 * 1000
@@ -4163,34 +4405,12 @@ setInterval(
 
 
 /* =========================================================
-   ESCAPE
+   INIT
 ========================================================= */
 
-document.addEventListener(
-    "keydown",
-    event => {
+loadStorage();
 
-        if(event.key === "Escape"){
-
-            closeFilterMenu();
-
-            closeContextMenu();
-
-            renameDialog.classList.remove(
-                "show"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-loadData();
+refreshData();
 
 </script>
 
