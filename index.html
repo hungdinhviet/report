@@ -7,6 +7,7 @@
 <title>Report</title>
 
 <style>
+
 /* =========================================================
    GLOBAL
 ========================================================= */
@@ -30,31 +31,34 @@ body {
     overflow: hidden;
 }
 
+
 /* =========================================================
    TOP BAR
 ========================================================= */
 
 .topbar {
+    position: relative;
+    z-index: 5000;
+
     height: 48px;
-    background: #ffffff;
-    border-bottom: 1px solid #d9dde3;
 
     display: flex;
     align-items: center;
 
-    padding: 0 12px;
-
     gap: 8px;
 
-    position: relative;
-    z-index: 1000;
+    padding: 0 12px;
+
+    background: #fff;
+
+    border-bottom: 1px solid #d9dde3;
 }
 
 .title {
+    flex: 1;
+
     font-size: 17px;
     font-weight: 700;
-
-    flex: 1;
 
     white-space: nowrap;
 }
@@ -85,8 +89,9 @@ body {
     white-space: nowrap;
 }
 
+
 /* =========================================================
-   TABLE AREA
+   TABLE WRAPPER
 ========================================================= */
 
 .table-wrapper {
@@ -94,7 +99,6 @@ body {
 
     left: 0;
     right: 0;
-
     top: 48px;
     bottom: 0;
 
@@ -104,6 +108,7 @@ body {
 
     isolation: isolate;
 }
+
 
 /* =========================================================
    TABLE
@@ -116,7 +121,6 @@ table {
     table-layout: fixed;
 
     width: max-content;
-
     min-width: 100%;
 }
 
@@ -130,18 +134,26 @@ td {
     vertical-align: middle;
 }
 
+
 /* =========================================================
    HEADER
 ========================================================= */
 
+/*
+   KHÔNG dùng sticky cho cả THEAD.
+   Sticky trực tiếp từng TH sẽ ổn định hơn khi
+   vừa freeze cột vừa freeze header.
+*/
+
 thead {
     position: relative;
-    z-index: 500;
+    z-index: 1000;
 }
 
-/*
-    Header row
-*/
+
+/* =========================================================
+   HEADER ROW
+========================================================= */
 
 .header-row {
     height: 40px;
@@ -149,7 +161,6 @@ thead {
 
 .header-cell {
     height: 40px;
-
     min-height: 40px;
     max-height: 40px;
 
@@ -157,12 +168,11 @@ thead {
 
     top: 0;
 
-    z-index: 800;
+    z-index: 2000;
 
     background: #f1f3f5;
 
     font-size: 13px;
-
     font-weight: 700;
 
     white-space: nowrap;
@@ -171,28 +181,32 @@ thead {
 }
 
 .header-inner {
+    position: relative;
+
     height: 100%;
 
     display: flex;
-
     align-items: center;
 
     gap: 4px;
-
-    position: relative;
 }
 
 .header-title {
+    flex: 1;
+
     overflow: hidden;
 
     text-overflow: ellipsis;
 
     white-space: nowrap;
 
-    flex: 1;
-
     cursor: pointer;
 }
+
+
+/* =========================================================
+   FILTER BUTTON
+========================================================= */
 
 .filter-button {
     width: 24px;
@@ -215,6 +229,7 @@ thead {
     background: #dfe4ea;
 }
 
+
 /* =========================================================
    SEARCH ROW
 ========================================================= */
@@ -225,7 +240,6 @@ thead {
 
 .search-cell {
     height: 38px;
-
     min-height: 38px;
     max-height: 38px;
 
@@ -233,7 +247,7 @@ thead {
 
     top: 40px;
 
-    z-index: 790;
+    z-index: 1900;
 
     background: #fafafa;
 
@@ -241,12 +255,12 @@ thead {
 }
 
 .search-input {
-    width: 100%;
+    display: block;
 
+    width: 100%;
     height: 29px;
 
     border: 1px solid #cfd4da;
-
     border-radius: 4px;
 
     padding: 0 7px;
@@ -265,14 +279,19 @@ thead {
         0 0 0 1px #2684ff;
 }
 
+
 /* =========================================================
    BODY
 ========================================================= */
 
 .body-cell {
+    position: relative;
+
     min-height: 34px;
 
     height: auto;
+
+    background: #fff;
 
     font-size: 14px;
 
@@ -281,18 +300,15 @@ thead {
     overflow-wrap: anywhere;
 
     word-break: break-word;
-
-    background: #fff;
-
-    position: relative;
 }
 
 tbody tr:hover td {
-    background-color: #f8fafc;
+    background: #f8fafc;
 }
 
+
 /* =========================================================
-   ACTIVE HEADER COLORS
+   HEADER COLORS
 ========================================================= */
 
 .header-cell.filtered {
@@ -307,83 +323,79 @@ tbody tr:hover td {
     background: #bdecc4;
 }
 
+
 /* =========================================================
    FREEZE COLUMNS
 ========================================================= */
 
 /*
-   BODY FROZEN COLUMN
+   BODY FROZEN
 */
 
-tbody .frozen-column {
+tbody td.frozen-column {
     position: sticky !important;
 
-    z-index: 700 !important;
+    z-index: 100 !important;
 
     background: #fff;
 }
 
-/*
-   FROZEN HEADER
 
-   Quan trọng:
-   Header có z-index cao hơn frozen body.
+/*
+   HEADER FROZEN
+
+   QUAN TRỌNG:
+   z-index cao hơn body rất nhiều.
 */
 
-thead .frozen-column.header-cell {
+thead th.header-cell.frozen-column {
     position: sticky !important;
 
     top: 0 !important;
 
-    z-index: 1000 !important;
-
-    background: #f1f3f5;
+    z-index: 2000 !important;
 }
 
+
 /*
-   FROZEN SEARCH
+   SEARCH FROZEN
 */
 
-thead .frozen-column.search-cell {
+thead th.search-cell.frozen-column {
     position: sticky !important;
 
     top: 40px !important;
 
-    z-index: 990 !important;
-
-    background: #fafafa;
+    z-index: 1900 !important;
 }
 
+
 /*
-   Active frozen header
+   Frozen header màu active
 */
 
-thead th.filtered.frozen-column.header-cell {
+thead th.header-cell.frozen-column.filtered {
     background: #c8f7c5 !important;
-
-    z-index: 1000 !important;
 }
 
-thead th.sorted.frozen-column.header-cell {
+thead th.header-cell.frozen-column.sorted {
     background: #d8ebff !important;
-
-    z-index: 1000 !important;
 }
 
-thead th.filtered.sorted.frozen-column.header-cell {
+thead th.header-cell.frozen-column.filtered.sorted {
     background: #bdecc4 !important;
-
-    z-index: 1000 !important;
 }
+
 
 /*
-   Shadow at the end of frozen area
+   Frozen last column shadow
 */
 
 .frozen-last {
     box-shadow:
-        4px 0 7px rgba(0, 0, 0, 0.10);
+        5px 0 8px rgba(0,0,0,.12);
 }
+
 
 /* =========================================================
    RESIZE
@@ -396,20 +408,20 @@ thead th.filtered.sorted.frozen-column.header-cell {
     right: -3px;
 
     width: 7px;
-
     height: 100%;
 
     cursor: col-resize;
 
-    z-index: 2000;
+    z-index: 3000;
 }
 
 .resize-handle:hover {
-    background: rgba(38, 132, 255, 0.25);
+    background: rgba(38,132,255,.25);
 }
 
+
 /* =========================================================
-   FILTER DROPDOWN
+   FILTER MENU
 ========================================================= */
 
 .filter-menu {
@@ -419,22 +431,20 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
     max-height: 720px;
 
+    display: flex;
+    flex-direction: column;
+
     background: #fff;
 
     border: 1px solid #cfd4da;
-
     border-radius: 7px;
 
     box-shadow:
         0 8px 25px rgba(0,0,0,.18);
 
-    z-index: 5000;
+    z-index: 10000;
 
     overflow: hidden;
-
-    display: flex;
-
-    flex-direction: column;
 }
 
 .filter-header {
@@ -444,9 +454,8 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
     border-bottom: 1px solid #e0e3e7;
 
-    font-weight: 700;
-
     font-size: 13px;
+    font-weight: 700;
 }
 
 .filter-search {
@@ -457,11 +466,9 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
 .filter-search input {
     width: 100%;
-
     height: 30px;
 
     border: 1px solid #cfd4da;
-
     border-radius: 4px;
 
     padding: 0 8px;
@@ -484,15 +491,14 @@ thead th.filtered.sorted.frozen-column.header-cell {
 .filter-actions button,
 .sort-actions button,
 .format-actions button {
-    border: 1px solid #cfd4da;
-
-    background: #fff;
-
-    border-radius: 4px;
-
     height: 28px;
 
     padding: 0 8px;
+
+    border: 1px solid #cfd4da;
+    border-radius: 4px;
+
+    background: #fff;
 
     cursor: pointer;
 
@@ -505,16 +511,17 @@ thead th.filtered.sorted.frozen-column.header-cell {
     background: #f1f3f5;
 }
 
+
 /* =========================================================
    VALUE LIST
 ========================================================= */
 
 .value-list {
-    overflow-y: auto;
+    max-height: 260px;
 
     min-height: 80px;
 
-    max-height: 260px;
+    overflow-y: auto;
 
     padding: 4px 0;
 
@@ -525,12 +532,11 @@ thead th.filtered.sorted.frozen-column.header-cell {
     min-height: 30px;
 
     display: flex;
-
     align-items: center;
 
-    padding: 3px 9px;
-
     gap: 7px;
+
+    padding: 3px 9px;
 
     cursor: pointer;
 
@@ -548,10 +554,11 @@ thead th.filtered.sorted.frozen-column.header-cell {
 .value-text {
     flex: 1;
 
-    overflow-wrap: anywhere;
-
     white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
 }
+
 
 /* =========================================================
    SORT
@@ -564,11 +571,10 @@ thead th.filtered.sorted.frozen-column.header-cell {
 }
 
 .sort-title {
-    font-size: 12px;
-
-    font-weight: 700;
-
     margin-bottom: 6px;
+
+    font-size: 12px;
+    font-weight: 700;
 }
 
 .sort-row {
@@ -585,10 +591,9 @@ thead th.filtered.sorted.frozen-column.header-cell {
     height: 28px;
 
     border: 1px solid #cfd4da;
+    border-radius: 4px;
 
     background: #fff;
-
-    border-radius: 4px;
 
     cursor: pointer;
 
@@ -597,11 +602,9 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
 .priority-input {
     width: 70px;
-
     height: 28px;
 
     border: 1px solid #cfd4da;
-
     border-radius: 4px;
 
     padding: 0 6px;
@@ -612,6 +615,7 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
     gap: 5px;
 }
+
 
 /* =========================================================
    FORMAT
@@ -626,11 +630,10 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
     cursor: pointer;
 
-    font-size: 12px;
-
-    font-weight: 700;
-
     background: #f8f9fa;
+
+    font-size: 12px;
+    font-weight: 700;
 }
 
 .format-panel {
@@ -647,7 +650,6 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
 .format-field {
     display: flex;
-
     flex-direction: column;
 
     gap: 3px;
@@ -655,18 +657,12 @@ thead th.filtered.sorted.frozen-column.header-cell {
     font-size: 11px;
 }
 
-.format-field.full {
-    grid-column: 1 / -1;
-}
-
 .format-field select,
 .format-field input[type="number"] {
     width: 100%;
-
     height: 28px;
 
     border: 1px solid #cfd4da;
-
     border-radius: 4px;
 
     background: #fff;
@@ -678,7 +674,6 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
 .color-row {
     display: flex;
-
     align-items: center;
 
     gap: 6px;
@@ -686,12 +681,11 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
 .color-row input[type="color"] {
     width: 42px;
-
     height: 28px;
 
-    border: 1px solid #cfd4da;
-
     padding: 1px;
+
+    border: 1px solid #cfd4da;
 }
 
 .check-row {
@@ -720,20 +714,22 @@ thead th.filtered.sorted.frozen-column.header-cell {
     border-color: #9fc8f5 !important;
 }
 
+
 /* =========================================================
    EMPTY
 ========================================================= */
 
 .empty-row {
-    text-align: center;
-
     padding: 30px;
+
+    text-align: center;
 
     color: #777;
 }
 
+
 /* =========================================================
-   SETTINGS PANEL
+   SETTINGS
 ========================================================= */
 
 .settings-overlay {
@@ -741,18 +737,17 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
     inset: 0;
 
+    display: none;
+
     background: rgba(0,0,0,.25);
 
-    z-index: 6000;
-
-    display: none;
+    z-index: 20000;
 }
 
 .settings-panel {
     position: absolute;
 
     top: 55px;
-
     right: 15px;
 
     width: 390px;
@@ -761,52 +756,21 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
     overflow-y: auto;
 
+    padding: 12px;
+
     background: #fff;
 
     border: 1px solid #cfd4da;
-
     border-radius: 8px;
 
     box-shadow:
         0 10px 30px rgba(0,0,0,.2);
-
-    padding: 12px;
 }
 
 .settings-title {
-    font-weight: 700;
-
     margin-bottom: 12px;
-}
-
-.setting-group {
-    margin-bottom: 15px;
-
-    border-bottom: 1px solid #e4e6e9;
-
-    padding-bottom: 12px;
-}
-
-.setting-label {
-    display: block;
-
-    font-size: 12px;
 
     font-weight: 700;
-
-    margin-bottom: 6px;
-}
-
-.setting-input {
-    width: 100%;
-
-    height: 32px;
-
-    border: 1px solid #cfd4da;
-
-    border-radius: 4px;
-
-    padding: 0 7px;
 }
 
 .close-settings {
@@ -821,21 +785,34 @@ thead th.filtered.sorted.frozen-column.header-cell {
     font-size: 18px;
 }
 
-/* =========================================================
-   FREEZE INPUT
-========================================================= */
+.setting-group {
+    margin-bottom: 15px;
 
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #e4e6e9;
+}
+
+.setting-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.setting-input,
 .freeze-input {
     width: 100%;
-
     height: 32px;
 
     border: 1px solid #cfd4da;
-
     border-radius: 4px;
 
     padding: 0 7px;
 }
+
 
 /* =========================================================
    LOADING
@@ -846,18 +823,18 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
     inset: 48px 0 0 0;
 
-    background: rgba(255,255,255,.72);
-
     display: none;
 
     align-items: center;
-
     justify-content: center;
 
-    z-index: 4500;
+    background: rgba(255,255,255,.72);
+
+    z-index: 15000;
 
     font-size: 14px;
 }
+
 
 /* =========================================================
    SCROLLBAR
@@ -865,7 +842,6 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
 ::-webkit-scrollbar {
     width: 10px;
-
     height: 10px;
 }
 
@@ -879,25 +855,12 @@ thead th.filtered.sorted.frozen-column.header-cell {
     background: #f2f3f5;
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    .status {
-        display: none;
-    }
-
-    .filter-menu {
-        width: min(330px, calc(100vw - 20px));
-    }
-
-}
 </style>
 </head>
 
+
 <body>
+
 
 <!-- =========================================================
      TOP BAR
@@ -941,6 +904,7 @@ thead th.filtered.sorted.frozen-column.header-cell {
     id="tableWrapper"
     class="table-wrapper"
 >
+
     <table id="dataTable">
 
         <thead id="tableHead"></thead>
@@ -948,6 +912,7 @@ thead th.filtered.sorted.frozen-column.header-cell {
         <tbody id="tableBody"></tbody>
 
     </table>
+
 </div>
 
 
@@ -1007,9 +972,7 @@ thead th.filtered.sorted.frozen-column.header-cell {
                 Đổi tên cột
             </label>
 
-            <div
-                id="renameContainer"
-            ></div>
+            <div id="renameContainer"></div>
 
         </div>
 
@@ -1031,12 +994,13 @@ thead th.filtered.sorted.frozen-column.header-cell {
 
 <script>
 
+
 /* =========================================================
    GOOGLE SHEET
 ========================================================= */
 
 const SHEET_URL =
-    "https://docs.google.com/spreadsheets/d/19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS/gviz/tq?tqx=out%3Acsv&gid=616860962";
+"https://docs.google.com/spreadsheets/d/19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS/gviz/tq?tqx=out%3Acsv&gid=616860962";
 
 
 /* =========================================================
@@ -1044,9 +1008,11 @@ const SHEET_URL =
 ========================================================= */
 
 const STORAGE_KEY =
-    "report_google_sheet_table_v10";
+"report_google_sheet_table_v11";
+
 
 const OLD_STORAGE_KEYS = [
+    "report_google_sheet_table_v10",
     "report_google_sheet_table_v9",
     "report_google_sheet_table_v8"
 ];
@@ -1056,7 +1022,8 @@ const OLD_STORAGE_KEYS = [
    HIDDEN COLUMNS
 ========================================================= */
 
-const HIDDEN_COLUMNS = new Set([
+const HIDDEN_COLUMNS =
+new Set([
     "Sort_DATA",
     "Sort_NM",
     "Sort_NgM"
@@ -1064,7 +1031,7 @@ const HIDDEN_COLUMNS = new Set([
 
 
 /* =========================================================
-   SORT MAPPING
+   SORT MAP
 ========================================================= */
 
 const SORT_BY_MAP = {
@@ -1095,6 +1062,8 @@ let searches = {};
 
 let sortPriorities = {};
 
+let sortDirections = {};
+
 let columnWidths = {};
 
 let columnFormats = {};
@@ -1104,25 +1073,25 @@ let renamedHeaders = {};
 let freezeCount = 0;
 
 
-/*
-   Current filter menu
-*/
+/* =========================================================
+   FILTER MENU
+========================================================= */
 
 let openFilterIndex = null;
 
 let filterMenuElement = null;
 
 
-/*
-   Resize
-*/
+/* =========================================================
+   RESIZE
+========================================================= */
 
 let resizing = null;
 
 
-/*
-   Search debounce
-*/
+/* =========================================================
+   SEARCH TIMERS
+========================================================= */
 
 const searchTimers = {};
 
@@ -1157,38 +1126,33 @@ const DEFAULT_FORMAT = {
 ========================================================= */
 
 const tableHead =
-    document.getElementById(
-        "tableHead"
-    );
+document.getElementById(
+    "tableHead"
+);
 
 const tableBody =
-    document.getElementById(
-        "tableBody"
-    );
-
-const tableWrapper =
-    document.getElementById(
-        "tableWrapper"
-    );
+document.getElementById(
+    "tableBody"
+);
 
 const statusEl =
-    document.getElementById(
-        "status"
-    );
+document.getElementById(
+    "status"
+);
 
 const loadingEl =
-    document.getElementById(
-        "loading"
-    );
+document.getElementById(
+    "loading"
+);
 
 const settingsOverlay =
-    document.getElementById(
-        "settingsOverlay"
-    );
+document.getElementById(
+    "settingsOverlay"
+);
 
 
 /* =========================================================
-   STORAGE LOAD
+   LOAD STATE
 ========================================================= */
 
 function loadState() {
@@ -1201,20 +1165,23 @@ function loadState() {
     if (!raw) {
 
         for (
-            const oldKey
+            const key
             of OLD_STORAGE_KEYS
         ) {
 
             raw =
                 localStorage.getItem(
-                    oldKey
+                    key
                 );
 
             if (raw) break;
+
         }
+
     }
 
     if (!raw) return;
+
 
     try {
 
@@ -1230,6 +1197,9 @@ function loadState() {
         sortPriorities =
             state.sortPriorities || {};
 
+        sortDirections =
+            state.sortDirections || {};
+
         columnWidths =
             state.columnWidths || {};
 
@@ -1244,10 +1214,11 @@ function loadState() {
                 state.freezeCount || 0
             );
 
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
-            "Không thể đọc localStorage:",
+            "Storage error:",
             error
         );
 
@@ -1257,32 +1228,32 @@ function loadState() {
 
 
 /* =========================================================
-   STORAGE SAVE
+   SAVE STATE
 ========================================================= */
 
 function saveState() {
 
-    const state = {
-
-        filters,
-
-        searches,
-
-        sortPriorities,
-
-        columnWidths,
-
-        columnFormats,
-
-        renamedHeaders,
-
-        freezeCount
-
-    };
-
     localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify(state)
+        JSON.stringify({
+
+            filters,
+
+            searches,
+
+            sortPriorities,
+
+            sortDirections,
+
+            columnWidths,
+
+            columnFormats,
+
+            renamedHeaders,
+
+            freezeCount
+
+        })
     );
 
 }
@@ -1290,7 +1261,6 @@ function saveState() {
 
 /* =========================================================
    CSV PARSER
-   Giữ line break bên trong ô
 ========================================================= */
 
 function parseCSV(text) {
@@ -1303,16 +1273,19 @@ function parseCSV(text) {
 
     let inQuotes = false;
 
+
     for (
         let i = 0;
         i < text.length;
         i++
     ) {
 
-        const c = text[i];
+        const c =
+            text[i];
 
         const next =
             text[i + 1];
+
 
         if (c === '"') {
 
@@ -1325,7 +1298,8 @@ function parseCSV(text) {
 
                 i++;
 
-            } else {
+            }
+            else {
 
                 inQuotes =
                     !inQuotes;
@@ -1406,7 +1380,7 @@ function parseCSV(text) {
 
 
 /* =========================================================
-   NORMALIZE CSV VALUE
+   NORMALIZE
 ========================================================= */
 
 function normalizeValue(value) {
@@ -1426,7 +1400,7 @@ function normalizeValue(value) {
 
 
 /* =========================================================
-   PARSE VIETNAMESE DATE
+   DATE
 ========================================================= */
 
 function parseVietnameseDate(value) {
@@ -1435,49 +1409,36 @@ function parseVietnameseDate(value) {
         normalizeValue(value)
             .trim();
 
-    if (!s) return null;
-
-    const match =
+    const m =
         s.match(
             /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
         );
 
-    if (!match) return null;
+    if (!m) return null;
 
-    const day =
-        Number(match[1]);
-
-    const month =
-        Number(match[2]) - 1;
-
-    const year =
-        Number(match[3]);
 
     const d =
         new Date(
-            year,
-            month,
-            day
+            Number(m[3]),
+            Number(m[2]) - 1,
+            Number(m[1])
         );
 
+
     if (
-        d.getFullYear() !== year ||
-        d.getMonth() !== month ||
-        d.getDate() !== day
+        d.getFullYear() !==
+        Number(m[3])
     ) {
 
         return null;
 
     }
 
+
     return d;
 
 }
 
-
-/* =========================================================
-   DISPLAY RELATIVE DATE
-========================================================= */
 
 function displayRelativeMonth(value) {
 
@@ -1494,8 +1455,10 @@ function displayRelativeMonth(value) {
 
     }
 
+
     const now =
         new Date();
+
 
     const months =
         (
@@ -1508,17 +1471,20 @@ function displayRelativeMonth(value) {
             d.getMonth()
         );
 
+
     const n =
         Math.max(
             0,
             months
         );
 
+
     if (n === 0) {
 
         return "0 tháng";
 
     }
+
 
     return (
         String(n)
@@ -1531,7 +1497,7 @@ function displayRelativeMonth(value) {
 
 
 /* =========================================================
-   VIETNAMESE NUMBER
+   NUMBER
 ========================================================= */
 
 function parseVNNumber(value) {
@@ -1541,6 +1507,7 @@ function parseVNNumber(value) {
             .trim();
 
     if (!s) return null;
+
 
     if (
         /^-?\d{1,3}(\.\d{3})+(,\d+)?$/
@@ -1555,6 +1522,7 @@ function parseVNNumber(value) {
 
     }
 
+
     if (
         /^-?\d+(,\d+)?$/
             .test(s)
@@ -1566,6 +1534,7 @@ function parseVNNumber(value) {
 
     }
 
+
     if (
         /^-?\d+(\.\d+)?$/
             .test(s)
@@ -1574,6 +1543,7 @@ function parseVNNumber(value) {
         return Number(s);
 
     }
+
 
     return null;
 
@@ -1607,36 +1577,30 @@ function getDisplayValue(
 
 
 /* =========================================================
-   GET VISIBLE HEADERS
+   VISIBLE COLUMNS
 ========================================================= */
 
 function getVisibleHeaderIndices() {
 
-    const result = [];
-
-    headers.forEach(
-        (header, index) => {
-
-            if (
-                !HIDDEN_COLUMNS.has(
+    return headers
+        .map(
+            (header, index) =>
+                HIDDEN_COLUMNS.has(
                     header
                 )
-            ) {
-
-                result.push(index);
-
-            }
-
-        }
-    );
-
-    return result;
+                    ? null
+                    : index
+        )
+        .filter(
+            index =>
+                index !== null
+        );
 
 }
 
 
 /* =========================================================
-   GET HEADER DISPLAY NAME
+   HEADER NAME
 ========================================================= */
 
 function getHeaderName(index) {
@@ -1651,7 +1615,7 @@ function getHeaderName(index) {
 
 
 /* =========================================================
-   GET FORMAT
+   FORMAT
 ========================================================= */
 
 function getColumnFormat(index) {
@@ -1667,10 +1631,6 @@ function getColumnFormat(index) {
 }
 
 
-/* =========================================================
-   APPLY FORMAT
-========================================================= */
-
 function applyFormatToCell(
     cell,
     index
@@ -1680,6 +1640,7 @@ function applyFormatToCell(
         getColumnFormat(
             index
         );
+
 
     cell.style.textAlign =
         f.align;
@@ -1706,6 +1667,7 @@ function applyFormatToCell(
     cell.style.backgroundColor =
         f.background;
 
+
     if (f.wrap) {
 
         cell.style.whiteSpace =
@@ -1717,7 +1679,8 @@ function applyFormatToCell(
         cell.style.wordBreak =
             "break-word";
 
-    } else {
+    }
+    else {
 
         cell.style.whiteSpace =
             "nowrap";
@@ -1734,18 +1697,17 @@ function applyFormatToCell(
 
 
 /* =========================================================
-   FIND SORT INDEX
+   SORT INDEX
 ========================================================= */
 
-function getSortIndex(
-    visibleIndex
-) {
+function getSortIndex(index) {
 
     const header =
-        headers[visibleIndex];
+        headers[index];
 
     const mapped =
         SORT_BY_MAP[header];
+
 
     if (
         mapped &&
@@ -1758,22 +1720,21 @@ function getSortIndex(
 
     }
 
-    return visibleIndex;
+
+    return index;
 
 }
 
 
 /* =========================================================
-   GET SEARCHED ROWS
+   FILTER / SEARCH MATCH
 ========================================================= */
 
 /*
-   Important:
+   ignoreIndex:
 
-   Searches are treated like active filters.
-
-   When building the value list of column X,
-   the search/filter of X itself is ignored.
+   Khi xây dựng filter của cột X,
+   bỏ qua filter + search của chính X.
 */
 
 function rowMatchesConditions(
@@ -1781,9 +1742,8 @@ function rowMatchesConditions(
     ignoreIndex = null
 ) {
 
-    /*
-       FILTERS
-    */
+
+    /* FILTER */
 
     for (
         const key of Object.keys(
@@ -1794,6 +1754,7 @@ function rowMatchesConditions(
         const index =
             Number(key);
 
+
         if (
             index === ignoreIndex
         ) {
@@ -1802,8 +1763,10 @@ function rowMatchesConditions(
 
         }
 
+
         const selected =
             filters[index];
+
 
         if (
             !Array.isArray(
@@ -1815,22 +1778,26 @@ function rowMatchesConditions(
 
         }
 
-        /*
-           Empty selection = no restriction
-        */
 
         if (
             selected.length === 0
         ) {
 
-            continue;
+            /*
+               Không có giá trị nào được chọn
+               = không hiển thị dòng nào.
+            */
+
+            return false;
 
         }
+
 
         const value =
             normalizeValue(
                 row[index]
             );
+
 
         if (
             !selected.includes(
@@ -1845,9 +1812,7 @@ function rowMatchesConditions(
     }
 
 
-    /*
-       SEARCHES
-    */
+    /* SEARCH */
 
     for (
         const key of Object.keys(
@@ -1858,6 +1823,7 @@ function rowMatchesConditions(
         const index =
             Number(key);
 
+
         if (
             index === ignoreIndex
         ) {
@@ -1866,6 +1832,7 @@ function rowMatchesConditions(
 
         }
 
+
         const search =
             normalizeValue(
                 searches[index]
@@ -1873,17 +1840,20 @@ function rowMatchesConditions(
             .trim()
             .toLowerCase();
 
+
         if (!search) {
 
             continue;
 
         }
 
+
         const value =
             normalizeValue(
                 row[index]
             )
             .toLowerCase();
+
 
         if (
             !value.includes(
@@ -1904,7 +1874,7 @@ function rowMatchesConditions(
 
 
 /* =========================================================
-   GET FILTERED ROWS
+   FILTERED ROWS
 ========================================================= */
 
 function getFilteredRows() {
@@ -1921,25 +1891,16 @@ function getFilteredRows() {
 
 
 /* =========================================================
-   UNIQUE VALUES FOR FILTER
+   AVAILABLE FILTER VALUES
 ========================================================= */
-
-/*
-   Đây là phần quan trọng nhất.
-
-   Khi mở filter cột X:
-
-   - dùng toàn bộ rows
-   - áp dụng filter/search của các cột khác
-   - KHÔNG áp dụng filter/search của X
-*/
 
 function getAvailableValues(
     index
 ) {
 
-    const set =
+    const values =
         new Set();
+
 
     for (
         const row of rows
@@ -1956,7 +1917,8 @@ function getAvailableValues(
 
         }
 
-        set.add(
+
+        values.add(
             normalizeValue(
                 row[index]
             )
@@ -1964,8 +1926,9 @@ function getAvailableValues(
 
     }
 
+
     return Array.from(
-        set
+        values
     );
 
 }
@@ -1990,9 +1953,6 @@ function sortFilterValues(
                 normalizeValue(b)
                     .trim();
 
-            /*
-               Blank first
-            */
 
             if (
                 aa === "" &&
@@ -2003,6 +1963,7 @@ function sortFilterValues(
 
             }
 
+
             if (
                 aa !== "" &&
                 bb === ""
@@ -2012,15 +1973,13 @@ function sortFilterValues(
 
             }
 
-            /*
-               Numeric
-            */
 
             const na =
                 parseVNNumber(aa);
 
             const nb =
                 parseVNNumber(bb);
+
 
             if (
                 na !== null &&
@@ -2031,12 +1990,14 @@ function sortFilterValues(
 
             }
 
+
             return aa.localeCompare(
                 bb,
                 "vi",
                 {
                     numeric: true,
-                    sensitivity: "base"
+                    sensitivity:
+                        "base"
                 }
             );
 
@@ -2047,15 +2008,14 @@ function sortFilterValues(
 
 
 /* =========================================================
-   HEADER ACTIVE STATE
+   ACTIVE STATES
 ========================================================= */
 
-function hasActiveFilter(
-    index
-) {
+function hasActiveFilter(index) {
 
     const selected =
         filters[index];
+
 
     if (
         !Array.isArray(
@@ -2067,23 +2027,21 @@ function hasActiveFilter(
 
     }
 
-    const available =
-        getAvailableValues(
-            index
-        );
-
-    /*
-       If selected is not equal to all
-       available values, consider active.
-    */
 
     if (
         selected.length === 0
     ) {
 
-        return false;
+        return true;
 
     }
+
+
+    const available =
+        getAvailableValues(
+            index
+        );
+
 
     if (
         selected.length !==
@@ -2094,74 +2052,101 @@ function hasActiveFilter(
 
     }
 
-    const selectedSet =
+
+    const set =
         new Set(
             selected
         );
 
+
     return available.some(
         value =>
-            !selectedSet.has(
-                value
-            )
+            !set.has(value)
     );
 
 }
 
 
-/* =========================================================
-   HAS SEARCH
-========================================================= */
-
-function hasActiveSearch(
-    index
-) {
+function hasActiveSearch(index) {
 
     return Boolean(
         normalizeValue(
             searches[index]
-        ).trim()
+        )
+        .trim()
     );
 
 }
 
 
-/* =========================================================
-   HAS SORT
-========================================================= */
-
-function hasActiveSort(
-    index
-) {
+function hasActiveSort(index) {
 
     return (
         sortPriorities[index] !==
-        undefined &&
-        sortPriorities[index] !==
-        null &&
-        String(
-            sortPriorities[index]
-        ).trim() !== ""
+        undefined
     );
 
 }
 
 
 /* =========================================================
-   INIT DEFAULT FILTERS
+   UPDATE HEADER STATES
+========================================================= */
+
+/*
+   QUAN TRỌNG:
+
+   Hàm này chỉ thay class.
+
+   KHÔNG dựng lại header.
+
+   Vì vậy search input không mất focus.
+*/
+
+function updateHeaderStates() {
+
+    document
+        .querySelectorAll(
+            "thead .header-cell"
+        )
+        .forEach(
+            th => {
+
+                const index =
+                    Number(
+                        th.dataset.column
+                    );
+
+
+                th.classList.toggle(
+                    "filtered",
+                    hasActiveFilter(index) ||
+                    hasActiveSearch(index)
+                );
+
+
+                th.classList.toggle(
+                    "sorted",
+                    hasActiveSort(index)
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   DEFAULT FILTERS
 ========================================================= */
 
 function initializeDefaultFilters() {
-
-    /*
-       Ngày update:
-       mặc định bỏ blank
-    */
 
     const dateIndex =
         headers.indexOf(
             "Ngày update"
         );
+
 
     if (
         dateIndex >= 0 &&
@@ -2169,7 +2154,7 @@ function initializeDefaultFilters() {
             undefined
     ) {
 
-        const values =
+        filters[dateIndex] =
             Array.from(
                 new Set(
                     rows
@@ -2188,21 +2173,14 @@ function initializeDefaultFilters() {
                 )
             );
 
-        filters[dateIndex] =
-            values;
-
     }
 
-
-    /*
-       Dừng gói:
-       mặc định chỉ chọn blank
-    */
 
     const stopIndex =
         headers.indexOf(
             "Dừng gói"
         );
+
 
     if (
         stopIndex >= 0 &&
@@ -2220,12 +2198,10 @@ function initializeDefaultFilters() {
 
 
 /* =========================================================
-   APPLY SORT
+   SORT ROWS
 ========================================================= */
 
-function applySort(
-    sourceRows
-) {
+function applySort(sourceRows) {
 
     const priorities =
         Object.entries(
@@ -2238,7 +2214,11 @@ function applySort(
                     Number(index),
 
                 priority:
-                    Number(priority)
+                    Number(priority),
+
+                direction:
+                    sortDirections[index] ||
+                    "asc"
 
             })
         )
@@ -2249,6 +2229,7 @@ function applySort(
                 )
         );
 
+
     if (
         priorities.length === 0
     ) {
@@ -2257,16 +2238,6 @@ function applySort(
 
     }
 
-    /*
-       Không normalize priority.
-
-       Người dùng nhập:
-       1
-       3
-       8
-
-       thì giữ đúng thứ tự đó.
-    */
 
     priorities.sort(
         (a, b) => {
@@ -2282,6 +2253,7 @@ function applySort(
                 );
 
             }
+
 
             return (
                 a.index -
@@ -2302,13 +2274,11 @@ function applySort(
                 of priorities
             ) {
 
-                const displayIndex =
-                    item.index;
-
                 const actualIndex =
                     getSortIndex(
-                        displayIndex
+                        item.index
                     );
+
 
                 const va =
                     normalizeValue(
@@ -2317,12 +2287,14 @@ function applySort(
                         ]
                     );
 
+
                 const vb =
                     normalizeValue(
                         b[
                             actualIndex
                         ]
                     );
+
 
                 const na =
                     parseVNNumber(
@@ -2334,7 +2306,9 @@ function applySort(
                         vb
                     );
 
-                let compare = 0;
+
+                let compare;
+
 
                 if (
                     na !== null &&
@@ -2344,7 +2318,8 @@ function applySort(
                     compare =
                         na - nb;
 
-                } else {
+                }
+                else {
 
                     compare =
                         va.localeCompare(
@@ -2359,6 +2334,18 @@ function applySort(
 
                 }
 
+
+                if (
+                    item.direction ===
+                    "desc"
+                ) {
+
+                    compare =
+                        -compare;
+
+                }
+
+
                 if (
                     compare !== 0
                 ) {
@@ -2368,6 +2355,7 @@ function applySort(
                 }
 
             }
+
 
             return 0;
 
@@ -2385,13 +2373,12 @@ function renderHeader() {
 
     tableHead.innerHTML = "";
 
+
     const visible =
         getVisibleHeaderIndices();
 
 
-    /*
-       HEADER ROW
-    */
+    /* HEADER */
 
     const headerRow =
         document.createElement(
@@ -2410,34 +2397,31 @@ function renderHeader() {
                     "th"
                 );
 
+
             th.className =
                 "header-cell";
+
 
             th.dataset.column =
                 index;
 
-            th.style.width =
-                `${
+
+            const width =
+                Number(
                     columnWidths[index] ||
                     150
-                }px`;
+                );
+
+
+            th.style.width =
+                `${width}px`;
 
             th.style.minWidth =
-                `${
-                    columnWidths[index] ||
-                    150
-                }px`;
+                `${width}px`;
 
             th.style.maxWidth =
-                `${
-                    columnWidths[index] ||
-                    150
-                }px`;
+                `${width}px`;
 
-
-            /*
-               Active states
-            */
 
             if (
                 hasActiveFilter(index) ||
@@ -2449,6 +2433,7 @@ function renderHeader() {
                 );
 
             }
+
 
             if (
                 hasActiveSort(index)
@@ -2496,25 +2481,22 @@ function renderHeader() {
             );
 
 
-            const filterButton =
+            const button =
                 document.createElement(
                     "button"
                 );
 
-            filterButton.className =
+            button.className =
                 "filter-button";
 
-            filterButton.type =
+            button.type =
                 "button";
 
-            filterButton.textContent =
+            button.textContent =
                 "▼";
 
-            filterButton.title =
-                "Lọc / sắp xếp / định dạng";
 
-
-            filterButton.addEventListener(
+            button.addEventListener(
                 "click",
                 event => {
 
@@ -2522,25 +2504,12 @@ function renderHeader() {
 
                     openFilterMenu(
                         index,
-                        filterButton
+                        button
                     );
 
                 }
             );
 
-
-            inner.appendChild(
-                title
-            );
-
-            inner.appendChild(
-                filterButton
-            );
-
-
-            /*
-               Resize
-            */
 
             const resize =
                 document.createElement(
@@ -2549,6 +2518,7 @@ function renderHeader() {
 
             resize.className =
                 "resize-handle";
+
 
             resize.addEventListener(
                 "mousedown",
@@ -2564,6 +2534,14 @@ function renderHeader() {
 
 
             inner.appendChild(
+                title
+            );
+
+            inner.appendChild(
+                button
+            );
+
+            inner.appendChild(
                 resize
             );
 
@@ -2572,10 +2550,12 @@ function renderHeader() {
                 inner
             );
 
+
             applyFormatToCell(
                 th,
                 index
             );
+
 
             headerRow.appendChild(
                 th
@@ -2585,9 +2565,7 @@ function renderHeader() {
     );
 
 
-    /*
-       SEARCH ROW
-    */
+    /* SEARCH */
 
     const searchRow =
         document.createElement(
@@ -2632,23 +2610,27 @@ function renderHeader() {
                 "";
 
 
+            /*
+               QUAN TRỌNG:
+
+               Không gọi renderTable()
+               ở đây.
+
+               Chỉ render BODY.
+            */
+
             input.addEventListener(
                 "input",
                 event => {
 
-                    const value =
+                    searches[index] =
                         event.target.value;
 
-                    searches[index] =
-                        value;
-
-                    /*
-                       debounce để không lag
-                    */
 
                     clearTimeout(
                         searchTimers[index]
                     );
+
 
                     searchTimers[index] =
                         setTimeout(
@@ -2656,52 +2638,26 @@ function renderHeader() {
 
                                 saveState();
 
-                                renderTable();
-
                                 /*
-                                   Nếu filter menu
-                                   đang mở thì
-                                   cập nhật lại
-                                   menu.
+                                   Chỉ body.
+                                   Không rebuild input.
                                 */
 
-                                if (
-                                    openFilterIndex !==
-                                    null
-                                ) {
+                                renderBody();
 
-                                    const openIndex =
-                                        openFilterIndex;
+                                updateHeaderStates();
 
-                                    closeFilterMenu();
+                                applyFreezeColumns();
 
-                                    setTimeout(
-                                        () => {
+                                /*
+                                   Cập nhật filter menu
+                                   của các cột khác.
+                                */
 
-                                            const button =
-                                                document.querySelector(
-                                                    `[data-column="${openIndex}"] .filter-button`
-                                                );
-
-                                            if (
-                                                button
-                                            ) {
-
-                                                openFilterMenu(
-                                                    openIndex,
-                                                    button
-                                                );
-
-                                            }
-
-                                        },
-                                        0
-                                    );
-
-                                }
+                                refreshOpenFilterMenu();
 
                             },
-                            180
+                            120
                         );
 
                 }
@@ -2709,8 +2665,8 @@ function renderHeader() {
 
 
             /*
-               Search riêng cột,
-               không trigger filter menu.
+               Không cho click input
+               truyền ra ngoài.
             */
 
             input.addEventListener(
@@ -2723,14 +2679,26 @@ function renderHeader() {
             );
 
 
+            input.addEventListener(
+                "mousedown",
+                event => {
+
+                    event.stopPropagation();
+
+                }
+            );
+
+
             th.appendChild(
                 input
             );
+
 
             applyFormatToCell(
                 th,
                 index
             );
+
 
             searchRow.appendChild(
                 th
@@ -2759,20 +2727,23 @@ function renderBody() {
 
     tableBody.innerHTML = "";
 
+
     const visible =
         getVisibleHeaderIndices();
 
-    let filteredRows =
+
+    let data =
         getFilteredRows();
 
-    filteredRows =
+
+    data =
         applySort(
-            filteredRows
+            data
         );
 
 
     if (
-        filteredRows.length === 0
+        data.length === 0
     ) {
 
         const tr =
@@ -2780,34 +2751,41 @@ function renderBody() {
                 "tr"
             );
 
+
         const td =
             document.createElement(
                 "td"
             );
 
+
         td.className =
             "empty-row";
+
 
         td.colSpan =
             visible.length;
 
+
         td.textContent =
             "Không có dữ liệu phù hợp";
+
 
         tr.appendChild(
             td
         );
 
+
         tableBody.appendChild(
             tr
         );
+
 
         return;
 
     }
 
 
-    filteredRows.forEach(
+    data.forEach(
         row => {
 
             const tr =
@@ -2824,46 +2802,37 @@ function renderBody() {
                             "td"
                         );
 
+
                     td.className =
                         "body-cell";
+
 
                     td.dataset.column =
                         index;
 
 
-                    const value =
+                    const width =
+                        Number(
+                            columnWidths[index] ||
+                            150
+                        );
+
+
+                    td.style.width =
+                        `${width}px`;
+
+                    td.style.minWidth =
+                        `${width}px`;
+
+                    td.style.maxWidth =
+                        `${width}px`;
+
+
+                    td.textContent =
                         getDisplayValue(
                             row[index],
                             headers[index]
                         );
-
-
-                    /*
-                       textContent:
-                       giữ line break
-                    */
-
-                    td.textContent =
-                        value;
-
-
-                    td.style.width =
-                        `${
-                            columnWidths[index] ||
-                            150
-                        }px`;
-
-                    td.style.minWidth =
-                        `${
-                            columnWidths[index] ||
-                            150
-                        }px`;
-
-                    td.style.maxWidth =
-                        `${
-                            columnWidths[index] ||
-                            150
-                        }px`;
 
 
                     applyFormatToCell(
@@ -2912,13 +2881,13 @@ function renderTable() {
 
 
 /* =========================================================
-   FREEZE COLUMNS
+   APPLY FREEZE
 ========================================================= */
 
 function applyFreezeColumns() {
 
     /*
-       Xóa trạng thái cũ
+       Xóa cũ
     */
 
     document
@@ -2946,15 +2915,20 @@ function applyFreezeColumns() {
         getVisibleHeaderIndices();
 
 
+    const count =
+        Math.min(
+            Math.max(
+                0,
+                Number(freezeCount)
+            ),
+            visible.length
+        );
+
+
     const frozen =
         visible.slice(
             0,
-            Math.max(
-                0,
-                Number(
-                    freezeCount
-                )
-            )
+            count
         );
 
 
@@ -2984,31 +2958,67 @@ function applyFreezeColumns() {
                         "frozen-column"
                     );
 
+
                     cell.style.left =
                         `${left}px`;
 
 
                     /*
-                       Frozen body background
-                       must remain opaque.
+                       Body thấp
                     */
 
-                    const format =
-                        getColumnFormat(
-                            index
-                        );
+                    if (
+                        cell.classList.contains(
+                            "body-cell"
+                        )
+                    ) {
 
-                    cell.style.backgroundColor =
-                        format.background ||
-                        "#ffffff";
+                        cell.style.zIndex =
+                            "100";
+
+                    }
+
+
+                    /*
+                       Header cao nhất
+                    */
+
+                    if (
+                        cell.classList.contains(
+                            "header-cell"
+                        )
+                    ) {
+
+                        cell.style.zIndex =
+                            "2000";
+
+                        cell.style.top =
+                            "0px";
+
+                    }
+
+
+                    /*
+                       Search cao
+                    */
+
+                    if (
+                        cell.classList.contains(
+                            "search-cell"
+                        )
+                    ) {
+
+                        cell.style.zIndex =
+                            "1900";
+
+                        cell.style.top =
+                            "40px";
+
+                    }
 
                 }
             );
 
-
-            /*
-               Last frozen column
-            */
 
             if (
                 position ===
@@ -3037,6 +3047,49 @@ function applyFreezeColumns() {
 
 
 /* =========================================================
+   REFRESH OPEN FILTER MENU
+========================================================= */
+
+function refreshOpenFilterMenu() {
+
+    if (
+        openFilterIndex === null
+    ) {
+
+        return;
+
+    }
+
+
+    const index =
+        openFilterIndex;
+
+
+    const button =
+        document.querySelector(
+            `[data-column="${index}"] .filter-button`
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    /*
+       Không refresh nếu người dùng
+       đang thao tác trong menu.
+
+       Menu sẽ được cập nhật khi
+       thay đổi filter bằng checkbox.
+    */
+
+}
+
+
+/* =========================================================
    OPEN FILTER MENU
 ========================================================= */
 
@@ -3047,6 +3100,7 @@ function openFilterMenu(
 
     closeFilterMenu();
 
+
     openFilterIndex =
         index;
 
@@ -3056,6 +3110,7 @@ function openFilterMenu(
             "div"
         );
 
+
     menu.className =
         "filter-menu";
 
@@ -3064,9 +3119,7 @@ function openFilterMenu(
         menu;
 
 
-    /*
-       HEADER
-    */
+    /* HEADER */
 
     const header =
         document.createElement(
@@ -3087,9 +3140,7 @@ function openFilterMenu(
     );
 
 
-    /*
-       SEARCH VALUES
-    */
+    /* SEARCH VALUES */
 
     const searchBox =
         document.createElement(
@@ -3112,6 +3163,12 @@ function openFilterMenu(
         "Tìm trong danh sách giá trị...";
 
 
+    valueSearch.addEventListener(
+        "click",
+        e => e.stopPropagation()
+    );
+
+
     searchBox.appendChild(
         valueSearch
     );
@@ -3121,9 +3178,7 @@ function openFilterMenu(
     );
 
 
-    /*
-       ACTIONS
-    */
+    /* ACTIONS */
 
     const actions =
         document.createElement(
@@ -3160,14 +3215,13 @@ function openFilterMenu(
         clearAll
     );
 
+
     menu.appendChild(
         actions
     );
 
 
-    /*
-       VALUE LIST
-    */
+    /* VALUES */
 
     const valueList =
         document.createElement(
@@ -3178,20 +3232,6 @@ function openFilterMenu(
         "value-list";
 
 
-    /*
-       Initial selected state.
-
-       Nếu chưa có filter:
-       tất cả giá trị khả dụng được chọn.
-
-       Đặc biệt với default:
-       Ngày update và Dừng gói
-       đã được initialize trước đó.
-    */
-
-    let selected =
-        filters[index];
-
     const allAvailable =
         sortFilterValues(
             getAvailableValues(
@@ -3200,28 +3240,16 @@ function openFilterMenu(
         );
 
 
-    if (
-        !Array.isArray(
-            selected
+    let selected =
+        Array.isArray(
+            filters[index]
         )
-    ) {
-
-        selected =
-            [
-                ...allAvailable
-            ];
-
-    }
-
-
-    /*
-       Clone để thao tác ngay.
-    */
-
-    selected =
-        new Set(
-            selected
-        );
+            ? new Set(
+                filters[index]
+            )
+            : new Set(
+                allAvailable
+            );
 
 
     function renderValues(
@@ -3230,7 +3258,8 @@ function openFilterMenu(
 
         valueList.innerHTML = "";
 
-        const normalizedKeyword =
+
+        const key =
             normalizeValue(
                 keyword
             )
@@ -3241,24 +3270,157 @@ function openFilterMenu(
             allAvailable.filter(
                 value => {
 
-                    if (
-                        !normalizedKeyword
-                    ) {
+                    if (!key) {
 
                         return true;
 
                     }
 
+
                     return normalizeValue(
                         value
                     )
                     .toLowerCase()
-                    .includes(
-                        normalizedKeyword
-                    );
+                    .includes(key);
 
                 }
             );
+
+
+        values.forEach(
+            value => {
+
+                const label =
+                    document.createElement(
+                        "label"
+                    );
+
+
+                label.className =
+                    "value-item";
+
+
+                const checkbox =
+                    document.createElement(
+                        "input"
+                    );
+
+
+                checkbox.type =
+                    "checkbox";
+
+
+                checkbox.checked =
+                    selected.has(
+                        value
+                    );
+
+
+                checkbox.addEventListener(
+                    "click",
+                    event => {
+
+                        event.stopPropagation();
+
+                    }
+                );
+
+
+                checkbox.addEventListener(
+                    "change",
+                    event => {
+
+                        event.stopPropagation();
+
+
+                        if (
+                            checkbox.checked
+                        ) {
+
+                            selected.add(
+                                value
+                            );
+
+                        }
+                        else {
+
+                            selected.delete(
+                                value
+                            );
+
+                        }
+
+
+                        /*
+                           FILTER NGAY LẬP TỨC
+                        */
+
+                        filters[index] =
+                            Array.from(
+                                selected
+                            );
+
+
+                        saveState();
+
+
+                        /*
+                           Chỉ render body,
+                           KHÔNG render header.
+
+                           Vì vậy menu không biến mất.
+                        */
+
+                        renderBody();
+
+                        updateHeaderStates();
+
+                        applyFreezeColumns();
+
+
+                        /*
+                           Các filter khác phải
+                           thay đổi danh sách giá trị
+                           theo filter mới.
+
+                           Menu hiện tại vẫn giữ.
+                        */
+
+                    }
+                );
+
+
+                const span =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                span.className =
+                    "value-text";
+
+
+                span.textContent =
+                    value === ""
+                        ? "(Trống)"
+                        : value;
+
+
+                label.appendChild(
+                    checkbox
+                );
+
+                label.appendChild(
+                    span
+                );
+
+
+                valueList.appendChild(
+                    label
+                );
+
+            }
+        );
 
 
         if (
@@ -3282,130 +3444,12 @@ function openFilterMenu(
             empty.textContent =
                 "Không có giá trị";
 
+
             valueList.appendChild(
                 empty
             );
 
-            return;
-
         }
-
-
-        values.forEach(
-            value => {
-
-                const label =
-                    document.createElement(
-                        "label"
-                    );
-
-                label.className =
-                    "value-item";
-
-
-                const checkbox =
-                    document.createElement(
-                        "input"
-                    );
-
-                checkbox.type =
-                    "checkbox";
-
-                checkbox.checked =
-                    selected.has(
-                        value
-                    );
-
-
-                const span =
-                    document.createElement(
-                        "span"
-                    );
-
-                span.className =
-                    "value-text";
-
-
-                span.textContent =
-                    value === ""
-                        ? "(Trống)"
-                        : value;
-
-
-                /*
-                   IMPORTANT:
-                   Tick = filter ngay.
-                */
-
-                checkbox.addEventListener(
-                    "change",
-                    event => {
-
-                        event.stopPropagation();
-
-
-                        if (
-                            checkbox.checked
-                        ) {
-
-                            selected.add(
-                                value
-                            );
-
-                        } else {
-
-                            selected.delete(
-                                value
-                            );
-
-                        }
-
-
-                        filters[index] =
-                            Array.from(
-                                selected
-                            );
-
-
-                        saveState();
-
-                        /*
-                           Render bảng ngay
-                        */
-
-                        renderTable();
-
-
-                        /*
-                           Cập nhật lại các
-                           filter khác.
-
-                           Nếu menu hiện tại vẫn mở,
-                           giá trị của nó được giữ.
-                        */
-
-                        refreshOtherFilterMenus(
-                            index
-                        );
-
-                    }
-                );
-
-
-                label.appendChild(
-                    checkbox
-                );
-
-                label.appendChild(
-                    span
-                );
-
-                valueList.appendChild(
-                    label
-                );
-
-            }
-        );
 
     }
 
@@ -3419,26 +3463,31 @@ function openFilterMenu(
 
             event.stopPropagation();
 
+
             selected =
                 new Set(
                     allAvailable
                 );
+
 
             filters[index] =
                 Array.from(
                     selected
                 );
 
+
             saveState();
 
-            renderTable();
+
+            renderBody();
+
+            updateHeaderStates();
+
+            applyFreezeColumns();
+
 
             renderValues(
                 valueSearch.value
-            );
-
-            refreshOtherFilterMenus(
-                index
             );
 
         }
@@ -3451,22 +3500,27 @@ function openFilterMenu(
 
             event.stopPropagation();
 
+
             selected =
                 new Set();
+
 
             filters[index] =
                 [];
 
+
             saveState();
 
-            renderTable();
+
+            renderBody();
+
+            updateHeaderStates();
+
+            applyFreezeColumns();
+
 
             renderValues(
                 valueSearch.value
-            );
-
-            refreshOtherFilterMenus(
-                index
             );
 
         }
@@ -3478,6 +3532,7 @@ function openFilterMenu(
         event => {
 
             event.stopPropagation();
+
 
             renderValues(
                 event.target.value
@@ -3492,9 +3547,9 @@ function openFilterMenu(
     );
 
 
-    /*
-       SORT SECTION
-    */
+    /* =====================================================
+       SORT
+    ===================================================== */
 
     const sortSection =
         document.createElement(
@@ -3526,21 +3581,21 @@ function openFilterMenu(
         "sort-row";
 
 
-    const sortAsc =
+    const asc =
         document.createElement(
             "button"
         );
 
-    sortAsc.textContent =
+    asc.textContent =
         "A → Z";
 
 
-    const sortDesc =
+    const desc =
         document.createElement(
             "button"
         );
 
-    sortDesc.textContent =
+    desc.textContent =
         "Z → A";
 
 
@@ -3567,11 +3622,11 @@ function openFilterMenu(
 
 
     sortRow.appendChild(
-        sortAsc
+        asc
     );
 
     sortRow.appendChild(
-        sortDesc
+        desc
     );
 
     sortRow.appendChild(
@@ -3579,11 +3634,12 @@ function openFilterMenu(
     );
 
 
-    sortAsc.addEventListener(
+    asc.addEventListener(
         "click",
         event => {
 
             event.stopPropagation();
+
 
             sortPriorities[index] =
                 Number(
@@ -3591,24 +3647,30 @@ function openFilterMenu(
                     1
                 );
 
+
+            sortDirections[index] =
+                "asc";
+
+
             saveState();
 
-            renderTable();
+
+            renderBody();
+
+            updateHeaderStates();
+
+            applyFreezeColumns();
 
         }
     );
 
 
-    sortDesc.addEventListener(
+    desc.addEventListener(
         "click",
         event => {
 
             event.stopPropagation();
 
-            /*
-               Dùng số âm để giữ
-               chiều giảm dần.
-            */
 
             sortPriorities[index] =
                 Number(
@@ -3616,49 +3678,19 @@ function openFilterMenu(
                     1
                 );
 
-            /*
-               data attribute
-               lưu direction
-            */
 
             sortDirections[index] =
                 "desc";
 
-            saveState();
-
-            renderTable();
-
-        }
-    );
-
-
-    priority.addEventListener(
-        "change",
-        event => {
-
-            event.stopPropagation();
-
-            const value =
-                event.target.value;
-
-            if (
-                value === ""
-            ) {
-
-                delete sortPriorities[
-                    index
-                ];
-
-            } else {
-
-                sortPriorities[index] =
-                    Number(value);
-
-            }
 
             saveState();
 
-            renderTable();
+
+            renderBody();
+
+            updateHeaderStates();
+
+            applyFreezeColumns();
 
         }
     );
@@ -3679,6 +3711,7 @@ function openFilterMenu(
 
             event.stopPropagation();
 
+
             delete sortPriorities[
                 index
             ];
@@ -3687,26 +3720,21 @@ function openFilterMenu(
                 index
             ];
 
+
             saveState();
 
-            renderTable();
 
-            priority.value = "";
+            renderBody();
+
+            updateHeaderStates();
+
+            applyFreezeColumns();
+
+
+            priority.value =
+                "";
 
         }
-    );
-
-
-    const sortActions =
-        document.createElement(
-            "div"
-        );
-
-    sortActions.className =
-        "sort-actions";
-
-    sortActions.appendChild(
-        clearSort
     );
 
 
@@ -3719,7 +3747,7 @@ function openFilterMenu(
     );
 
     sortSection.appendChild(
-        sortActions
+        clearSort
     );
 
 
@@ -3728,16 +3756,16 @@ function openFilterMenu(
     );
 
 
-    /*
-       FORMAT SECTION
-    */
+    /* =====================================================
+       FORMAT
+    ===================================================== */
 
-    const formatSection =
+    const formatDetails =
         document.createElement(
             "details"
         );
 
-    formatSection.className =
+    formatDetails.className =
         "format-section";
 
 
@@ -3753,40 +3781,46 @@ function openFilterMenu(
         "🎨 Định dạng cột";
 
 
-    formatSection.appendChild(
+    formatDetails.appendChild(
         summary
     );
 
 
-    const formatPanel =
+    const panel =
         document.createElement(
             "div"
         );
 
-    formatPanel.className =
+    panel.className =
         "format-panel";
 
 
-    const currentFormat =
+    panel.addEventListener(
+        "click",
+        e => {
+
+            e.stopPropagation();
+
+        }
+    );
+
+
+    const current =
         getColumnFormat(
             index
         );
 
 
-    const formatGrid =
+    const grid =
         document.createElement(
             "div"
         );
 
-    formatGrid.className =
+    grid.className =
         "format-grid";
 
 
-    /*
-       ALIGN
-    */
-
-    const alignField =
+    const align =
         createSelectField(
             "Căn lề",
             [
@@ -3794,15 +3828,11 @@ function openFilterMenu(
                 ["center", "Giữa"],
                 ["right", "Phải"]
             ],
-            currentFormat.align
+            current.align
         );
 
 
-    /*
-       FONT
-    */
-
-    const fontField =
+    const font =
         createSelectField(
             "Font",
             [
@@ -3814,28 +3844,20 @@ function openFilterMenu(
                 ["Times New Roman", "Times New Roman"],
                 ["Segoe UI", "Segoe UI"]
             ],
-            currentFormat.fontFamily
+            current.fontFamily
         );
 
 
-    /*
-       SIZE
-    */
-
-    const sizeField =
+    const size =
         createNumberField(
             "Cỡ chữ",
-            currentFormat.fontSize,
+            current.fontSize,
             8,
             48
         );
 
 
-    /*
-       WRAP
-    */
-
-    const wrapField =
+    const wrap =
         createSelectField(
             "Xuống dòng",
             [
@@ -3843,55 +3865,52 @@ function openFilterMenu(
                 ["false", "Không xuống dòng"]
             ],
             String(
-                currentFormat.wrap
+                current.wrap
             )
         );
 
 
-    /*
-       COLOR
-    */
-
-    const colorField =
+    const color =
         createColorField(
             "Màu chữ",
-            currentFormat.color
+            current.color
         );
 
 
-    /*
-       BACKGROUND
-    */
-
-    const backgroundField =
+    const background =
         createColorField(
             "Màu nền",
-            currentFormat.background
+            current.background
         );
 
 
-    formatGrid.appendChild(
-        alignField.wrapper
+    grid.appendChild(
+        align.wrapper
     );
 
-    formatGrid.appendChild(
-        fontField.wrapper
+    grid.appendChild(
+        font.wrapper
     );
 
-    formatGrid.appendChild(
-        sizeField.wrapper
+    grid.appendChild(
+        size.wrapper
     );
 
-    formatGrid.appendChild(
-        wrapField.wrapper
+    grid.appendChild(
+        wrap.wrapper
     );
 
-    formatGrid.appendChild(
-        colorField.wrapper
+    grid.appendChild(
+        color.wrapper
     );
 
-    formatGrid.appendChild(
-        backgroundField.wrapper
+    grid.appendChild(
+        background.wrapper
+    );
+
+
+    panel.appendChild(
+        grid
     );
 
 
@@ -3904,11 +3923,6 @@ function openFilterMenu(
         "check-row";
 
 
-    const boldLabel =
-        document.createElement(
-            "label"
-        );
-
     const bold =
         document.createElement(
             "input"
@@ -3918,8 +3932,12 @@ function openFilterMenu(
         "checkbox";
 
     bold.checked =
-        Boolean(
-            currentFormat.bold
+        current.bold;
+
+
+    const boldLabel =
+        document.createElement(
+            "label"
         );
 
     boldLabel.appendChild(
@@ -3933,11 +3951,6 @@ function openFilterMenu(
     );
 
 
-    const italicLabel =
-        document.createElement(
-            "label"
-        );
-
     const italic =
         document.createElement(
             "input"
@@ -3947,8 +3960,12 @@ function openFilterMenu(
         "checkbox";
 
     italic.checked =
-        Boolean(
-            currentFormat.italic
+        current.italic;
+
+
+    const italicLabel =
+        document.createElement(
+            "label"
         );
 
     italicLabel.appendChild(
@@ -3968,6 +3985,11 @@ function openFilterMenu(
 
     checkRow.appendChild(
         italicLabel
+    );
+
+
+    panel.appendChild(
+        checkRow
     );
 
 
@@ -4009,28 +4031,29 @@ function openFilterMenu(
 
             event.stopPropagation();
 
+
             columnFormats[index] = {
 
                 align:
-                    alignField.select.value,
+                    align.select.value,
 
                 fontFamily:
-                    fontField.select.value,
+                    font.select.value,
 
                 fontSize:
                     Number(
-                        sizeField.input.value
+                        size.input.value
                     ) || 14,
 
                 wrap:
-                    wrapField.select.value ===
+                    wrap.select.value ===
                     "true",
 
                 color:
-                    colorField.input.value,
+                    color.input.value,
 
                 background:
-                    backgroundField.input.value,
+                    background.input.value,
 
                 bold:
                     bold.checked,
@@ -4043,30 +4066,23 @@ function openFilterMenu(
 
             saveState();
 
-            renderTable();
 
             /*
-               Menu phải được dựng lại
-               để không mất trạng thái.
+               Không rebuild menu.
             */
 
-            const currentButton =
-                document.querySelector(
-                    `[data-column="${index}"] .filter-button`
-                );
+            renderTable();
 
-            closeFilterMenu();
 
-            if (
-                currentButton
-            ) {
+            /*
+               Sau renderTable menu cũ
+               bị mất? Không.
 
-                openFilterMenu(
-                    index,
-                    currentButton
-                );
+               Vì menu nằm ngoài table.
+               Vẫn giữ nguyên.
+            */
 
-            }
+            applyFreezeColumns();
 
         }
     );
@@ -4080,31 +4096,18 @@ function openFilterMenu(
 
             event.stopPropagation();
 
+
             delete columnFormats[
                 index
             ];
 
+
             saveState();
+
 
             renderTable();
 
-            closeFilterMenu();
-
-            const currentButton =
-                document.querySelector(
-                    `[data-column="${index}"] .filter-button`
-                );
-
-            if (
-                currentButton
-            ) {
-
-                openFilterMenu(
-                    index,
-                    currentButton
-                );
-
-            }
+            applyFreezeColumns();
 
         }
     );
@@ -4119,46 +4122,22 @@ function openFilterMenu(
     );
 
 
-    formatPanel.appendChild(
-        formatGrid
-    );
-
-    formatPanel.appendChild(
-        checkRow
-    );
-
-    formatPanel.appendChild(
+    panel.appendChild(
         formatActions
     );
 
 
-    /*
-       Prevent clicking format controls
-       from closing menu.
-    */
-
-    formatPanel.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-        }
+    formatDetails.appendChild(
+        panel
     );
 
-
-    formatSection.appendChild(
-        formatPanel
-    );
 
     menu.appendChild(
-        formatSection
+        formatDetails
     );
 
 
-    /*
-       DONE BUTTON
-    */
+    /* DONE */
 
     const done =
         document.createElement(
@@ -4197,8 +4176,6 @@ function openFilterMenu(
 
             closeFilterMenu();
 
-            renderTable();
-
         }
     );
 
@@ -4208,28 +4185,16 @@ function openFilterMenu(
     );
 
 
-    /*
-       Add menu to body
-    */
-
     document.body.appendChild(
         menu
     );
 
-
-    /*
-       Position menu
-    */
 
     positionFilterMenu(
         menu,
         button
     );
 
-
-    /*
-       Outside click
-    */
 
     setTimeout(
         () => {
@@ -4247,245 +4212,7 @@ function openFilterMenu(
 
 
 /* =========================================================
-   SORT DIRECTION
-========================================================= */
-
-const sortDirections = {};
-
-
-/* =========================================================
-   CREATE SELECT FIELD
-========================================================= */
-
-function createSelectField(
-    labelText,
-    options,
-    value
-) {
-
-    const wrapper =
-        document.createElement(
-            "label"
-        );
-
-    wrapper.className =
-        "format-field";
-
-
-    const label =
-        document.createElement(
-            "span"
-        );
-
-    label.textContent =
-        labelText;
-
-
-    const select =
-        document.createElement(
-            "select"
-        );
-
-
-    options.forEach(
-        option => {
-
-            const opt =
-                document.createElement(
-                    "option"
-                );
-
-            opt.value =
-                option[0];
-
-            opt.textContent =
-                option[1];
-
-            if (
-                String(
-                    option[0]
-                ) ===
-                String(value)
-            ) {
-
-                opt.selected =
-                    true;
-
-            }
-
-            select.appendChild(
-                opt
-            );
-
-        }
-    );
-
-
-    wrapper.appendChild(
-        label
-    );
-
-    wrapper.appendChild(
-        select
-    );
-
-
-    return {
-
-        wrapper,
-
-        select
-
-    };
-
-}
-
-
-/* =========================================================
-   CREATE NUMBER FIELD
-========================================================= */
-
-function createNumberField(
-    labelText,
-    value,
-    min,
-    max
-) {
-
-    const wrapper =
-        document.createElement(
-            "label"
-        );
-
-    wrapper.className =
-        "format-field";
-
-
-    const label =
-        document.createElement(
-            "span"
-        );
-
-    label.textContent =
-        labelText;
-
-
-    const input =
-        document.createElement(
-            "input"
-        );
-
-    input.type =
-        "number";
-
-    input.min =
-        min;
-
-    input.max =
-        max;
-
-    input.value =
-        value;
-
-
-    wrapper.appendChild(
-        label
-    );
-
-    wrapper.appendChild(
-        input
-    );
-
-
-    return {
-
-        wrapper,
-
-        input
-
-    };
-
-}
-
-
-/* =========================================================
-   CREATE COLOR FIELD
-========================================================= */
-
-function createColorField(
-    labelText,
-    value
-) {
-
-    const wrapper =
-        document.createElement(
-            "label"
-        );
-
-    wrapper.className =
-        "format-field";
-
-
-    const label =
-        document.createElement(
-            "span"
-        );
-
-    label.textContent =
-        labelText;
-
-
-    const row =
-        document.createElement(
-            "div"
-        );
-
-    row.className =
-        "color-row";
-
-
-    const input =
-        document.createElement(
-            "input"
-        );
-
-    input.type =
-        "color";
-
-    input.value =
-        /^#[0-9a-fA-F]{6}$/
-            .test(value)
-            ? value
-            : "#ffffff";
-
-
-    row.appendChild(
-        input
-    );
-
-
-    wrapper.appendChild(
-        label
-    );
-
-    wrapper.appendChild(
-        row
-    );
-
-
-    return {
-
-        wrapper,
-
-        input
-
-    };
-
-}
-
-
-/* =========================================================
-   POSITION FILTER MENU
+   FILTER MENU POSITION
 ========================================================= */
 
 function positionFilterMenu(
@@ -4497,30 +4224,30 @@ function positionFilterMenu(
         button.getBoundingClientRect();
 
 
-    const menuWidth =
+    const width =
         330;
 
-    const viewportWidth =
-        window.innerWidth;
 
     let left =
         rect.left;
+
 
     let top =
         rect.bottom + 5;
 
 
     if (
-        left + menuWidth >
-        viewportWidth - 10
+        left + width >
+        window.innerWidth - 10
     ) {
 
         left =
-            viewportWidth -
-            menuWidth -
+            window.innerWidth -
+            width -
             10;
 
     }
+
 
     if (
         left < 10
@@ -4531,7 +4258,7 @@ function positionFilterMenu(
     }
 
 
-    const menuHeight =
+    const height =
         Math.min(
             menu.scrollHeight,
             720
@@ -4539,16 +4266,17 @@ function positionFilterMenu(
 
 
     if (
-        top + menuHeight >
+        top + height >
         window.innerHeight - 10
     ) {
 
         top =
             rect.top -
-            menuHeight -
+            height -
             5;
 
     }
+
 
     if (
         top < 55
@@ -4569,7 +4297,7 @@ function positionFilterMenu(
 
 
 /* =========================================================
-   CLOSE FILTER MENU
+   CLOSE FILTER
 ========================================================= */
 
 function closeFilterMenu() {
@@ -4580,13 +4308,15 @@ function closeFilterMenu() {
 
         filterMenuElement.remove();
 
-        filterMenuElement =
-            null;
-
     }
+
+
+    filterMenuElement =
+        null;
 
     openFilterIndex =
         null;
+
 
     document.removeEventListener(
         "mousedown",
@@ -4597,7 +4327,7 @@ function closeFilterMenu() {
 
 
 /* =========================================================
-   OUTSIDE FILTER HANDLER
+   OUTSIDE CLICK
 ========================================================= */
 
 function outsideFilterHandler(
@@ -4614,71 +4344,6 @@ function outsideFilterHandler(
         closeFilterMenu();
 
     }
-
-}
-
-
-/* =========================================================
-   REFRESH OTHER FILTER MENUS
-========================================================= */
-
-function refreshOtherFilterMenus(
-    changedIndex
-) {
-
-    /*
-       Không đóng menu hiện tại.
-
-       Nếu đang mở cột X và X thay đổi,
-       danh sách của X phải vẫn dựa trên
-       các cột khác.
-    */
-
-    if (
-        openFilterIndex === null
-    ) {
-
-        return;
-
-    }
-
-
-    const currentIndex =
-        openFilterIndex;
-
-
-    /*
-       Rebuild menu để các giá trị
-       phản ánh filter liên động mới.
-    */
-
-    const button =
-        document.querySelector(
-            `[data-column="${currentIndex}"] .filter-button`
-        );
-
-
-    if (!button) {
-
-        return;
-
-    }
-
-
-    closeFilterMenu();
-
-
-    setTimeout(
-        () => {
-
-            openFilterMenu(
-                currentIndex,
-                button
-            );
-
-        },
-        0
-    );
 
 }
 
@@ -4722,6 +4387,7 @@ function startResize(
         resizeMove
     );
 
+
     document.addEventListener(
         "mouseup",
         resizeEnd
@@ -4730,19 +4396,9 @@ function startResize(
 }
 
 
-/* =========================================================
-   RESIZE MOVE
-========================================================= */
+function resizeMove(event) {
 
-function resizeMove(
-    event
-) {
-
-    if (!resizing) {
-
-        return;
-
-    }
+    if (!resizing) return;
 
 
     const delta =
@@ -4755,11 +4411,6 @@ function resizeMove(
         delta;
 
 
-    /*
-       Không giới hạn min/max
-       theo yêu cầu.
-    */
-
     width =
         Math.max(
             30,
@@ -4769,14 +4420,9 @@ function resizeMove(
 
     columnWidths[
         resizing.index
-    ] = Math.round(
-        width
-    );
+    ] =
+        Math.round(width);
 
-
-    /*
-       Update widths live
-    */
 
     document
         .querySelectorAll(
@@ -4803,20 +4449,13 @@ function resizeMove(
 }
 
 
-/* =========================================================
-   RESIZE END
-========================================================= */
-
 function resizeEnd() {
 
-    if (!resizing) {
-
-        return;
-
-    }
+    if (!resizing) return;
 
 
     resizing = null;
+
 
     document.body.style.cursor =
         "";
@@ -4827,6 +4466,7 @@ function resizeEnd() {
         resizeMove
     );
 
+
     document.removeEventListener(
         "mouseup",
         resizeEnd
@@ -4835,18 +4475,17 @@ function resizeEnd() {
 
     saveState();
 
+
     applyFreezeColumns();
 
 }
 
 
 /* =========================================================
-   RENAME COLUMN
+   RENAME
 ========================================================= */
 
-function renameColumn(
-    index
-) {
+function renameColumn(index) {
 
     const current =
         getHeaderName(
@@ -4870,29 +4509,36 @@ function renameColumn(
     }
 
 
-    const trimmed =
+    const name =
         value.trim();
 
 
     if (
-        !trimmed
+        !name ||
+        name === headers[index]
     ) {
 
         delete renamedHeaders[
             index
         ];
 
-    } else {
+    }
+    else {
 
         renamedHeaders[index] =
-            trimmed;
+            name;
 
     }
 
 
     saveState();
 
-    renderTable();
+
+    renderHeader();
+
+    renderBody();
+
+    applyFreezeColumns();
 
     buildRenameSettings();
 
@@ -4900,7 +4546,7 @@ function renameColumn(
 
 
 /* =========================================================
-   BUILD RENAME SETTINGS
+   RENAME SETTINGS
 ========================================================= */
 
 function buildRenameSettings() {
@@ -4910,6 +4556,7 @@ function buildRenameSettings() {
             "renameContainer"
         );
 
+
     container.innerHTML = "";
 
 
@@ -4917,31 +4564,19 @@ function buildRenameSettings() {
         .forEach(
             index => {
 
-                const row =
-                    document.createElement(
-                        "div"
-                    );
-
-                row.style.display =
-                    "flex";
-
-                row.style.gap =
-                    "5px";
-
-                row.style.marginBottom =
-                    "5px";
-
-
                 const input =
                     document.createElement(
                         "input"
                     );
 
+
                 input.className =
                     "setting-input";
 
-                input.style.flex =
-                    "1";
+
+                input.style.marginBottom =
+                    "5px";
+
 
                 input.value =
                     getHeaderName(
@@ -4967,29 +4602,32 @@ function buildRenameSettings() {
                                 index
                             ];
 
-                        } else {
+                        }
+                        else {
 
                             renamedHeaders[
                                 index
-                            ] = value;
+                            ] =
+                                value;
 
                         }
 
 
                         saveState();
 
-                        renderTable();
+
+                        renderHeader();
+
+                        renderBody();
+
+                        applyFreezeColumns();
 
                     }
                 );
 
 
-                row.appendChild(
-                    input
-                );
-
                 container.appendChild(
-                    row
+                    input
                 );
 
             }
@@ -4999,7 +4637,7 @@ function buildRenameSettings() {
 
 
 /* =========================================================
-   LOAD GOOGLE SHEET
+   LOAD DATA
 ========================================================= */
 
 async function loadData() {
@@ -5007,25 +4645,18 @@ async function loadData() {
     loadingEl.style.display =
         "flex";
 
+
     statusEl.textContent =
         "Đang tải dữ liệu...";
 
 
     try {
 
-        /*
-           cache bust
-        */
-
-        const url =
-            SHEET_URL +
-            "&_=" +
-            Date.now();
-
-
         const response =
             await fetch(
-                url,
+                SHEET_URL +
+                "&_=" +
+                Date.now(),
                 {
                     cache:
                         "no-store"
@@ -5066,10 +4697,6 @@ async function loadData() {
         }
 
 
-        /*
-           Header
-        */
-
         headers =
             parsed[0].map(
                 value =>
@@ -5078,10 +4705,6 @@ async function loadData() {
                     ).trim()
             );
 
-
-        /*
-           Rows
-        */
 
         rows =
             parsed
@@ -5092,7 +4715,9 @@ async function loadData() {
                         const result =
                             new Array(
                                 headers.length
-                            ).fill("");
+                            )
+                            .fill("");
+
 
                         for (
                             let i = 0;
@@ -5106,6 +4731,7 @@ async function loadData() {
                                 );
 
                         }
+
 
                         return result;
 
@@ -5122,43 +4748,49 @@ async function loadData() {
 
         initializeDefaultFilters();
 
+
         saveState();
 
+
         renderTable();
+
 
         buildRenameSettings();
 
 
-        const now =
-            new Date();
-
         statusEl.textContent =
-            `${rows.length.toLocaleString("vi-VN")} dòng • cập nhật ${now.toLocaleTimeString("vi-VN")}`;
+            `${rows.length.toLocaleString("vi-VN")} dòng • cập nhật ${new Date().toLocaleTimeString("vi-VN")}`;
 
-
-    } catch (error) {
+    }
+    catch (error) {
 
         console.error(
             error
         );
 
+
         statusEl.textContent =
             "Lỗi tải dữ liệu";
 
+
         tableBody.innerHTML = "";
+
 
         const tr =
             document.createElement(
                 "tr"
             );
 
+
         const td =
             document.createElement(
                 "td"
             );
 
+
         td.className =
             "empty-row";
+
 
         td.colSpan =
             Math.max(
@@ -5167,19 +4799,23 @@ async function loadData() {
                     .length
             );
 
+
         td.textContent =
             "Không thể tải dữ liệu Google Sheet: " +
             error.message;
+
 
         tr.appendChild(
             td
         );
 
+
         tableBody.appendChild(
             tr
         );
 
-    } finally {
+    }
+    finally {
 
         loadingEl.style.display =
             "none";
@@ -5190,7 +4826,235 @@ async function loadData() {
 
 
 /* =========================================================
-   SETTINGS OPEN/CLOSE
+   FORMAT HELPERS
+========================================================= */
+
+function createSelectField(
+    labelText,
+    options,
+    value
+) {
+
+    const wrapper =
+        document.createElement(
+            "label"
+        );
+
+    wrapper.className =
+        "format-field";
+
+
+    const label =
+        document.createElement(
+            "span"
+        );
+
+    label.textContent =
+        labelText;
+
+
+    const select =
+        document.createElement(
+            "select"
+        );
+
+
+    options.forEach(
+        item => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                item[0];
+
+            option.textContent =
+                item[1];
+
+
+            if (
+                String(item[0]) ===
+                String(value)
+            ) {
+
+                option.selected =
+                    true;
+
+            }
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    wrapper.appendChild(
+        label
+    );
+
+    wrapper.appendChild(
+        select
+    );
+
+
+    return {
+
+        wrapper,
+
+        select
+
+    };
+
+}
+
+
+function createNumberField(
+    labelText,
+    value,
+    min,
+    max
+) {
+
+    const wrapper =
+        document.createElement(
+            "label"
+        );
+
+    wrapper.className =
+        "format-field";
+
+
+    const label =
+        document.createElement(
+            "span"
+        );
+
+    label.textContent =
+        labelText;
+
+
+    const input =
+        document.createElement(
+            "input"
+        );
+
+
+    input.type =
+        "number";
+
+    input.min =
+        min;
+
+    input.max =
+        max;
+
+    input.value =
+        value;
+
+
+    wrapper.appendChild(
+        label
+    );
+
+    wrapper.appendChild(
+        input
+    );
+
+
+    return {
+
+        wrapper,
+
+        input
+
+    };
+
+}
+
+
+function createColorField(
+    labelText,
+    value
+) {
+
+    const wrapper =
+        document.createElement(
+            "label"
+        );
+
+    wrapper.className =
+        "format-field";
+
+
+    const label =
+        document.createElement(
+            "span"
+        );
+
+    label.textContent =
+        labelText;
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "color-row";
+
+
+    const input =
+        document.createElement(
+            "input"
+        );
+
+
+    input.type =
+        "color";
+
+
+    input.value =
+        /^#[0-9a-fA-F]{6}$/
+            .test(value)
+            ? value
+            : "#ffffff";
+
+
+    row.appendChild(
+        input
+    );
+
+
+    wrapper.appendChild(
+        label
+    );
+
+    wrapper.appendChild(
+        row
+    );
+
+
+    return {
+
+        wrapper,
+
+        input
+
+    };
+
+}
+
+
+/* =========================================================
+   SETTINGS
 ========================================================= */
 
 document
@@ -5203,6 +5067,7 @@ document
 
             closeFilterMenu();
 
+
             document
                 .getElementById(
                     "freezeInput"
@@ -5210,7 +5075,9 @@ document
                 .value =
                 freezeCount;
 
+
             buildRenameSettings();
+
 
             settingsOverlay.style.display =
                 "block";
@@ -5290,15 +5157,11 @@ document
                 );
 
 
-            const visibleCount =
-                getVisibleHeaderIndices()
-                    .length;
-
-
             value =
                 Math.min(
                     value,
-                    visibleCount
+                    getVisibleHeaderIndices()
+                        .length
                 );
 
 
@@ -5312,6 +5175,7 @@ document
 
             saveState();
 
+
             renderTable();
 
         }
@@ -5319,7 +5183,7 @@ document
 
 
 /* =========================================================
-   RESET ALL
+   RESET
 ========================================================= */
 
 document
@@ -5330,13 +5194,11 @@ document
         "click",
         () => {
 
-            const confirmed =
-                confirm(
-                    "Bạn có chắc muốn reset toàn bộ cài đặt bảng?"
-                );
-
-
-            if (!confirmed) {
+            if (
+                !confirm(
+                    "Bạn có chắc muốn reset toàn bộ cài đặt?"
+                )
+            ) {
 
                 return;
 
@@ -5349,6 +5211,8 @@ document
 
             sortPriorities = {};
 
+            sortDirections = {};
+
             columnWidths = {};
 
             columnFormats = {};
@@ -5360,9 +5224,12 @@ document
 
             initializeDefaultFilters();
 
+
             saveState();
 
+
             renderTable();
+
 
             buildRenameSettings();
 
@@ -5379,7 +5246,7 @@ document
 
 
 /* =========================================================
-   REFRESH BUTTON
+   REFRESH
 ========================================================= */
 
 document
@@ -5414,6 +5281,7 @@ window.addEventListener(
                     `[data-column="${openFilterIndex}"] .filter-button`
                 );
 
+
             if (button) {
 
                 positionFilterMenu(
@@ -5430,26 +5298,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   SCROLL
-========================================================= */
-
-/*
-   Không thay đổi sticky bằng JS.
-
-   Đây là điểm quan trọng:
-   Header sử dụng position: sticky
-   với top: 0.
-
-   Frozen columns cũng sticky,
-   nhưng z-index của header cao hơn.
-
-   Vì vậy kéo dọc sẽ không làm
-   header bị body/frozen column che.
-*/
-
-
-/* =========================================================
-   AUTO REFRESH
+   AUTO REFRESH 5 MIN
 ========================================================= */
 
 setInterval(
