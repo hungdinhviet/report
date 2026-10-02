@@ -6,513 +6,773 @@
 <title>Report</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-html,
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
+html,body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    font-size:14px;
 }
 
-body {
-    background: #fff;
+body{
+    background:#fff;
 }
 
-#app {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
+#app{
+    position:relative;
+    width:100%;
+    height:100vh;
+    overflow:hidden;
 }
 
-/* =========================
+/* =========================================================
    TOOLBAR
-========================= */
+========================================================= */
 
-.toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 8px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ccc;
-    z-index: 1000;
+.toolbar{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:44px;
+
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    padding:5px 8px;
+
+    background:#f5f5f5;
+    border-bottom:1px solid #ccc;
+
+    z-index:5000;
 }
 
-.toolbar button {
-    height: 32px;
-    padding: 0 12px;
-    border: 1px solid #bbb;
-    background: white;
-    border-radius: 4px;
-    cursor: pointer;
+.toolbar button{
+    height:32px;
+    padding:0 12px;
+
+    border:1px solid #bbb;
+    border-radius:4px;
+
+    background:#fff;
+
+    cursor:pointer;
 }
 
-.toolbar button:hover {
-    background: #eaf2ff;
+.toolbar button:hover{
+    background:#eef5ff;
 }
 
-.toolbar .status {
-    margin-left: auto;
-    color: #666;
-    white-space: nowrap;
+.toolbar-status{
+    margin-left:auto;
+    color:#666;
+    white-space:nowrap;
 }
 
-/* =========================
-   TABLE AREA
-========================= */
+/* =========================================================
+   TABLE SCROLL CONTAINER
+========================================================= */
 
-.table-wrapper {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 44px;
-    bottom: 0;
+.table-wrapper{
+    position:absolute;
 
-    overflow: auto;
+    left:0;
+    right:0;
+    top:44px;
+    bottom:0;
 
-    background: white;
-    border-top: 1px solid #ddd;
+    overflow:auto;
+
+    background:#fff;
+
+    /*
+       Đây phải là scroll container duy nhất
+       của bảng.
+    */
+    isolation:isolate;
 }
 
-/*
-IMPORTANT:
-sticky hoạt động ổn định nhất khi table dùng
-border-collapse: separate.
-*/
-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    table-layout: fixed;
-    width: max-content;
-    min-width: 100%;
+/* =========================================================
+   TABLE
+========================================================= */
+
+table{
+    border-collapse:separate;
+    border-spacing:0;
+
+    table-layout:fixed;
+
+    width:max-content;
+    min-width:100%;
 }
 
-/* =========================
+th,td{
+    box-sizing:border-box;
+}
+
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
-thead th {
-    position: relative;
-    padding: 0;
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #aaa;
-    background: #f1f3f5;
+thead th{
+    position:relative;
+
+    padding:0;
+
+    border-right:1px solid #ccc;
+    border-bottom:1px solid #aaa;
+
+    background:#f1f3f5;
 }
 
 /*
-HEADER ROW
+   Header chính.
 */
-.header-cell {
-    position: sticky !important;
-    top: 0 !important;
-    height: 38px;
-    z-index: 300 !important;
-    background: #f1f3f5 !important;
+.header-cell{
+    position:sticky !important;
+
+    top:0 !important;
+
+    height:38px;
+
+    z-index:300 !important;
+
+    background:#f1f3f5 !important;
 }
 
 /*
-SEARCH ROW
+   Dòng search.
 */
-.search-cell {
-    position: sticky !important;
-    top: 38px !important;
-    height: 36px;
-    z-index: 299 !important;
-    background: #fafafa !important;
+.search-cell{
+    position:sticky !important;
+
+    top:38px !important;
+
+    height:36px;
+
+    z-index:299 !important;
+
+    background:#fafafa !important;
 }
 
 /*
-Frozen header = cao nhất
+   Header + frozen column.
+   Cao nhất.
 */
-.header-cell.frozen-column {
-    position: sticky !important;
-    top: 0 !important;
-    z-index: 600 !important;
+.header-cell.frozen-column{
+    position:sticky !important;
+
+    top:0 !important;
+
+    z-index:1000 !important;
 }
 
-.search-cell.frozen-column {
-    position: sticky !important;
-    top: 38px !important;
-    z-index: 599 !important;
+.search-cell.frozen-column{
+    position:sticky !important;
+
+    top:38px !important;
+
+    z-index:999 !important;
 }
 
-/* =========================
+/* =========================================================
    HEADER CONTENT
-========================= */
+========================================================= */
 
-.header-content {
-    height: 38px;
-    display: flex;
-    align-items: center;
-    padding: 0 6px;
-    gap: 4px;
-    cursor: default;
-    user-select: none;
+.header-content{
+    width:100%;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 5px;
+
+    user-select:none;
 }
 
-.header-title {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: bold;
+.header-title{
+    flex:1;
+
+    min-width:0;
+
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+
+    font-weight:bold;
+
+    cursor:pointer;
 }
 
-.sort-button {
-    width: 22px;
-    height: 24px;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
-    font-size: 13px;
+.header-actions{
+    display:flex;
+    align-items:center;
+
+    flex-shrink:0;
 }
 
-.filter-button {
-    width: 24px;
-    height: 24px;
-    border: 0;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
-    font-size: 13px;
+.header-button{
+    width:24px;
+    height:25px;
+
+    border:0;
+    background:transparent;
+
+    padding:0;
+
+    cursor:pointer;
 }
 
-/* =========================
+.header-button:hover{
+    background:#ddd;
+    border-radius:3px;
+}
+
+/* =========================================================
    SEARCH
-========================= */
+========================================================= */
 
-.search-cell-inner {
-    padding: 4px;
-    height: 36px;
+.search-inner{
+    height:36px;
+    padding:4px;
 }
 
-.column-search {
-    width: 100%;
-    height: 27px;
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    padding: 3px 6px;
-    outline: none;
-    font-size: 13px;
-    background: white;
+.column-search{
+    width:100%;
+    height:27px;
+
+    border:1px solid #bbb;
+    border-radius:3px;
+
+    padding:3px 6px;
+
+    outline:none;
+
+    font-size:13px;
+
+    background:#fff;
 }
 
-.column-search:focus {
-    border-color: #4285f4;
-    box-shadow: 0 0 0 1px #4285f4;
+.column-search:focus{
+    border-color:#4285f4;
+
+    box-shadow:
+        0 0 0 1px #4285f4;
 }
 
-/* =========================
+/* =========================================================
    BODY
-========================= */
+========================================================= */
 
-tbody td {
-    height: 34px;
-    padding: 6px 8px;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    background: white;
-    vertical-align: middle;
+tbody td{
+    height:34px;
+
+    padding:6px 8px;
+
+    border-right:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+
+    background:#fff;
+
+    vertical-align:middle;
 }
 
-.body-cell {
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
+.body-cell{
+    white-space:pre-wrap;
 
-/*
-Frozen body cells.
-*/
-tbody td.frozen-column {
-    position: sticky !important;
-    z-index: 100 !important;
-    background: white;
+    overflow-wrap:anywhere;
+
+    word-break:break-word;
 }
 
 /*
-Frozen column cuối cùng có bóng nhẹ để
-nhìn rõ ranh giới.
+   Frozen body.
 */
-.frozen-last {
-    box-shadow: 4px 0 7px rgba(0,0,0,.12);
-}
+tbody td.frozen-column{
+    position:sticky !important;
 
-/* =========================
-   FILTERED / SORTED HEADER
-========================= */
+    z-index:100 !important;
 
-.header-cell.filtered {
-    background: #c8f7c5 !important;
-}
-
-.header-cell.sorted {
-    background: #d8ebff !important;
-}
-
-.header-cell.filtered.sorted {
-    background: #bdecc4 !important;
+    background:#fff;
 }
 
 /*
-Giữ màu khi header vừa frozen vừa filtered/sorted
+   Ranh giới cột frozen cuối.
 */
-.header-cell.frozen-column.filtered {
-    background: #c8f7c5 !important;
+.frozen-last{
+    box-shadow:
+        4px 0 7px rgba(0,0,0,.12);
 }
 
-.header-cell.frozen-column.sorted {
-    background: #d8ebff !important;
+/* =========================================================
+   HEADER STATES
+========================================================= */
+
+.header-cell.filtered{
+    background:#c8f7c5 !important;
 }
 
-.header-cell.frozen-column.filtered.sorted {
-    background: #bdecc4 !important;
+.header-cell.sorted{
+    background:#d8ebff !important;
 }
 
-/* =========================
-   RESIZE HANDLE
-========================= */
-
-.resize-handle {
-    position: absolute;
-    right: -3px;
-    top: 0;
-    width: 7px;
-    height: 100%;
-    cursor: col-resize;
-    z-index: 700;
+.header-cell.filtered.sorted{
+    background:#bdecc4 !important;
 }
 
-.resize-handle:hover {
-    background: rgba(0, 120, 255, .25);
+.header-cell.frozen-column.filtered{
+    background:#c8f7c5 !important;
 }
 
-/* =========================
+.header-cell.frozen-column.sorted{
+    background:#d8ebff !important;
+}
+
+.header-cell.frozen-column.filtered.sorted{
+    background:#bdecc4 !important;
+}
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+.resize-handle{
+    position:absolute;
+
+    right:-3px;
+    top:0;
+
+    width:7px;
+    height:100%;
+
+    cursor:col-resize;
+
+    z-index:1500;
+}
+
+.resize-handle:hover{
+    background:rgba(0,120,255,.25);
+}
+
+/* =========================================================
    FILTER MENU
-========================= */
+========================================================= */
 
-.filter-menu {
-    position: fixed;
-    width: 330px;
-    max-height: 600px;
-    overflow: hidden;
+.filter-menu{
+    position:fixed;
 
-    background: white;
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    box-shadow: 0 5px 20px rgba(0,0,0,.2);
+    width:350px;
+    max-height:calc(100vh - 20px);
 
-    z-index: 5000;
+    background:#fff;
+
+    border:1px solid #aaa;
+    border-radius:5px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,.22);
+
+    z-index:10000;
+
+    overflow:hidden;
 }
 
-.filter-menu-inner {
-    max-height: 600px;
-    overflow-y: auto;
-    padding: 8px;
+.filter-menu-inner{
+    max-height:calc(100vh - 20px);
+
+    overflow-y:auto;
+
+    padding:9px;
 }
 
-.filter-menu-title {
-    font-weight: bold;
-    margin-bottom: 7px;
+.menu-title{
+    font-weight:bold;
+
+    margin-bottom:8px;
+
+    font-size:14px;
 }
 
-.filter-values-search {
-    width: 100%;
-    height: 30px;
-    border: 1px solid #bbb;
-    border-radius: 3px;
-    padding: 4px 7px;
-    margin-bottom: 7px;
+/* =========================================================
+   FILTER SEARCH
+========================================================= */
+
+.filter-search{
+    width:100%;
+
+    height:30px;
+
+    border:1px solid #bbb;
+    border-radius:3px;
+
+    padding:4px 7px;
+
+    margin-bottom:7px;
+
+    outline:none;
 }
 
-.filter-actions {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 7px;
+.filter-search:focus{
+    border-color:#4285f4;
 }
 
-.filter-actions button,
-.filter-footer button {
-    border: 1px solid #bbb;
-    background: white;
-    border-radius: 3px;
-    padding: 5px 8px;
-    cursor: pointer;
+/* =========================================================
+   FILTER ACTIONS
+========================================================= */
+
+.filter-actions{
+    display:flex;
+
+    gap:5px;
+
+    margin-bottom:7px;
 }
 
-.filter-actions button:hover,
-.filter-footer button:hover {
-    background: #eef5ff;
+.menu-button{
+    border:1px solid #bbb;
+
+    background:#fff;
+
+    border-radius:3px;
+
+    padding:5px 8px;
+
+    cursor:pointer;
 }
 
-.filter-values {
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    max-height: 230px;
-    overflow-y: auto;
-    padding: 5px 0;
+.menu-button:hover{
+    background:#eef5ff;
 }
 
-.filter-value-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 28px;
-    padding: 3px 4px;
+/* =========================================================
+   FILTER VALUES
+========================================================= */
+
+.filter-values{
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+
+    max-height:230px;
+
+    overflow-y:auto;
+
+    padding:4px 0;
 }
 
-.filter-value-row:hover {
-    background: #f3f3f3;
+.filter-value-row{
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    min-height:28px;
+
+    padding:3px 5px;
 }
 
-.filter-value-row label {
-    flex: 1;
-    overflow-wrap: anywhere;
-    cursor: pointer;
+.filter-value-row:hover{
+    background:#f4f4f4;
 }
 
-.filter-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 5px;
-    padding-top: 8px;
+.filter-value-row label{
+    flex:1;
+
+    overflow-wrap:anywhere;
+
+    cursor:pointer;
 }
 
-/* =========================
-   FORMAT AREA
-========================= */
+/* =========================================================
+   SORT
+========================================================= */
 
-.format-section {
-    margin-top: 10px;
-    border-top: 1px solid #ddd;
-    padding-top: 8px;
+.menu-section{
+    margin-top:10px;
+
+    padding-top:9px;
+
+    border-top:1px solid #ddd;
 }
 
-.format-title {
-    font-weight: bold;
-    margin-bottom: 7px;
+.menu-section-title{
+    font-weight:bold;
+
+    margin-bottom:7px;
 }
 
-.format-row {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-bottom: 6px;
+.form-row{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    margin-bottom:7px;
 }
 
-.format-row label {
-    width: 85px;
-    flex-shrink: 0;
+.form-row > label{
+    width:90px;
+
+    flex-shrink:0;
 }
 
-.format-row select,
-.format-row input[type="number"] {
-    flex: 1;
-    height: 28px;
+.form-row select,
+.form-row input[type="number"],
+.form-row input[type="text"]{
+    flex:1;
+
+    height:29px;
+
+    border:1px solid #bbb;
+
+    border-radius:3px;
+
+    padding:3px 6px;
 }
 
-.format-checks {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+.sort-direction{
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
 }
 
-.color-input {
-    width: 50px;
-    height: 28px;
-    padding: 0;
+.sort-direction label{
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
 }
 
-/* =========================
+/* =========================================================
+   FORMAT
+========================================================= */
+
+.format-checks{
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:7px;
+}
+
+.format-checks label{
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+}
+
+.color-row{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    margin-bottom:7px;
+}
+
+.color-row label{
+    width:90px;
+}
+
+.color-input{
+    width:55px;
+    height:29px;
+
+    padding:0;
+
+    border:1px solid #bbb;
+}
+
+/* =========================================================
+   MENU FOOTER
+========================================================= */
+
+.menu-footer{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:5px;
+
+    margin-top:9px;
+}
+
+/* =========================================================
    SETTINGS
-========================= */
+========================================================= */
 
-.settings-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.25);
-    z-index: 7000;
-    display: none;
+.settings-overlay{
+    position:fixed;
+
+    inset:0;
+
+    display:none;
+
+    background:rgba(0,0,0,.25);
+
+    z-index:12000;
 }
 
-.settings-panel {
-    position: absolute;
-    top: 55px;
-    right: 15px;
-    width: 380px;
-    max-height: calc(100vh - 70px);
-    overflow-y: auto;
+.settings-panel{
+    position:absolute;
 
-    background: white;
-    border: 1px solid #aaa;
-    border-radius: 6px;
-    box-shadow: 0 6px 25px rgba(0,0,0,.25);
-    padding: 12px;
+    top:55px;
+    right:15px;
+
+    width:430px;
+
+    max-height:calc(100vh - 70px);
+
+    overflow-y:auto;
+
+    background:#fff;
+
+    border:1px solid #aaa;
+    border-radius:6px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,.25);
+
+    padding:12px;
 }
 
-.settings-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 12px;
+.settings-title{
+    font-size:17px;
+
+    font-weight:bold;
+
+    margin-bottom:12px;
 }
 
-.settings-row {
-    margin-bottom: 10px;
+.settings-row{
+    margin-bottom:10px;
 }
 
-.settings-row label {
-    display: block;
-    margin-bottom: 4px;
+.settings-row > label{
+    display:block;
+
+    margin-bottom:4px;
+
+    font-weight:bold;
 }
 
 .settings-row input,
-.settings-row select {
-    width: 100%;
-    height: 30px;
+.settings-row select{
+    width:100%;
+
+    height:30px;
+
+    border:1px solid #bbb;
+
+    border-radius:3px;
+
+    padding:3px 6px;
 }
 
-/* =========================
+/* =========================================================
+   RENAME PANEL
+========================================================= */
+
+.rename-list{
+    border:1px solid #ddd;
+
+    max-height:350px;
+
+    overflow-y:auto;
+}
+
+.rename-item{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    padding:5px;
+
+    border-bottom:1px solid #eee;
+}
+
+.rename-item:last-child{
+    border-bottom:0;
+}
+
+.rename-original{
+    width:135px;
+
+    flex-shrink:0;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+}
+
+.rename-item input{
+    flex:1;
+
+    height:29px;
+}
+
+/* =========================================================
    LOADING
-========================= */
+========================================================= */
 
-.loading {
-    position: absolute;
-    inset: 44px 0 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255,255,255,.85);
-    z-index: 9000;
-    font-size: 16px;
+.loading{
+    position:absolute;
+
+    left:0;
+    right:0;
+    top:44px;
+    bottom:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(255,255,255,.85);
+
+    z-index:11000;
+
+    font-size:16px;
 }
 
-.hidden {
-    display: none !important;
+.hidden{
+    display:none !important;
 }
 
-/* =========================
-   EMPTY / ERROR
-========================= */
+/* =========================================================
+   MESSAGE
+========================================================= */
 
-.message {
-    padding: 30px;
-    text-align: center;
-    color: #777;
+.message{
+    padding:30px;
+
+    text-align:center;
+
+    color:#777;
 }
 </style>
 </head>
@@ -522,55 +782,163 @@ Giữ màu khi header vừa frozen vừa filtered/sorted
 <div id="app">
 
     <div class="toolbar">
-        <button id="refreshBtn">↻ Làm mới</button>
-        <button id="resetBtn">⟳ Tổng / Reset</button>
-        <button id="settingsBtn">⚙ Cài đặt</button>
 
-        <span id="status" class="status">Đang tải...</span>
+        <button id="refreshBtn">
+            ↻ Làm mới
+        </button>
+
+        <button id="resetBtn">
+            ⟳ Tổng / Reset
+        </button>
+
+        <button id="settingsBtn">
+            ⚙ Cài đặt
+        </button>
+
+        <span
+            id="status"
+            class="toolbar-status"
+        >
+            Đang tải...
+        </span>
+
     </div>
 
-    <div id="loading" class="loading">
+
+    <div
+        id="loading"
+        class="loading"
+    >
         Đang tải dữ liệu...
     </div>
 
-    <div id="tableWrapper" class="table-wrapper">
+
+    <div
+        id="tableWrapper"
+        class="table-wrapper"
+    >
+
         <table id="dataTable">
+
             <thead></thead>
+
             <tbody></tbody>
+
         </table>
+
     </div>
 
 </div>
 
-<div id="settingsOverlay" class="settings-overlay">
-    <div class="settings-panel" id="settingsPanel">
-        <div class="settings-title">Cài đặt bảng</div>
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<div
+    id="settingsOverlay"
+    class="settings-overlay"
+>
+
+    <div
+        id="settingsPanel"
+        class="settings-panel"
+    >
+
+        <div class="settings-title">
+            ⚙ Cài đặt bảng
+        </div>
+
 
         <div class="settings-row">
-            <label>Số cột cố định</label>
+
+            <label>
+                Số cột cố định
+            </label>
+
             <input
                 id="freezeCountInput"
                 type="number"
                 min="0"
                 value="0"
             >
+
         </div>
+
 
         <div class="settings-row">
-            <label>Tự động làm mới</label>
-            <select id="autoRefreshSelect">
-                <option value="0">Tắt</option>
-                <option value="1">5 phút</option>
-                <option value="2">10 phút</option>
-                <option value="3">30 phút</option>
+
+            <label>
+                Tự động làm mới
+            </label>
+
+            <select
+                id="autoRefreshSelect"
+            >
+
+                <option value="0">
+                    Tắt
+                </option>
+
+                <option value="5">
+                    5 phút
+                </option>
+
+                <option value="10">
+                    10 phút
+                </option>
+
+                <option value="30">
+                    30 phút
+                </option>
+
             </select>
+
         </div>
 
-        <div style="text-align:right">
-            <button id="closeSettingsBtn">Đóng</button>
+
+        <div class="settings-row">
+
+            <label>
+                Đổi tên cột
+            </label>
+
+            <div
+                id="renameList"
+                class="rename-list"
+            ></div>
+
         </div>
+
+
+        <div
+            style="
+                display:flex;
+                justify-content:flex-end;
+                gap:6px;
+            "
+        >
+
+            <button
+                id="saveSettingsBtn"
+                class="menu-button"
+            >
+                Lưu
+            </button>
+
+            <button
+                id="closeSettingsBtn"
+                class="menu-button"
+            >
+                Đóng
+            </button>
+
+        </div>
+
     </div>
+
 </div>
+
 
 <script>
 "use strict";
@@ -580,7 +948,7 @@ Giữ màu khi header vừa frozen vừa filtered/sorted
 ========================================================= */
 
 const CSV_URL =
-    "https://docs.google.com/spreadsheets/d/19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS/gviz/tq?tqx=out%3Acsv&gid=616860962";
+"https://docs.google.com/spreadsheets/d/19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS/gviz/tq?tqx=out%3Acsv&gid=616860962";
 
 
 /* =========================================================
@@ -588,9 +956,10 @@ const CSV_URL =
 ========================================================= */
 
 const STORAGE_KEY =
-    "report_google_sheet_table_v10";
+"report_google_sheet_table_v11";
 
 const OLD_KEYS = [
+    "report_google_sheet_table_v10",
     "report_google_sheet_table_v9",
     "report_google_sheet_table_v8"
 ];
@@ -608,48 +977,87 @@ const HIDDEN_COLUMNS = new Set([
 
 
 /* =========================================================
-   SORT MAP
+   SPECIAL SORT MAPPING
 ========================================================= */
 
 const SORT_BY_MAP = {
-    "DATA": "Sort_DATA",
-    "Thoại nội mạng": "Sort_NM",
-    "Thoại ngoại mạng": "Sort_NgM"
+
+    "DATA":
+        "Sort_DATA",
+
+    "Thoại nội mạng":
+        "Sort_NM",
+
+    "Thoại ngoại mạng":
+        "Sort_NgM"
+
 };
 
 
 /* =========================================================
-   GLOBAL DATA
+   DATA
 ========================================================= */
 
 let headers = [];
+
 let rows = [];
 
+
+/* =========================================================
+   STATE
+========================================================= */
+
 let filters = {};
+
 let searches = {};
+
 let sorts = {};
 
 let columnWidths = {};
+
 let columnFormats = {};
+
 let renamedHeaders = {};
 
 let freezeCount = 0;
 
-let openFilterIndex = null;
-let filterMenuElement = null;
 
-let filterValueSearch = "";
+/* =========================================================
+   DEFAULT FILTER
+========================================================= */
 
-let resizeState = null;
-
-let autoRefreshTimer = null;
+let defaultFiltersInitialized =
+false;
 
 
 /* =========================================================
-   DEFAULT FILTER INITIALIZATION
+   FILTER MENU
 ========================================================= */
 
-let defaultFiltersInitialized = false;
+let openFilterIndex =
+null;
+
+let filterMenuElement =
+null;
+
+let filterValueSearch =
+"";
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+let resizeState =
+null;
+
+
+/* =========================================================
+   AUTO REFRESH
+========================================================= */
+
+let autoRefreshTimer =
+null;
 
 
 /* =========================================================
@@ -657,79 +1065,140 @@ let defaultFiltersInitialized = false;
 ========================================================= */
 
 const table =
-    document.getElementById("dataTable");
+document.getElementById(
+    "dataTable"
+);
 
 const thead =
-    table.querySelector("thead");
+table.querySelector(
+    "thead"
+);
 
 const tbody =
-    table.querySelector("tbody");
+table.querySelector(
+    "tbody"
+);
 
 const tableWrapper =
-    document.getElementById("tableWrapper");
+document.getElementById(
+    "tableWrapper"
+);
 
 const loading =
-    document.getElementById("loading");
+document.getElementById(
+    "loading"
+);
 
 const statusEl =
-    document.getElementById("status");
+document.getElementById(
+    "status"
+);
+
+const settingsOverlay =
+document.getElementById(
+    "settingsOverlay"
+);
+
+const freezeCountInput =
+document.getElementById(
+    "freezeCountInput"
+);
+
+const autoRefreshSelect =
+document.getElementById(
+    "autoRefreshSelect"
+);
+
+const renameList =
+document.getElementById(
+    "renameList"
+);
 
 
 /* =========================================================
    LOAD STATE
 ========================================================= */
 
-function loadState() {
+function loadState(){
 
     let saved = null;
 
-    try {
-        const current =
-            localStorage.getItem(STORAGE_KEY);
+    try{
 
-        if (current) {
-            saved = JSON.parse(current);
+        const current =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
+
+        if(current){
+            saved =
+            JSON.parse(current);
         }
 
-        if (!saved) {
-            for (const key of OLD_KEYS) {
+
+        if(!saved){
+
+            for(
+                const key of OLD_KEYS
+            ){
 
                 const old =
-                    localStorage.getItem(key);
+                localStorage.getItem(
+                    key
+                );
 
-                if (old) {
-                    saved = JSON.parse(old);
+                if(old){
+
+                    saved =
+                    JSON.parse(old);
+
                     break;
                 }
             }
         }
 
-    } catch (e) {
-        console.warn("Không đọc được localStorage", e);
+    }
+    catch(error){
+
+        console.warn(
+            "Không đọc được LocalStorage",
+            error
+        );
     }
 
-    if (!saved) return;
+
+    if(!saved){
+        return;
+    }
+
 
     filters =
-        saved.filters || {};
+    saved.filters || {};
 
     searches =
-        saved.searches || {};
+    saved.searches || {};
 
     sorts =
-        saved.sorts || {};
+    saved.sorts || {};
 
     columnWidths =
-        saved.columnWidths || {};
+    saved.columnWidths || {};
 
     columnFormats =
-        saved.columnFormats || {};
+    saved.columnFormats || {};
 
     renamedHeaders =
-        saved.renamedHeaders || {};
+    saved.renamedHeaders || {};
 
     freezeCount =
-        Number(saved.freezeCount || 0);
+    Number(
+        saved.freezeCount || 0
+    );
+
+
+    /*
+       Không tự đánh lại priority.
+    */
 }
 
 
@@ -737,304 +1206,416 @@ function loadState() {
    SAVE STATE
 ========================================================= */
 
-function saveState() {
+function saveState(){
 
-    try {
+    try{
 
         localStorage.setItem(
             STORAGE_KEY,
+
             JSON.stringify({
+
                 filters,
+
                 searches,
+
                 sorts,
+
                 columnWidths,
+
                 columnFormats,
+
                 renamedHeaders,
+
                 freezeCount
+
             })
         );
 
-    } catch (e) {
-        console.warn("Không lưu được trạng thái", e);
+    }
+    catch(error){
+
+        console.warn(
+            "Không lưu được LocalStorage",
+            error
+        );
     }
 }
 
 
 /* =========================================================
    CSV PARSER
-   IMPORTANT: giữ xuống dòng trong ô
 ========================================================= */
 
-function parseCSV(text) {
+function parseCSV(text){
 
     const result = [];
 
     let row = [];
+
     let cell = "";
 
     let inQuotes = false;
 
-    for (let i = 0; i < text.length; i++) {
+
+    for(
+        let i = 0;
+        i < text.length;
+        i++
+    ){
 
         const c =
-            text[i];
+        text[i];
 
         const next =
-            text[i + 1];
+        text[i + 1];
 
-        if (c === '"') {
 
-            if (
+        if(c === '"'){
+
+            if(
                 inQuotes &&
                 next === '"'
-            ) {
+            ){
+
                 cell += '"';
+
                 i++;
-            } else {
-                inQuotes = !inQuotes;
+
+            }
+            else{
+
+                inQuotes =
+                !inQuotes;
             }
 
-        } else if (
+        }
+
+
+        else if(
             c === "," &&
             !inQuotes
-        ) {
+        ){
 
             row.push(cell);
+
             cell = "";
+        }
 
-        } else if (
-            (c === "\n" || c === "\r") &&
+
+        else if(
+            (
+                c === "\n" ||
+                c === "\r"
+            ) &&
             !inQuotes
-        ) {
+        ){
 
-            if (
+            if(
                 c === "\r" &&
                 next === "\n"
-            ) {
+            ){
+
                 i++;
             }
 
+
             row.push(cell);
+
             cell = "";
 
-            if (
+
+            if(
                 row.length > 1 ||
                 row[0] !== ""
-            ) {
+            ){
+
                 result.push(row);
             }
 
-            row = [];
 
-        } else {
+            row = [];
+        }
+
+
+        else{
 
             cell += c;
         }
     }
 
-    if (
+
+    if(
         cell.length > 0 ||
         row.length > 0
-    ) {
+    ){
 
         row.push(cell);
+
         result.push(row);
     }
+
 
     return result;
 }
 
 
 /* =========================================================
-   FETCH DATA
+   LOAD DATA
 ========================================================= */
 
-async function loadData() {
+async function loadData(){
 
-    loading.classList.remove("hidden");
+    loading.classList.remove(
+        "hidden"
+    );
 
     statusEl.textContent =
-        "Đang tải dữ liệu...";
+    "Đang tải dữ liệu...";
 
-    try {
 
-        const url =
-            CSV_URL +
-            "&cachebust=" +
-            Date.now();
+    try{
 
         const response =
-            await fetch(url, {
-                cache: "no-store"
-            });
+        await fetch(
+            CSV_URL +
+            "&cachebust=" +
+            Date.now(),
+            {
+                cache:"no-store"
+            }
+        );
 
-        if (!response.ok) {
+
+        if(!response.ok){
+
             throw new Error(
-                "HTTP " + response.status
+                "HTTP " +
+                response.status
             );
         }
+
 
         const text =
-            await response.text();
+        await response.text();
 
-        if (!text.trim()) {
+
+        if(!text.trim()){
+
             throw new Error(
-                "Google Sheet trả về dữ liệu rỗng."
+                "Google Sheet trả về rỗng."
             );
         }
 
-        const parsed =
-            parseCSV(text);
 
-        if (
+        const parsed =
+        parseCSV(text);
+
+
+        if(
             !parsed.length ||
             !parsed[0].length
-        ) {
+        ){
+
             throw new Error(
                 "Không tìm thấy header."
             );
         }
 
+
         headers =
-            parsed[0]
-                .map(x => String(x).trim());
+        parsed[0].map(
+            value =>
+            String(value).trim()
+        );
+
 
         rows =
-            parsed
-                .slice(1)
-                .map(row => {
+        parsed
+        .slice(1)
+        .map(sourceRow => {
 
-                    const result =
-                        new Array(headers.length)
-                            .fill("");
+            const row =
+            new Array(
+                headers.length
+            ).fill("");
 
-                    for (
-                        let i = 0;
-                        i < headers.length;
-                        i++
-                    ) {
-                        result[i] =
-                            row[i] == null
-                                ? ""
-                                : String(row[i]);
-                    }
 
-                    return result;
-                });
+            for(
+                let i = 0;
+                i < headers.length;
+                i++
+            ){
+
+                row[i] =
+                sourceRow[i] == null
+                    ? ""
+                    : String(
+                        sourceRow[i]
+                    );
+            }
+
+
+            return row;
+        });
+
+
+        /*
+           Nếu Google Sheet có thêm cột mới,
+           vẫn không phá state cũ.
+        */
 
         initializeDefaults();
 
+
         renderTable();
 
-        statusEl.textContent =
-            `${rows.length.toLocaleString("vi-VN")} dòng • ${new Date().toLocaleTimeString("vi-VN")}`;
 
-    } catch (error) {
+        statusEl.textContent =
+        `${rows.length.toLocaleString("vi-VN")} dòng • cập nhật ${new Date().toLocaleTimeString("vi-VN")}`;
+
+
+    }
+    catch(error){
 
         console.error(error);
 
+
         statusEl.textContent =
-            "Lỗi tải dữ liệu";
+        "Lỗi tải dữ liệu";
+
+
+        thead.innerHTML = "";
 
         tbody.innerHTML = "";
 
+
         const tr =
-            document.createElement("tr");
+        document.createElement("tr");
 
         const td =
-            document.createElement("td");
+        document.createElement("td");
+
 
         td.colSpan =
-            Math.max(headers.length, 1);
+        Math.max(
+            headers.length,
+            1
+        );
+
 
         td.className =
-            "message";
+        "message";
+
 
         td.textContent =
-            "Không tải được dữ liệu Google Sheet: " +
-            error.message;
+        "Không tải được Google Sheet: " +
+        error.message;
+
 
         tr.appendChild(td);
+
         tbody.appendChild(tr);
 
-    } finally {
+    }
+    finally{
 
-        loading.classList.add("hidden");
+        loading.classList.add(
+            "hidden"
+        );
     }
 }
 
 
 /* =========================================================
-   DEFAULT FILTERS
+   DEFAULT FILTER
 ========================================================= */
 
-function initializeDefaults() {
+function initializeDefaults(){
 
-    if (defaultFiltersInitialized) {
+    if(
+        defaultFiltersInitialized
+    ){
+
         return;
     }
 
-    defaultFiltersInitialized = true;
+
+    defaultFiltersInitialized =
+    true;
+
 
     const dateIndex =
-        headers.indexOf("Ngày update");
+    headers.indexOf(
+        "Ngày update"
+    );
+
 
     const stopIndex =
-        headers.indexOf("Dừng gói");
+    headers.indexOf(
+        "Dừng gói"
+    );
+
 
     /*
        Ngày update:
-       chọn tất cả non-blank,
-       blank không chọn.
+       chọn non-blank.
     */
 
-    if (
+    if(
         dateIndex >= 0 &&
         filters[dateIndex] === undefined
-    ) {
-
-        const values =
-            getAllColumnValues(dateIndex);
+    ){
 
         filters[dateIndex] =
-            values.filter(v =>
-                String(v).trim() !== ""
-            );
+        getAllColumnValues(
+            dateIndex
+        )
+        .filter(
+            value =>
+            String(value).trim() !== ""
+        );
     }
+
 
     /*
        Dừng gói:
        chỉ chọn blank.
     */
 
-    if (
+    if(
         stopIndex >= 0 &&
         filters[stopIndex] === undefined
-    ) {
+    ){
 
         filters[stopIndex] = [""];
     }
+
 
     saveState();
 }
 
 
 /* =========================================================
-   GET ALL COLUMN VALUES
+   COLUMN VALUES
 ========================================================= */
 
-function getAllColumnValues(index) {
+function getAllColumnValues(index){
 
     const set =
-        new Set();
+    new Set();
+
 
     rows.forEach(row => {
 
         set.add(
-            String(row[index] ?? "")
+            String(
+                row[index] ?? ""
+            )
         );
 
     });
+
 
     return Array.from(set);
 }
@@ -1044,46 +1625,68 @@ function getAllColumnValues(index) {
    DISPLAY HEADER
 ========================================================= */
 
-function getDisplayHeader(header) {
+function getDisplayHeader(
+    originalHeader
+){
 
-    return renamedHeaders[header] || header;
+    return (
+        renamedHeaders[
+            originalHeader
+        ] ||
+        originalHeader
+    );
 }
 
 
 /* =========================================================
-   VIETNAMESE NUMBER
+   NUMBER
 ========================================================= */
 
-function parseVNNumber(value) {
+function parseVNNumber(value){
 
     const s =
-        String(value ?? "").trim();
+    String(
+        value ?? ""
+    ).trim();
 
-    if (!s) return null;
 
-    if (
-        /^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)
-    ) {
+    if(!s){
+        return null;
+    }
+
+
+    if(
+        /^-?\d{1,3}(\.\d{3})+(,\d+)?$/
+        .test(s)
+    ){
+
         return Number(
             s
-                .replace(/\./g, "")
-                .replace(",", ".")
+            .replace(/\./g,"")
+            .replace(",",".")
         );
     }
 
-    if (
-        /^-?\d+(,\d+)?$/.test(s)
-    ) {
+
+    if(
+        /^-?\d+(,\d+)?$/
+        .test(s)
+    ){
+
         return Number(
-            s.replace(",", ".")
+            s.replace(",",".")
         );
     }
 
-    if (
-        /^-?\d+(\.\d+)?$/.test(s)
-    ) {
+
+    if(
+        /^-?\d+(\.\d+)?$/
+        .test(s)
+    ){
+
         return Number(s);
     }
+
 
     return null;
 }
@@ -1093,84 +1696,103 @@ function parseVNNumber(value) {
    DATE
 ========================================================= */
 
-function parseVietnameseDate(value) {
+function parseVietnameseDate(value){
 
     const s =
-        String(value ?? "").trim();
+    String(
+        value ?? ""
+    ).trim();
+
 
     const match =
-        s.match(
-            /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-        );
+    s.match(
+        /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+    );
 
-    if (!match) {
+
+    if(!match){
         return null;
     }
 
+
     const day =
-        Number(match[1]);
+    Number(match[1]);
 
     const month =
-        Number(match[2]) - 1;
+    Number(match[2]) - 1;
 
     const year =
-        Number(match[3]);
+    Number(match[3]);
+
 
     const date =
-        new Date(
-            year,
-            month,
-            day
-        );
+    new Date(
+        year,
+        month,
+        day
+    );
 
-    if (
+
+    if(
         date.getFullYear() !== year ||
         date.getMonth() !== month ||
         date.getDate() !== day
-    ) {
+    ){
+
         return null;
     }
+
 
     return date;
 }
 
 
 /* =========================================================
-   RELATIVE MONTH
+   DATE DISPLAY
 ========================================================= */
 
-function displayDateRelative(value) {
+function displayDateRelative(value){
 
     const date =
-        parseVietnameseDate(value);
+    parseVietnameseDate(value);
 
-    if (!date) {
+
+    if(!date){
         return value;
     }
 
+
     const now =
-        new Date();
+    new Date();
+
 
     const months =
-        (
-            now.getFullYear() -
-            date.getFullYear()
-        ) * 12
-        +
-        (
-            now.getMonth() -
-            date.getMonth()
-        );
+    (
+        now.getFullYear() -
+        date.getFullYear()
+    ) * 12
+    +
+    (
+        now.getMonth() -
+        date.getMonth()
+    );
+
 
     const n =
-        Math.max(0, months);
+    Math.max(
+        0,
+        months
+    );
 
-    if (n === 0) {
+
+    if(n === 0){
+
         return "0 tháng";
     }
 
+
     return (
-        String(n).padStart(2, "0") +
+        String(n).padStart(2,"0") +
         " tháng"
     );
 }
@@ -1180,15 +1802,24 @@ function displayDateRelative(value) {
    DISPLAY VALUE
 ========================================================= */
 
-function getDisplayValue(value, header) {
+function getDisplayValue(
+    value,
+    header
+){
 
-    if (
+    if(
         header === "Ngày update"
-    ) {
-        return displayDateRelative(value);
+    ){
+
+        return displayDateRelative(
+            value
+        );
     }
 
-    return String(value ?? "");
+
+    return String(
+        value ?? ""
+    );
 }
 
 
@@ -1196,335 +1827,464 @@ function getDisplayValue(value, header) {
    SORT VALUE
 ========================================================= */
 
-function getSortValue(row, index) {
+function getSortValue(
+    row,
+    index
+){
 
-    const header =
-        headers[index];
+    const originalHeader =
+    headers[index];
 
-    const mapped =
-        SORT_BY_MAP[header];
+
+    /*
+       DATA → Sort_DATA
+       Nội mạng → Sort_NM
+       Ngoại mạng → Sort_NgM
+    */
+
+    const helperHeader =
+    SORT_BY_MAP[
+        originalHeader
+    ];
+
 
     let value =
-        row[index];
+    row[index];
 
-    if (mapped) {
 
-        const mappedIndex =
-            headers.indexOf(mapped);
+    if(helperHeader){
 
-        if (
-            mappedIndex >= 0 &&
-            String(row[mappedIndex]).trim() !== ""
-        ) {
+        const helperIndex =
+        headers.indexOf(
+            helperHeader
+        );
+
+
+        if(
+            helperIndex >= 0 &&
+            String(
+                row[helperIndex] ?? ""
+            ).trim() !== ""
+        ){
+
             value =
-                row[mappedIndex];
+            row[helperIndex];
         }
     }
 
-    const numeric =
-        parseVNNumber(value);
 
-    if (numeric !== null) {
+    const number =
+    parseVNNumber(value);
+
+
+    if(number !== null){
+
         return {
-            type: "number",
-            value: numeric
+
+            type:"number",
+
+            value:number
+
         };
     }
+
 
     const date =
-        parseVietnameseDate(value);
+    parseVietnameseDate(value);
 
-    if (date) {
+
+    if(date){
+
         return {
-            type: "date",
-            value: date.getTime()
+
+            type:"date",
+
+            value:date.getTime()
+
         };
     }
 
+
     return {
-        type: "text",
+
+        type:"text",
+
         value:
-            String(value ?? "")
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
+        String(
+            value ?? ""
+        )
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+
     };
 }
 
 
 /* =========================================================
-   MATCH FILTERS / SEARCHES
+   ROW MATCH
 ========================================================= */
 
 function rowMatchesFilters(
     row,
     ignoreColumn = -1
-) {
+){
 
     /*
-       Column filters
+       FILTER
     */
 
-    for (
+    for(
         const key of Object.keys(filters)
-    ) {
+    ){
 
         const index =
-            Number(key);
+        Number(key);
 
-        if (
+
+        if(
             index === ignoreColumn
-        ) {
+        ){
+
             continue;
         }
+
 
         const selected =
-            filters[key];
+        filters[key];
 
-        /*
-           undefined = không filter
-        */
 
-        if (
+        if(
             selected === undefined
-        ) {
+        ){
+
             continue;
         }
 
+
         /*
-           [] = Bỏ chọn hết
-           => không có dòng nào.
+           Bỏ chọn hết
+           = không có dòng.
         */
 
-        if (
+        if(
             Array.isArray(selected) &&
             selected.length === 0
-        ) {
+        ){
+
             return false;
         }
 
-        const value =
-            String(row[index] ?? "");
 
-        if (
+        const value =
+        String(
+            row[index] ?? ""
+        );
+
+
+        if(
             Array.isArray(selected) &&
             selected.length > 0 &&
             !selected.includes(value)
-        ) {
+        ){
+
             return false;
         }
     }
 
 
     /*
-       Search boxes
+       SEARCH
     */
 
-    for (
+    for(
         const key of Object.keys(searches)
-    ) {
+    ){
 
         const index =
-            Number(key);
+        Number(key);
 
-        if (
+
+        if(
             index === ignoreColumn
-        ) {
+        ){
+
             continue;
         }
 
-        const search =
-            String(searches[key] ?? "")
-                .trim()
-                .toLowerCase();
 
-        if (!search) {
+        const query =
+        String(
+            searches[key] ?? ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+        if(!query){
             continue;
         }
+
 
         const value =
-            String(row[index] ?? "")
-                .toLowerCase();
+        String(
+            row[index] ?? ""
+        )
+        .toLowerCase();
 
-        if (
-            !value.includes(search)
-        ) {
+
+        if(
+            !value.includes(query)
+        ){
+
             return false;
         }
     }
+
 
     return true;
 }
 
 
 /* =========================================================
-   FILTER VALUES FOR COLUMN
-   IMPORTANT:
-   bỏ qua filter/search của chính cột đó.
+   FILTER VALUES FOR CURRENT COLUMN
 ========================================================= */
 
-function getFilterValuesForColumn(index) {
+function getFilterValuesForColumn(
+    index
+){
+
+    /*
+       Rất quan trọng:
+       bỏ qua filter/search của chính
+       cột đang mở.
+
+       Nhưng áp dụng toàn bộ filter/search
+       của các cột khác.
+    */
 
     const source =
-        rows.filter(row =>
-            rowMatchesFilters(
-                row,
-                index
-            )
-        );
+    rows.filter(
+        row =>
+        rowMatchesFilters(
+            row,
+            index
+        )
+    );
+
 
     const set =
-        new Set();
+    new Set();
+
 
     source.forEach(row => {
 
         set.add(
-            String(row[index] ?? "")
+            String(
+                row[index] ?? ""
+            )
         );
 
     });
+
 
     return Array.from(set);
 }
 
 
 /* =========================================================
-   GET VISIBLE ROWS
+   VISIBLE ROWS
 ========================================================= */
 
-function getVisibleRows() {
+function getVisibleRows(){
 
     const result =
-        rows
-            .map((row, originalIndex) => ({
-                row,
-                originalIndex
-            }))
-            .filter(item =>
-                rowMatchesFilters(
-                    item.row
-                )
-            );
+    rows
+    .map(
+        (row,originalIndex) => ({
+            row,
+            originalIndex
+        })
+    )
+    .filter(
+        item =>
+        rowMatchesFilters(
+            item.row
+        )
+    );
+
 
     /*
-       Sort theo priority mà user nhập.
-       Không normalize số.
+       SORTS
+       Priority hoàn toàn linh hoạt.
     */
 
     const activeSorts =
-        Object.keys(sorts)
-            .map(key => ({
-                index: Number(key),
-                priority: Number(sorts[key].priority),
-                direction:
-                    sorts[key].direction || "asc"
-            }))
-            .filter(x =>
-                Number.isFinite(x.priority)
-            )
-            .sort((a, b) =>
-                a.priority - b.priority
-            );
+    Object.keys(sorts)
+    .map(key => {
 
-    if (!activeSorts.length) {
+        const priority =
+        Number(
+            sorts[key].priority
+        );
+
+
+        return {
+
+            index:
+            Number(key),
+
+            priority,
+
+            direction:
+            sorts[key].direction ||
+            "asc"
+
+        };
+
+    })
+    .filter(
+        item =>
+        Number.isFinite(
+            item.priority
+        )
+    )
+    .sort(
+        (a,b) =>
+        a.priority -
+        b.priority
+    );
+
+
+    if(
+        activeSorts.length === 0
+    ){
+
         return result;
     }
 
-    result.sort((a, b) => {
 
-        for (const sort of activeSorts) {
+    result.sort(
+        (a,b) => {
 
-            const av =
+            for(
+                const sort of activeSorts
+            ){
+
+                const av =
                 getSortValue(
                     a.row,
                     sort.index
                 );
 
-            const bv =
+
+                const bv =
                 getSortValue(
                     b.row,
                     sort.index
                 );
 
-            let compare = 0;
 
-            if (
-                av.type === "number" &&
-                bv.type === "number"
-            ) {
-                compare =
-                    av.value - bv.value;
+                let compare = 0;
 
-            } else if (
-                av.type === "date" &&
-                bv.type === "date"
-            ) {
-                compare =
-                    av.value - bv.value;
 
-            } else {
+                if(
+                    av.type === "number" &&
+                    bv.type === "number"
+                ){
 
-                compare =
+                    compare =
+                    av.value -
+                    bv.value;
+                }
+
+
+                else if(
+                    av.type === "date" &&
+                    bv.type === "date"
+                ){
+
+                    compare =
+                    av.value -
+                    bv.value;
+                }
+
+
+                else{
+
+                    compare =
                     String(av.value)
-                        .localeCompare(
-                            String(bv.value),
-                            "vi",
-                            {
-                                numeric: true,
-                                sensitivity: "base"
-                            }
-                        );
+                    .localeCompare(
+                        String(bv.value),
+                        "vi",
+                        {
+                            numeric:true,
+                            sensitivity:"base"
+                        }
+                    );
+                }
+
+
+                if(compare !== 0){
+
+                    return (
+                        sort.direction === "desc"
+                            ? -compare
+                            : compare
+                    );
+                }
             }
 
-            if (compare !== 0) {
 
-                return (
-                    sort.direction === "desc"
-                        ? -compare
-                        : compare
-                );
-            }
+            return (
+                a.originalIndex -
+                b.originalIndex
+            );
         }
+    );
 
-        return (
-            a.originalIndex -
-            b.originalIndex
-        );
-    });
 
     return result;
 }
 
 
 /* =========================================================
-   VISIBLE HEADERS
+   VISIBLE COLUMNS
 ========================================================= */
 
-function getVisibleHeaderIndexes() {
+function getVisibleHeaderIndexes(){
 
     const result = [];
 
-    headers.forEach(
-        (header, index) => {
 
-            if (
-                !HIDDEN_COLUMNS.has(header)
-            ) {
+    headers.forEach(
+        (header,index) => {
+
+            if(
+                !HIDDEN_COLUMNS.has(
+                    header
+                )
+            ){
+
                 result.push(index);
             }
 
         }
     );
 
+
     return result;
 }
 
 
 /* =========================================================
-   COLUMN WIDTH
+   WIDTH
 ========================================================= */
 
-function getColumnWidth(index) {
+function getColumnWidth(index){
 
     return (
         Number(
@@ -1538,34 +2298,28 @@ function getColumnWidth(index) {
    FORMAT
 ========================================================= */
 
-function getColumnFormat(index) {
+function getColumnFormat(index){
 
     return {
-        align:
-            "left",
 
-        fontFamily:
-            "Arial",
+        align:"left",
 
-        fontSize:
-            14,
+        fontFamily:"Arial",
 
-        bold:
-            false,
+        fontSize:14,
 
-        italic:
-            false,
+        bold:false,
 
-        wrap:
-            true,
+        italic:false,
 
-        color:
-            "#111111",
+        wrap:true,
 
-        background:
-            "#ffffff",
+        color:"#111111",
+
+        background:"#ffffff",
 
         ...(columnFormats[index] || {})
+
     };
 }
 
@@ -1573,55 +2327,66 @@ function getColumnFormat(index) {
 function applyFormatToCell(
     cell,
     index
-) {
+){
 
     const f =
-        getColumnFormat(index);
+    getColumnFormat(index);
+
 
     cell.style.textAlign =
-        f.align;
+    f.align;
+
 
     cell.style.fontFamily =
-        f.fontFamily;
+    f.fontFamily;
+
 
     cell.style.fontSize =
-        `${Number(f.fontSize) || 14}px`;
+    `${Number(f.fontSize) || 14}px`;
+
 
     cell.style.fontWeight =
-        f.bold ? "700" : "400";
+    f.bold
+        ? "700"
+        : "400";
+
 
     cell.style.fontStyle =
-        f.italic
-            ? "italic"
-            : "normal";
+    f.italic
+        ? "italic"
+        : "normal";
+
 
     cell.style.color =
-        f.color || "#111111";
+    f.color || "#111111";
+
 
     cell.style.backgroundColor =
-        f.background || "#ffffff";
+    f.background || "#ffffff";
 
-    if (f.wrap) {
 
-        cell.style.whiteSpace =
-            "pre-wrap";
-
-        cell.style.overflowWrap =
-            "anywhere";
-
-        cell.style.wordBreak =
-            "break-word";
-
-    } else {
+    if(f.wrap){
 
         cell.style.whiteSpace =
-            "nowrap";
+        "pre-wrap";
 
         cell.style.overflowWrap =
-            "normal";
+        "anywhere";
 
         cell.style.wordBreak =
-            "normal";
+        "break-word";
+
+    }
+    else{
+
+        cell.style.whiteSpace =
+        "nowrap";
+
+        cell.style.overflowWrap =
+        "normal";
+
+        cell.style.wordBreak =
+        "normal";
     }
 }
 
@@ -1630,7 +2395,7 @@ function applyFormatToCell(
    RENDER TABLE
 ========================================================= */
 
-function renderTable() {
+function renderTable(){
 
     closeFilterMenu();
 
@@ -1638,9 +2403,14 @@ function renderTable() {
 
     renderBody();
 
-    requestAnimationFrame(() => {
-        applyFreezeColumns();
-    });
+
+    requestAnimationFrame(
+        () => {
+
+            applyFreezeColumns();
+
+        }
+    );
 }
 
 
@@ -1648,257 +2418,376 @@ function renderTable() {
    RENDER HEADER
 ========================================================= */
 
-function renderHeader() {
+function renderHeader(){
 
     thead.innerHTML = "";
 
+
     const visibleIndexes =
-        getVisibleHeaderIndexes();
+    getVisibleHeaderIndexes();
 
 
     /*
-       Header row
+       HEADER ROW
     */
 
     const headerRow =
-        document.createElement("tr");
+    document.createElement("tr");
 
     headerRow.className =
-        "header-row";
+    "header-row";
 
 
-    visibleIndexes.forEach(index => {
+    visibleIndexes.forEach(
+        index => {
 
-        const th =
+            const th =
             document.createElement("th");
 
-        th.className =
+
+            th.className =
             "header-cell";
 
-        th.dataset.column =
+
+            th.dataset.column =
             String(index);
 
-        th.style.width =
-            `${getColumnWidth(index)}px`;
 
-        th.style.minWidth =
-            `${getColumnWidth(index)}px`;
-
-        th.style.maxWidth =
-            `${getColumnWidth(index)}px`;
+            const width =
+            getColumnWidth(index);
 
 
-        const content =
+            th.style.width =
+            `${width}px`;
+
+            th.style.minWidth =
+            `${width}px`;
+
+            th.style.maxWidth =
+            `${width}px`;
+
+
+            const content =
             document.createElement("div");
 
-        content.className =
+            content.className =
             "header-content";
 
 
-        const title =
+            /*
+               TITLE
+            */
+
+            const title =
             document.createElement("div");
 
-        title.className =
+            title.className =
             "header-title";
 
-        title.textContent =
+
+            title.textContent =
             getDisplayHeader(
                 headers[index]
             );
 
 
-        const sortButton =
-            document.createElement("button");
+            /*
+               Double click title
+               = đổi tên nhanh.
+            */
 
-        sortButton.className =
-            "sort-button";
+            title.addEventListener(
+                "dblclick",
+                event => {
 
-        sortButton.textContent =
-            getSortIcon(index);
+                    event.preventDefault();
 
-        sortButton.title =
-            "Sắp xếp";
-
-
-        sortButton.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-                openSortDialog(
-                    index,
-                    th
-                );
-            }
-        );
+                    openRenamePrompt(
+                        index
+                    );
+                }
+            );
 
 
-        const filterButton =
-            document.createElement("button");
+            /*
+               ACTIONS
+            */
 
-        filterButton.className =
-            "filter-button";
-
-        filterButton.textContent =
-            "▼";
-
-        filterButton.title =
-            "Lọc";
-
-
-        filterButton.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-                openFilterMenu(
-                    index,
-                    th
-                );
-            }
-        );
-
-
-        content.appendChild(title);
-        content.appendChild(sortButton);
-        content.appendChild(filterButton);
-
-        th.appendChild(content);
-
-
-        /*
-           Resize
-        */
-
-        const resize =
+            const actions =
             document.createElement("div");
 
-        resize.className =
+            actions.className =
+            "header-actions";
+
+
+            /*
+               SORT ICON
+            */
+
+            const sortButton =
+            document.createElement("button");
+
+            sortButton.className =
+            "header-button";
+
+            sortButton.textContent =
+            getSortIcon(index);
+
+            sortButton.title =
+            "Sort By";
+
+
+            sortButton.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+
+                    /*
+                       Mở cùng menu filter,
+                       trong đó có Sort By.
+                    */
+
+                    openFilterMenu(
+                        index,
+                        th
+                    );
+                }
+            );
+
+
+            /*
+               FILTER
+            */
+
+            const filterButton =
+            document.createElement("button");
+
+            filterButton.className =
+            "header-button";
+
+            filterButton.textContent =
+            "▼";
+
+            filterButton.title =
+            "Filter / Sort / Định dạng";
+
+
+            filterButton.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    openFilterMenu(
+                        index,
+                        th
+                    );
+                }
+            );
+
+
+            actions.appendChild(
+                sortButton
+            );
+
+            actions.appendChild(
+                filterButton
+            );
+
+
+            content.appendChild(
+                title
+            );
+
+            content.appendChild(
+                actions
+            );
+
+
+            th.appendChild(
+                content
+            );
+
+
+            /*
+               RESIZE
+            */
+
+            const resize =
+            document.createElement("div");
+
+            resize.className =
             "resize-handle";
 
-        resize.addEventListener(
-            "mousedown",
-            event => {
 
-                event.preventDefault();
-                event.stopPropagation();
+            resize.addEventListener(
+                "mousedown",
+                event => {
 
-                startResize(
-                    event,
-                    index
-                );
-            }
-        );
+                    event.preventDefault();
+                    event.stopPropagation();
 
-        th.appendChild(resize);
+                    startResize(
+                        event,
+                        index
+                    );
+                }
+            );
 
-        headerRow.appendChild(th);
 
-    });
+            th.appendChild(
+                resize
+            );
 
-    thead.appendChild(headerRow);
+
+            headerRow.appendChild(
+                th
+            );
+
+        }
+    );
+
+
+    thead.appendChild(
+        headerRow
+    );
 
 
     /*
-       Search row
+       SEARCH ROW
     */
 
     const searchRow =
-        document.createElement("tr");
+    document.createElement("tr");
 
     searchRow.className =
-        "search-row";
+    "search-row";
 
 
-    visibleIndexes.forEach(index => {
+    visibleIndexes.forEach(
+        index => {
 
-        const th =
+            const th =
             document.createElement("th");
 
-        th.className =
+
+            th.className =
             "search-cell";
 
-        th.dataset.column =
+
+            th.dataset.column =
             String(index);
 
-        th.style.width =
-            `${getColumnWidth(index)}px`;
 
-        th.style.minWidth =
-            `${getColumnWidth(index)}px`;
-
-        th.style.maxWidth =
-            `${getColumnWidth(index)}px`;
+            const width =
+            getColumnWidth(index);
 
 
-        const inner =
+            th.style.width =
+            `${width}px`;
+
+            th.style.minWidth =
+            `${width}px`;
+
+            th.style.maxWidth =
+            `${width}px`;
+
+
+            const inner =
             document.createElement("div");
 
-        inner.className =
-            "search-cell-inner";
+            inner.className =
+            "search-inner";
 
 
-        const input =
+            const input =
             document.createElement("input");
 
-        input.className =
+            input.className =
             "column-search";
 
-        input.type =
+
+            input.type =
             "text";
 
-        input.placeholder =
+
+            input.placeholder =
             "Tìm kiếm...";
 
-        input.value =
+
+            input.value =
             searches[index] || "";
 
 
-        /*
-           QUAN TRỌNG:
-           Không renderTable() khi input.
-           Chỉ render BODY.
-           Vì vậy focus không bị mất.
-        */
+            /*
+               QUAN TRỌNG:
+               không renderHeader()
+               khi nhập.
 
-        input.addEventListener(
-            "input",
-            () => {
+               Chỉ render body.
+               => focus không mất.
+            */
 
-                searches[index] =
+            input.addEventListener(
+                "input",
+                () => {
+
+                    searches[index] =
                     input.value;
 
-                saveState();
 
-                renderBody();
+                    saveState();
 
-                updateHeaderStates();
 
-                /*
-                   Nếu đang mở filter của cột khác,
-                   refresh danh sách filter.
-                */
+                    renderBody();
 
-                if (
-                    openFilterIndex !== null
-                ) {
-                    refreshOpenFilterMenu();
+
+                    updateHeaderStates();
+
+
+                    /*
+                       Nếu menu filter đang mở,
+                       refresh danh sách.
+                    */
+
+                    if(
+                        openFilterIndex !== null
+                    ){
+
+                        refreshOpenFilterMenu(
+                            true
+                        );
+                    }
+
                 }
-            }
-        );
+            );
 
 
-        inner.appendChild(input);
+            inner.appendChild(
+                input
+            );
 
-        th.appendChild(inner);
 
-        searchRow.appendChild(th);
+            th.appendChild(
+                inner
+            );
 
-    });
 
-    thead.appendChild(searchRow);
+            searchRow.appendChild(
+                th
+            );
+
+        }
+    );
+
+
+    thead.appendChild(
+        searchRow
+    );
 
 
     updateHeaderStates();
@@ -1906,101 +2795,122 @@ function renderHeader() {
 
 
 /* =========================================================
-   RENDER BODY ONLY
-   Không render lại header
+   RENDER BODY
 ========================================================= */
 
-function renderBody() {
+function renderBody(){
 
     tbody.innerHTML = "";
 
+
     const visibleIndexes =
-        getVisibleHeaderIndexes();
+    getVisibleHeaderIndexes();
+
 
     const visibleRows =
-        getVisibleRows();
+    getVisibleRows();
 
 
-    if (!visibleRows.length) {
+    if(
+        visibleRows.length === 0
+    ){
 
         const tr =
-            document.createElement("tr");
+        document.createElement("tr");
+
 
         const td =
-            document.createElement("td");
+        document.createElement("td");
+
 
         td.colSpan =
-            Math.max(
-                visibleIndexes.length,
-                1
-            );
+        Math.max(
+            visibleIndexes.length,
+            1
+        );
+
 
         td.className =
-            "message";
+        "message";
+
 
         td.textContent =
-            "Không có dữ liệu phù hợp.";
+        "Không có dữ liệu phù hợp.";
+
 
         tr.appendChild(td);
+
         tbody.appendChild(tr);
+
 
         requestAnimationFrame(
             applyFreezeColumns
         );
 
+
         return;
     }
 
 
-    visibleRows.forEach(item => {
+    visibleRows.forEach(
+        item => {
 
-        const tr =
+            const tr =
             document.createElement("tr");
 
-        visibleIndexes.forEach(index => {
 
-            const td =
-                document.createElement("td");
+            visibleIndexes.forEach(
+                index => {
 
-            td.className =
-                "body-cell";
-
-            td.dataset.column =
-                String(index);
-
-            td.style.width =
-                `${getColumnWidth(index)}px`;
-
-            td.style.minWidth =
-                `${getColumnWidth(index)}px`;
-
-            td.style.maxWidth =
-                `${getColumnWidth(index)}px`;
+                    const td =
+                    document.createElement("td");
 
 
-            const value =
-                getDisplayValue(
-                    item.row[index],
-                    headers[index]
-                );
-
-            td.textContent =
-                value;
+                    td.className =
+                    "body-cell";
 
 
-            applyFormatToCell(
-                td,
-                index
+                    td.dataset.column =
+                    String(index);
+
+
+                    const width =
+                    getColumnWidth(index);
+
+
+                    td.style.width =
+                    `${width}px`;
+
+                    td.style.minWidth =
+                    `${width}px`;
+
+                    td.style.maxWidth =
+                    `${width}px`;
+
+
+                    td.textContent =
+                    getDisplayValue(
+                        item.row[index],
+                        headers[index]
+                    );
+
+
+                    applyFormatToCell(
+                        td,
+                        index
+                    );
+
+
+                    tr.appendChild(td);
+
+                }
             );
 
 
-            tr.appendChild(td);
+            tbody.appendChild(tr);
 
-        });
-
-        tbody.appendChild(tr);
-
-    });
+        }
+    );
 
 
     requestAnimationFrame(
@@ -2013,55 +2923,64 @@ function renderBody() {
    HEADER STATES
 ========================================================= */
 
-function updateHeaderStates() {
+function updateHeaderStates(){
 
-    const headerCells =
-        thead.querySelectorAll(
-            ".header-cell"
-        );
+    thead
+    .querySelectorAll(
+        ".header-cell"
+    )
+    .forEach(
+        th => {
 
-    headerCells.forEach(th => {
-
-        const index =
+            const index =
             Number(
                 th.dataset.column
             );
 
-        const hasSearch =
+
+            const searchActive =
             String(
                 searches[index] || ""
             ).trim() !== "";
 
-        const hasFilter =
-            isEffectiveFilter(index);
 
-        const sorted =
-            sorts[index] != null;
-
-
-        th.classList.toggle(
-            "filtered",
-            hasSearch || hasFilter
-        );
-
-        th.classList.toggle(
-            "sorted",
-            sorted
-        );
-
-
-        const sortButton =
-            th.querySelector(
-                ".sort-button"
+            const filterActive =
+            isEffectiveFilter(
+                index
             );
 
-        if (sortButton) {
 
-            sortButton.textContent =
+            const sorted =
+            sorts[index] !== undefined;
+
+
+            th.classList.toggle(
+                "filtered",
+                searchActive ||
+                filterActive
+            );
+
+
+            th.classList.toggle(
+                "sorted",
+                sorted
+            );
+
+
+            const sortButton =
+            th.querySelector(
+                ".header-button"
+            );
+
+
+            if(sortButton){
+
+                sortButton.textContent =
                 getSortIcon(index);
-        }
+            }
 
-    });
+        }
+    );
 }
 
 
@@ -2069,39 +2988,52 @@ function updateHeaderStates() {
    EFFECTIVE FILTER
 ========================================================= */
 
-function isEffectiveFilter(index) {
+function isEffectiveFilter(index){
 
-    if (
+    if(
         filters[index] === undefined
-    ) {
+    ){
+
         return false;
     }
 
-    const values =
-        filters[index];
 
-    if (!Array.isArray(values)) {
+    const selected =
+    filters[index];
+
+
+    if(
+        !Array.isArray(selected)
+    ){
+
         return false;
     }
 
-    const allValues =
-        getAllColumnValues(index);
 
-    if (
-        values.length === 0
-    ) {
+    if(
+        selected.length === 0
+    ){
+
         return true;
     }
 
+
+    const allValues =
+    getAllColumnValues(index);
+
+
     /*
-       Chọn tất cả = không xem là active
+       Chọn toàn bộ = không active.
     */
 
-    if (
-        values.length === allValues.length
-    ) {
+    if(
+        selected.length ===
+        allValues.length
+    ){
+
         return false;
     }
+
 
     return true;
 }
@@ -2111,19 +3043,24 @@ function isEffectiveFilter(index) {
    SORT ICON
 ========================================================= */
 
-function getSortIcon(index) {
+function getSortIcon(index){
 
-    if (
-        sorts[index] == null
-    ) {
+    if(
+        sorts[index] === undefined
+    ){
+
         return "↕";
     }
 
+
     const direction =
-        sorts[index].direction;
+    sorts[index].direction ||
+    "asc";
+
 
     const priority =
-        sorts[index].priority;
+    sorts[index].priority;
+
 
     return (
         direction === "asc"
@@ -2131,9 +3068,144 @@ function getSortIcon(index) {
             : "▼"
     ) +
     (
-        priority !== undefined
+        priority !== undefined &&
+        priority !== ""
             ? String(priority)
             : ""
+    );
+}
+
+
+/* =========================================================
+   OPEN FILTER MENU
+========================================================= */
+
+function openFilterMenu(
+    index,
+    anchor
+){
+
+    closeFilterMenu();
+
+
+    openFilterIndex =
+    index;
+
+
+    filterValueSearch =
+    "";
+
+
+    filterMenuElement =
+    document.createElement(
+        "div"
+    );
+
+
+    filterMenuElement.className =
+    "filter-menu";
+
+
+    document.body.appendChild(
+        filterMenuElement
+    );
+
+
+    renderFilterMenu(
+        index
+    );
+
+
+    positionMenu(
+        anchor
+    );
+}
+
+
+/* =========================================================
+   POSITION MENU
+========================================================= */
+
+function positionMenu(anchor){
+
+    if(
+        !filterMenuElement ||
+        !anchor
+    ){
+
+        return;
+    }
+
+
+    const rect =
+    anchor.getBoundingClientRect();
+
+
+    let left =
+    rect.left;
+
+
+    let top =
+    rect.bottom + 4;
+
+
+    requestAnimationFrame(
+        () => {
+
+            const width =
+            filterMenuElement.offsetWidth;
+
+
+            const height =
+            filterMenuElement.offsetHeight;
+
+
+            if(
+                left + width >
+                window.innerWidth - 10
+            ){
+
+                left =
+                window.innerWidth -
+                width -
+                10;
+            }
+
+
+            if(
+                top + height >
+                window.innerHeight - 10
+            ){
+
+                top =
+                rect.top -
+                height -
+                4;
+            }
+
+
+            left =
+            Math.max(
+                10,
+                left
+            );
+
+
+            top =
+            Math.max(
+                10,
+                top
+            );
+
+
+            filterMenuElement.style.left =
+            `${left}px`;
+
+
+            filterMenuElement.style.top =
+            `${top}px`;
+
+        }
     );
 }
 
@@ -2142,158 +3214,86 @@ function getSortIcon(index) {
    FILTER MENU
 ========================================================= */
 
-function openFilterMenu(
-    index,
-    anchor
-) {
+function renderFilterMenu(index){
 
-    closeFilterMenu();
+    if(
+        !filterMenuElement
+    ){
 
-    openFilterIndex =
-        index;
-
-    filterValueSearch =
-        "";
-
-    filterMenuElement =
-        document.createElement("div");
-
-    filterMenuElement.className =
-        "filter-menu";
-
-    document.body.appendChild(
-        filterMenuElement
-    );
-
-    renderFilterMenuContent(
-        index
-    );
-
-    positionFilterMenu(
-        anchor
-    );
-}
-
-
-/* =========================================================
-   POSITION FILTER
-========================================================= */
-
-function positionFilterMenu(anchor) {
-
-    if (
-        !filterMenuElement ||
-        !anchor
-    ) {
         return;
     }
 
-    const rect =
-        anchor.getBoundingClientRect();
 
-    const menuWidth =
-        filterMenuElement.offsetWidth;
+    filterMenuElement.innerHTML =
+    "";
 
-    const menuHeight =
-        filterMenuElement.offsetHeight;
-
-    let left =
-        rect.left;
-
-    let top =
-        rect.bottom + 4;
-
-
-    if (
-        left + menuWidth >
-        window.innerWidth - 10
-    ) {
-        left =
-            window.innerWidth -
-            menuWidth -
-            10;
-    }
-
-    if (
-        top + menuHeight >
-        window.innerHeight - 10
-    ) {
-        top =
-            rect.top -
-            menuHeight -
-            4;
-    }
-
-    if (left < 10) {
-        left = 10;
-    }
-
-    if (top < 10) {
-        top = 10;
-    }
-
-    filterMenuElement.style.left =
-        `${left}px`;
-
-    filterMenuElement.style.top =
-        `${top}px`;
-}
-
-
-/* =========================================================
-   FILTER MENU CONTENT
-========================================================= */
-
-function renderFilterMenuContent(index) {
-
-    if (!filterMenuElement) {
-        return;
-    }
-
-    filterMenuElement.innerHTML = "";
 
     const inner =
-        document.createElement("div");
+    document.createElement(
+        "div"
+    );
+
 
     inner.className =
-        "filter-menu-inner";
-
-
-    const title =
-        document.createElement("div");
-
-    title.className =
-        "filter-menu-title";
-
-    title.textContent =
-        `Lọc: ${getDisplayHeader(headers[index])}`;
-
-    inner.appendChild(title);
+    "filter-menu-inner";
 
 
     /*
-       Search trong filter menu
+       TITLE
     */
 
-    const valueSearch =
-        document.createElement("input");
-
-    valueSearch.className =
-        "filter-values-search";
-
-    valueSearch.placeholder =
-        "Tìm trong danh sách...";
-
-    valueSearch.value =
-        filterValueSearch;
+    const title =
+    document.createElement(
+        "div"
+    );
 
 
-    valueSearch.addEventListener(
+    title.className =
+    "menu-title";
+
+
+    title.textContent =
+    getDisplayHeader(
+        headers[index]
+    );
+
+
+    inner.appendChild(
+        title
+    );
+
+
+    /*
+       FILTER SEARCH
+    */
+
+    const filterSearch =
+    document.createElement(
+        "input"
+    );
+
+
+    filterSearch.className =
+    "filter-search";
+
+
+    filterSearch.placeholder =
+    "Tìm trong danh sách filter...";
+
+
+    filterSearch.value =
+    filterValueSearch;
+
+
+    filterSearch.addEventListener(
         "input",
-        () => {
+        event => {
+
+            event.stopPropagation();
 
             filterValueSearch =
-                valueSearch.value;
+            filterSearch.value;
+
 
             renderFilterValuesOnly(
                 index
@@ -2301,27 +3301,39 @@ function renderFilterMenuContent(index) {
         }
     );
 
+
     inner.appendChild(
-        valueSearch
+        filterSearch
     );
 
 
     /*
-       Buttons
+       FILTER BUTTONS
     */
 
     const actions =
-        document.createElement("div");
+    document.createElement(
+        "div"
+    );
+
 
     actions.className =
-        "filter-actions";
+    "filter-actions";
 
 
     const selectAll =
-        document.createElement("button");
+    document.createElement(
+        "button"
+    );
+
+
+    selectAll.className =
+    "menu-button";
+
 
     selectAll.textContent =
-        "Chọn tất cả";
+    "Chọn tất cả";
+
 
     selectAll.addEventListener(
         "click",
@@ -2330,34 +3342,43 @@ function renderFilterMenuContent(index) {
             event.preventDefault();
             event.stopPropagation();
 
-            const values =
-                getFilterValuesForColumn(
-                    index
-                );
 
             filters[index] =
-                values.slice();
+            getFilterValuesForColumn(
+                index
+            ).slice();
+
 
             saveState();
 
+
             renderBody();
 
+
             updateHeaderStates();
+
 
             renderFilterValuesOnly(
                 index
             );
 
-            refreshOpenFilterMenu();
         }
     );
 
 
     const deselectAll =
-        document.createElement("button");
+    document.createElement(
+        "button"
+    );
+
+
+    deselectAll.className =
+    "menu-button";
+
 
     deselectAll.textContent =
-        "Bỏ chọn";
+    "Bỏ chọn";
+
 
     deselectAll.addEventListener(
         "click",
@@ -2366,18 +3387,24 @@ function renderFilterMenuContent(index) {
             event.preventDefault();
             event.stopPropagation();
 
+
             filters[index] =
-                [];
+            [];
+
 
             saveState();
 
+
             renderBody();
 
+
             updateHeaderStates();
+
 
             renderFilterValuesOnly(
                 index
             );
+
         }
     );
 
@@ -2386,25 +3413,34 @@ function renderFilterMenuContent(index) {
         selectAll
     );
 
+
     actions.appendChild(
         deselectAll
     );
 
-    inner.appendChild(actions);
+
+    inner.appendChild(
+        actions
+    );
 
 
     /*
-       Values
+       VALUES
     */
 
     const valuesContainer =
-        document.createElement("div");
+    document.createElement(
+        "div"
+    );
+
 
     valuesContainer.className =
-        "filter-values";
+    "filter-values";
+
 
     valuesContainer.id =
-        "filterValuesContainer";
+    "filterValuesContainer";
+
 
     inner.appendChild(
         valuesContainer
@@ -2412,89 +3448,130 @@ function renderFilterMenuContent(index) {
 
 
     /*
-       Footer
+       SORT
     */
 
-    const footer =
-        document.createElement("div");
-
-    footer.className =
-        "filter-footer";
-
-
-    const clearBtn =
-        document.createElement("button");
-
-    clearBtn.textContent =
-        "Xóa lọc";
-
-    clearBtn.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            delete filters[index];
-
-            saveState();
-
-            renderBody();
-
-            updateHeaderStates();
-
-            renderFilterValuesOnly(
-                index
-            );
-        }
+    const sortSection =
+    createSortSection(
+        index
     );
 
-
-    const applyBtn =
-        document.createElement("button");
-
-    applyBtn.textContent =
-        "Áp dụng";
-
-    applyBtn.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            /*
-               Filter đã áp dụng NGAY khi tick.
-               Nút này chỉ đóng menu.
-            */
-
-            closeFilterMenu();
-        }
-    );
-
-
-    footer.appendChild(
-        clearBtn
-    );
-
-    footer.appendChild(
-        applyBtn
-    );
 
     inner.appendChild(
-        footer
+        sortSection
     );
 
 
     /*
-       Format
+       FORMAT
     */
 
     const formatSection =
-        createFormatSection(index);
+    createFormatSection(
+        index
+    );
+
 
     inner.appendChild(
         formatSection
+    );
+
+
+    /*
+       FOOTER
+    */
+
+    const footer =
+    document.createElement(
+        "div"
+    );
+
+
+    footer.className =
+    "menu-footer";
+
+
+    const clearFilter =
+    document.createElement(
+        "button"
+    );
+
+
+    clearFilter.className =
+    "menu-button";
+
+
+    clearFilter.textContent =
+    "Xóa lọc";
+
+
+    clearFilter.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            delete filters[index];
+
+
+            saveState();
+
+
+            renderBody();
+
+
+            updateHeaderStates();
+
+
+            renderFilterValuesOnly(
+                index
+            );
+
+        }
+    );
+
+
+    const close =
+    document.createElement(
+        "button"
+    );
+
+
+    close.className =
+    "menu-button";
+
+
+    close.textContent =
+    "Đóng";
+
+
+    close.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            closeFilterMenu();
+
+        }
+    );
+
+
+    footer.appendChild(
+        clearFilter
+    );
+
+
+    footer.appendChild(
+        close
+    );
+
+
+    inner.appendChild(
+        footer
     );
 
 
@@ -2510,212 +3587,1368 @@ function renderFilterMenuContent(index) {
 
 
 /* =========================================================
-   FILTER VALUES ONLY
+   FILTER VALUES
 ========================================================= */
 
-function renderFilterValuesOnly(index) {
+function renderFilterValuesOnly(
+    index
+){
 
-    if (!filterMenuElement) {
+    if(
+        !filterMenuElement
+    ){
+
         return;
     }
+
 
     const container =
-        filterMenuElement.querySelector(
-            "#filterValuesContainer"
-        );
+    filterMenuElement.querySelector(
+        "#filterValuesContainer"
+    );
 
-    if (!container) {
+
+    if(!container){
         return;
     }
 
-    container.innerHTML = "";
+
+    container.innerHTML =
+    "";
 
 
     const allValues =
-        getFilterValuesForColumn(
-            index
-        );
+    getFilterValuesForColumn(
+        index
+    );
 
 
     const query =
-        String(
-            filterValueSearch || ""
-        )
-            .trim()
-            .toLowerCase();
+    String(
+        filterValueSearch || ""
+    )
+    .trim()
+    .toLowerCase();
 
 
     const values =
-        allValues.filter(value => {
+    allValues.filter(
+        value => {
 
-            if (!query) {
+            if(!query){
                 return true;
             }
 
-            return String(value)
-                .toLowerCase()
-                .includes(query);
-        });
 
+            return String(value)
+            .toLowerCase()
+            .includes(query);
+
+        }
+    );
+
+
+    /*
+       Nếu chưa có filter:
+       coi như tất cả được chọn.
+    */
 
     const selected =
-        filters[index] === undefined
-            ? allValues.slice()
-            : filters[index];
+    filters[index] === undefined
+        ? allValues.slice()
+        : filters[index];
 
 
-    values.forEach(value => {
+    values.forEach(
+        value => {
 
-        const row =
-            document.createElement("div");
+            const row =
+            document.createElement(
+                "div"
+            );
 
-        row.className =
+
+            row.className =
             "filter-value-row";
 
 
-        const checkbox =
-            document.createElement("input");
+            const checkbox =
+            document.createElement(
+                "input"
+            );
 
-        checkbox.type =
+
+            checkbox.type =
             "checkbox";
 
-        checkbox.checked =
-            selected.includes(value);
+
+            checkbox.checked =
+            selected.includes(
+                value
+            );
 
 
-        /*
-           QUAN TRỌNG:
-           Tick checkbox = lọc NGAY.
-        */
+            checkbox.addEventListener(
+                "change",
+                event => {
 
-        checkbox.addEventListener(
-            "change",
-            event => {
-
-                event.stopPropagation();
-
-                let current =
-                    Array.isArray(
-                        filters[index]
-                    )
-                        ? filters[index].slice()
-                        : allValues.slice();
+                    event.stopPropagation();
 
 
-                if (
-                    checkbox.checked
-                ) {
+                    let current;
 
-                    if (
-                        !current.includes(value)
-                    ) {
-                        current.push(value);
+
+                    if(
+                        filters[index] === undefined
+                    ){
+
+                        current =
+                        allValues.slice();
+
+                    }
+                    else{
+
+                        current =
+                        filters[index].slice();
                     }
 
-                } else {
 
-                    current =
+                    if(
+                        checkbox.checked
+                    ){
+
+                        if(
+                            !current.includes(
+                                value
+                            )
+                        ){
+
+                            current.push(
+                                value
+                            );
+                        }
+
+                    }
+                    else{
+
+                        current =
                         current.filter(
-                            x => x !== value
+                            item =>
+                            item !== value
                         );
-                }
+                    }
 
 
-                filters[index] =
+                    filters[index] =
                     current;
 
-                saveState();
 
-                /*
-                   Lọc ngay
-                */
-
-                renderBody();
-
-                updateHeaderStates();
-
-                /*
-                   Các cột khác phải thay đổi
-                   danh sách filter theo.
-                */
-
-                refreshOpenFilterMenu(
-                    false
-                );
-            }
-        );
+                    saveState();
 
 
-        const label =
-            document.createElement("label");
+                    /*
+                       LỌC NGAY.
+                    */
 
-        label.textContent =
+                    renderBody();
+
+
+                    updateHeaderStates();
+
+
+                    /*
+                       Không đóng menu.
+                       Cập nhật lại danh sách filter
+                       theo trạng thái mới.
+                    */
+
+                    const savedSearch =
+                    filterValueSearch;
+
+
+                    renderFilterMenu(
+                        index
+                    );
+
+
+                    filterValueSearch =
+                    savedSearch;
+
+
+                    const searchInput =
+                    filterMenuElement.querySelector(
+                        ".filter-search"
+                    );
+
+
+                    if(searchInput){
+
+                        searchInput.value =
+                        savedSearch;
+                    }
+
+
+                    renderFilterValuesOnly(
+                        index
+                    );
+
+                }
+            );
+
+
+            const label =
+            document.createElement(
+                "label"
+            );
+
+
+            label.textContent =
             value === ""
                 ? "(Trống)"
                 : value;
 
-        label.addEventListener(
-            "click",
-            event => {
 
-                event.stopPropagation();
-            }
-        );
+            label.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                }
+            );
 
 
-        row.appendChild(
-            checkbox
-        );
+            row.appendChild(
+                checkbox
+            );
 
-        row.appendChild(
-            label
-        );
 
-        container.appendChild(
-            row
-        );
-    });
+            row.appendChild(
+                label
+            );
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
 }
 
 
 /* =========================================================
-   REFRESH OPEN FILTER
+   SORT SECTION
+========================================================= */
+
+function createSortSection(index){
+
+    const section =
+    document.createElement(
+        "div"
+    );
+
+
+    section.className =
+    "menu-section";
+
+
+    const title =
+    document.createElement(
+        "div"
+    );
+
+
+    title.className =
+    "menu-section-title";
+
+
+    title.textContent =
+    "Sort By";
+
+
+    section.appendChild(
+        title
+    );
+
+
+    /*
+       Helper sort info
+    */
+
+    const originalHeader =
+    headers[index];
+
+
+    const helper =
+    SORT_BY_MAP[
+        originalHeader
+    ];
+
+
+    if(helper){
+
+        const info =
+        document.createElement(
+            "div"
+        );
+
+
+        info.style.fontSize =
+        "12px";
+
+
+        info.style.color =
+        "#666";
+
+
+        info.style.marginBottom =
+        "7px";
+
+
+        info.textContent =
+        "Sắp xếp theo: " +
+        helper;
+
+
+        section.appendChild(
+            info
+        );
+    }
+
+
+    /*
+       PRIORITY
+    */
+
+    const priorityRow =
+    document.createElement(
+        "div"
+    );
+
+
+    priorityRow.className =
+    "form-row";
+
+
+    const priorityLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    priorityLabel.textContent =
+    "Ưu tiên";
+
+
+    const priority =
+    document.createElement(
+        "input"
+    );
+
+
+    priority.type =
+    "number";
+
+
+    /*
+       Cho số thập phân.
+    */
+
+    priority.step =
+    "any";
+
+
+    priority.placeholder =
+    "VD: 1, 1.5, 10, 100";
+
+
+    if(
+        sorts[index] !== undefined
+    ){
+
+        priority.value =
+        sorts[index].priority;
+    }
+
+
+    priorityRow.appendChild(
+        priorityLabel
+    );
+
+
+    priorityRow.appendChild(
+        priority
+    );
+
+
+    section.appendChild(
+        priorityRow
+    );
+
+
+    /*
+       DIRECTION
+    */
+
+    const directionRow =
+    document.createElement(
+        "div"
+    );
+
+
+    directionRow.className =
+    "form-row";
+
+
+    const directionLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    directionLabel.textContent =
+    "Chiều";
+
+
+    const directionWrap =
+    document.createElement(
+        "div"
+    );
+
+
+    directionWrap.className =
+    "sort-direction";
+
+
+    const ascLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    const asc =
+    document.createElement(
+        "input"
+    );
+
+
+    asc.type =
+    "radio";
+
+
+    asc.name =
+    "sortDirection";
+
+
+    asc.value =
+    "asc";
+
+
+    const descLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    const desc =
+    document.createElement(
+        "input"
+    );
+
+
+    desc.type =
+    "radio";
+
+
+    desc.name =
+    "sortDirection";
+
+
+    desc.value =
+    "desc";
+
+
+    const currentDirection =
+    sorts[index]?.direction ||
+    "asc";
+
+
+    asc.checked =
+    currentDirection === "asc";
+
+
+    desc.checked =
+    currentDirection === "desc";
+
+
+    ascLabel.appendChild(
+        asc
+    );
+
+
+    ascLabel.appendChild(
+        document.createTextNode(
+            "Tăng dần"
+        )
+    );
+
+
+    descLabel.appendChild(
+        desc
+    );
+
+
+    descLabel.appendChild(
+        document.createTextNode(
+            "Giảm dần"
+        )
+    );
+
+
+    directionWrap.appendChild(
+        ascLabel
+    );
+
+
+    directionWrap.appendChild(
+        descLabel
+    );
+
+
+    directionRow.appendChild(
+        directionLabel
+    );
+
+
+    directionRow.appendChild(
+        directionWrap
+    );
+
+
+    section.appendChild(
+        directionRow
+    );
+
+
+    /*
+       BUTTONS
+    */
+
+    const buttons =
+    document.createElement(
+        "div"
+    );
+
+
+    buttons.style.display =
+    "flex";
+
+
+    buttons.style.gap =
+    "5px";
+
+
+    const apply =
+    document.createElement(
+        "button"
+    );
+
+
+    apply.className =
+    "menu-button";
+
+
+    apply.textContent =
+    "Áp dụng Sort";
+
+
+    apply.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            const raw =
+            priority.value.trim();
+
+
+            if(raw === ""){
+
+                delete sorts[index];
+
+            }
+            else{
+
+                const number =
+                Number(raw);
+
+
+                if(
+                    Number.isFinite(number)
+                ){
+
+                    sorts[index] = {
+
+                        /*
+                           Giữ nguyên số user nhập
+                           dưới dạng number.
+                        */
+
+                        priority:number,
+
+                        direction:
+                        desc.checked
+                            ? "desc"
+                            : "asc"
+
+                    };
+
+                }
+            }
+
+
+            saveState();
+
+
+            renderBody();
+
+
+            updateHeaderStates();
+
+
+            /*
+               Cập nhật icon nhưng giữ menu.
+            */
+
+            renderFilterMenu(
+                index
+            );
+
+        }
+    );
+
+
+    const clear =
+    document.createElement(
+        "button"
+    );
+
+
+    clear.className =
+    "menu-button";
+
+
+    clear.textContent =
+    "Xóa Sort";
+
+
+    clear.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            delete sorts[index];
+
+
+            saveState();
+
+
+            renderBody();
+
+
+            updateHeaderStates();
+
+
+            renderFilterMenu(
+                index
+            );
+
+        }
+    );
+
+
+    buttons.appendChild(
+        apply
+    );
+
+
+    buttons.appendChild(
+        clear
+    );
+
+
+    section.appendChild(
+        buttons
+    );
+
+
+    return section;
+}
+
+
+/* =========================================================
+   FORMAT SECTION
+========================================================= */
+
+function createFormatSection(index){
+
+    const section =
+    document.createElement(
+        "div"
+    );
+
+
+    section.className =
+    "menu-section";
+
+
+    const title =
+    document.createElement(
+        "div"
+    );
+
+
+    title.className =
+    "menu-section-title";
+
+
+    title.textContent =
+    "Định dạng cột";
+
+
+    section.appendChild(
+        title
+    );
+
+
+    const format =
+    getColumnFormat(
+        index
+    );
+
+
+    /*
+       ALIGN
+    */
+
+    const alignRow =
+    document.createElement(
+        "div"
+    );
+
+
+    alignRow.className =
+    "form-row";
+
+
+    const alignLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    alignLabel.textContent =
+    "Căn lề";
+
+
+    const align =
+    document.createElement(
+        "select"
+    );
+
+
+    [
+        ["left","Trái"],
+        ["center","Giữa"],
+        ["right","Phải"]
+    ]
+    .forEach(
+        item => {
+
+            const option =
+            document.createElement(
+                "option"
+            );
+
+
+            option.value =
+            item[0];
+
+
+            option.textContent =
+            item[1];
+
+
+            align.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    align.value =
+    format.align;
+
+
+    alignRow.appendChild(
+        alignLabel
+    );
+
+
+    alignRow.appendChild(
+        align
+    );
+
+
+    section.appendChild(
+        alignRow
+    );
+
+
+    /*
+       FONT
+    */
+
+    const fontRow =
+    document.createElement(
+        "div"
+    );
+
+
+    fontRow.className =
+    "form-row";
+
+
+    const fontLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    fontLabel.textContent =
+    "Font";
+
+
+    const font =
+    document.createElement(
+        "select"
+    );
+
+
+    [
+        "Arial",
+        "Calibri",
+        "Tahoma",
+        "Verdana",
+        "Times New Roman"
+    ]
+    .forEach(
+        name => {
+
+            const option =
+            document.createElement(
+                "option"
+            );
+
+
+            option.value =
+            name;
+
+
+            option.textContent =
+            name;
+
+
+            font.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    font.value =
+    format.fontFamily;
+
+
+    fontRow.appendChild(
+        fontLabel
+    );
+
+
+    fontRow.appendChild(
+        font
+    );
+
+
+    section.appendChild(
+        fontRow
+    );
+
+
+    /*
+       FONT SIZE
+    */
+
+    const sizeRow =
+    document.createElement(
+        "div"
+    );
+
+
+    sizeRow.className =
+    "form-row";
+
+
+    const sizeLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    sizeLabel.textContent =
+    "Cỡ chữ";
+
+
+    const size =
+    document.createElement(
+        "input"
+    );
+
+
+    size.type =
+    "number";
+
+
+    size.min =
+    "8";
+
+
+    size.max =
+    "48";
+
+
+    size.value =
+    format.fontSize;
+
+
+    sizeRow.appendChild(
+        sizeLabel
+    );
+
+
+    sizeRow.appendChild(
+        size
+    );
+
+
+    section.appendChild(
+        sizeRow
+    );
+
+
+    /*
+       CHECKBOX
+    */
+
+    const checks =
+    document.createElement(
+        "div"
+    );
+
+
+    checks.className =
+    "format-checks";
+
+
+    const boldLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    const bold =
+    document.createElement(
+        "input"
+    );
+
+
+    bold.type =
+    "checkbox";
+
+
+    bold.checked =
+    !!format.bold;
+
+
+    boldLabel.appendChild(
+        bold
+    );
+
+
+    boldLabel.appendChild(
+        document.createTextNode(
+            "Đậm"
+        )
+    );
+
+
+    const italicLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    const italic =
+    document.createElement(
+        "input"
+    );
+
+
+    italic.type =
+    "checkbox";
+
+
+    italic.checked =
+    !!format.italic;
+
+
+    italicLabel.appendChild(
+        italic
+    );
+
+
+    italicLabel.appendChild(
+        document.createTextNode(
+            "Nghiêng"
+        )
+    );
+
+
+    const wrapLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    const wrap =
+    document.createElement(
+        "input"
+    );
+
+
+    wrap.type =
+    "checkbox";
+
+
+    wrap.checked =
+    !!format.wrap;
+
+
+    wrapLabel.appendChild(
+        wrap
+    );
+
+
+    wrapLabel.appendChild(
+        document.createTextNode(
+            "Xuống dòng"
+        )
+    );
+
+
+    checks.appendChild(
+        boldLabel
+    );
+
+
+    checks.appendChild(
+        italicLabel
+    );
+
+
+    checks.appendChild(
+        wrapLabel
+    );
+
+
+    section.appendChild(
+        checks
+    );
+
+
+    /*
+       TEXT COLOR
+    */
+
+    const textColorRow =
+    document.createElement(
+        "div"
+    );
+
+
+    textColorRow.className =
+    "color-row";
+
+
+    const textColorLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    textColorLabel.textContent =
+    "Màu chữ";
+
+
+    const textColor =
+    document.createElement(
+        "input"
+    );
+
+
+    textColor.type =
+    "color";
+
+
+    textColor.className =
+    "color-input";
+
+
+    textColor.value =
+    validColor(format.color)
+        ? format.color
+        : "#111111";
+
+
+    textColorRow.appendChild(
+        textColorLabel
+    );
+
+
+    textColorRow.appendChild(
+        textColor
+    );
+
+
+    section.appendChild(
+        textColorRow
+    );
+
+
+    /*
+       BACKGROUND
+    */
+
+    const backgroundRow =
+    document.createElement(
+        "div"
+    );
+
+
+    backgroundRow.className =
+    "color-row";
+
+
+    const backgroundLabel =
+    document.createElement(
+        "label"
+    );
+
+
+    backgroundLabel.textContent =
+    "Màu nền";
+
+
+    const background =
+    document.createElement(
+        "input"
+    );
+
+
+    background.type =
+    "color";
+
+
+    background.className =
+    "color-input";
+
+
+    background.value =
+    validColor(format.background)
+        ? format.background
+        : "#ffffff";
+
+
+    backgroundRow.appendChild(
+        backgroundLabel
+    );
+
+
+    backgroundRow.appendChild(
+        background
+    );
+
+
+    section.appendChild(
+        backgroundRow
+    );
+
+
+    /*
+       APPLY
+    */
+
+    const apply =
+    document.createElement(
+        "button"
+    );
+
+
+    apply.className =
+    "menu-button";
+
+
+    apply.style.width =
+    "100%";
+
+
+    apply.textContent =
+    "Áp dụng định dạng";
+
+
+    apply.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            columnFormats[index] = {
+
+                align:
+                align.value,
+
+                fontFamily:
+                font.value,
+
+                fontSize:
+                Number(
+                    size.value
+                ) || 14,
+
+                bold:
+                bold.checked,
+
+                italic:
+                italic.checked,
+
+                wrap:
+                wrap.checked,
+
+                color:
+                textColor.value,
+
+                background:
+                background.value
+
+            };
+
+
+            saveState();
+
+
+            /*
+               Chỉ body.
+               Không render header.
+            */
+
+            renderBody();
+
+            updateHeaderStates();
+
+        }
+    );
+
+
+    section.appendChild(
+        apply
+    );
+
+
+    return section;
+}
+
+
+/* =========================================================
+   COLOR VALID
+========================================================= */
+
+function validColor(value){
+
+    return (
+        typeof value === "string" &&
+        /^#[0-9a-fA-F]{6}$/.test(value)
+    );
+}
+
+
+/* =========================================================
+   REFRESH OPEN MENU
 ========================================================= */
 
 function refreshOpenFilterMenu(
     preserveSearch = true
-) {
+){
 
-    if (
+    if(
         openFilterIndex === null ||
         !filterMenuElement
-    ) {
+    ){
+
         return;
     }
 
+
     const index =
-        openFilterIndex;
+    openFilterIndex;
 
-    const currentSearch =
-        filterValueSearch;
 
-    renderFilterMenuContent(
+    const oldSearch =
+    filterValueSearch;
+
+
+    renderFilterMenu(
         index
     );
 
-    if (preserveSearch) {
+
+    if(preserveSearch){
+
         filterValueSearch =
-            currentSearch;
+        oldSearch;
+
 
         const input =
-            filterMenuElement.querySelector(
-                ".filter-values-search"
-            );
+        filterMenuElement.querySelector(
+            ".filter-search"
+        );
 
-        if (input) {
+
+        if(input){
+
             input.value =
-                currentSearch;
+            oldSearch;
         }
+
 
         renderFilterValuesOnly(
             index
@@ -2728,910 +4961,526 @@ function refreshOpenFilterMenu(
    CLOSE FILTER
 ========================================================= */
 
-function closeFilterMenu() {
+function closeFilterMenu(){
 
-    if (filterMenuElement) {
+    if(
+        filterMenuElement
+    ){
 
         filterMenuElement.remove();
 
         filterMenuElement =
-            null;
+        null;
     }
 
+
     openFilterIndex =
-        null;
+    null;
+
 
     filterValueSearch =
-        "";
+    "";
 }
 
 
 /* =========================================================
-   FORMAT SECTION
+   RENAME PROMPT
 ========================================================= */
 
-function createFormatSection(index) {
+function openRenamePrompt(index){
 
-    const section =
-        document.createElement("div");
-
-    section.className =
-        "format-section";
-
-
-    const title =
-        document.createElement("div");
-
-    title.className =
-        "format-title";
-
-    title.textContent =
-        "Định dạng cột";
-
-    section.appendChild(title);
-
-
-    const format =
-        getColumnFormat(index);
-
-
-    /*
-       Align
-    */
-
-    const alignRow =
-        document.createElement("div");
-
-    alignRow.className =
-        "format-row";
-
-    const alignLabel =
-        document.createElement("label");
-
-    alignLabel.textContent =
-        "Căn lề";
-
-    const align =
-        document.createElement("select");
-
-    [
-        ["left", "Trái"],
-        ["center", "Giữa"],
-        ["right", "Phải"]
-    ].forEach(([value, text]) => {
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            value;
-
-        option.textContent =
-            text;
-
-        align.appendChild(
-            option
-        );
-    });
-
-    align.value =
-        format.align;
-
-    alignRow.appendChild(
-        alignLabel
-    );
-
-    alignRow.appendChild(
-        align
-    );
-
-    section.appendChild(
-        alignRow
-    );
-
-
-    /*
-       Font
-    */
-
-    const fontRow =
-        document.createElement("div");
-
-    fontRow.className =
-        "format-row";
-
-    const fontLabel =
-        document.createElement("label");
-
-    fontLabel.textContent =
-        "Font";
-
-    const font =
-        document.createElement("select");
-
-    [
-        "Arial",
-        "Calibri",
-        "Tahoma",
-        "Verdana",
-        "Times New Roman"
-    ].forEach(name => {
-
-        const option =
-            document.createElement("option");
-
-        option.value =
-            name;
-
-        option.textContent =
-            name;
-
-        font.appendChild(
-            option
-        );
-    });
-
-    font.value =
-        format.fontFamily;
-
-    fontRow.appendChild(
-        fontLabel
-    );
-
-    fontRow.appendChild(
-        font
-    );
-
-    section.appendChild(
-        fontRow
-    );
-
-
-    /*
-       Size
-    */
-
-    const sizeRow =
-        document.createElement("div");
-
-    sizeRow.className =
-        "format-row";
-
-    const sizeLabel =
-        document.createElement("label");
-
-    sizeLabel.textContent =
-        "Cỡ chữ";
-
-    const size =
-        document.createElement("input");
-
-    size.type =
-        "number";
-
-    size.min =
-        "8";
-
-    size.max =
-        "48";
-
-    size.value =
-        format.fontSize;
-
-    sizeRow.appendChild(
-        sizeLabel
-    );
-
-    sizeRow.appendChild(
-        size
-    );
-
-    section.appendChild(
-        sizeRow
-    );
-
-
-    /*
-       Checkboxes
-    */
-
-    const checks =
-        document.createElement("div");
-
-    checks.className =
-        "format-checks";
-
-
-    const boldLabel =
-        document.createElement("label");
-
-    const bold =
-        document.createElement("input");
-
-    bold.type =
-        "checkbox";
-
-    bold.checked =
-        !!format.bold;
-
-    boldLabel.appendChild(
-        bold
-    );
-
-    boldLabel.appendChild(
-        document.createTextNode(
-            " Đậm"
-        )
-    );
-
-
-    const italicLabel =
-        document.createElement("label");
-
-    const italic =
-        document.createElement("input");
-
-    italic.type =
-        "checkbox";
-
-    italic.checked =
-        !!format.italic;
-
-    italicLabel.appendChild(
-        italic
-    );
-
-    italicLabel.appendChild(
-        document.createTextNode(
-            " Nghiêng"
-        )
-    );
-
-
-    const wrapLabel =
-        document.createElement("label");
-
-    const wrap =
-        document.createElement("input");
-
-    wrap.type =
-        "checkbox";
-
-    wrap.checked =
-        !!format.wrap;
-
-    wrapLabel.appendChild(
-        wrap
-    );
-
-    wrapLabel.appendChild(
-        document.createTextNode(
-            " Xuống dòng"
-        )
-    );
-
-
-    checks.appendChild(
-        boldLabel
-    );
-
-    checks.appendChild(
-        italicLabel
-    );
-
-    checks.appendChild(
-        wrapLabel
-    );
-
-    section.appendChild(
-        checks
-    );
-
-
-    /*
-       Text color
-    */
-
-    const colorRow =
-        document.createElement("div");
-
-    colorRow.className =
-        "format-row";
-
-    const colorLabel =
-        document.createElement("label");
-
-    colorLabel.textContent =
-        "Màu chữ";
-
-    const color =
-        document.createElement("input");
-
-    color.type =
-        "color";
-
-    color.className =
-        "color-input";
-
-    color.value =
-        isValidColor(
-            format.color
-        )
-            ? format.color
-            : "#111111";
-
-    colorRow.appendChild(
-        colorLabel
-    );
-
-    colorRow.appendChild(
-        color
-    );
-
-    section.appendChild(
-        colorRow
-    );
-
-
-    /*
-       Background
-    */
-
-    const backgroundRow =
-        document.createElement("div");
-
-    backgroundRow.className =
-        "format-row";
-
-    const backgroundLabel =
-        document.createElement("label");
-
-    backgroundLabel.textContent =
-        "Nền";
-
-    const background =
-        document.createElement("input");
-
-    background.type =
-        "color";
-
-    background.className =
-        "color-input";
-
-    background.value =
-        isValidColor(
-            format.background
-        )
-            ? format.background
-            : "#ffffff";
-
-    backgroundRow.appendChild(
-        backgroundLabel
-    );
-
-    backgroundRow.appendChild(
-        background
-    );
-
-    section.appendChild(
-        backgroundRow
-    );
-
-
-    /*
-       Apply
-    */
-
-    const apply =
-        document.createElement("button");
-
-    apply.textContent =
-        "Áp dụng định dạng";
-
-    apply.style.width =
-        "100%";
-
-    apply.style.marginTop =
-        "8px";
-
-    apply.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            columnFormats[index] = {
-
-                align:
-                    align.value,
-
-                fontFamily:
-                    font.value,
-
-                fontSize:
-                    Number(size.value) || 14,
-
-                bold:
-                    bold.checked,
-
-                italic:
-                    italic.checked,
-
-                wrap:
-                    wrap.checked,
-
-                color:
-                    color.value,
-
-                background:
-                    background.value
-            };
-
-            saveState();
-
-            renderBody();
-
-            updateHeaderStates();
-        }
-    );
-
-    section.appendChild(
-        apply
-    );
-
-    return section;
-}
-
-
-/* =========================================================
-   COLOR VALIDATION
-========================================================= */
-
-function isValidColor(value) {
-
-    return (
-        typeof value === "string" &&
-        /^#[0-9a-fA-F]{6}$/.test(value)
-    );
-}
-
-
-/* =========================================================
-   SORT DIALOG
-========================================================= */
-
-function openSortDialog(
-    index,
-    anchor
-) {
-
-    closeFilterMenu();
-
-    const menu =
-        document.createElement("div");
-
-    menu.className =
-        "filter-menu";
-
-    document.body.appendChild(
-        menu
-    );
-
-
-    const inner =
-        document.createElement("div");
-
-    inner.className =
-        "filter-menu-inner";
-
-
-    const title =
-        document.createElement("div");
-
-    title.className =
-        "filter-menu-title";
-
-    title.textContent =
-        `Sắp xếp: ${getDisplayHeader(headers[index])}`;
-
-    inner.appendChild(title);
+    const original =
+    headers[index];
 
 
     const current =
-        sorts[index] || {
-            priority: "",
-            direction: "asc"
-        };
-
-
-    /*
-       Priority
-    */
-
-    const priorityRow =
-        document.createElement("div");
-
-    priorityRow.className =
-        "format-row";
-
-    const priorityLabel =
-        document.createElement("label");
-
-    priorityLabel.textContent =
-        "Thứ tự";
-
-    const priority =
-        document.createElement("input");
-
-    priority.type =
-        "number";
-
-    priority.value =
-        current.priority ?? "";
-
-    priorityRow.appendChild(
-        priorityLabel
-    );
-
-    priorityRow.appendChild(
-        priority
-    );
-
-    inner.appendChild(
-        priorityRow
+    getDisplayHeader(
+        original
     );
 
 
-    /*
-       Direction
-    */
-
-    const directionRow =
-        document.createElement("div");
-
-    directionRow.className =
-        "format-row";
-
-    const directionLabel =
-        document.createElement("label");
-
-    directionLabel.textContent =
-        "Chiều";
-
-    const direction =
-        document.createElement("select");
-
-    const asc =
-        document.createElement("option");
-
-    asc.value =
-        "asc";
-
-    asc.textContent =
-        "Tăng dần";
-
-    const desc =
-        document.createElement("option");
-
-    desc.value =
-        "desc";
-
-    desc.textContent =
-        "Giảm dần";
-
-    direction.appendChild(
-        asc
-    );
-
-    direction.appendChild(
-        desc
-    );
-
-    direction.value =
-        current.direction || "asc";
-
-    directionRow.appendChild(
-        directionLabel
-    );
-
-    directionRow.appendChild(
-        direction
-    );
-
-    inner.appendChild(
-        directionRow
+    const newName =
+    prompt(
+        "Tên mới của cột:",
+        current
     );
 
 
-    /*
-       Buttons
-    */
+    if(
+        newName === null
+    ){
 
-    const footer =
-        document.createElement("div");
-
-    footer.className =
-        "filter-footer";
+        return;
+    }
 
 
-    const clear =
-        document.createElement("button");
-
-    clear.textContent =
-        "Xóa sort";
-
-    clear.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            delete sorts[index];
-
-            saveState();
-
-            renderBody();
-
-            updateHeaderStates();
-
-            menu.remove();
-        }
-    );
+    const trimmed =
+    newName.trim();
 
 
-    const apply =
-        document.createElement("button");
+    if(
+        trimmed === ""
+    ){
 
-    apply.textContent =
-        "Áp dụng";
+        delete renamedHeaders[
+            original
+        ];
 
-    apply.addEventListener(
-        "click",
-        event => {
+    }
+    else{
 
-            event.preventDefault();
-            event.stopPropagation();
-
-            const p =
-                Number(priority.value);
-
-            if (
-                priority.value.trim() === ""
-            ) {
-
-                delete sorts[index];
-
-            } else {
-
-                sorts[index] = {
-
-                    priority: p,
-
-                    direction:
-                        direction.value
-                };
-            }
-
-            saveState();
-
-            renderBody();
-
-            updateHeaderStates();
-
-            menu.remove();
-        }
-    );
+        renamedHeaders[
+            original
+        ] =
+        trimmed;
+    }
 
 
-    footer.appendChild(
-        clear
-    );
-
-    footer.appendChild(
-        apply
-    );
-
-    inner.appendChild(
-        footer
-    );
+    saveState();
 
 
-    menu.appendChild(
-        inner
-    );
-
-
-    /*
-       Position
-    */
-
-    const rect =
-        anchor.getBoundingClientRect();
-
-    let left =
-        rect.left;
-
-    let top =
-        rect.bottom + 4;
-
-    requestAnimationFrame(() => {
-
-        const width =
-            menu.offsetWidth;
-
-        const height =
-            menu.offsetHeight;
-
-        if (
-            left + width >
-            window.innerWidth - 10
-        ) {
-            left =
-                window.innerWidth -
-                width -
-                10;
-        }
-
-        if (
-            top + height >
-            window.innerHeight - 10
-        ) {
-            top =
-                rect.top -
-                height -
-                4;
-        }
-
-        menu.style.left =
-            `${Math.max(10, left)}px`;
-
-        menu.style.top =
-            `${Math.max(10, top)}px`;
-    });
+    renderTable();
 }
 
 
 /* =========================================================
-   APPLY FREEZE COLUMNS
-   CRITICAL FIX
+   SETTINGS RENAME LIST
 ========================================================= */
 
-function applyFreezeColumns() {
+function renderRenameList(){
+
+    renameList.innerHTML =
+    "";
+
+
+    headers.forEach(
+        (header,index) => {
+
+            if(
+                HIDDEN_COLUMNS.has(
+                    header
+                )
+            ){
+
+                return;
+            }
+
+
+            const item =
+            document.createElement(
+                "div"
+            );
+
+
+            item.className =
+            "rename-item";
+
+
+            const original =
+            document.createElement(
+                "div"
+            );
+
+
+            original.className =
+            "rename-original";
+
+
+            original.title =
+            header;
+
+
+            original.textContent =
+            header;
+
+
+            const input =
+            document.createElement(
+                "input"
+            );
+
+
+            input.type =
+            "text";
+
+
+            input.value =
+            getDisplayHeader(
+                header
+            );
+
+
+            input.dataset.index =
+            String(index);
+
+
+            input.addEventListener(
+                "change",
+                () => {
+
+                    const value =
+                    input.value.trim();
+
+
+                    if(
+                        value === "" ||
+                        value === header
+                    ){
+
+                        delete renamedHeaders[
+                            header
+                        ];
+
+                    }
+                    else{
+
+                        renamedHeaders[
+                            header
+                        ] =
+                        value;
+                    }
+
+                }
+            );
+
+
+            item.appendChild(
+                original
+            );
+
+
+            item.appendChild(
+                input
+            );
+
+
+            renameList.appendChild(
+                item
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   SETTINGS OPEN
+========================================================= */
+
+document
+.getElementById(
+    "settingsBtn"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        freezeCountInput.value =
+        freezeCount;
+
+
+        /*
+           Nếu đã load dữ liệu.
+        */
+
+        renderRenameList();
+
+
+        /*
+           Auto refresh.
+        */
+
+        if(
+            autoRefreshTimer
+        ){
+
+            /*
+               Không cần đọc ngược timer.
+            */
+        }
+
+
+        settingsOverlay.style.display =
+        "block";
+    }
+);
+
+
+/* =========================================================
+   SETTINGS SAVE
+========================================================= */
+
+document
+.getElementById(
+    "saveSettingsBtn"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        /*
+           Freeze
+        */
+
+        const requested =
+        Number(
+            freezeCountInput.value
+        );
+
+
+        freezeCount =
+        Math.max(
+            0,
+            Math.min(
+                requested,
+                getVisibleHeaderIndexes().length
+            )
+        );
+
+
+        /*
+           Rename
+        */
+
+        renameList
+        .querySelectorAll(
+            ".rename-item input"
+        )
+        .forEach(
+            input => {
+
+                const index =
+                Number(
+                    input.dataset.index
+                );
+
+
+                const original =
+                headers[index];
+
+
+                const value =
+                input.value.trim();
+
+
+                if(
+                    value === "" ||
+                    value === original
+                ){
+
+                    delete renamedHeaders[
+                        original
+                    ];
+
+                }
+                else{
+
+                    renamedHeaders[
+                        original
+                    ] =
+                    value;
+                }
+
+            }
+        );
+
+
+        saveState();
+
+
+        renderTable();
+
+
+        setupAutoRefresh();
+
+
+        settingsOverlay.style.display =
+        "none";
+    }
+);
+
+
+/* =========================================================
+   SETTINGS CLOSE
+========================================================= */
+
+document
+.getElementById(
+    "closeSettingsBtn"
+)
+.addEventListener(
+    "click",
+    () => {
+
+        settingsOverlay.style.display =
+        "none";
+    }
+);
+
+
+settingsOverlay.addEventListener(
+    "click",
+    event => {
+
+        if(
+            event.target ===
+            settingsOverlay
+        ){
+
+            settingsOverlay.style.display =
+            "none";
+        }
+    }
+);
+
+
+/* =========================================================
+   FREEZE COLUMNS
+========================================================= */
+
+function applyFreezeColumns(){
 
     /*
-       Xóa trạng thái cũ
+       Xóa trạng thái cũ.
     */
 
     document
-        .querySelectorAll(
-            ".frozen-column"
-        )
-        .forEach(cell => {
+    .querySelectorAll(
+        ".frozen-column"
+    )
+    .forEach(
+        cell => {
 
             cell.classList.remove(
                 "frozen-column"
             );
 
+
             cell.classList.remove(
                 "frozen-last"
             );
 
-            cell.style.left =
-                "";
 
-        });
+            cell.style.left =
+            "";
+
+        }
+    );
 
 
     const visibleIndexes =
-        getVisibleHeaderIndexes();
+    getVisibleHeaderIndexes();
 
 
     const count =
-        Math.max(
-            0,
-            Math.min(
-                Number(freezeCount) || 0,
-                visibleIndexes.length
-            )
-        );
+    Math.max(
+        0,
+        Math.min(
+            Number(freezeCount) || 0,
+            visibleIndexes.length
+        )
+    );
 
 
-    if (count === 0) {
+    if(
+        count === 0
+    ){
+
         return;
     }
 
 
-    /*
-       Lấy đúng các cột đầu tiên đang hiển thị.
-    */
-
     const frozenIndexes =
-        visibleIndexes.slice(
-            0,
-            count
-        );
+    visibleIndexes.slice(
+        0,
+        count
+    );
 
 
-    let left =
-        0;
+    let left = 0;
 
 
     frozenIndexes.forEach(
-        (index, position) => {
+        (index,position) => {
 
             const width =
-                getColumnWidth(index);
+            getColumnWidth(
+                index
+            );
 
 
             const cells =
-                document.querySelectorAll(
-                    `[data-column="${index}"]`
-                );
+            document.querySelectorAll(
+                `[data-column="${index}"]`
+            );
 
 
-            cells.forEach(cell => {
-
-                cell.classList.add(
-                    "frozen-column"
-                );
-
-                /*
-                   Cột frozen cuối cùng
-                */
-
-                if (
-                    position ===
-                    frozenIndexes.length - 1
-                ) {
+            cells.forEach(
+                cell => {
 
                     cell.classList.add(
-                        "frozen-last"
+                        "frozen-column"
                     );
-                }
 
 
-                cell.style.left =
+                    if(
+                        position ===
+                        frozenIndexes.length - 1
+                    ){
+
+                        cell.classList.add(
+                            "frozen-last"
+                        );
+                    }
+
+
+                    cell.style.left =
                     `${left}px`;
 
 
-                /*
-                   QUAN TRỌNG:
-                   Header phải giữ top riêng.
-                */
+                    /*
+                       Đảm bảo header có top
+                       độc lập với left.
+                    */
 
-                if (
-                    cell.classList.contains(
-                        "header-cell"
-                    )
-                ) {
+                    if(
+                        cell.classList.contains(
+                            "header-cell"
+                        )
+                    ){
 
-                    cell.style.top =
+                        cell.style.top =
                         "0px";
 
-                    cell.style.zIndex =
-                        "600";
+                        cell.style.zIndex =
+                        "1000";
 
-                } else if (
-                    cell.classList.contains(
-                        "search-cell"
-                    )
-                ) {
+                    }
 
-                    cell.style.top =
+
+                    else if(
+                        cell.classList.contains(
+                            "search-cell"
+                        )
+                    ){
+
+                        cell.style.top =
                         "38px";
 
-                    cell.style.zIndex =
-                        "599";
+                        cell.style.zIndex =
+                        "999";
 
-                } else {
+                    }
 
-                    cell.style.zIndex =
+
+                    else{
+
+                        cell.style.zIndex =
                         "100";
-                }
+                    }
 
-            });
+                }
+            );
 
 
             left += width;
@@ -3641,108 +5490,131 @@ function applyFreezeColumns() {
 
 
 /* =========================================================
-   RESIZE
+   RESIZE START
 ========================================================= */
 
 function startResize(
     event,
     index
-) {
+){
 
     resizeState = {
 
         index,
 
         startX:
-            event.clientX,
+        event.clientX,
 
         startWidth:
-            getColumnWidth(index)
+        getColumnWidth(index)
+
     };
 
 
     document.body.style.cursor =
-        "col-resize";
+    "col-resize";
+
 
     document.body.style.userSelect =
-        "none";
+    "none";
 }
 
+
+/* =========================================================
+   RESIZE MOVE
+========================================================= */
 
 document.addEventListener(
     "mousemove",
     event => {
 
-        if (!resizeState) {
+        if(
+            !resizeState
+        ){
+
             return;
         }
 
-        const delta =
-            event.clientX -
-            resizeState.startX;
 
-        const newWidth =
-            Math.max(
-                30,
-                resizeState.startWidth +
-                delta
-            );
+        const delta =
+        event.clientX -
+        resizeState.startX;
+
+
+        const width =
+        Math.max(
+            30,
+            resizeState.startWidth +
+            delta
+        );
+
 
         columnWidths[
             resizeState.index
         ] =
-            newWidth;
+        width;
 
 
         /*
-           Update toàn bộ cell của cột
-           mà KHÔNG render lại header.
+           Không render table.
+           Chỉ update width.
         */
 
         document
-            .querySelectorAll(
-                `[data-column="${resizeState.index}"]`
-            )
-            .forEach(cell => {
+        .querySelectorAll(
+            `[data-column="${resizeState.index}"]`
+        )
+        .forEach(
+            cell => {
 
                 cell.style.width =
-                    `${newWidth}px`;
+                `${width}px`;
 
                 cell.style.minWidth =
-                    `${newWidth}px`;
+                `${width}px`;
 
                 cell.style.maxWidth =
-                    `${newWidth}px`;
-            });
+                `${width}px`;
+            }
+        );
 
-
-        /*
-           Freeze cần tính lại left
-        */
 
         applyFreezeColumns();
+
     }
 );
 
+
+/* =========================================================
+   RESIZE END
+========================================================= */
 
 document.addEventListener(
     "mouseup",
     () => {
 
-        if (!resizeState) {
+        if(
+            !resizeState
+        ){
+
             return;
         }
 
+
         saveState();
 
+
         resizeState =
-            null;
+        null;
+
 
         document.body.style.cursor =
-            "";
+        "";
+
 
         document.body.style.userSelect =
-            "";
+        "";
+
     }
 );
 
@@ -3751,152 +5623,29 @@ document.addEventListener(
    RESET
 ========================================================= */
 
-function resetUserState() {
+function resetUserState(){
 
     searches = {};
+
     sorts = {};
 
     /*
-       Xóa filter người dùng nhưng
-       giữ default filter.
+       Giữ default filter.
     */
 
     filters = {};
 
     defaultFiltersInitialized =
-        false;
+    false;
+
 
     initializeDefaults();
 
+
     saveState();
 
+
     renderTable();
-}
-
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-const settingsOverlay =
-    document.getElementById(
-        "settingsOverlay"
-    );
-
-const freezeCountInput =
-    document.getElementById(
-        "freezeCountInput"
-    );
-
-const autoRefreshSelect =
-    document.getElementById(
-        "autoRefreshSelect"
-    );
-
-
-document
-    .getElementById("settingsBtn")
-    .addEventListener(
-        "click",
-        () => {
-
-            freezeCountInput.value =
-                freezeCount;
-
-            settingsOverlay.style.display =
-                "block";
-        }
-    );
-
-
-document
-    .getElementById("closeSettingsBtn")
-    .addEventListener(
-        "click",
-        () => {
-
-            const value =
-                Number(
-                    freezeCountInput.value
-                );
-
-            freezeCount =
-                Math.max(
-                    0,
-                    Math.min(
-                        value,
-                        getVisibleHeaderIndexes().length
-                    )
-                );
-
-            saveState();
-
-            renderTable();
-
-            settingsOverlay.style.display =
-                "none";
-        }
-    );
-
-
-settingsOverlay.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            settingsOverlay
-        ) {
-
-            settingsOverlay.style.display =
-                "none";
-        }
-    }
-);
-
-
-/* =========================================================
-   AUTO REFRESH
-========================================================= */
-
-function setupAutoRefresh() {
-
-    if (autoRefreshTimer) {
-
-        clearInterval(
-            autoRefreshTimer
-        );
-
-        autoRefreshTimer =
-            null;
-    }
-
-    const value =
-        Number(
-            autoRefreshSelect.value
-        );
-
-    if (!value) {
-        return;
-    }
-
-    const minutes =
-        value === 1
-            ? 5
-            : value === 2
-                ? 10
-                : 30;
-
-
-    autoRefreshTimer =
-        setInterval(
-            async () => {
-
-                await loadData();
-
-            },
-            minutes * 60 * 1000
-        );
 }
 
 
@@ -3905,14 +5654,16 @@ function setupAutoRefresh() {
 ========================================================= */
 
 document
-    .getElementById("refreshBtn")
-    .addEventListener(
-        "click",
-        async () => {
+.getElementById(
+    "refreshBtn"
+)
+.addEventListener(
+    "click",
+    async () => {
 
-            await loadData();
-        }
-    );
+        await loadData();
+    }
+);
 
 
 /* =========================================================
@@ -3920,18 +5671,68 @@ document
 ========================================================= */
 
 document
-    .getElementById("resetBtn")
-    .addEventListener(
-        "click",
-        () => {
+.getElementById(
+    "resetBtn"
+)
+.addEventListener(
+    "click",
+    () => {
 
-            resetUserState();
-        }
-    );
+        resetUserState();
+    }
+);
 
 
 /* =========================================================
-   AUTO REFRESH SELECT
+   AUTO REFRESH
+========================================================= */
+
+function setupAutoRefresh(){
+
+    if(
+        autoRefreshTimer
+    ){
+
+        clearInterval(
+            autoRefreshTimer
+        );
+
+
+        autoRefreshTimer =
+        null;
+    }
+
+
+    const minutes =
+    Number(
+        autoRefreshSelect.value
+    );
+
+
+    if(
+        !minutes
+    ){
+
+        return;
+    }
+
+
+    autoRefreshTimer =
+    setInterval(
+        async () => {
+
+            await loadData();
+
+        },
+        minutes *
+        60 *
+        1000
+    );
+}
+
+
+/* =========================================================
+   AUTO REFRESH CHANGE
 ========================================================= */
 
 autoRefreshSelect.addEventListener(
@@ -3944,65 +5745,65 @@ autoRefreshSelect.addEventListener(
 
 
 /* =========================================================
-   CLICK OUTSIDE FILTER MENU
+   CLICK OUTSIDE MENU
 ========================================================= */
 
 document.addEventListener(
     "mousedown",
     event => {
 
-        if (!filterMenuElement) {
+        if(
+            !filterMenuElement
+        ){
+
             return;
         }
 
-        if (
+
+        if(
             filterMenuElement.contains(
                 event.target
             )
-        ) {
+        ){
+
             return;
         }
 
-        if (
+
+        if(
             event.target.closest(
-                ".filter-button"
+                ".header-button"
             )
-        ) {
+        ){
+
             return;
         }
 
-        if (
-            event.target.closest(
-                ".sort-button"
-            )
-        ) {
-            return;
-        }
 
         closeFilterMenu();
+
     }
 );
 
 
 /* =========================================================
-   SCROLL
-   Sticky header nằm trong chính table-wrapper.
-   Không re-render header khi scroll.
+   ESC
 ========================================================= */
 
-tableWrapper.addEventListener(
-    "scroll",
-    () => {
+document.addEventListener(
+    "keydown",
+    event => {
 
-        /*
-           Không làm gì cả.
-           CSS sticky tự xử lý.
-           Điều này rất quan trọng để header
-           không bị render lại / mất sticky.
-        */
-    },
-    {
-        passive: true
+        if(
+            event.key === "Escape"
+        ){
+
+            closeFilterMenu();
+
+
+            settingsOverlay.style.display =
+            "none";
+        }
     }
 );
 
@@ -4017,18 +5818,21 @@ window.addEventListener(
 
         applyFreezeColumns();
 
-        if (
+
+        if(
             openFilterIndex !== null &&
             filterMenuElement
-        ) {
+        ){
 
             const header =
-                thead.querySelector(
-                    `.header-cell[data-column="${openFilterIndex}"]`
-                );
+            thead.querySelector(
+                `.header-cell[data-column="${openFilterIndex}"]`
+            );
 
-            if (header) {
-                positionFilterMenu(
+
+            if(header){
+
+                positionMenu(
                     header
                 );
             }
@@ -4038,7 +5842,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   INITIALIZE
+   INITIAL LOAD
 ========================================================= */
 
 loadState();
