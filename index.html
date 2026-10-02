@@ -1,33 +1,2563 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Đinh Việt Hùng</title>
+<title>REPORT</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 100px;
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f5f6f8;
+        color: #222;
+    }
+
+    body {
+        overflow: hidden;
+    }
+
+    /* =========================
+       TOP BAR
+       ========================= */
+
+    .topbar {
+        height: 58px;
+        background: #ffffff;
+        border-bottom: 1px solid #d9d9d9;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        padding: 0 14px;
+
+        position: relative;
+        z-index: 1000;
+    }
+
+    .title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-right: 10px;
+        white-space: nowrap;
+    }
+
+    .top-button {
+        height: 34px;
+        padding: 0 14px;
+
+        border: 1px solid #cfcfcf;
+        border-radius: 5px;
+
+        background: white;
+        cursor: pointer;
+
+        font-size: 14px;
+    }
+
+    .top-button:hover {
+        background: #f2f2f2;
+    }
+
+    .top-button.primary {
+        background: #1976d2;
+        color: white;
+        border-color: #1976d2;
+    }
+
+    .top-button.primary:hover {
+        background: #1565c0;
+    }
+
+    .freeze-control {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        margin-left: auto;
+
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .freeze-control select {
+        height: 34px;
+        border: 1px solid #cfcfcf;
+        border-radius: 5px;
+        padding: 0 8px;
+        background: white;
+    }
+
+    .status {
+        font-size: 12px;
+        color: #666;
+        white-space: nowrap;
+    }
+
+    /* =========================
+       TABLE AREA
+       ========================= */
+
+    .table-wrapper {
+        width: 100%;
+        height: calc(100vh - 58px);
+
+        overflow: auto;
+
+        position: relative;
+
+        background: white;
+    }
+
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+
+        table-layout: fixed;
+
+        width: max-content;
+
+        min-width: 100%;
+    }
+
+    th,
+    td {
+        border-right: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+
+        padding: 7px 9px;
+
+        font-size: 14px;
+
+        white-space: nowrap;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        background: white;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    thead th {
+        position: sticky;
+        top: 0;
+
+        z-index: 50;
+
+        background: #f1f3f5;
+
+        font-weight: 600;
+
+        height: 42px;
+
+        user-select: none;
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 5px;
+
+        width: 100%;
+        height: 100%;
+    }
+
+    .header-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        cursor: pointer;
+    }
+
+    .sort-arrow {
+        flex-shrink: 0;
+
+        font-size: 12px;
+
+        color: #777;
+    }
+
+    /* =========================
+       SEARCH ROW
+       ========================= */
+
+    .search-row th {
+        position: sticky;
+        top: 42px;
+
+        z-index: 49;
+
+        background: white;
+
+        padding: 5px 6px;
+
+        height: 42px;
+    }
+
+    .search-box {
+        width: 100%;
+        height: 30px;
+
+        border: 1px solid #cfcfcf;
+        border-radius: 4px;
+
+        padding: 0 7px;
+
+        font-size: 13px;
+
+        outline: none;
+    }
+
+    .search-box:focus {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 1px #1976d2;
+    }
+
+    /* =========================
+       FILTER BUTTON
+       ========================= */
+
+    .filter-button {
+        flex-shrink: 0;
+
+        width: 22px;
+        height: 22px;
+
+        border: 0;
+
+        background: transparent;
+
+        cursor: pointer;
+
+        font-size: 14px;
+
+        border-radius: 3px;
+    }
+
+    .filter-button:hover {
+        background: #ddd;
+    }
+
+    .filter-button.active {
+        color: #1976d2;
+        font-weight: bold;
+    }
+
+    /* =========================
+       COLUMN RESIZE
+       ========================= */
+
+    .resize-handle {
+        position: absolute;
+
+        top: 0;
+        right: -3px;
+
+        width: 7px;
+        height: 100%;
+
+        cursor: col-resize;
+
+        z-index: 100;
+    }
+
+    .resize-handle:hover {
+        background: rgba(25, 118, 210, 0.25);
+    }
+
+    /* =========================
+       FILTER MENU
+       ========================= */
+
+    .filter-menu {
+        position: fixed;
+
+        z-index: 99999;
+
+        width: 270px;
+
+        max-height: 440px;
+
+        background: white;
+
+        border: 1px solid #cfcfcf;
+
+        border-radius: 6px;
+
+        box-shadow: 0 5px 20px rgba(0,0,0,0.18);
+
+        display: none;
+
+        overflow: hidden;
+    }
+
+    .filter-menu.show {
+        display: block;
+    }
+
+    .filter-top {
+        padding: 8px;
+
+        border-bottom: 1px solid #ddd;
+
+        display: flex;
+
+        gap: 5px;
+    }
+
+    .filter-top button {
+        flex: 1;
+
+        height: 30px;
+
+        background: #f7f7f7;
+
+        border: 1px solid #ccc;
+
+        border-radius: 4px;
+
+        cursor: pointer;
+
+        font-size: 12px;
+    }
+
+    .filter-top button:hover {
+        background: #e9e9e9;
+    }
+
+    .filter-search {
+        width: calc(100% - 16px);
+
+        margin: 8px;
+
+        height: 30px;
+
+        border: 1px solid #ccc;
+
+        border-radius: 4px;
+
+        padding: 0 7px;
+    }
+
+    .filter-values {
+        max-height: 270px;
+
+        overflow-y: auto;
+
+        padding: 4px 8px;
+    }
+
+    .filter-value {
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        min-height: 30px;
+
+        cursor: pointer;
+
+        font-size: 13px;
+    }
+
+    .filter-value:hover {
+        background: #f4f4f4;
+    }
+
+    .filter-value span {
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+    }
+
+    .filter-bottom {
+        display: flex;
+
+        gap: 7px;
+
+        padding: 8px;
+
+        border-top: 1px solid #ddd;
+    }
+
+    .filter-bottom button {
+        flex: 1;
+
+        height: 32px;
+
+        border-radius: 4px;
+
+        cursor: pointer;
+
+        border: 1px solid #ccc;
+
+        background: white;
+    }
+
+    .filter-bottom .apply {
+        background: #1976d2;
+
+        border-color: #1976d2;
+
+        color: white;
+    }
+
+    /* =========================
+       ROWS
+       ========================= */
+
+    tbody tr:hover td {
+        background: #f7fbff;
+    }
+
+    tbody tr:nth-child(even) td {
+        background: #fafafa;
+    }
+
+    tbody tr:nth-child(even):hover td {
+        background: #f7fbff;
+    }
+
+    /* =========================
+       FROZEN COLUMNS
+       ========================= */
+
+    .frozen {
+        position: sticky !important;
+
+        z-index: 40 !important;
+
+        background: white !important;
+    }
+
+    thead .frozen {
+        z-index: 80 !important;
+        background: #f1f3f5 !important;
+    }
+
+    thead .search-row .frozen {
+        z-index: 79 !important;
+        background: white !important;
+    }
+
+    /* =========================
+       LOADING
+       ========================= */
+
+    .loading {
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 200000;
+
+        background: rgba(255,255,255,0.92);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-direction: column;
+
+        gap: 12px;
+
+        font-size: 16px;
+    }
+
+    .loading.hidden {
+        display: none;
+    }
+
+    .spinner {
+        width: 34px;
+        height: 34px;
+
+        border: 4px solid #ddd;
+
+        border-top-color: #1976d2;
+
+        border-radius: 50%;
+
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* =========================
+       EMPTY / ERROR
+       ========================= */
+
+    .message {
+        padding: 40px;
+
+        text-align: center;
+
+        color: #666;
+
+        font-size: 15px;
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 700px) {
+
+        .title {
+            font-size: 16px;
         }
 
-        h1 {
-            font-size: 40px;
+        .status {
+            display: none;
         }
 
-        p {
-            font-size: 20px;
+        .freeze-control {
+            display: none;
         }
-    </style>
+    }
+</style>
 </head>
 
 <body>
 
-    <h1>🎉 Xin chào!</h1>
+<div class="topbar">
 
-    <p>Website đầu tiên của tôi.</p>
+    <div class="title">
+        📊 REPORT
+    </div>
+
+    <button
+        class="top-button primary"
+        id="refreshButton">
+        🔄 Cập nhật dữ liệu
+    </button>
+
+    <button
+        class="top-button"
+        id="clearAllButton">
+        🧹 Xóa bộ lọc
+    </button>
+
+    <div class="freeze-control">
+
+        <span>
+            📌 Cố định cột:
+        </span>
+
+        <select id="freezeSelect">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+        </select>
+
+    </div>
+
+    <div
+        class="status"
+        id="status">
+        Đang tải...
+    </div>
+
+</div>
+
+
+<div
+    class="table-wrapper"
+    id="tableWrapper">
+
+    <table id="dataTable">
+
+        <thead id="tableHead"></thead>
+
+        <tbody id="tableBody"></tbody>
+
+    </table>
+
+</div>
+
+
+<div
+    class="filter-menu"
+    id="filterMenu">
+
+    <div class="filter-top">
+
+        <button id="selectAllButton">
+            Chọn tất cả
+        </button>
+
+        <button id="deselectAllButton">
+            Bỏ chọn
+        </button>
+
+    </div>
+
+    <input
+        type="text"
+        class="filter-search"
+        id="filterSearch"
+        placeholder="Tìm trong danh sách...">
+
+    <div
+        class="filter-values"
+        id="filterValues">
+    </div>
+
+    <div class="filter-bottom">
+
+        <button id="clearFilterButton">
+            Xóa lọc
+        </button>
+
+        <button
+            class="apply"
+            id="applyFilterButton">
+            Áp dụng
+        </button>
+
+    </div>
+
+</div>
+
+
+<div
+    class="loading"
+    id="loading">
+
+    <div class="spinner"></div>
+
+    <div id="loadingText">
+        Đang tải dữ liệu...
+    </div>
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   GOOGLE SHEET
+   ============================================================ */
+
+const SHEET_ID =
+    "19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS";
+
+const SHEET_GID =
+    "616860962";
+
+
+/* ============================================================
+   GOOGLE SHEET CSV URL
+   ============================================================ */
+
+const CSV_URL =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
+
+
+/* ============================================================
+   GLOBAL DATA
+   ============================================================ */
+
+let headers = [];
+
+let originalData = [];
+
+let filteredData = [];
+
+let filters = {};
+
+let searches = {};
+
+let sortState = {
+    column: null,
+    direction: null
+};
+
+let columnWidths = {};
+
+let freezeCount = 0;
+
+let activeFilterColumn = null;
+
+let temporaryFilterValues = new Set();
+
+
+/* ============================================================
+   LOCAL STORAGE
+   ============================================================ */
+
+const STORAGE_KEY =
+    "report_google_sheet_table_v1";
+
+
+function loadSettings() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
+
+        if (!saved) {
+            return;
+        }
+
+        const settings =
+            JSON.parse(saved);
+
+        filters =
+            settings.filters || {};
+
+        searches =
+            settings.searches || {};
+
+        sortState =
+            settings.sortState || {
+                column: null,
+                direction: null
+            };
+
+        columnWidths =
+            settings.columnWidths || {};
+
+        freezeCount =
+            Number(settings.freezeCount || 0);
+
+    } catch (error) {
+
+        console.error(
+            "Không thể đọc cài đặt:",
+            error
+        );
+
+    }
+
+}
+
+
+function saveSettings() {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+
+                filters,
+
+                searches,
+
+                sortState,
+
+                columnWidths,
+
+                freezeCount
+
+            })
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Không thể lưu cài đặt:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   CSV PARSER
+   ============================================================ */
+
+function parseCSV(text) {
+
+    const rows = [];
+
+    let row = [];
+
+    let value = "";
+
+    let insideQuotes = false;
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        const char =
+            text[i];
+
+        const next =
+            text[i + 1];
+
+        if (char === '"') {
+
+            if (
+                insideQuotes &&
+                next === '"'
+            ) {
+
+                value += '"';
+
+                i++;
+
+            } else {
+
+                insideQuotes =
+                    !insideQuotes;
+
+            }
+
+        } else if (
+            char === "," &&
+            !insideQuotes
+        ) {
+
+            row.push(value);
+
+            value = "";
+
+        } else if (
+            (char === "\n" || char === "\r") &&
+            !insideQuotes
+        ) {
+
+            if (
+                char === "\r" &&
+                next === "\n"
+            ) {
+
+                i++;
+
+            }
+
+            row.push(value);
+
+            value = "";
+
+            if (
+                row.some(
+                    cell =>
+                        cell.trim() !== ""
+                )
+            ) {
+
+                rows.push(row);
+
+            }
+
+            row = [];
+
+        } else {
+
+            value += char;
+
+        }
+
+    }
+
+    if (
+        value !== "" ||
+        row.length > 0
+    ) {
+
+        row.push(value);
+
+        if (
+            row.some(
+                cell =>
+                    cell.trim() !== ""
+            )
+        ) {
+
+            rows.push(row);
+
+        }
+
+    }
+
+    return rows;
+
+}
+
+
+/* ============================================================
+   LOAD DATA
+   ============================================================ */
+
+async function loadData() {
+
+    showLoading(
+        "Đang tải dữ liệu từ Google Sheet..."
+    );
+
+    try {
+
+        const response =
+            await fetch(
+                CSV_URL + "&_=" + Date.now()
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Không thể tải Google Sheet."
+            );
+
+        }
+
+        const text =
+            await response.text();
+
+        const rows =
+            parseCSV(text);
+
+        if (
+            !rows ||
+            rows.length === 0
+        ) {
+
+            throw new Error(
+                "Google Sheet không có dữ liệu."
+            );
+
+        }
+
+        headers =
+            rows[0].map(
+                (header, index) => {
+
+                    const clean =
+                        String(header || "")
+                        .trim();
+
+                    return clean ||
+                        `Cột ${index + 1}`;
+
+                }
+            );
+
+        originalData =
+            rows
+            .slice(1)
+            .map(row => {
+
+                const item = {};
+
+                headers.forEach(
+                    (header, index) => {
+
+                        item[header] =
+                            row[index] !== undefined
+                                ? row[index]
+                                : "";
+
+                    }
+                );
+
+                return item;
+
+            })
+            .filter(row =>
+                Object.values(row)
+                .some(
+                    value =>
+                        String(value).trim() !== ""
+                )
+            );
+
+
+        cleanupSettings();
+
+        renderTable();
+
+        hideLoading();
+
+        updateStatus();
+
+    } catch (error) {
+
+        console.error(error);
+
+        hideLoading();
+
+        showError(
+            "Không thể tải dữ liệu Google Sheet.<br><br>" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   CLEAN OLD SETTINGS
+   ============================================================ */
+
+function cleanupSettings() {
+
+    const validHeaders =
+        new Set(headers);
+
+    Object.keys(filters)
+        .forEach(column => {
+
+            if (
+                !validHeaders.has(column)
+            ) {
+
+                delete filters[column];
+
+            }
+
+        });
+
+    Object.keys(searches)
+        .forEach(column => {
+
+            if (
+                !validHeaders.has(column)
+            ) {
+
+                delete searches[column];
+
+            }
+
+        });
+
+    Object.keys(columnWidths)
+        .forEach(column => {
+
+            if (
+                !validHeaders.has(column)
+            ) {
+
+                delete columnWidths[column];
+
+            }
+
+        });
+
+    if (
+        freezeCount > headers.length
+    ) {
+
+        freezeCount =
+            headers.length;
+
+    }
+
+}
+
+
+/* ============================================================
+   FILTER DATA
+   ============================================================ */
+
+function applyFilters() {
+
+    filteredData =
+        originalData.filter(row => {
+
+            for (
+                const column of headers
+            ) {
+
+                const search =
+                    String(
+                        searches[column] || ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+                const value =
+                    String(
+                        row[column] ?? ""
+                    );
+
+                if (
+                    search &&
+                    !value
+                        .toLowerCase()
+                        .includes(search)
+                ) {
+
+                    return false;
+
+                }
+
+
+                const selected =
+                    filters[column];
+
+                if (
+                    Array.isArray(selected) &&
+                    selected.length > 0
+                ) {
+
+                    if (
+                        !selected.includes(value)
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+            }
+
+            return true;
+
+        });
+
+
+    if (
+        sortState.column &&
+        sortState.direction
+    ) {
+
+        const column =
+            sortState.column;
+
+        const direction =
+            sortState.direction === "asc"
+                ? 1
+                : -1;
+
+        filteredData.sort(
+            (a, b) => {
+
+                const av =
+                    String(
+                        a[column] ?? ""
+                    )
+                    .toLowerCase();
+
+                const bv =
+                    String(
+                        b[column] ?? ""
+                    )
+                    .toLowerCase();
+
+                return (
+                    av.localeCompare(
+                        bv,
+                        "vi",
+                        {
+                            numeric: true,
+                            sensitivity: "base"
+                        }
+                    ) * direction
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   RENDER TABLE
+   ============================================================ */
+
+function renderTable() {
+
+    applyFilters();
+
+    renderHeader();
+
+    renderBody();
+
+    updateFrozenColumns();
+
+    updateStatus();
+
+}
+
+
+/* ============================================================
+   RENDER HEADER
+   ============================================================ */
+
+function renderHeader() {
+
+    const thead =
+        document.getElementById(
+            "tableHead"
+        );
+
+    thead.innerHTML = "";
+
+
+    const headerRow =
+        document.createElement("tr");
+
+
+    headers.forEach(
+        (column, index) => {
+
+            const th =
+                document.createElement("th");
+
+            th.dataset.columnIndex =
+                index;
+
+            th.dataset.column =
+                column;
+
+
+            if (
+                columnWidths[column]
+            ) {
+
+                th.style.width =
+                    columnWidths[column] + "px";
+
+                th.style.minWidth =
+                    columnWidths[column] + "px";
+
+            } else {
+
+                th.style.width =
+                    "150px";
+
+                th.style.minWidth =
+                    "150px";
+
+            }
+
+
+            const content =
+                document.createElement("div");
+
+            content.className =
+                "header-content";
+
+
+            const title =
+                document.createElement("div");
+
+            title.className =
+                "header-title";
+
+            title.textContent =
+                column;
+
+
+            title.title =
+                "Click để sắp xếp";
+
+
+            title.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    toggleSort(column);
+
+                }
+            );
+
+
+            const arrow =
+                document.createElement("span");
+
+            arrow.className =
+                "sort-arrow";
+
+
+            if (
+                sortState.column === column
+            ) {
+
+                arrow.textContent =
+                    sortState.direction === "asc"
+                        ? "▲"
+                        : "▼";
+
+            } else {
+
+                arrow.textContent =
+                    "↕";
+
+            }
+
+
+            const filterButton =
+                document.createElement("button");
+
+            filterButton.className =
+                "filter-button";
+
+
+            if (
+                Array.isArray(filters[column])
+            ) {
+
+                filterButton.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            filterButton.textContent =
+                "▼";
+
+
+            filterButton.title =
+                "Lọc";
+
+
+            filterButton.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    openFilter(
+                        column,
+                        filterButton
+                    );
+
+                }
+            );
+
+
+            content.appendChild(title);
+
+            const right =
+                document.createElement("div");
+
+            right.style.display =
+                "flex";
+
+            right.style.alignItems =
+                "center";
+
+            right.style.gap =
+                "2px";
+
+            right.appendChild(arrow);
+
+            right.appendChild(
+                filterButton
+            );
+
+            content.appendChild(right);
+
+            th.appendChild(content);
+
+
+            const resize =
+                document.createElement("div");
+
+            resize.className =
+                "resize-handle";
+
+            resize.addEventListener(
+                "mousedown",
+                event => {
+
+                    startResize(
+                        event,
+                        index
+                    );
+
+                }
+            );
+
+            th.appendChild(resize);
+
+
+            headerRow.appendChild(th);
+
+        }
+    );
+
+
+    thead.appendChild(headerRow);
+
+
+    /* SEARCH ROW */
+
+    const searchRow =
+        document.createElement("tr");
+
+    searchRow.className =
+        "search-row";
+
+
+    headers.forEach(
+        (column, index) => {
+
+            const th =
+                document.createElement("th");
+
+            th.dataset.columnIndex =
+                index;
+
+
+            if (
+                columnWidths[column]
+            ) {
+
+                th.style.width =
+                    columnWidths[column] + "px";
+
+                th.style.minWidth =
+                    columnWidths[column] + "px";
+
+            } else {
+
+                th.style.width =
+                    "150px";
+
+                th.style.minWidth =
+                    "150px";
+
+            }
+
+
+            const input =
+                document.createElement("input");
+
+            input.className =
+                "search-box";
+
+            input.placeholder =
+                "Tìm...";
+
+            input.value =
+                searches[column] || "";
+
+
+            input.addEventListener(
+                "input",
+                () => {
+
+                    searches[column] =
+                        input.value;
+
+                    saveSettings();
+
+                    renderBody();
+
+                    updateFrozenColumns();
+
+                    updateStatus();
+
+                }
+            );
+
+
+            th.appendChild(input);
+
+            searchRow.appendChild(th);
+
+        }
+    );
+
+
+    thead.appendChild(searchRow);
+
+}
+
+
+/* ============================================================
+   RENDER BODY
+   ============================================================ */
+
+function renderBody() {
+
+    const tbody =
+        document.getElementById(
+            "tableBody"
+        );
+
+    tbody.innerHTML = "";
+
+
+    if (
+        filteredData.length === 0
+    ) {
+
+        const tr =
+            document.createElement("tr");
+
+        const td =
+            document.createElement("td");
+
+        td.colSpan =
+            Math.max(headers.length, 1);
+
+        td.className =
+            "message";
+
+        td.textContent =
+            "Không có dữ liệu phù hợp.";
+
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+
+        return;
+
+    }
+
+
+    filteredData.forEach(
+        row => {
+
+            const tr =
+                document.createElement("tr");
+
+
+            headers.forEach(
+                column => {
+
+                    const td =
+                        document.createElement("td");
+
+                    td.textContent =
+                        row[column] ?? "";
+
+                    td.title =
+                        row[column] ?? "";
+
+                    if (
+                        columnWidths[column]
+                    ) {
+
+                        td.style.width =
+                            columnWidths[column] + "px";
+
+                        td.style.minWidth =
+                            columnWidths[column] + "px";
+
+                    } else {
+
+                        td.style.width =
+                            "150px";
+
+                        td.style.minWidth =
+                            "150px";
+
+                    }
+
+                    tr.appendChild(td);
+
+                }
+            );
+
+
+            tbody.appendChild(tr);
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   SORT
+   ============================================================ */
+
+function toggleSort(column) {
+
+    if (
+        sortState.column !== column
+    ) {
+
+        sortState.column =
+            column;
+
+        sortState.direction =
+            "asc";
+
+    } else if (
+        sortState.direction === "asc"
+    ) {
+
+        sortState.direction =
+            "desc";
+
+    } else {
+
+        sortState.column =
+            null;
+
+        sortState.direction =
+            null;
+
+    }
+
+
+    saveSettings();
+
+    renderTable();
+
+}
+
+
+/* ============================================================
+   FILTER MENU
+   ============================================================ */
+
+function openFilter(
+    column,
+    button
+) {
+
+    activeFilterColumn =
+        column;
+
+
+    const menu =
+        document.getElementById(
+            "filterMenu"
+        );
+
+
+    const current =
+        filters[column];
+
+
+    const uniqueValues =
+        [
+            ...new Set(
+                originalData.map(
+                    row =>
+                        String(
+                            row[column] ?? ""
+                        )
+                )
+            )
+        ]
+        .sort(
+            (a, b) =>
+                a.localeCompare(
+                    b,
+                    "vi",
+                    {
+                        numeric: true,
+                        sensitivity: "base"
+                    }
+                )
+        );
+
+
+    if (
+        Array.isArray(current)
+    ) {
+
+        temporaryFilterValues =
+            new Set(current);
+
+    } else {
+
+        temporaryFilterValues =
+            new Set(uniqueValues);
+
+    }
+
+
+    renderFilterValues(
+        uniqueValues
+    );
+
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    let left =
+        rect.left;
+
+    let top =
+        rect.bottom + 5;
+
+
+    if (
+        left + 270 >
+        window.innerWidth
+    ) {
+
+        left =
+            window.innerWidth - 280;
+
+    }
+
+
+    if (
+        top + 440 >
+        window.innerHeight
+    ) {
+
+        top =
+            rect.top - 445;
+
+    }
+
+
+    menu.style.left =
+        Math.max(5, left) + "px";
+
+    menu.style.top =
+        Math.max(5, top) + "px";
+
+
+    menu.classList.add("show");
+
+
+    document
+        .getElementById("filterSearch")
+        .value = "";
+
+}
+
+
+/* ============================================================
+   RENDER FILTER VALUES
+   ============================================================ */
+
+function renderFilterValues(
+    values
+) {
+
+    const container =
+        document.getElementById(
+            "filterValues"
+        );
+
+    container.innerHTML = "";
+
+
+    values.forEach(
+        value => {
+
+            const label =
+                document.createElement("label");
+
+            label.className =
+                "filter-value";
+
+
+            const checkbox =
+                document.createElement("input");
+
+            checkbox.type =
+                "checkbox";
+
+            checkbox.checked =
+                temporaryFilterValues
+                    .has(value);
+
+
+            checkbox.addEventListener(
+                "change",
+                () => {
+
+                    if (
+                        checkbox.checked
+                    ) {
+
+                        temporaryFilterValues
+                            .add(value);
+
+                    } else {
+
+                        temporaryFilterValues
+                            .delete(value);
+
+                    }
+
+                }
+            );
+
+
+            const span =
+                document.createElement("span");
+
+            span.textContent =
+                value === ""
+                    ? "(Trống)"
+                    : value;
+
+            span.title =
+                value;
+
+
+            label.appendChild(
+                checkbox
+            );
+
+            label.appendChild(
+                span
+            );
+
+            container.appendChild(
+                label
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   FILTER BUTTONS
+   ============================================================ */
+
+document
+    .getElementById("selectAllButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                !activeFilterColumn
+            ) return;
+
+            const values =
+                originalData.map(
+                    row =>
+                        String(
+                            row[activeFilterColumn] ?? ""
+                        )
+                );
+
+            temporaryFilterValues =
+                new Set(values);
+
+            filterSearchValues();
+
+        }
+    );
+
+
+document
+    .getElementById("deselectAllButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            temporaryFilterValues =
+                new Set();
+
+            filterSearchValues();
+
+        }
+    );
+
+
+document
+    .getElementById("applyFilterButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                !activeFilterColumn
+            ) return;
+
+
+            const allValues =
+                new Set(
+                    originalData.map(
+                        row =>
+                            String(
+                                row[activeFilterColumn] ?? ""
+                            )
+                    )
+                );
+
+
+            if (
+                temporaryFilterValues.size ===
+                allValues.size
+            ) {
+
+                delete filters[
+                    activeFilterColumn
+                ];
+
+            } else {
+
+                filters[
+                    activeFilterColumn
+                ] =
+                    [
+                        ...temporaryFilterValues
+                    ];
+
+            }
+
+
+            saveSettings();
+
+            closeFilter();
+
+            renderTable();
+
+        }
+    );
+
+
+document
+    .getElementById("clearFilterButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                activeFilterColumn
+            ) {
+
+                delete filters[
+                    activeFilterColumn
+                ];
+
+            }
+
+            saveSettings();
+
+            closeFilter();
+
+            renderTable();
+
+        }
+    );
+
+
+/* ============================================================
+   FILTER SEARCH
+   ============================================================ */
+
+document
+    .getElementById("filterSearch")
+    .addEventListener(
+        "input",
+        filterSearchValues
+    );
+
+
+function filterSearchValues() {
+
+    if (
+        !activeFilterColumn
+    ) return;
+
+
+    const search =
+        document
+        .getElementById("filterSearch")
+        .value
+        .toLowerCase();
+
+
+    const values =
+        [
+            ...new Set(
+                originalData.map(
+                    row =>
+                        String(
+                            row[activeFilterColumn] ?? ""
+                        )
+                )
+            )
+        ]
+        .filter(value =>
+            value
+                .toLowerCase()
+                .includes(search)
+        )
+        .sort(
+            (a, b) =>
+                a.localeCompare(
+                    b,
+                    "vi",
+                    {
+                        numeric: true,
+                        sensitivity: "base"
+                    }
+                )
+        );
+
+
+    renderFilterValues(values);
+
+}
+
+
+/* ============================================================
+   CLOSE FILTER
+   ============================================================ */
+
+function closeFilter() {
+
+    document
+        .getElementById("filterMenu")
+        .classList.remove("show");
+
+    activeFilterColumn =
+        null;
+
+}
+
+
+/* ============================================================
+   CLICK OUTSIDE FILTER
+   ============================================================ */
+
+document.addEventListener(
+    "mousedown",
+    event => {
+
+        const menu =
+            document.getElementById(
+                "filterMenu"
+            );
+
+        if (
+            !menu.contains(event.target) &&
+            !event.target.closest(".filter-button")
+        ) {
+
+            closeFilter();
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   COLUMN RESIZE
+   ============================================================ */
+
+let resizing = false;
+
+let resizeColumnIndex = null;
+
+let resizeStartX = 0;
+
+let resizeStartWidth = 0;
+
+
+function startResize(
+    event,
+    index
+) {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    resizing = true;
+
+    resizeColumnIndex =
+        index;
+
+    resizeStartX =
+        event.clientX;
+
+
+    const column =
+        headers[index];
+
+
+    resizeStartWidth =
+        columnWidths[column] ||
+        150;
+
+
+    document.body.style.cursor =
+        "col-resize";
+
+}
+
+
+document.addEventListener(
+    "mousemove",
+    event => {
+
+        if (!resizing) {
+            return;
+        }
+
+
+        const column =
+            headers[resizeColumnIndex];
+
+
+        const difference =
+            event.clientX -
+            resizeStartX;
+
+
+        let newWidth =
+            resizeStartWidth +
+            difference;
+
+
+        /*
+         * Không giới hạn cứng.
+         * Chỉ giữ một mức tối thiểu
+         * để cột không biến mất.
+         */
+
+        newWidth =
+            Math.max(
+                30,
+                newWidth
+            );
+
+
+        columnWidths[column] =
+            newWidth;
+
+
+        updateColumnWidths();
+
+    }
+);
+
+
+document.addEventListener(
+    "mouseup",
+    () => {
+
+        if (!resizing) {
+            return;
+        }
+
+
+        resizing = false;
+
+        document.body.style.cursor =
+            "";
+
+
+        saveSettings();
+
+    }
+);
+
+
+/* ============================================================
+   UPDATE COLUMN WIDTH
+   ============================================================ */
+
+function updateColumnWidths() {
+
+    headers.forEach(
+        (column, index) => {
+
+            const width =
+                columnWidths[column] ||
+                150;
+
+
+            const elements =
+                document.querySelectorAll(
+                    `[data-column-index="${index}"]`
+                );
+
+
+            elements.forEach(
+                element => {
+
+                    element.style.width =
+                        width + "px";
+
+                    element.style.minWidth =
+                        width + "px";
+
+                }
+            );
+
+
+            document
+                .querySelectorAll(
+                    "#dataTable tbody tr"
+                )
+                .forEach(row => {
+
+                    const cell =
+                        row.children[index];
+
+                    if (cell) {
+
+                        cell.style.width =
+                            width + "px";
+
+                        cell.style.minWidth =
+                            width + "px";
+
+                    }
+
+                });
+
+        }
+    );
+
+
+    updateFrozenColumns();
+
+}
+
+
+/* ============================================================
+   FROZEN COLUMNS
+   ============================================================ */
+
+function updateFrozenColumns() {
+
+    let left =
+        0;
+
+
+    for (
+        let i = 0;
+        i < headers.length;
+        i++
+    ) {
+
+        const width =
+            columnWidths[
+                headers[i]
+            ] || 150;
+
+
+        const elements =
+            document.querySelectorAll(
+                `[data-column-index="${i}"]`
+            );
+
+
+        elements.forEach(
+            element => {
+
+                element.classList.remove(
+                    "frozen"
+                );
+
+                element.style.left =
+                    "";
+
+            }
+        );
+
+
+        if (
+            i < freezeCount
+        ) {
+
+            elements.forEach(
+                element => {
+
+                    element.classList.add(
+                        "frozen"
+                    );
+
+                    element.style.left =
+                        left + "px";
+
+                }
+            );
+
+
+            /*
+             * Body cells không có
+             * data-column-index,
+             * xử lý riêng bên dưới.
+             */
+
+            document
+                .querySelectorAll(
+                    "#dataTable tbody tr"
+                )
+                .forEach(row => {
+
+                    const cell =
+                        row.children[i];
+
+                    if (cell) {
+
+                        cell.classList.add(
+                            "frozen"
+                        );
+
+                        cell.style.left =
+                            left + "px";
+
+                    }
+
+                });
+
+
+            left += width;
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   FREEZE SELECT
+   ============================================================ */
+
+document
+    .getElementById("freezeSelect")
+    .addEventListener(
+        "change",
+        event => {
+
+            freezeCount =
+                Number(
+                    event.target.value
+                );
+
+            saveSettings();
+
+            updateFrozenColumns();
+
+        }
+    );
+
+
+/* ============================================================
+   CLEAR ALL FILTERS
+   ============================================================ */
+
+document
+    .getElementById("clearAllButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            filters = {};
+
+            searches = {};
+
+            sortState = {
+                column: null,
+                direction: null
+            };
+
+            saveSettings();
+
+            renderTable();
+
+        }
+    );
+
+
+/* ============================================================
+   REFRESH
+   ============================================================ */
+
+document
+    .getElementById("refreshButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            loadData();
+
+        }
+    );
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+function updateStatus() {
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    status.textContent =
+        `${filteredData.length.toLocaleString("vi-VN")} / ${originalData.length.toLocaleString("vi-VN")} dòng`;
+
+}
+
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+
+function showLoading(message) {
+
+    const loading =
+        document.getElementById(
+            "loading"
+        );
+
+    const text =
+        document.getElementById(
+            "loadingText"
+        );
+
+
+    text.textContent =
+        message;
+
+
+    loading.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function hideLoading() {
+
+    document
+        .getElementById("loading")
+        .classList.add(
+            "hidden"
+        );
+
+}
+
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+
+function showError(message) {
+
+    const tbody =
+        document.getElementById(
+            "tableBody"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    const tr =
+        document.createElement("tr");
+
+    const td =
+        document.createElement("td");
+
+
+    td.colSpan =
+        Math.max(
+            headers.length,
+            1
+        );
+
+
+    td.className =
+        "message";
+
+
+    td.innerHTML =
+        message;
+
+
+    tr.appendChild(td);
+
+    tbody.appendChild(tr);
+
+
+    document
+        .getElementById("status")
+        .textContent =
+        "Lỗi tải dữ liệu";
+
+}
+
+
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
+
+loadSettings();
+
+document
+    .getElementById("freezeSelect")
+    .value =
+    String(freezeCount);
+
+
+loadData();
+
+
+/* ============================================================
+   AUTO REFRESH
+   ============================================================ */
+
+/*
+ * Kiểm tra dữ liệu mới mỗi 5 phút.
+ *
+ * Nếu bạn muốn tắt tự động cập nhật,
+ * có thể xóa đoạn setInterval này.
+ */
+
+setInterval(
+    () => {
+
+        loadData();
+
+    },
+    5 * 60 * 1000
+);
+
+</script>
 
 </body>
 </html>
