@@ -4,626 +4,680 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>REPORT</title>
+<title>Report</title>
 
 <style>
-* {
-    box-sizing: border-box;
+
+*{
+    box-sizing:border-box;
 }
 
 html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f6f8;
-    color: #222;
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f6f8;
+    color:#222;
 }
 
-body {
-    overflow: hidden;
+body{
+    overflow:hidden;
 }
 
-/* =========================================================
+/* =========================
    TOP BAR
-   ========================================================= */
+========================= */
 
-.topbar {
-    height: 58px;
-    background: #fff;
-    border-bottom: 1px solid #d8d8d8;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    padding: 0 14px;
-
-    position: relative;
-    z-index: 1000;
+.topbar{
+    height:52px;
+    background:#ffffff;
+    border-bottom:1px solid #ddd;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:0 12px;
+    position:relative;
+    z-index:1000;
 }
 
-.title {
-    font-size: 20px;
-    font-weight: 700;
-    white-space: nowrap;
-    margin-right: 8px;
+.title{
+    font-size:18px;
+    font-weight:700;
+    margin-right:10px;
 }
 
-.top-button {
-    height: 34px;
-    padding: 0 13px;
-
-    border: 1px solid #ccc;
-    border-radius: 5px;
-
-    background: #fff;
-
-    cursor: pointer;
-
-    font-size: 14px;
+button{
+    border:1px solid #ccc;
+    background:#fff;
+    border-radius:5px;
+    padding:7px 12px;
+    cursor:pointer;
+    font-size:13px;
 }
 
-.top-button:hover {
-    background: #f2f2f2;
+button:hover{
+    background:#f1f3f5;
 }
 
-.top-button.primary {
-    background: #1976d2;
-    border-color: #1976d2;
-    color: #fff;
+button.primary{
+    background:#1677ff;
+    color:#fff;
+    border-color:#1677ff;
 }
 
-.top-button.primary:hover {
-    background: #1565c0;
+button.primary:hover{
+    background:#0d65df;
 }
 
-.freeze-control {
-    margin-left: auto;
-
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    white-space: nowrap;
-
-    font-size: 14px;
+.status{
+    margin-left:auto;
+    font-size:12px;
+    color:#666;
 }
 
-.freeze-control select {
-    height: 34px;
-
-    border: 1px solid #ccc;
-    border-radius: 5px;
-
-    padding: 0 8px;
-
-    background: #fff;
-}
-
-.status {
-    font-size: 12px;
-    color: #666;
-
-    white-space: nowrap;
-}
-
-/* =========================================================
+/* =========================
    TABLE AREA
-   ========================================================= */
+========================= */
 
-.table-wrapper {
-    width: 100%;
-    height: calc(100vh - 58px);
-
-    overflow: auto;
-
-    background: #fff;
-
-    position: relative;
+.table-container{
+    position:absolute;
+    top:52px;
+    left:0;
+    right:0;
+    bottom:0;
+    overflow:auto;
+    background:#fff;
 }
 
-table {
-    border-collapse: separate;
-    border-spacing: 0;
+/* =========================
+   TABLE
+========================= */
 
-    table-layout: fixed;
-
-    width: max-content;
-    min-width: 100%;
+table{
+    border-collapse:separate;
+    border-spacing:0;
+    table-layout:fixed;
+    width:max-content;
+    min-width:100%;
 }
 
-th,
-td {
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-
-    padding: 0 9px;
-
-    font-size: 14px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-
-    background: #fff;
+thead{
+    position:sticky;
+    top:0;
+    z-index:500;
 }
 
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-thead th {
-    position: sticky;
-    top: 0;
-
-    z-index: 80;
-
-    height: 42px;
-
-    background: #f1f3f5;
-
-    font-weight: 600;
-
-    user-select: none;
+thead th{
+    position:relative;
+    background:#f8f9fa;
+    border-right:1px solid #d8d8d8;
+    border-bottom:1px solid #bbb;
+    min-width:80px;
+    padding:0;
+    vertical-align:top;
 }
 
-.header-content {
-    width: 100%;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 5px;
+.header-main{
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:4px;
+    padding:0 7px;
+    font-weight:700;
+    font-size:14px;
+    white-space:nowrap;
+    overflow:hidden;
 }
 
-.header-title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    cursor: pointer;
+.header-title{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    cursor:pointer;
 }
 
-.sort-arrow {
-    flex-shrink: 0;
-    color: #777;
-    font-size: 11px;
+.header-arrow{
+    font-size:11px;
+    color:#777;
+    flex-shrink:0;
 }
 
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 2px;
+.header-sort{
+    font-size:11px;
+    color:#1677ff;
+    font-weight:bold;
+    flex-shrink:0;
 }
 
-.filter-button {
-    width: 22px;
-    height: 22px;
-
-    border: 0;
-    border-radius: 3px;
-
-    background: transparent;
-
-    cursor: pointer;
-
-    color: #555;
+.header-sort.asc{
+    color:#1677ff;
 }
 
-.filter-button:hover {
-    background: #ddd;
+.header-sort.desc{
+    color:#e67e22;
 }
 
-.filter-button.active {
-    color: #1976d2;
-    font-weight: bold;
+/* cột đang filter/search */
+
+th.active-filter .header-main{
+    background:#dff5df;
+    color:#087f23;
 }
 
-/* =========================================================
-   SEARCH ROW
-   ========================================================= */
+/* cột đang sort */
 
-.search-row th {
-    position: sticky;
-
-    top: 42px;
-
-    z-index: 79;
-
-    height: 42px;
-
-    padding: 5px 6px;
-
-    background: #fff;
+th.active-sort .header-main{
+    background:#e7f0ff;
 }
 
-.search-box {
-    width: 100%;
-    height: 30px;
+/* cột vừa filter vừa sort */
 
-    padding: 0 7px;
-
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
-    outline: none;
-
-    font-size: 13px;
+th.active-filter.active-sort .header-main{
+    background:#d8f2df;
+    color:#087f23;
 }
 
-.search-box:focus {
-    border-color: #1976d2;
+/* =========================
+   SEARCH
+========================= */
 
-    box-shadow:
-        0 0 0 1px #1976d2;
+.search-row{
+    height:36px;
+    background:#fff;
 }
 
-/* =========================================================
-   RESIZE
-   ========================================================= */
-
-.resize-handle {
-    position: absolute;
-
-    top: 0;
-    right: -3px;
-
-    width: 7px;
-    height: 100%;
-
-    cursor: col-resize;
-
-    z-index: 200;
+.search-cell{
+    padding:4px;
+    border-top:1px solid #ddd;
+    border-right:1px solid #ddd;
+    background:#fff;
 }
 
-.resize-handle:hover {
-    background: rgba(25,118,210,.25);
+.search-input{
+    width:100%;
+    height:27px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    padding:4px 7px;
+    outline:none;
+    font-size:12px;
 }
 
-/* =========================================================
+.search-input:focus{
+    border-color:#1677ff;
+    box-shadow:0 0 0 2px rgba(22,119,255,.1);
+}
+
+/* =========================
    BODY
-   ========================================================= */
+========================= */
 
-tbody td {
-    height: 34px;
-    line-height: 34px;
+tbody td{
+    border-right:1px solid #e1e1e1;
+    border-bottom:1px solid #e1e1e1;
+    padding:7px 8px;
+    font-size:14px;
+    vertical-align:middle;
+    background:#fff;
+    overflow-wrap:anywhere;
+    word-break:break-word;
 }
 
-tbody tr:hover td {
-    background: #f7fbff;
+/* zebra */
+
+tbody tr:nth-child(even) td{
+    background:#fafafa;
 }
 
-tbody tr:nth-child(even) td {
-    background: #fafafa;
+tbody tr:hover td{
+    background:#f1f7ff;
 }
 
-tbody tr:nth-child(even):hover td {
-    background: #f7fbff;
+/* wrap */
+
+tbody td.wrap-text{
+    white-space:normal;
 }
 
-/* =========================================================
-   VIRTUAL SCROLLING
-   ========================================================= */
+/* nowrap */
 
-.virtual-spacer td {
-    padding: 0 !important;
-    border: 0 !important;
-    height: 0 !important;
-    line-height: 0 !important;
-    background: transparent !important;
+tbody td.no-wrap{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-.virtual-row td {
-    height: 34px;
+/* =========================
+   STICKY COLUMNS
+========================= */
+
+.sticky-col{
+    position:sticky !important;
+    z-index:300;
+    background:#fff !important;
 }
 
-/* =========================================================
-   FROZEN COLUMNS
-   ========================================================= */
-
-.frozen {
-    position: sticky !important;
-
-    z-index: 50 !important;
-
-    background: #fff !important;
+thead .sticky-col{
+    z-index:700;
+    background:#f8f9fa !important;
 }
 
-thead .frozen {
-    z-index: 100 !important;
-    background: #f1f3f5 !important;
+thead th.active-filter.sticky-col .header-main{
+    background:#dff5df !important;
 }
 
-.search-row .frozen {
-    z-index: 99 !important;
-    background: #fff !important;
+thead th.active-sort.sticky-col .header-main{
+    background:#e7f0ff !important;
 }
 
-tbody tr:hover .frozen {
-    background: #f7fbff !important;
+thead th.active-filter.active-sort.sticky-col .header-main{
+    background:#d8f2df !important;
 }
 
-/* =========================================================
-   FILTER MENU
-   ========================================================= */
-
-.filter-menu {
-    position: fixed;
-
-    z-index: 999999;
-
-    width: 280px;
-
-    background: #fff;
-
-    border: 1px solid #ccc;
-    border-radius: 6px;
-
-    box-shadow:
-        0 6px 25px rgba(0,0,0,.2);
-
-    display: none;
-
-    overflow: hidden;
+tbody tr:nth-child(even) td.sticky-col{
+    background:#fafafa !important;
 }
 
-.filter-menu.show {
-    display: block;
+tbody tr:hover td.sticky-col{
+    background:#f1f7ff !important;
 }
 
-.filter-top {
-    display: flex;
-    gap: 5px;
+/* =========================
+   RESIZE HANDLE
+========================= */
 
-    padding: 8px;
-
-    border-bottom: 1px solid #ddd;
+.resize-handle{
+    position:absolute;
+    top:0;
+    right:-3px;
+    width:7px;
+    height:100%;
+    cursor:col-resize;
+    z-index:800;
 }
 
-.filter-top button {
-    flex: 1;
-
-    height: 30px;
-
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
-    background: #f7f7f7;
-
-    cursor: pointer;
-
-    font-size: 12px;
+.resize-handle:hover{
+    background:rgba(22,119,255,.25);
 }
 
-.filter-search {
-    width: calc(100% - 16px);
+/* =========================
+   DROPDOWN MENU
+========================= */
 
-    height: 30px;
-
-    margin: 8px;
-
-    padding: 0 7px;
-
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
-    outline: none;
+.menu{
+    position:fixed;
+    z-index:5000;
+    width:300px;
+    max-height:520px;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:7px;
+    box-shadow:0 5px 25px rgba(0,0,0,.18);
+    display:none;
+    overflow:hidden;
 }
 
-.filter-search:focus {
-    border-color: #1976d2;
+.menu.show{
+    display:block;
 }
 
-.filter-values {
-    max-height: 270px;
-
-    overflow-y: auto;
-
-    padding: 4px 8px;
+.menu-header{
+    padding:10px;
+    font-weight:700;
+    border-bottom:1px solid #eee;
+    background:#fafafa;
 }
 
-.filter-value {
-    min-height: 30px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 7px;
-
-    cursor: pointer;
-
-    font-size: 13px;
+.menu-search{
+    padding:8px;
+    border-bottom:1px solid #eee;
 }
 
-.filter-value:hover {
-    background: #f4f4f4;
+.menu-search input{
+    width:100%;
+    height:30px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    padding:5px 8px;
 }
 
-.filter-value span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.menu-buttons{
+    display:flex;
+    gap:5px;
+    padding:7px 8px;
+    border-bottom:1px solid #eee;
 }
 
-.filter-bottom {
-    display: flex;
-    gap: 7px;
-
-    padding: 8px;
-
-    border-top: 1px solid #ddd;
+.menu-buttons button{
+    flex:1;
+    padding:6px 5px;
+    font-size:12px;
 }
 
-.filter-bottom button {
-    flex: 1;
-
-    height: 32px;
-
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
-    background: #fff;
-
-    cursor: pointer;
+.value-list{
+    max-height:280px;
+    overflow:auto;
+    padding:5px 8px;
 }
 
-.filter-bottom .apply {
-    background: #1976d2;
-    border-color: #1976d2;
-    color: #fff;
+.value-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:5px 3px;
+    font-size:13px;
 }
 
-/* =========================================================
+.value-item:hover{
+    background:#f5f5f5;
+}
+
+.value-item input{
+    width:15px;
+    height:15px;
+}
+
+.menu-footer{
+    display:flex;
+    gap:6px;
+    padding:8px;
+    border-top:1px solid #eee;
+}
+
+.menu-footer button{
+    flex:1;
+}
+
+/* =========================
+   CONTEXT MENU
+========================= */
+
+.context-menu{
+    position:fixed;
+    z-index:6000;
+    width:230px;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+    display:none;
+    overflow:hidden;
+}
+
+.context-menu.show{
+    display:block;
+}
+
+.context-item{
+    padding:9px 12px;
+    font-size:13px;
+    cursor:pointer;
+}
+
+.context-item:hover{
+    background:#f2f5f8;
+}
+
+.context-separator{
+    height:1px;
+    background:#eee;
+}
+
+/* =========================
+   SETTINGS PANEL
+========================= */
+
+.settings-panel{
+    position:fixed;
+    top:58px;
+    right:10px;
+    width:340px;
+    max-height:calc(100vh - 70px);
+    overflow:auto;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-shadow:0 8px 30px rgba(0,0,0,.2);
+    z-index:4000;
+    display:none;
+}
+
+.settings-panel.show{
+    display:block;
+}
+
+.settings-title{
+    padding:12px;
+    font-weight:bold;
+    border-bottom:1px solid #eee;
+}
+
+.settings-section{
+    padding:10px 12px;
+    border-bottom:1px solid #eee;
+}
+
+.settings-section-title{
+    font-size:12px;
+    color:#666;
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+.setting-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.setting-row label{
+    font-size:13px;
+}
+
+.setting-row input[type="number"]{
+    width:90px;
+    height:30px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    padding:4px 7px;
+}
+
+.setting-row select{
+    width:130px;
+    height:30px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+.color-input{
+    width:55px;
+    height:30px;
+    padding:2px;
+    border:1px solid #ccc;
+    border-radius:4px;
+}
+
+.settings-footer{
+    padding:10px 12px;
+    display:flex;
+    gap:7px;
+}
+
+.settings-footer button{
+    flex:1;
+}
+
+/* =========================
+   RENAME DIALOG
+========================= */
+
+.dialog-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.25);
+    z-index:7000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+}
+
+.dialog-overlay.show{
+    display:flex;
+}
+
+.dialog{
+    width:380px;
+    background:#fff;
+    border-radius:8px;
+    box-shadow:0 10px 40px rgba(0,0,0,.3);
+    padding:18px;
+}
+
+.dialog h3{
+    margin:0 0 14px;
+    font-size:17px;
+}
+
+.dialog input{
+    width:100%;
+    height:36px;
+    border:1px solid #bbb;
+    border-radius:5px;
+    padding:7px 9px;
+    font-size:14px;
+}
+
+.dialog-buttons{
+    margin-top:15px;
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+}
+
+/* =========================
+   RESIZE INFO
+========================= */
+
+.resize-info{
+    position:fixed;
+    z-index:9000;
+    display:none;
+    background:#222;
+    color:#fff;
+    padding:5px 8px;
+    border-radius:4px;
+    font-size:12px;
+    pointer-events:none;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#222;
+    color:#fff;
+    padding:9px 15px;
+    border-radius:5px;
+    font-size:13px;
+    z-index:10000;
+    opacity:0;
+    pointer-events:none;
+    transition:.2s;
+}
+
+.toast.show{
+    opacity:1;
+}
+
+/* =========================
    LOADING
-   ========================================================= */
+========================= */
 
-.loading {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 9999999;
-
-    background: rgba(255,255,255,.92);
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    flex-direction: column;
-
-    gap: 12px;
-
-    font-size: 16px;
+.loading{
+    position:fixed;
+    inset:52px 0 0 0;
+    background:rgba(255,255,255,.7);
+    z-index:2000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
 }
 
-.loading.hidden {
-    display: none;
+.loading.show{
+    display:flex;
 }
 
-.spinner {
-    width: 34px;
-    height: 34px;
-
-    border: 4px solid #ddd;
-
-    border-top-color: #1976d2;
-
-    border-radius: 50%;
-
-    animation: spin .8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* =========================================================
-   MESSAGE
-   ========================================================= */
-
-.message {
-    padding: 40px;
-
-    text-align: center;
-
-    color: #666;
-}
-
-/* =========================================================
+/* =========================
    MOBILE
-   ========================================================= */
+========================= */
 
-@media (max-width: 700px) {
+@media(max-width:700px){
 
-    .title {
-        font-size: 16px;
+    .title{
+        display:none;
     }
 
-    .freeze-control {
-        display: none;
+    .topbar{
+        gap:5px;
     }
 
-    .status {
-        display: none;
+    .status{
+        display:none;
     }
+
+    .settings-panel{
+        left:10px;
+        right:10px;
+        width:auto;
+    }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<!-- =======================================================
-     TOP BAR
-     ======================================================= -->
-
 <div class="topbar">
 
     <div class="title">
-        📊 REPORT
+        Theo dõi gói cước
     </div>
 
-    <button
-        class="top-button primary"
-        id="refreshButton">
-        🔄 Cập nhật dữ liệu
+    <button id="refreshButton" class="primary">
+        🔄 Làm mới
     </button>
 
-    <button
-        class="top-button"
-        id="clearAllButton">
-        🧹 Xóa bộ lọc
+    <button id="resetButton">
+        ↺ Tổng / Reset
     </button>
 
-    <div class="freeze-control">
+    <button id="freezeButton">
+        📌 Cố định cột
+    </button>
 
-        <span>
-            📌 Cố định cột:
-        </span>
+    <button id="settingsButton">
+        ⚙️ Cài đặt
+    </button>
 
-        <select id="freezeSelect">
-
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-
-        </select>
-
-    </div>
-
-    <div
-        class="status"
-        id="status">
+    <div class="status" id="status">
         Đang tải...
     </div>
 
 </div>
 
-
-<!-- =======================================================
-     TABLE
-     ======================================================= -->
-
-<div
-    class="table-wrapper"
-    id="tableWrapper">
+<div class="table-container" id="tableContainer">
 
     <table id="dataTable">
 
@@ -636,15 +690,25 @@ tbody tr:hover .frozen {
 </div>
 
 
-<!-- =======================================================
-     FILTER MENU
-     ======================================================= -->
+<!-- FILTER MENU -->
 
-<div
-    class="filter-menu"
-    id="filterMenu">
+<div class="menu" id="filterMenu">
 
-    <div class="filter-top">
+    <div class="menu-header" id="filterMenuTitle">
+        Bộ lọc
+    </div>
+
+    <div class="menu-search">
+
+        <input
+            id="filterValueSearch"
+            type="text"
+            placeholder="Tìm giá trị..."
+        >
+
+    </div>
+
+    <div class="menu-buttons">
 
         <button id="selectAllButton">
             Chọn tất cả
@@ -656,26 +720,15 @@ tbody tr:hover .frozen {
 
     </div>
 
-    <input
-        type="text"
-        id="filterSearch"
-        class="filter-search"
-        placeholder="Tìm trong danh sách...">
+    <div class="value-list" id="valueList"></div>
 
-    <div
-        id="filterValues"
-        class="filter-values">
-    </div>
+    <div class="menu-footer">
 
-    <div class="filter-bottom">
-
-        <button id="clearFilterButton">
+        <button id="clearColumnFilterButton">
             Xóa lọc
         </button>
 
-        <button
-            id="applyFilterButton"
-            class="apply">
+        <button id="applyFilterButton" class="primary">
             Áp dụng
         </button>
 
@@ -684,28 +737,291 @@ tbody tr:hover .frozen {
 </div>
 
 
-<!-- =======================================================
-     LOADING
-     ======================================================= -->
+<!-- CONTEXT MENU -->
 
-<div
-    class="loading"
-    id="loading">
+<div class="context-menu" id="contextMenu">
 
-    <div class="spinner"></div>
+    <div
+        class="context-item"
+        id="renameColumnButton"
+    >
+        ✏️ Đổi tên cột
+    </div>
 
-    <div id="loadingText">
-        Đang tải dữ liệu...
+    <div
+        class="context-item"
+        id="columnSettingsButton"
+    >
+        ⚙️ Định dạng cột
+    </div>
+
+    <div class="context-separator"></div>
+
+    <div
+        class="context-item"
+        id="sortAscButton"
+    >
+        ▲ Sort tăng dần
+    </div>
+
+    <div
+        class="context-item"
+        id="sortDescButton"
+    >
+        ▼ Sort giảm dần
+    </div>
+
+    <div
+        class="context-item"
+        id="removeSortButton"
+    >
+        ✕ Bỏ sort cột này
     </div>
 
 </div>
 
 
+<!-- SETTINGS -->
+
+<div class="settings-panel" id="settingsPanel">
+
+    <div class="settings-title">
+        ⚙️ Cài đặt website
+    </div>
+
+    <div class="settings-section">
+
+        <div class="settings-section-title">
+            Hiển thị
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                Wrap Text
+            </label>
+
+            <input
+                type="checkbox"
+                id="globalWrap"
+            >
+
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                Số cột cố định
+            </label>
+
+            <input
+                type="number"
+                id="freezeCount"
+                min="0"
+                value="0"
+            >
+
+        </div>
+
+    </div>
+
+    <div class="settings-section">
+
+        <div class="settings-section-title">
+            Cột đang chọn
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                Căn lề
+            </label>
+
+            <select id="columnAlign">
+
+                <option value="left">
+                    Trái
+                </option>
+
+                <option value="center">
+                    Giữa
+                </option>
+
+                <option value="right">
+                    Phải
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                Cỡ chữ
+            </label>
+
+            <input
+                type="number"
+                id="columnFontSize"
+                min="8"
+                max="40"
+                value="14"
+            >
+
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                In đậm
+            </label>
+
+            <input
+                type="checkbox"
+                id="columnBold"
+            >
+
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                In nghiêng
+            </label>
+
+            <input
+                type="checkbox"
+                id="columnItalic"
+            >
+
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                Màu chữ
+            </label>
+
+            <input
+                type="color"
+                id="columnTextColor"
+                class="color-input"
+                value="#222222"
+            >
+
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                Màu nền
+            </label>
+
+            <input
+                type="color"
+                id="columnBgColor"
+                class="color-input"
+                value="#ffffff"
+            >
+
+        </div>
+
+        <div class="setting-row">
+
+            <label>
+                Wrap Text
+            </label>
+
+            <input
+                type="checkbox"
+                id="columnWrap"
+            >
+
+        </div>
+
+    </div>
+
+    <div class="settings-footer">
+
+        <button id="resetColumnSettings">
+            Khôi phục cột
+        </button>
+
+        <button
+            id="closeSettings"
+            class="primary"
+        >
+            Đóng
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- RENAME -->
+
+<div
+    class="dialog-overlay"
+    id="renameDialog"
+>
+
+    <div class="dialog">
+
+        <h3>
+            ✏️ Đổi tên cột
+        </h3>
+
+        <input
+            id="renameInput"
+            type="text"
+            placeholder="Tên cột mới..."
+        >
+
+        <div class="dialog-buttons">
+
+            <button id="renameCancel">
+                Hủy
+            </button>
+
+            <button
+                id="renameSave"
+                class="primary"
+            >
+                Lưu
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="resize-info"
+    id="resizeInfo"
+></div>
+
+<div
+    class="loading"
+    id="loading"
+>
+    Đang tải dữ liệu...
+</div>
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
 <script>
 
 /* =========================================================
-   GOOGLE SHEET CONFIG
-   ========================================================= */
+   GOOGLE SHEET
+========================================================= */
 
 const SHEET_ID =
     "19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS";
@@ -718,155 +1034,232 @@ const CSV_URL =
 
 
 /* =========================================================
-   PERFORMANCE CONFIG
-   ========================================================= */
+   SETTINGS STORAGE
+========================================================= */
 
-const ROW_HEIGHT = 34;
-
-/*
- * Chỉ render số dòng này.
- * Có thể tăng lên 80 / 100 nếu muốn.
- */
-
-const BUFFER_ROWS = 40;
-
-
-/*
- * Chờ 120ms sau khi người dùng ngừng gõ.
- */
-
-const SEARCH_DELAY = 120;
+const STORAGE_KEY =
+    "report_google_sheet_table_v4";
 
 
 /* =========================================================
    DATA
-   ========================================================= */
+========================================================= */
 
-let headers = [];
+let originalHeaders = [];
 
 let originalData = [];
 
-let filteredData = [];
+let displayData = [];
 
+let columnNames = [];
 
-/* =========================================================
-   STATE
-   ========================================================= */
+let columnWidths = [];
 
-let filters = {};
+let columnSettings = {};
 
-let searches = {};
+let searchValues = {};
 
-let sortState = {
-    column: null,
-    direction: null
-};
+let selectedFilters = {};
 
-let columnWidths = {};
+let sortOrders = [];
 
 let freezeCount = 0;
 
-let activeFilterColumn = null;
+let globalWrap = true;
 
-let temporaryFilterValues =
-    new Set();
+let currentColumn = -1;
 
+let currentFilterColumn = -1;
 
-let searchTimers = {};
+let currentContextColumn = -1;
 
+let resizing = false;
 
-/* =========================================================
-   VIRTUAL SCROLL STATE
-   ========================================================= */
+let resizeColumn = -1;
 
-let virtualStart = 0;
+let resizeStartX = 0;
 
-let lastRenderedStart = -1;
-
-let isRendering = false;
+let resizeStartWidth = 0;
 
 
 /* =========================================================
-   STORAGE
-   ========================================================= */
+   DEFAULT FILTERS
+========================================================= */
 
-const STORAGE_KEY =
-    "report_google_sheet_table_v2";
+let defaultFilters = {};
 
 
 /* =========================================================
-   LOAD SETTINGS
-   ========================================================= */
+   DOM
+========================================================= */
 
-function loadSettings() {
+const tableHead =
+    document.getElementById("tableHead");
 
-    try {
+const tableBody =
+    document.getElementById("tableBody");
 
-        const saved =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
+const tableContainer =
+    document.getElementById("tableContainer");
 
-        if (!saved) {
-            return;
-        }
+const status =
+    document.getElementById("status");
 
-        const settings =
-            JSON.parse(saved);
+const loading =
+    document.getElementById("loading");
 
-        filters =
-            settings.filters || {};
+const filterMenu =
+    document.getElementById("filterMenu");
 
-        searches =
-            settings.searches || {};
+const valueList =
+    document.getElementById("valueList");
 
-        sortState =
-            settings.sortState || {
-                column: null,
-                direction: null
-            };
+const filterValueSearch =
+    document.getElementById("filterValueSearch");
 
-        columnWidths =
-            settings.columnWidths || {};
+const contextMenu =
+    document.getElementById("contextMenu");
 
-        freezeCount =
-            Number(
-                settings.freezeCount || 0
-            );
+const settingsPanel =
+    document.getElementById("settingsPanel");
 
-    } catch (error) {
+const renameDialog =
+    document.getElementById("renameDialog");
 
-        console.error(error);
+const renameInput =
+    document.getElementById("renameInput");
 
-    }
+const resizeInfo =
+    document.getElementById("resizeInfo");
 
+const toast =
+    document.getElementById("toast");
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer = null;
+
+function showToast(message){
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        }, 1800);
 }
 
 
 /* =========================================================
-   SAVE SETTINGS
-   ========================================================= */
+   SAVE / LOAD SETTINGS
+========================================================= */
 
-function saveSettings() {
+function saveSettings(){
 
-    try {
+    const settings = {
 
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify({
+        columnNames,
 
-                filters,
-                searches,
-                sortState,
-                columnWidths,
-                freezeCount
+        columnWidths,
 
-            })
+        columnSettings,
+
+        searchValues,
+
+        selectedFilters,
+
+        sortOrders,
+
+        freezeCount,
+
+        globalWrap
+
+    };
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(settings)
+    );
+}
+
+
+function loadSettings(){
+
+    try{
+
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
+
+        if(!raw){
+            return;
+        }
+
+        const settings =
+            JSON.parse(raw);
+
+        if(
+            Array.isArray(settings.columnNames)
+        ){
+            columnNames =
+                settings.columnNames;
+        }
+
+        if(
+            Array.isArray(settings.columnWidths)
+        ){
+            columnWidths =
+                settings.columnWidths;
+        }
+
+        if(settings.columnSettings){
+            columnSettings =
+                settings.columnSettings;
+        }
+
+        if(settings.searchValues){
+            searchValues =
+                settings.searchValues;
+        }
+
+        if(settings.selectedFilters){
+            selectedFilters =
+                settings.selectedFilters;
+        }
+
+        if(Array.isArray(settings.sortOrders)){
+            sortOrders =
+                settings.sortOrders;
+        }
+
+        if(
+            Number.isInteger(settings.freezeCount)
+        ){
+            freezeCount =
+                settings.freezeCount;
+        }
+
+        if(
+            typeof settings.globalWrap === "boolean"
+        ){
+            globalWrap =
+                settings.globalWrap;
+        }
+
+    }catch(error){
+
+        console.error(
+            "Không thể đọc settings",
+            error
         );
-
-    } catch (error) {
-
-        console.error(error);
 
     }
 
@@ -875,127 +1268,96 @@ function saveSettings() {
 
 /* =========================================================
    CSV PARSER
-   ========================================================= */
+========================================================= */
 
-function parseCSV(text) {
+function parseCSV(text){
 
     const rows = [];
 
     let row = [];
 
-    let value = "";
+    let cell = "";
 
     let insideQuotes = false;
 
-
-    for (
+    for(
         let i = 0;
         i < text.length;
         i++
-    ) {
+    ){
 
-        const char =
-            text[i];
+        const char = text[i];
 
-        const next =
-            text[i + 1];
+        const next = text[i + 1];
 
+        if(char === '"' && insideQuotes && next === '"'){
 
-        if (char === '"') {
+            cell += '"';
 
-            if (
-                insideQuotes &&
-                next === '"'
-            ) {
+            i++;
 
-                value += '"';
-
-                i++;
-
-            } else {
-
-                insideQuotes =
-                    !insideQuotes;
-
-            }
-
+            continue;
         }
 
-        else if (
+        if(char === '"'){
+
+            insideQuotes =
+                !insideQuotes;
+
+            continue;
+        }
+
+        if(
             char === "," &&
             !insideQuotes
-        ) {
+        ){
 
-            row.push(value);
+            row.push(cell);
 
-            value = "";
+            cell = "";
 
+            continue;
         }
 
-        else if (
-            (char === "\n" ||
-             char === "\r") &&
+        if(
+            (char === "\n" || char === "\r") &&
             !insideQuotes
-        ) {
+        ){
 
-            if (
+            if(
                 char === "\r" &&
                 next === "\n"
-            ) {
+            ){
 
                 i++;
 
             }
 
-            row.push(value);
-
-            value = "";
-
-
-            if (
-                row.some(
-                    cell =>
-                        cell.trim() !== ""
-                )
-            ) {
-
-                rows.push(row);
-
-            }
-
-            row = [];
-
-        }
-
-        else {
-
-            value += char;
-
-        }
-
-    }
-
-
-    if (
-        value !== "" ||
-        row.length > 0
-    ) {
-
-        row.push(value);
-
-        if (
-            row.some(
-                cell =>
-                    cell.trim() !== ""
-            )
-        ) {
+            row.push(cell);
 
             rows.push(row);
 
+            row = [];
+
+            cell = "";
+
+            continue;
         }
+
+        cell += char;
 
     }
 
+    if(
+        cell.length > 0 ||
+        row.length > 0
+    ){
+
+        row.push(cell);
+
+        rows.push(row);
+
+    }
 
     return rows;
 
@@ -1003,17 +1365,2661 @@ function parseCSV(text) {
 
 
 /* =========================================================
-   LOAD GOOGLE SHEET
-   ========================================================= */
+   NORMALIZE
+========================================================= */
 
-async function loadData() {
+function normalize(value){
 
-    showLoading(
-        "Đang tải dữ liệu..."
+    if(value === null ||
+       value === undefined){
+
+        return "";
+
+    }
+
+    return String(value)
+        .trim()
+        .toLowerCase();
+
+}
+
+
+/* =========================================================
+   FIND COLUMN
+========================================================= */
+
+function findColumn(...names){
+
+    for(
+        let i = 0;
+        i < originalHeaders.length;
+        i++
+    ){
+
+        const h =
+            normalize(originalHeaders[i]);
+
+        for(
+            const name of names
+        ){
+
+            if(
+                h === normalize(name)
+            ){
+
+                return i;
+
+            }
+
+        }
+
+    }
+
+    return -1;
+
+}
+
+
+/* =========================================================
+   SPECIAL SORT COLUMN
+========================================================= */
+
+function getSortColumn(index){
+
+    const name =
+        normalize(originalHeaders[index]);
+
+    if(name === "data"){
+
+        return findColumn(
+            "Sort_DATA",
+            "Sort DATA"
+        );
+
+    }
+
+    if(
+        name === "thoại nội mạng" ||
+        name === "thoai noi mang"
+    ){
+
+        return findColumn(
+            "Sort_NM",
+            "Sort NM"
+        );
+
+    }
+
+    if(
+        name === "thoại ngoại mạng" ||
+        name === "thoai ngoai mang"
+    ){
+
+        return findColumn(
+            "Sort_NgM",
+            "Sort NgM"
+        );
+
+    }
+
+    return index;
+
+}
+
+
+/* =========================================================
+   HIDDEN COLUMNS
+========================================================= */
+
+function isHiddenColumn(index){
+
+    const name =
+        normalize(originalHeaders[index]);
+
+    return [
+        "sort_data",
+        "sort data",
+        "sort_nm",
+        "sort nm",
+        "sort_ngm",
+        "sort ngm"
+    ].includes(name);
+
+}
+
+
+/* =========================================================
+   DATE UPDATE DISPLAY
+========================================================= */
+
+function findDateUpdateColumn(){
+
+    return findColumn(
+        "Ngày update",
+        "Ngay update",
+        "Ngày cập nhật",
+        "Ngay cap nhat"
+    );
+
+}
+
+
+function formatUpdateDate(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        String(value).trim() === ""
+    ){
+
+        return "";
+
+    }
+
+    const text =
+        String(value).trim();
+
+    let date = null;
+
+    /* yyyy-mm-dd */
+
+    let match =
+        text.match(
+            /^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/
+        );
+
+    if(match){
+
+        date =
+            new Date(
+                Number(match[1]),
+                Number(match[2]) - 1,
+                Number(match[3])
+            );
+
+    }
+
+    /* dd/mm/yyyy */
+
+    if(!date){
+
+        match =
+            text.match(
+                /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/
+            );
+
+        if(match){
+
+            date =
+                new Date(
+                    Number(match[3]),
+                    Number(match[2]) - 1,
+                    Number(match[1])
+                );
+
+        }
+
+    }
+
+    if(!date){
+
+        return text;
+
+    }
+
+    const now =
+        new Date();
+
+    let months =
+        (
+            now.getFullYear() -
+            date.getFullYear()
+        ) * 12 +
+        (
+            now.getMonth() -
+            date.getMonth()
+        );
+
+    if(months < 0){
+
+        months = 0;
+
+    }
+
+    return String(months).padStart(2, "0")
+        + " tháng";
+
+}
+
+
+/* =========================================================
+   DEFAULT FILTER
+========================================================= */
+
+function buildDefaultFilters(){
+
+    defaultFilters = {};
+
+    const dateColumn =
+        findDateUpdateColumn();
+
+    if(dateColumn >= 0){
+
+        defaultFilters[dateColumn] = {
+            type:"not-empty"
+        };
+
+    }
+
+    const stopColumn =
+        findColumn(
+            "Dừng gói",
+            "Dung goi"
+        );
+
+    if(stopColumn >= 0){
+
+        defaultFilters[stopColumn] = {
+            type:"empty"
+        };
+
+    }
+
+}
+
+
+/* =========================================================
+   CHECK DEFAULT FILTER
+========================================================= */
+
+function passesDefaultFilter(
+    row,
+    column
+){
+
+    const rule =
+        defaultFilters[column];
+
+    if(!rule){
+
+        return true;
+
+    }
+
+    const value =
+        row[column] ?? "";
+
+    const empty =
+        String(value).trim() === "";
+
+    if(rule.type === "empty"){
+
+        return empty;
+
+    }
+
+    if(rule.type === "not-empty"){
+
+        return !empty;
+
+    }
+
+    return true;
+
+}
+
+
+/* =========================================================
+   INITIALIZE COLUMNS
+========================================================= */
+
+function initializeColumns(){
+
+    if(
+        !Array.isArray(columnNames) ||
+        columnNames.length !== originalHeaders.length
+    ){
+
+        columnNames =
+            [...originalHeaders];
+
+    }else{
+
+        for(
+            let i = 0;
+            i < originalHeaders.length;
+            i++
+        ){
+
+            if(
+                !columnNames[i] ||
+                columnNames[i].trim() === ""
+            ){
+
+                columnNames[i] =
+                    originalHeaders[i];
+
+            }
+
+        }
+
+    }
+
+
+    if(
+        !Array.isArray(columnWidths) ||
+        columnWidths.length !== originalHeaders.length
+    ){
+
+        const old =
+            Array.isArray(columnWidths)
+                ? columnWidths
+                : [];
+
+        columnWidths =
+            originalHeaders.map(
+                (_, i) =>
+                    old[i] || 160
+            );
+
+    }
+
+
+    for(
+        let i = 0;
+        i < originalHeaders.length;
+        i++
+    ){
+
+        if(
+            !columnSettings[i]
+        ){
+
+            columnSettings[i] = {
+
+                align:"left",
+
+                fontSize:14,
+
+                bold:false,
+
+                italic:false,
+
+                textColor:"#222222",
+
+                bgColor:"#ffffff",
+
+                wrap:true
+
+            };
+
+        }
+
+    }
+
+
+    if(freezeCount > originalHeaders.length){
+
+        freezeCount =
+            originalHeaders.length;
+
+    }
+
+}
+
+
+/* =========================================================
+   DISPLAY VALUE
+========================================================= */
+
+function getDisplayValue(
+    value,
+    column
+){
+
+    const dateColumn =
+        findDateUpdateColumn();
+
+    if(
+        column === dateColumn
+    ){
+
+        return formatUpdateDate(value);
+
+    }
+
+    return value ?? "";
+
+}
+
+
+/* =========================================================
+   FILTER VALUES
+========================================================= */
+
+function getColumnValues(column){
+
+    const values = new Set();
+
+    for(
+        const row of originalData
+    ){
+
+        const value =
+            getDisplayValue(
+                row[column],
+                column
+            );
+
+        values.add(
+            String(value)
+        );
+
+    }
+
+    return Array.from(values)
+        .sort(
+            (a,b) =>
+                a.localeCompare(
+                    b,
+                    "vi",
+                    {
+                        numeric:true,
+                        sensitivity:"base"
+                    }
+                )
+        );
+
+}
+
+
+/* =========================================================
+   ACTIVE FILTER
+========================================================= */
+
+function hasUserFilter(column){
+
+    const filter =
+        selectedFilters[column];
+
+    return (
+        Array.isArray(filter) &&
+        filter.length > 0
+    );
+
+}
+
+
+function hasSearch(column){
+
+    return (
+        searchValues[column] &&
+        searchValues[column].trim() !== ""
+    );
+
+}
+
+
+function isActiveFilter(column){
+
+    return (
+        hasUserFilter(column) ||
+        hasSearch(column) ||
+        defaultFilters[column]
+    );
+
+}
+
+
+/* =========================================================
+   FILTER + SORT
+========================================================= */
+
+function recalculateData(){
+
+    const result = [];
+
+    for(
+        let rowIndex = 0;
+        rowIndex < originalData.length;
+        rowIndex++
+    ){
+
+        const row =
+            originalData[rowIndex];
+
+        let valid = true;
+
+
+        /* default filter */
+
+        for(
+            const key of Object.keys(
+                defaultFilters
+            )
+        ){
+
+            const column =
+                Number(key);
+
+            if(
+                !passesDefaultFilter(
+                    row,
+                    column
+                )
+            ){
+
+                valid = false;
+
+                break;
+
+            }
+
+        }
+
+        if(!valid){
+
+            continue;
+
+        }
+
+
+        /* user filter */
+
+        for(
+            const key of Object.keys(
+                selectedFilters
+            )
+        ){
+
+            const column =
+                Number(key);
+
+            const values =
+                selectedFilters[column];
+
+            if(
+                !Array.isArray(values) ||
+                values.length === 0
+            ){
+
+                continue;
+
+            }
+
+            const value =
+                String(
+                    getDisplayValue(
+                        row[column],
+                        column
+                    )
+                );
+
+            if(
+                !values.includes(value)
+            ){
+
+                valid = false;
+
+                break;
+
+            }
+
+        }
+
+        if(!valid){
+
+            continue;
+
+        }
+
+
+        /* search */
+
+        for(
+            const key of Object.keys(
+                searchValues
+            )
+        ){
+
+            const column =
+                Number(key);
+
+            const search =
+                normalize(
+                    searchValues[column]
+                );
+
+            if(!search){
+
+                continue;
+
+            }
+
+            const value =
+                normalize(
+                    getDisplayValue(
+                        row[column],
+                        column
+                    )
+                );
+
+            if(
+                !value.includes(search)
+            ){
+
+                valid = false;
+
+                break;
+
+            }
+
+        }
+
+        if(valid){
+
+            result.push({
+                row,
+                originalIndex:rowIndex
+            });
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MULTI SORT
+    ===================================================== */
+
+    if(sortOrders.length > 0){
+
+        result.sort(
+            (a,b) => {
+
+                for(
+                    const sort of sortOrders
+                ){
+
+                    const displayColumn =
+                        sort.column;
+
+                    const actualSortColumn =
+                        getSortColumn(
+                            displayColumn
+                        );
+
+                    const av =
+                        a.row[actualSortColumn];
+
+                    const bv =
+                        b.row[actualSortColumn];
+
+                    const cmp =
+                        compareValues(
+                            av,
+                            bv
+                        );
+
+                    if(cmp !== 0){
+
+                        return (
+                            sort.direction === "asc"
+                                ? cmp
+                                : -cmp
+                        );
+
+                    }
+
+                }
+
+                return (
+                    a.originalIndex -
+                    b.originalIndex
+                );
+
+            }
+        );
+
+    }
+
+
+    displayData =
+        result.map(
+            item => item.row
+        );
+
+
+    renderTableBody();
+
+    updateStatus();
+
+}
+
+
+/* =========================================================
+   COMPARE
+========================================================= */
+
+function compareValues(a,b){
+
+    const aa =
+        String(a ?? "").trim();
+
+    const bb =
+        String(b ?? "").trim();
+
+    if(aa === bb){
+
+        return 0;
+
+    }
+
+    if(aa === ""){
+
+        return -1;
+
+    }
+
+    if(bb === ""){
+
+        return 1;
+
+    }
+
+    const na =
+        Number(
+            aa.replace(
+                /[^\d.-]/g,
+                ""
+            )
+        );
+
+    const nb =
+        Number(
+            bb.replace(
+                /[^\d.-]/g,
+                ""
+            )
+        );
+
+    if(
+        !Number.isNaN(na) &&
+        !Number.isNaN(nb) &&
+        aa.match(/\d/) &&
+        bb.match(/\d/)
+    ){
+
+        return na - nb;
+
+    }
+
+    return aa.localeCompare(
+        bb,
+        "vi",
+        {
+            numeric:true,
+            sensitivity:"base"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RENDER HEADER
+========================================================= */
+
+function renderHeader(){
+
+    tableHead.innerHTML = "";
+
+    const row =
+        document.createElement("tr");
+
+    for(
+        let column = 0;
+        column < originalHeaders.length;
+        column++
+    ){
+
+        if(
+            isHiddenColumn(column)
+        ){
+
+            continue;
+
+        }
+
+        const th =
+            document.createElement("th");
+
+        th.dataset.column =
+            column;
+
+        th.style.width =
+            columnWidths[column] + "px";
+
+        th.style.minWidth =
+            columnWidths[column] + "px";
+
+        const sortIndex =
+            sortOrders.findIndex(
+                s =>
+                    s.column === column
+            );
+
+        const activeFilter =
+            isActiveFilter(column);
+
+        const activeSort =
+            sortIndex >= 0;
+
+        if(activeFilter){
+
+            th.classList.add(
+                "active-filter"
+            );
+
+        }
+
+        if(activeSort){
+
+            th.classList.add(
+                "active-sort"
+            );
+
+        }
+
+
+        /* HEADER */
+
+        const headerMain =
+            document.createElement("div");
+
+        headerMain.className =
+            "header-main";
+
+
+        const title =
+            document.createElement("div");
+
+        title.className =
+            "header-title";
+
+        title.textContent =
+            columnNames[column];
+
+
+        const right =
+            document.createElement("div");
+
+        right.style.display =
+            "flex";
+
+        right.style.alignItems =
+            "center";
+
+        right.style.gap =
+            "4px";
+
+
+        if(activeSort){
+
+            const sortBadge =
+                document.createElement("span");
+
+            sortBadge.className =
+                "header-sort " +
+                (
+                    sortOrders[sortIndex]
+                        .direction === "asc"
+                        ? "asc"
+                        : "desc"
+                );
+
+            const number =
+                sortIndex + 1;
+
+            sortBadge.textContent =
+                `${number} ${
+                    sortOrders[sortIndex].direction === "asc"
+                        ? "▲"
+                        : "▼"
+                }`;
+
+            right.appendChild(
+                sortBadge
+            );
+
+        }else{
+
+            const arrow =
+                document.createElement("span");
+
+            arrow.className =
+                "header-arrow";
+
+            arrow.textContent =
+                "▼";
+
+            right.appendChild(
+                arrow
+            );
+
+        }
+
+
+        headerMain.appendChild(
+            title
+        );
+
+        headerMain.appendChild(
+            right
+        );
+
+
+        /* CLICK */
+
+        headerMain.addEventListener(
+            "click",
+            event => {
+
+                if(
+                    event.target.closest(
+                        ".resize-handle"
+                    )
+                ){
+
+                    return;
+
+                }
+
+                openFilterMenu(
+                    column,
+                    event
+                );
+
+            }
+        );
+
+
+        /* RIGHT CLICK */
+
+        headerMain.addEventListener(
+            "contextmenu",
+            event => {
+
+                event.preventDefault();
+
+                openContextMenu(
+                    column,
+                    event.clientX,
+                    event.clientY
+                );
+
+            }
+        );
+
+
+        th.appendChild(
+            headerMain
+        );
+
+
+        /* RESIZE */
+
+        const resizeHandle =
+            document.createElement("div");
+
+        resizeHandle.className =
+            "resize-handle";
+
+        resizeHandle.addEventListener(
+            "mousedown",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                startResize(
+                    event,
+                    column
+                );
+
+            }
+        );
+
+        th.appendChild(
+            resizeHandle
+        );
+
+
+        row.appendChild(
+            th
+        );
+
+    }
+
+
+    /* SEARCH ROW */
+
+    const searchRow =
+        document.createElement("tr");
+
+    searchRow.className =
+        "search-row";
+
+
+    for(
+        let column = 0;
+        column < originalHeaders.length;
+        column++
+    ){
+
+        if(
+            isHiddenColumn(column)
+        ){
+
+            continue;
+
+        }
+
+        const td =
+            document.createElement("th");
+
+        td.className =
+            "search-cell";
+
+        td.style.width =
+            columnWidths[column] + "px";
+
+        td.style.minWidth =
+            columnWidths[column] + "px";
+
+
+        const input =
+            document.createElement("input");
+
+        input.className =
+            "search-input";
+
+        input.placeholder =
+            "🔎 Tìm...";
+
+        input.value =
+            searchValues[column] || "";
+
+
+        let timer = null;
+
+        input.addEventListener(
+            "input",
+            () => {
+
+                clearTimeout(timer);
+
+                timer =
+                    setTimeout(
+                        () => {
+
+                            searchValues[column] =
+                                input.value;
+
+                            saveSettings();
+
+                            recalculateData();
+
+                            renderHeader();
+
+                            applyStickyColumns();
+
+                        },
+                        150
+                    );
+
+            }
+        );
+
+
+        input.addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+            }
+        );
+
+
+        td.appendChild(
+            input
+        );
+
+        searchRow.appendChild(
+            td
+        );
+
+    }
+
+
+    tableHead.appendChild(
+        row
+    );
+
+    tableHead.appendChild(
+        searchRow
     );
 
 
-    try {
+    applyStickyColumns();
+
+}
+
+
+/* =========================================================
+   RENDER BODY
+========================================================= */
+
+function renderTableBody(){
+
+    tableBody.innerHTML = "";
+
+    const fragment =
+        document.createDocumentFragment();
+
+    for(
+        let rowIndex = 0;
+        rowIndex < displayData.length;
+        rowIndex++
+    ){
+
+        const row =
+            displayData[rowIndex];
+
+        const tr =
+            document.createElement("tr");
+
+
+        for(
+            let column = 0;
+            column < originalHeaders.length;
+            column++
+        ){
+
+            if(
+                isHiddenColumn(column)
+            ){
+
+                continue;
+
+            }
+
+            const td =
+                document.createElement("td");
+
+            const setting =
+                columnSettings[column] || {};
+
+
+            td.textContent =
+                getDisplayValue(
+                    row[column],
+                    column
+                );
+
+
+            td.style.textAlign =
+                setting.align || "left";
+
+            td.style.fontSize =
+                (setting.fontSize || 14) + "px";
+
+            td.style.fontWeight =
+                setting.bold
+                    ? "700"
+                    : "400";
+
+            td.style.fontStyle =
+                setting.italic
+                    ? "italic"
+                    : "normal";
+
+            td.style.color =
+                setting.textColor ||
+                "#222222";
+
+            td.style.backgroundColor =
+                setting.bgColor ||
+                "#ffffff";
+
+
+            const wrap =
+                setting.wrap !== undefined
+                    ? setting.wrap
+                    : globalWrap;
+
+
+            if(wrap){
+
+                td.classList.add(
+                    "wrap-text"
+                );
+
+            }else{
+
+                td.classList.add(
+                    "no-wrap"
+                );
+
+            }
+
+
+            td.style.width =
+                columnWidths[column] + "px";
+
+            td.style.minWidth =
+                columnWidths[column] + "px";
+
+            td.style.maxWidth =
+                columnWidths[column] + "px";
+
+
+            tr.appendChild(td);
+
+        }
+
+
+        fragment.appendChild(
+            tr
+        );
+
+    }
+
+
+    tableBody.appendChild(
+        fragment
+    );
+
+
+    applyStickyColumns();
+
+}
+
+
+/* =========================================================
+   STICKY
+========================================================= */
+
+function applyStickyColumns(){
+
+    const visibleColumns = [];
+
+    for(
+        let i = 0;
+        i < originalHeaders.length;
+        i++
+    ){
+
+        if(
+            !isHiddenColumn(i)
+        ){
+
+            visibleColumns.push(i);
+
+        }
+
+    }
+
+
+    let left = 0;
+
+
+    for(
+        let visibleIndex = 0;
+        visibleIndex < visibleColumns.length;
+        visibleIndex++
+    ){
+
+        const column =
+            visibleColumns[visibleIndex];
+
+        const elements =
+            document.querySelectorAll(
+                `[data-column="${column}"]`
+            );
+
+
+        if(
+            visibleIndex < freezeCount
+        ){
+
+            elements.forEach(
+                element => {
+
+                    element.classList.add(
+                        "sticky-col"
+                    );
+
+                    element.style.left =
+                        left + "px";
+
+                }
+            );
+
+            left +=
+                columnWidths[column];
+
+        }else{
+
+            elements.forEach(
+                element => {
+
+                    element.classList.remove(
+                        "sticky-col"
+                    );
+
+                    element.style.left =
+                        "";
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* tbody cells */
+
+    const bodyRows =
+        tableBody.querySelectorAll("tr");
+
+    bodyRows.forEach(
+        row => {
+
+            let visibleIndex = 0;
+
+            const cells =
+                Array.from(
+                    row.children
+                );
+
+            cells.forEach(
+                cell => {
+
+                    while(
+                        visibleIndex <
+                        visibleColumns.length &&
+                        isHiddenColumn(
+                            visibleColumns[visibleIndex]
+                        )
+                    ){
+
+                        visibleIndex++;
+
+                    }
+
+                    if(
+                        visibleIndex <
+                        freezeCount
+                    ){
+
+                        const column =
+                            visibleColumns[
+                                visibleIndex
+                            ];
+
+                        cell.classList.add(
+                            "sticky-col"
+                        );
+
+                        let offset = 0;
+
+                        for(
+                            let x = 0;
+                            x < visibleIndex;
+                            x++
+                        ){
+
+                            offset +=
+                                columnWidths[
+                                    visibleColumns[x]
+                                ];
+
+                        }
+
+                        cell.style.left =
+                            offset + "px";
+
+                    }
+
+                    visibleIndex++;
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   OPEN FILTER
+========================================================= */
+
+function openFilterMenu(
+    column,
+    event
+){
+
+    currentFilterColumn =
+        column;
+
+    filterMenu.style.display =
+        "block";
+
+    filterMenu.classList.add(
+        "show"
+    );
+
+    filterMenu.style.left =
+        Math.min(
+            event.clientX,
+            window.innerWidth - 310
+        ) + "px";
+
+    filterMenu.style.top =
+        Math.min(
+            event.clientY + 5,
+            window.innerHeight - 540
+        ) + "px";
+
+
+    document.getElementById(
+        "filterMenuTitle"
+    ).textContent =
+        `Lọc: ${columnNames[column]}`;
+
+
+    filterValueSearch.value =
+        "";
+
+
+    renderFilterValues();
+
+}
+
+
+/* =========================================================
+   RENDER FILTER VALUES
+========================================================= */
+
+function renderFilterValues(){
+
+    valueList.innerHTML = "";
+
+    if(currentFilterColumn < 0){
+
+        return;
+
+    }
+
+    const column =
+        currentFilterColumn;
+
+    let values =
+        getColumnValues(column);
+
+
+    const search =
+        normalize(
+            filterValueSearch.value
+        );
+
+
+    if(search){
+
+        values =
+            values.filter(
+                value =>
+                    normalize(
+                        value
+                    ).includes(search)
+            );
+
+    }
+
+
+    let selected =
+        selectedFilters[column];
+
+
+    if(!Array.isArray(selected)){
+
+        selected =
+            [...values];
+
+    }
+
+
+    for(
+        const value of values
+    ){
+
+        const label =
+            document.createElement(
+                "label"
+            );
+
+        label.className =
+            "value-item";
+
+
+        const checkbox =
+            document.createElement(
+                "input"
+            );
+
+        checkbox.type =
+            "checkbox";
+
+        checkbox.value =
+            value;
+
+        checkbox.checked =
+            selected.includes(
+                value
+            );
+
+
+        label.appendChild(
+            checkbox
+        );
+
+
+        const text =
+            document.createElement(
+                "span"
+            );
+
+        text.textContent =
+            value === ""
+                ? "(Trống)"
+                : value;
+
+
+        label.appendChild(
+            text
+        );
+
+
+        valueList.appendChild(
+            label
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILTER BUTTONS
+========================================================= */
+
+document.getElementById(
+    "selectAllButton"
+).addEventListener(
+    "click",
+    () => {
+
+        const checkboxes =
+            valueList.querySelectorAll(
+                "input[type=checkbox]"
+            );
+
+        checkboxes.forEach(
+            checkbox => {
+
+                checkbox.checked =
+                    true;
+
+            }
+        );
+
+    }
+);
+
+
+document.getElementById(
+    "deselectAllButton"
+).addEventListener(
+    "click",
+    () => {
+
+        const checkboxes =
+            valueList.querySelectorAll(
+                "input[type=checkbox]"
+            );
+
+        checkboxes.forEach(
+            checkbox => {
+
+                checkbox.checked =
+                    false;
+
+            }
+        );
+
+    }
+);
+
+
+filterValueSearch.addEventListener(
+    "input",
+    renderFilterValues
+);
+
+
+/* =========================================================
+   APPLY FILTER
+========================================================= */
+
+document.getElementById(
+    "applyFilterButton"
+).addEventListener(
+    "click",
+    () => {
+
+        const checkboxes =
+            valueList.querySelectorAll(
+                "input[type=checkbox]"
+            );
+
+        const values = [];
+
+        checkboxes.forEach(
+            checkbox => {
+
+                if(checkbox.checked){
+
+                    values.push(
+                        checkbox.value
+                    );
+
+                }
+
+            }
+        );
+
+
+        const allValues =
+            getColumnValues(
+                currentFilterColumn
+            );
+
+
+        if(
+            values.length === 0
+        ){
+
+            selectedFilters[
+                currentFilterColumn
+            ] = [];
+
+        }else if(
+            values.length ===
+            allValues.length
+        ){
+
+            delete selectedFilters[
+                currentFilterColumn
+            ];
+
+        }else{
+
+            selectedFilters[
+                currentFilterColumn
+            ] =
+                values;
+
+        }
+
+
+        saveSettings();
+
+        closeFilterMenu();
+
+        recalculateData();
+
+        renderHeader();
+
+        showToast(
+            "Đã áp dụng bộ lọc"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CLEAR COLUMN FILTER
+========================================================= */
+
+document.getElementById(
+    "clearColumnFilterButton"
+).addEventListener(
+    "click",
+    () => {
+
+        delete selectedFilters[
+            currentFilterColumn
+        ];
+
+        saveSettings();
+
+        closeFilterMenu();
+
+        recalculateData();
+
+        renderHeader();
+
+    }
+);
+
+
+/* =========================================================
+   CLOSE FILTER
+========================================================= */
+
+function closeFilterMenu(){
+
+    filterMenu.classList.remove(
+        "show"
+    );
+
+    filterMenu.style.display =
+        "none";
+
+}
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if(
+            !event.target.closest(
+                "#filterMenu"
+            ) &&
+            !event.target.closest(
+                ".header-main"
+            )
+        ){
+
+            closeFilterMenu();
+
+        }
+
+        if(
+            !event.target.closest(
+                "#contextMenu"
+            )
+        ){
+
+            closeContextMenu();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CONTEXT MENU
+========================================================= */
+
+function openContextMenu(
+    column,
+    x,
+    y
+){
+
+    currentContextColumn =
+        column;
+
+    contextMenu.style.left =
+        Math.min(
+            x,
+            window.innerWidth - 240
+        ) + "px";
+
+    contextMenu.style.top =
+        Math.min(
+            y,
+            window.innerHeight - 230
+        ) + "px";
+
+    contextMenu.classList.add(
+        "show"
+    );
+
+}
+
+
+function closeContextMenu(){
+
+    contextMenu.classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   SORT
+========================================================= */
+
+function setSort(
+    column,
+    direction
+){
+
+    const existing =
+        sortOrders.find(
+            s =>
+                s.column === column
+        );
+
+
+    if(existing){
+
+        existing.direction =
+            direction;
+
+    }else{
+
+        sortOrders.push({
+
+            column,
+
+            direction
+
+        });
+
+    }
+
+
+    saveSettings();
+
+    closeContextMenu();
+
+    recalculateData();
+
+    renderHeader();
+
+    showToast(
+        `Sort ưu tiên ${sortOrders.findIndex(
+            s => s.column === column
+        ) + 1}`
+    );
+
+}
+
+
+function removeSort(column){
+
+    sortOrders =
+        sortOrders.filter(
+            s =>
+                s.column !== column
+        );
+
+    saveSettings();
+
+    closeContextMenu();
+
+    recalculateData();
+
+    renderHeader();
+
+}
+
+
+/* =========================================================
+   CONTEXT ACTIONS
+========================================================= */
+
+document.getElementById(
+    "sortAscButton"
+).addEventListener(
+    "click",
+    () => {
+
+        setSort(
+            currentContextColumn,
+            "asc"
+        );
+
+    }
+);
+
+
+document.getElementById(
+    "sortDescButton"
+).addEventListener(
+    "click",
+    () => {
+
+        setSort(
+            currentContextColumn,
+            "desc"
+        );
+
+    }
+);
+
+
+document.getElementById(
+    "removeSortButton"
+).addEventListener(
+    "click",
+    () => {
+
+        removeSort(
+            currentContextColumn
+        );
+
+    }
+);
+
+
+/* =========================================================
+   RENAME
+========================================================= */
+
+document.getElementById(
+    "renameColumnButton"
+).addEventListener(
+    "click",
+    () => {
+
+        const column =
+            currentContextColumn;
+
+        closeContextMenu();
+
+        renameInput.value =
+            columnNames[column];
+
+        renameDialog.classList.add(
+            "show"
+        );
+
+        renameInput.focus();
+
+        renameInput.select();
+
+    }
+);
+
+
+document.getElementById(
+    "renameCancel"
+).addEventListener(
+    "click",
+    () => {
+
+        renameDialog.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+document.getElementById(
+    "renameSave"
+).addEventListener(
+    "click",
+    () => {
+
+        const name =
+            renameInput.value.trim();
+
+        if(!name){
+
+            return;
+
+        }
+
+        columnNames[
+            currentContextColumn
+        ] = name;
+
+        saveSettings();
+
+        renameDialog.classList.remove(
+            "show"
+        );
+
+        renderHeader();
+
+        renderTableBody();
+
+        showToast(
+            "Đã đổi tên cột"
+        );
+
+    }
+);
+
+
+renameInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Enter"){
+
+            document.getElementById(
+                "renameSave"
+            ).click();
+
+        }
+
+        if(event.key === "Escape"){
+
+            document.getElementById(
+                "renameCancel"
+            ).click();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   COLUMN SETTINGS
+========================================================= */
+
+function openColumnSettings(
+    column
+){
+
+    currentColumn =
+        column;
+
+    const setting =
+        columnSettings[column];
+
+
+    document.getElementById(
+        "columnAlign"
+    ).value =
+        setting.align || "left";
+
+
+    document.getElementById(
+        "columnFontSize"
+    ).value =
+        setting.fontSize || 14;
+
+
+    document.getElementById(
+        "columnBold"
+    ).checked =
+        !!setting.bold;
+
+
+    document.getElementById(
+        "columnItalic"
+    ).checked =
+        !!setting.italic;
+
+
+    document.getElementById(
+        "columnTextColor"
+    ).value =
+        setting.textColor || "#222222";
+
+
+    document.getElementById(
+        "columnBgColor"
+    ).value =
+        setting.bgColor || "#ffffff";
+
+
+    document.getElementById(
+        "columnWrap"
+    ).checked =
+        setting.wrap !== false;
+
+
+    settingsPanel.classList.add(
+        "show"
+    );
+
+}
+
+
+document.getElementById(
+    "columnSettingsButton"
+).addEventListener(
+    "click",
+    () => {
+
+        const column =
+            currentContextColumn;
+
+        closeContextMenu();
+
+        openColumnSettings(
+            column
+        );
+
+    }
+);
+
+
+/* =========================================================
+   LIVE COLUMN SETTINGS
+========================================================= */
+
+function updateCurrentColumnSetting(){
+
+    if(currentColumn < 0){
+
+        return;
+
+    }
+
+    const setting =
+        columnSettings[currentColumn];
+
+
+    setting.align =
+        document.getElementById(
+            "columnAlign"
+        ).value;
+
+
+    setting.fontSize =
+        Number(
+            document.getElementById(
+                "columnFontSize"
+            ).value
+        ) || 14;
+
+
+    setting.bold =
+        document.getElementById(
+            "columnBold"
+        ).checked;
+
+
+    setting.italic =
+        document.getElementById(
+            "columnItalic"
+        ).checked;
+
+
+    setting.textColor =
+        document.getElementById(
+            "columnTextColor"
+        ).value;
+
+
+    setting.bgColor =
+        document.getElementById(
+            "columnBgColor"
+        ).value;
+
+
+    setting.wrap =
+        document.getElementById(
+            "columnWrap"
+        ).checked;
+
+
+    saveSettings();
+
+    renderTableBody();
+
+}
+
+
+[
+    "columnAlign",
+    "columnFontSize",
+    "columnBold",
+    "columnItalic",
+    "columnTextColor",
+    "columnBgColor",
+    "columnWrap"
+].forEach(
+    id => {
+
+        document.getElementById(
+            id
+        ).addEventListener(
+            "input",
+            updateCurrentColumnSetting
+        );
+
+        document.getElementById(
+            id
+        ).addEventListener(
+            "change",
+            updateCurrentColumnSetting
+        );
+
+    }
+);
+
+
+/* =========================================================
+   RESET COLUMN SETTINGS
+========================================================= */
+
+document.getElementById(
+    "resetColumnSettings"
+).addEventListener(
+    "click",
+    () => {
+
+        if(currentColumn < 0){
+
+            return;
+
+        }
+
+        columnSettings[
+            currentColumn
+        ] = {
+
+            align:"left",
+
+            fontSize:14,
+
+            bold:false,
+
+            italic:false,
+
+            textColor:"#222222",
+
+            bgColor:"#ffffff",
+
+            wrap:true
+
+        };
+
+        saveSettings();
+
+        openColumnSettings(
+            currentColumn
+        );
+
+        renderTableBody();
+
+        showToast(
+            "Đã khôi phục định dạng cột"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SETTINGS PANEL
+========================================================= */
+
+document.getElementById(
+    "settingsButton"
+).addEventListener(
+    "click",
+    () => {
+
+        settingsPanel.classList.toggle(
+            "show"
+        );
+
+        document.getElementById(
+            "globalWrap"
+        ).checked =
+            globalWrap;
+
+        document.getElementById(
+            "freezeCount"
+        ).value =
+            freezeCount;
+
+    }
+);
+
+
+document.getElementById(
+    "closeSettings"
+).addEventListener(
+    "click",
+    () => {
+
+        settingsPanel.classList.remove(
+            "show"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   GLOBAL WRAP
+========================================================= */
+
+document.getElementById(
+    "globalWrap"
+).addEventListener(
+    "change",
+    event => {
+
+        globalWrap =
+            event.target.checked;
+
+        saveSettings();
+
+        renderTableBody();
+
+    }
+);
+
+
+/* =========================================================
+   FREEZE
+========================================================= */
+
+document.getElementById(
+    "freezeCount"
+).addEventListener(
+    "change",
+    event => {
+
+        freezeCount =
+            Math.max(
+                0,
+                Number(
+                    event.target.value
+                ) || 0
+            );
+
+        if(
+            freezeCount >
+            originalHeaders.length
+        ){
+
+            freezeCount =
+                originalHeaders.length;
+
+        }
+
+        saveSettings();
+
+        applyStickyColumns();
+
+    }
+);
+
+
+document.getElementById(
+    "freezeButton"
+).addEventListener(
+    "click",
+    () => {
+
+        settingsPanel.classList.add(
+            "show"
+        );
+
+        document.getElementById(
+            "freezeCount"
+        ).focus();
+
+    }
+);
+
+
+/* =========================================================
+   RESET FILTERS
+========================================================= */
+
+document.getElementById(
+    "resetButton"
+).addEventListener(
+    "click",
+    () => {
+
+        selectedFilters = {};
+
+        searchValues = {};
+
+        sortOrders = [];
+
+        saveSettings();
+
+        recalculateData();
+
+        renderHeader();
+
+        showToast(
+            "Đã reset filter, search và sort"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+function startResize(
+    event,
+    column
+){
+
+    resizing = true;
+
+    resizeColumn =
+        column;
+
+    resizeStartX =
+        event.clientX;
+
+    resizeStartWidth =
+        columnWidths[column];
+
+
+    resizeInfo.style.display =
+        "block";
+
+    resizeInfo.textContent =
+        `${resizeStartWidth}px`;
+
+
+    document.body.style.cursor =
+        "col-resize";
+
+}
+
+
+document.addEventListener(
+    "mousemove",
+    event => {
+
+        if(!resizing){
+
+            return;
+
+        }
+
+        const delta =
+            event.clientX -
+            resizeStartX;
+
+        const newWidth =
+            Math.max(
+                40,
+                resizeStartWidth +
+                delta
+            );
+
+        columnWidths[
+            resizeColumn
+        ] = newWidth;
+
+
+        resizeInfo.textContent =
+            `${Math.round(newWidth)} px`;
+
+        resizeInfo.style.left =
+            (event.clientX + 12) + "px";
+
+        resizeInfo.style.top =
+            (event.clientY + 12) + "px";
+
+
+        updateColumnWidthVisual(
+            resizeColumn,
+            newWidth
+        );
+
+        applyStickyColumns();
+
+    }
+);
+
+
+document.addEventListener(
+    "mouseup",
+    () => {
+
+        if(!resizing){
+
+            return;
+
+        }
+
+        resizing = false;
+
+        resizeInfo.style.display =
+            "none";
+
+        document.body.style.cursor =
+            "";
+
+        saveSettings();
+
+    }
+);
+
+
+/* =========================================================
+   UPDATE WIDTH
+========================================================= */
+
+function updateColumnWidthVisual(
+    column,
+    width
+){
+
+    document
+        .querySelectorAll(
+            `[data-column="${column}"]`
+        )
+        .forEach(
+            element => {
+
+                element.style.width =
+                    width + "px";
+
+                element.style.minWidth =
+                    width + "px";
+
+                element.style.maxWidth =
+                    width + "px";
+
+            }
+        );
+
+
+    const visibleColumns = [];
+
+    for(
+        let i = 0;
+        i < originalHeaders.length;
+        i++
+    ){
+
+        if(!isHiddenColumn(i)){
+
+            visibleColumns.push(i);
+
+        }
+
+    }
+
+
+    let left = 0;
+
+    for(
+        let i = 0;
+        i < Math.min(
+            freezeCount,
+            visibleColumns.length
+        );
+        i++
+    ){
+
+        const c =
+            visibleColumns[i];
+
+        document
+            .querySelectorAll(
+                `[data-column="${c}"]`
+            )
+            .forEach(
+                element => {
+
+                    element.style.left =
+                        left + "px";
+
+                }
+            );
+
+        left +=
+            columnWidths[c];
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD GOOGLE SHEET
+========================================================= */
+
+async function loadData(){
+
+    loading.classList.add(
+        "show"
+    );
+
+    status.textContent =
+        "Đang tải dữ liệu...";
+
+
+    try{
 
         const response =
             await fetch(
@@ -1023,10 +4029,10 @@ async function loadData() {
             );
 
 
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
-                "Không thể tải Google Sheet."
+                `HTTP ${response.status}`
             );
 
         }
@@ -1040,2222 +4046,111 @@ async function loadData() {
             parseCSV(text);
 
 
-        if (
-            !rows.length
-        ) {
+        if(
+            rows.length < 1
+        ){
 
             throw new Error(
-                "Google Sheet không có dữ liệu."
+                "Google Sheet không có dữ liệu"
             );
 
         }
 
 
-        /*
-         * HEADER
-         */
-
-        headers =
+        originalHeaders =
             rows[0].map(
-                (header, index) => {
-
-                    const value =
-                        String(
-                            header || ""
-                        ).trim();
-
-                    return value ||
-                        `Cột ${index + 1}`;
-
-                }
+                h =>
+                    String(h || "").trim()
             );
 
-
-        /*
-         * DATA
-         */
 
         originalData =
-            new Array(
-                Math.max(
-                    0,
-                    rows.length - 1
-                )
-            );
+            rows
+                .slice(1)
+                .filter(
+                    row =>
+                        row.some(
+                            value =>
+                                String(
+                                    value ?? ""
+                                ).trim() !== ""
+                        )
+                );
 
 
-        for (
-            let i = 1;
-            i < rows.length;
-            i++
-        ) {
+        loadSettings();
 
-            const source =
-                rows[i];
+        initializeColumns();
 
-            const item =
-                {};
-
-            for (
-                let j = 0;
-                j < headers.length;
-                j++
-            ) {
-
-                item[headers[j]] =
-                    source[j] ?? "";
-
-            }
-
-            originalData[i - 1] =
-                item;
-
-        }
-
-
-        cleanupSettings();
-
-
-        /*
-         * Render header một lần
-         */
+        buildDefaultFilters();
 
         renderHeader();
 
-
-        /*
-         * Lọc + sort
-         */
-
         recalculateData();
-
-
-        hideLoading();
 
         updateStatus();
 
-    }
+        saveSettings();
 
-    catch (error) {
+
+        showToast(
+            "Đã cập nhật dữ liệu"
+        );
+
+
+    }catch(error){
 
         console.error(error);
 
-        hideLoading();
+        status.textContent =
+            "❌ Lỗi tải dữ liệu";
 
-        showError(
-            error.message
+        showToast(
+            "Không thể tải Google Sheet"
         );
 
-    }
+    }finally{
 
-}
-
-
-/* =========================================================
-   CLEAN SETTINGS
-   ========================================================= */
-
-function cleanupSettings() {
-
-    const valid =
-        new Set(headers);
-
-
-    Object.keys(filters)
-        .forEach(column => {
-
-            if (
-                !valid.has(column)
-            ) {
-
-                delete filters[column];
-
-            }
-
-        });
-
-
-    Object.keys(searches)
-        .forEach(column => {
-
-            if (
-                !valid.has(column)
-            ) {
-
-                delete searches[column];
-
-            }
-
-        });
-
-
-    Object.keys(columnWidths)
-        .forEach(column => {
-
-            if (
-                !valid.has(column)
-            ) {
-
-                delete columnWidths[column];
-
-            }
-
-        });
-
-
-    freezeCount =
-        Math.min(
-            freezeCount,
-            headers.length
-        );
-
-
-    document
-        .getElementById("freezeSelect")
-        .value =
-        String(freezeCount);
-
-}
-
-
-/* =========================================================
-   RECALCULATE DATA
-   ========================================================= */
-
-function recalculateData() {
-
-    const activeSearches =
-        [];
-
-    const activeFilters =
-        [];
-
-
-    /*
-     * Chuyển search thành mảng
-     * để xử lý nhanh hơn.
-     */
-
-    for (
-        const column of headers
-    ) {
-
-        const search =
-            String(
-                searches[column] || ""
-            )
-            .trim()
-            .toLowerCase();
-
-
-        if (search) {
-
-            activeSearches.push({
-                column,
-                value: search
-            });
-
-        }
-
-
-        const selected =
-            filters[column];
-
-
-        if (
-            Array.isArray(selected)
-        ) {
-
-            activeFilters.push({
-                column,
-                values:
-                    new Set(selected)
-            });
-
-        }
-
-    }
-
-
-    /*
-     * Nếu không có filter/search
-     * thì dùng toàn bộ data.
-     */
-
-    if (
-        activeSearches.length === 0 &&
-        activeFilters.length === 0
-    ) {
-
-        filteredData =
-            originalData.slice();
-
-    }
-
-    else {
-
-        const result = [];
-
-
-        for (
-            let i = 0;
-            i < originalData.length;
-            i++
-        ) {
-
-            const row =
-                originalData[i];
-
-
-            let matched = true;
-
-
-            /*
-             * SEARCH
-             */
-
-            for (
-                let j = 0;
-                j < activeSearches.length;
-                j++
-            ) {
-
-                const item =
-                    activeSearches[j];
-
-                const value =
-                    String(
-                        row[item.column] ?? ""
-                    )
-                    .toLowerCase();
-
-
-                if (
-                    !value.includes(
-                        item.value
-                    )
-                ) {
-
-                    matched = false;
-
-                    break;
-
-                }
-
-            }
-
-
-            if (!matched) {
-                continue;
-            }
-
-
-            /*
-             * FILTER
-             */
-
-            for (
-                let j = 0;
-                j < activeFilters.length;
-                j++
-            ) {
-
-                const item =
-                    activeFilters[j];
-
-                const value =
-                    String(
-                        row[item.column] ?? ""
-                    );
-
-
-                if (
-                    !item.values.has(value)
-                ) {
-
-                    matched = false;
-
-                    break;
-
-                }
-
-            }
-
-
-            if (matched) {
-
-                result.push(row);
-
-            }
-
-        }
-
-
-        filteredData =
-            result;
-
-    }
-
-
-    /*
-     * SORT
-     */
-
-    if (
-        sortState.column &&
-        sortState.direction
-    ) {
-
-        const column =
-            sortState.column;
-
-        const direction =
-            sortState.direction === "asc"
-                ? 1
-                : -1;
-
-
-        filteredData.sort(
-            (a, b) => {
-
-                const av =
-                    String(
-                        a[column] ?? ""
-                    );
-
-                const bv =
-                    String(
-                        b[column] ?? ""
-                    );
-
-
-                return (
-                    av.localeCompare(
-                        bv,
-                        "vi",
-                        {
-                            numeric: true,
-                            sensitivity: "base"
-                        }
-                    ) *
-                    direction
-                );
-
-            }
-        );
-
-    }
-
-
-    virtualStart = 0;
-
-    lastRenderedStart = -1;
-
-
-    renderVirtualRows();
-
-    updateStatus();
-
-}
-
-
-/* =========================================================
-   RENDER HEADER
-   ========================================================= */
-
-function renderHeader() {
-
-    const thead =
-        document.getElementById(
-            "tableHead"
-        );
-
-
-    thead.innerHTML = "";
-
-
-    /*
-     * HEADER
-     */
-
-    const headerRow =
-        document.createElement("tr");
-
-
-    headers.forEach(
-        (column, index) => {
-
-            const th =
-                document.createElement("th");
-
-
-            th.dataset.columnIndex =
-                index;
-
-
-            setColumnWidth(
-                th,
-                column
-            );
-
-
-            const content =
-                document.createElement(
-                    "div"
-                );
-
-            content.className =
-                "header-content";
-
-
-            const title =
-                document.createElement(
-                    "div"
-                );
-
-            title.className =
-                "header-title";
-
-            title.textContent =
-                column;
-
-
-            title.title =
-                "Bấm để sắp xếp";
-
-
-            title.addEventListener(
-                "click",
-                () => {
-
-                    toggleSort(column);
-
-                }
-            );
-
-
-            const right =
-                document.createElement(
-                    "div"
-                );
-
-            right.className =
-                "header-right";
-
-
-            const arrow =
-                document.createElement(
-                    "span"
-                );
-
-            arrow.className =
-                "sort-arrow";
-
-            arrow.dataset.sortColumn =
-                column;
-
-
-            updateSortArrow(
-                arrow,
-                column
-            );
-
-
-            const filterButton =
-                document.createElement(
-                    "button"
-                );
-
-            filterButton.className =
-                "filter-button";
-
-            filterButton.textContent =
-                "▼";
-
-
-            if (
-                Array.isArray(
-                    filters[column]
-                )
-            ) {
-
-                filterButton.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            filterButton.addEventListener(
-                "click",
-                event => {
-
-                    event.stopPropagation();
-
-                    openFilter(
-                        column,
-                        filterButton
-                    );
-
-                }
-            );
-
-
-            right.appendChild(arrow);
-
-            right.appendChild(
-                filterButton
-            );
-
-
-            content.appendChild(
-                title
-            );
-
-            content.appendChild(
-                right
-            );
-
-
-            th.appendChild(
-                content
-            );
-
-
-            /*
-             * Resize handle
-             */
-
-            const resize =
-                document.createElement(
-                    "div"
-                );
-
-            resize.className =
-                "resize-handle";
-
-
-            resize.addEventListener(
-                "mousedown",
-                event => {
-
-                    startResize(
-                        event,
-                        index
-                    );
-
-                }
-            );
-
-
-            th.appendChild(
-                resize
-            );
-
-
-            headerRow.appendChild(th);
-
-        }
-    );
-
-
-    thead.appendChild(
-        headerRow
-    );
-
-
-    /*
-     * SEARCH ROW
-     */
-
-    const searchRow =
-        document.createElement("tr");
-
-    searchRow.className =
-        "search-row";
-
-
-    headers.forEach(
-        (column, index) => {
-
-            const th =
-                document.createElement("th");
-
-
-            th.dataset.columnIndex =
-                index;
-
-
-            setColumnWidth(
-                th,
-                column
-            );
-
-
-            const input =
-                document.createElement(
-                    "input"
-                );
-
-
-            input.className =
-                "search-box";
-
-            input.placeholder =
-                "Tìm...";
-
-            input.value =
-                searches[column] || "";
-
-
-            input.dataset.column =
-                column;
-
-
-            input.addEventListener(
-                "input",
-                () => {
-
-                    searches[column] =
-                        input.value;
-
-
-                    clearTimeout(
-                        searchTimers[column]
-                    );
-
-
-                    searchTimers[column] =
-                        setTimeout(
-                            () => {
-
-                                saveSettings();
-
-                                recalculateData();
-
-                            },
-                            SEARCH_DELAY
-                        );
-
-                }
-            );
-
-
-            th.appendChild(
-                input
-            );
-
-            searchRow.appendChild(
-                th
-            );
-
-        }
-    );
-
-
-    thead.appendChild(
-        searchRow
-    );
-
-
-    updateFrozenColumns();
-
-}
-
-
-/* =========================================================
-   SORT ARROW
-   ========================================================= */
-
-function updateSortArrow(
-    element,
-    column
-) {
-
-    if (
-        sortState.column === column
-    ) {
-
-        element.textContent =
-            sortState.direction === "asc"
-                ? "▲"
-                : "▼";
-
-    }
-
-    else {
-
-        element.textContent =
-            "↕";
-
-    }
-
-}
-
-
-/* =========================================================
-   UPDATE SORT ARROWS
-   ========================================================= */
-
-function updateAllSortArrows() {
-
-    document
-        .querySelectorAll(
-            ".sort-arrow"
-        )
-        .forEach(
-            element => {
-
-                updateSortArrow(
-                    element,
-                    element.dataset.sortColumn
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   VIRTUAL ROWS
-   ========================================================= */
-
-function renderVirtualRows(
-    force = false
-) {
-
-    if (isRendering) {
-        return;
-    }
-
-
-    isRendering = true;
-
-
-    requestAnimationFrame(
-        () => {
-
-            const tbody =
-                document.getElementById(
-                    "tableBody"
-                );
-
-
-            const wrapper =
-                document.getElementById(
-                    "tableWrapper"
-                );
-
-
-            const scrollTop =
-                wrapper.scrollTop;
-
-
-            /*
-             * Header height
-             *
-             * 42 header
-             * 42 search
-             */
-
-            const bodyScrollTop =
-                Math.max(
-                    0,
-                    scrollTop - 84
-                );
-
-
-            const visibleRows =
-                Math.ceil(
-                    wrapper.clientHeight /
-                    ROW_HEIGHT
-                );
-
-
-            const start =
-                Math.max(
-                    0,
-                    Math.floor(
-                        bodyScrollTop /
-                        ROW_HEIGHT
-                    ) - BUFFER_ROWS
-                );
-
-
-            const end =
-                Math.min(
-                    filteredData.length,
-                    start +
-                    visibleRows +
-                    BUFFER_ROWS * 2
-                );
-
-
-            if (
-                !force &&
-                start === lastRenderedStart
-            ) {
-
-                isRendering = false;
-
-                return;
-
-            }
-
-
-            virtualStart =
-                start;
-
-            lastRenderedStart =
-                start;
-
-
-            tbody.innerHTML = "";
-
-
-            /*
-             * TOP SPACER
-             */
-
-            if (start > 0) {
-
-                const spacer =
-                    document.createElement(
-                        "tr"
-                    );
-
-                spacer.className =
-                    "virtual-spacer";
-
-
-                const td =
-                    document.createElement(
-                        "td"
-                    );
-
-
-                td.colSpan =
-                    Math.max(
-                        1,
-                        headers.length
-                    );
-
-
-                td.style.height =
-                    (
-                        start *
-                        ROW_HEIGHT
-                    ) + "px";
-
-
-                spacer.appendChild(td);
-
-                tbody.appendChild(
-                    spacer
-                );
-
-            }
-
-
-            /*
-             * DATA ROWS
-             */
-
-            const fragment =
-                document.createDocumentFragment();
-
-
-            for (
-                let i = start;
-                i < end;
-                i++
-            ) {
-
-                const row =
-                    filteredData[i];
-
-
-                const tr =
-                    document.createElement(
-                        "tr"
-                    );
-
-                tr.className =
-                    "virtual-row";
-
-
-                for (
-                    let c = 0;
-                    c < headers.length;
-                    c++
-                ) {
-
-                    const column =
-                        headers[c];
-
-
-                    const td =
-                        document.createElement(
-                            "td"
-                        );
-
-
-                    td.dataset.columnIndex =
-                        c;
-
-
-                    setColumnWidth(
-                        td,
-                        column
-                    );
-
-
-                    const value =
-                        row[column] ?? "";
-
-
-                    td.textContent =
-                        value;
-
-
-                    td.title =
-                        value;
-
-
-                    tr.appendChild(td);
-
-                }
-
-
-                fragment.appendChild(
-                    tr
-                );
-
-            }
-
-
-            tbody.appendChild(
-                fragment
-            );
-
-
-            /*
-             * BOTTOM SPACER
-             */
-
-            const remaining =
-                filteredData.length -
-                end;
-
-
-            if (remaining > 0) {
-
-                const spacer =
-                    document.createElement(
-                        "tr"
-                    );
-
-                spacer.className =
-                    "virtual-spacer";
-
-
-                const td =
-                    document.createElement(
-                        "td"
-                    );
-
-
-                td.colSpan =
-                    Math.max(
-                        1,
-                        headers.length
-                    );
-
-
-                td.style.height =
-                    (
-                        remaining *
-                        ROW_HEIGHT
-                    ) + "px";
-
-
-                spacer.appendChild(td);
-
-                tbody.appendChild(
-                    spacer
-                );
-
-            }
-
-
-            updateFrozenColumns();
-
-
-            isRendering = false;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   SCROLL
-   ========================================================= */
-
-let scrollAnimation = false;
-
-
-document
-    .getElementById("tableWrapper")
-    .addEventListener(
-        "scroll",
-        () => {
-
-            if (scrollAnimation) {
-                return;
-            }
-
-
-            scrollAnimation = true;
-
-
-            requestAnimationFrame(
-                () => {
-
-                    renderVirtualRows();
-
-                    scrollAnimation =
-                        false;
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   COLUMN WIDTH
-   ========================================================= */
-
-function setColumnWidth(
-    element,
-    column
-) {
-
-    const width =
-        columnWidths[column] || 150;
-
-
-    element.style.width =
-        width + "px";
-
-
-    element.style.minWidth =
-        width + "px";
-
-}
-
-
-/* =========================================================
-   RESIZE
-   ========================================================= */
-
-let resizing = false;
-
-let resizeIndex = -1;
-
-let resizeStartX = 0;
-
-let resizeStartWidth = 0;
-
-
-function startResize(
-    event,
-    index
-) {
-
-    event.preventDefault();
-
-    event.stopPropagation();
-
-
-    resizing = true;
-
-    resizeIndex =
-        index;
-
-    resizeStartX =
-        event.clientX;
-
-
-    const column =
-        headers[index];
-
-
-    resizeStartWidth =
-        columnWidths[column] ||
-        150;
-
-
-    document.body.style.cursor =
-        "col-resize";
-
-}
-
-
-document.addEventListener(
-    "mousemove",
-    event => {
-
-        if (!resizing) {
-            return;
-        }
-
-
-        const column =
-            headers[resizeIndex];
-
-
-        const newWidth =
-            Math.max(
-                30,
-                resizeStartWidth +
-                (
-                    event.clientX -
-                    resizeStartX
-                )
-            );
-
-
-        columnWidths[column] =
-            newWidth;
-
-
-        /*
-         * Chỉ cập nhật cột đang resize.
-         */
-
-        document
-            .querySelectorAll(
-                `[data-column-index="${resizeIndex}"]`
-            )
-            .forEach(
-                element => {
-
-                    element.style.width =
-                        newWidth + "px";
-
-                    element.style.minWidth =
-                        newWidth + "px";
-
-                }
-            );
-
-
-        updateFrozenColumns();
-
-    }
-);
-
-
-document.addEventListener(
-    "mouseup",
-    () => {
-
-        if (!resizing) {
-            return;
-        }
-
-
-        resizing = false;
-
-        document.body.style.cursor =
-            "";
-
-
-        saveSettings();
-
-    }
-);
-
-
-/* =========================================================
-   FROZEN COLUMNS
-   ========================================================= */
-
-function updateFrozenColumns() {
-
-    let left = 0;
-
-
-    for (
-        let i = 0;
-        i < headers.length;
-        i++
-    ) {
-
-        const width =
-            columnWidths[
-                headers[i]
-            ] || 150;
-
-
-        const all =
-            document.querySelectorAll(
-                `[data-column-index="${i}"]`
-            );
-
-
-        all.forEach(
-            element => {
-
-                element.classList.remove(
-                    "frozen"
-                );
-
-                element.style.left =
-                    "";
-
-            }
-        );
-
-
-        if (
-            i < freezeCount
-        ) {
-
-            all.forEach(
-                element => {
-
-                    element.classList.add(
-                        "frozen"
-                    );
-
-                    element.style.left =
-                        left + "px";
-
-                }
-            );
-
-
-            left += width;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   FREEZE SELECT
-   ========================================================= */
-
-document
-    .getElementById(
-        "freezeSelect"
-    )
-    .addEventListener(
-        "change",
-        event => {
-
-            freezeCount =
-                Number(
-                    event.target.value
-                );
-
-
-            saveSettings();
-
-            updateFrozenColumns();
-
-        }
-    );
-
-
-/* =========================================================
-   SORT
-   ========================================================= */
-
-function toggleSort(column) {
-
-    if (
-        sortState.column !== column
-    ) {
-
-        sortState.column =
-            column;
-
-        sortState.direction =
-            "asc";
-
-    }
-
-    else if (
-        sortState.direction === "asc"
-    ) {
-
-        sortState.direction =
-            "desc";
-
-    }
-
-    else {
-
-        sortState.column =
-            null;
-
-        sortState.direction =
-            null;
-
-    }
-
-
-    saveSettings();
-
-    updateAllSortArrows();
-
-    recalculateData();
-
-}
-
-
-/* =========================================================
-   FILTER MENU
-   ========================================================= */
-
-function openFilter(
-    column,
-    button
-) {
-
-    activeFilterColumn =
-        column;
-
-
-    const current =
-        filters[column];
-
-
-    const values =
-        [
-            ...new Set(
-                originalData.map(
-                    row =>
-                        String(
-                            row[column] ?? ""
-                        )
-                )
-            )
-        ];
-
-
-    values.sort(
-        (a, b) =>
-            a.localeCompare(
-                b,
-                "vi",
-                {
-                    numeric: true,
-                    sensitivity: "base"
-                }
-            )
-    );
-
-
-    if (
-        Array.isArray(current)
-    ) {
-
-        temporaryFilterValues =
-            new Set(current);
-
-    }
-
-    else {
-
-        temporaryFilterValues =
-            new Set(values);
-
-    }
-
-
-    renderFilterValues(values);
-
-
-    const menu =
-        document.getElementById(
-            "filterMenu"
-        );
-
-
-    const rect =
-        button.getBoundingClientRect();
-
-
-    let left =
-        rect.left;
-
-
-    let top =
-        rect.bottom + 5;
-
-
-    if (
-        left + 280 >
-        window.innerWidth
-    ) {
-
-        left =
-            window.innerWidth - 285;
-
-    }
-
-
-    if (
-        top + 440 >
-        window.innerHeight
-    ) {
-
-        top =
-            rect.top - 445;
-
-    }
-
-
-    menu.style.left =
-        Math.max(
-            5,
-            left
-        ) + "px";
-
-
-    menu.style.top =
-        Math.max(
-            5,
-            top
-        ) + "px";
-
-
-    menu.classList.add(
-        "show"
-    );
-
-
-    document
-        .getElementById(
-            "filterSearch"
-        )
-        .value = "";
-
-}
-
-
-/* =========================================================
-   FILTER VALUES
-   ========================================================= */
-
-function renderFilterValues(
-    values
-) {
-
-    const container =
-        document.getElementById(
-            "filterValues"
-        );
-
-
-    container.innerHTML = "";
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    values.forEach(
-        value => {
-
-            const label =
-                document.createElement(
-                    "label"
-                );
-
-
-            label.className =
-                "filter-value";
-
-
-            const checkbox =
-                document.createElement(
-                    "input"
-                );
-
-
-            checkbox.type =
-                "checkbox";
-
-
-            checkbox.checked =
-                temporaryFilterValues.has(
-                    value
-                );
-
-
-            checkbox.addEventListener(
-                "change",
-                () => {
-
-                    if (
-                        checkbox.checked
-                    ) {
-
-                        temporaryFilterValues.add(
-                            value
-                        );
-
-                    }
-
-                    else {
-
-                        temporaryFilterValues.delete(
-                            value
-                        );
-
-                    }
-
-                }
-            );
-
-
-            const span =
-                document.createElement(
-                    "span"
-                );
-
-
-            span.textContent =
-                value === ""
-                    ? "(Trống)"
-                    : value;
-
-
-            span.title =
-                value;
-
-
-            label.appendChild(
-                checkbox
-            );
-
-            label.appendChild(
-                span
-            );
-
-
-            fragment.appendChild(
-                label
-            );
-
-        }
-    );
-
-
-    container.appendChild(
-        fragment
-    );
-
-}
-
-
-/* =========================================================
-   FILTER SEARCH
-   ========================================================= */
-
-document
-    .getElementById(
-        "filterSearch"
-    )
-    .addEventListener(
-        "input",
-        () => {
-
-            if (
-                !activeFilterColumn
-            ) {
-                return;
-            }
-
-
-            const search =
-                document
-                .getElementById(
-                    "filterSearch"
-                )
-                .value
-                .toLowerCase();
-
-
-            const values =
-                [
-                    ...new Set(
-                        originalData.map(
-                            row =>
-                                String(
-                                    row[
-                                        activeFilterColumn
-                                    ] ?? ""
-                                )
-                        )
-                    )
-                ]
-                .filter(
-                    value =>
-                        value
-                        .toLowerCase()
-                        .includes(search)
-                );
-
-
-            values.sort(
-                (a, b) =>
-                    a.localeCompare(
-                        b,
-                        "vi",
-                        {
-                            numeric: true,
-                            sensitivity: "base"
-                        }
-                    )
-            );
-
-
-            renderFilterValues(
-                values
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   SELECT ALL
-   ========================================================= */
-
-document
-    .getElementById(
-        "selectAllButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            if (
-                !activeFilterColumn
-            ) {
-                return;
-            }
-
-
-            const values =
-                new Set(
-                    originalData.map(
-                        row =>
-                            String(
-                                row[
-                                    activeFilterColumn
-                                ] ?? ""
-                            )
-                    )
-                );
-
-
-            temporaryFilterValues =
-                values;
-
-
-            const search =
-                document
-                .getElementById(
-                    "filterSearch"
-                )
-                .value
-                .toLowerCase();
-
-
-            const visibleValues =
-                [...values]
-                .filter(
-                    value =>
-                        value
-                        .toLowerCase()
-                        .includes(search)
-                );
-
-
-            renderFilterValues(
-                visibleValues
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   DESELECT ALL
-   ========================================================= */
-
-document
-    .getElementById(
-        "deselectAllButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            temporaryFilterValues =
-                new Set();
-
-
-            const search =
-                document
-                .getElementById(
-                    "filterSearch"
-                )
-                .value
-                .toLowerCase();
-
-
-            const values =
-                [
-                    ...new Set(
-                        originalData.map(
-                            row =>
-                                String(
-                                    row[
-                                        activeFilterColumn
-                                    ] ?? ""
-                                )
-                        )
-                    )
-                ]
-                .filter(
-                    value =>
-                        value
-                        .toLowerCase()
-                        .includes(search)
-                );
-
-
-            renderFilterValues(
-                values
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   APPLY FILTER
-   ========================================================= */
-
-document
-    .getElementById(
-        "applyFilterButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            if (
-                !activeFilterColumn
-            ) {
-                return;
-            }
-
-
-            const allValues =
-                new Set(
-                    originalData.map(
-                        row =>
-                            String(
-                                row[
-                                    activeFilterColumn
-                                ] ?? ""
-                            )
-                    )
-                );
-
-
-            if (
-                temporaryFilterValues.size ===
-                allValues.size
-            ) {
-
-                delete filters[
-                    activeFilterColumn
-                ];
-
-            }
-
-            else {
-
-                filters[
-                    activeFilterColumn
-                ] =
-                    [
-                        ...temporaryFilterValues
-                    ];
-
-            }
-
-
-            saveSettings();
-
-            closeFilter();
-
-            updateHeaderFilterButtons();
-
-            recalculateData();
-
-        }
-    );
-
-
-/* =========================================================
-   CLEAR FILTER
-   ========================================================= */
-
-document
-    .getElementById(
-        "clearFilterButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            if (
-                activeFilterColumn
-            ) {
-
-                delete filters[
-                    activeFilterColumn
-                ];
-
-            }
-
-
-            saveSettings();
-
-            closeFilter();
-
-            updateHeaderFilterButtons();
-
-            recalculateData();
-
-        }
-    );
-
-
-/* =========================================================
-   UPDATE FILTER BUTTONS
-   ========================================================= */
-
-function updateHeaderFilterButtons() {
-
-    headers.forEach(
-        (column, index) => {
-
-            const th =
-                document.querySelector(
-                    `thead th[data-column-index="${index}"]`
-                );
-
-
-            if (!th) {
-                return;
-            }
-
-
-            const button =
-                th.querySelector(
-                    ".filter-button"
-                );
-
-
-            if (!button) {
-                return;
-            }
-
-
-            button.classList.toggle(
-                "active",
-                Array.isArray(
-                    filters[column]
-                )
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   CLOSE FILTER
-   ========================================================= */
-
-function closeFilter() {
-
-    document
-        .getElementById(
-            "filterMenu"
-        )
-        .classList.remove(
+        loading.classList.remove(
             "show"
         );
 
-
-    activeFilterColumn =
-        null;
+    }
 
 }
-
-
-/* =========================================================
-   CLICK OUTSIDE FILTER
-   ========================================================= */
-
-document.addEventListener(
-    "mousedown",
-    event => {
-
-        const menu =
-            document.getElementById(
-                "filterMenu"
-            );
-
-
-        if (
-            !menu.contains(
-                event.target
-            ) &&
-            !event.target.closest(
-                ".filter-button"
-            )
-        ) {
-
-            closeFilter();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   CLEAR ALL
-   ========================================================= */
-
-document
-    .getElementById(
-        "clearAllButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            filters = {};
-
-            searches = {};
-
-            sortState = {
-                column: null,
-                direction: null
-            };
-
-
-            saveSettings();
-
-
-            /*
-             * Chỉ reset giá trị input,
-             * không dựng lại header.
-             */
-
-            document
-                .querySelectorAll(
-                    ".search-box"
-                )
-                .forEach(
-                    input => {
-
-                        input.value = "";
-
-                    }
-                );
-
-
-            updateAllSortArrows();
-
-            updateHeaderFilterButtons();
-
-            recalculateData();
-
-        }
-    );
-
-
-/* =========================================================
-   REFRESH
-   ========================================================= */
-
-document
-    .getElementById(
-        "refreshButton"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            loadData();
-
-        }
-    );
 
 
 /* =========================================================
    STATUS
-   ========================================================= */
+========================================================= */
 
-function updateStatus() {
-
-    const status =
-        document.getElementById(
-            "status"
-        );
-
+function updateStatus(){
 
     status.textContent =
-        `${filteredData.length.toLocaleString("vi-VN")} / ${originalData.length.toLocaleString("vi-VN")} dòng`;
+        `${displayData.length.toLocaleString("vi-VN")} dòng`;
 
 }
 
 
 /* =========================================================
-   LOADING
-   ========================================================= */
+   REFRESH
+========================================================= */
 
-function showLoading(
-    message
-) {
+document.getElementById(
+    "refreshButton"
+).addEventListener(
+    "click",
+    () => {
 
-    document
-        .getElementById(
-            "loadingText"
-        )
-        .textContent =
-        message;
+        loadData();
 
-
-    document
-        .getElementById(
-            "loading"
-        )
-        .classList.remove(
-            "hidden"
-        );
-
-}
-
-
-function hideLoading() {
-
-    document
-        .getElementById(
-            "loading"
-        )
-        .classList.add(
-            "hidden"
-        );
-
-}
-
-
-/* =========================================================
-   ERROR
-   ========================================================= */
-
-function showError(
-    message
-) {
-
-    const tbody =
-        document.getElementById(
-            "tableBody"
-        );
-
-
-    tbody.innerHTML = "";
-
-
-    const tr =
-        document.createElement(
-            "tr"
-        );
-
-
-    const td =
-        document.createElement(
-            "td"
-        );
-
-
-    td.colSpan =
-        Math.max(
-            1,
-            headers.length
-        );
-
-
-    td.className =
-        "message";
-
-
-    td.innerHTML =
-        "❌ " +
-        message;
-
-
-    tr.appendChild(td);
-
-    tbody.appendChild(tr);
-
-
-    document
-        .getElementById(
-            "status"
-        )
-        .textContent =
-        "Lỗi tải dữ liệu";
-
-}
+    }
+);
 
 
 /* =========================================================
    AUTO REFRESH
-   ========================================================= */
-
-/*
- * 5 phút cập nhật Google Sheet một lần.
- *
- * Lưu ý:
- * Đây chỉ là tải lại dữ liệu.
- * Không làm mất search/filter/sort/resize
- * vì các trạng thái đã lưu trong localStorage.
- */
+========================================================= */
 
 setInterval(
     () => {
@@ -3268,18 +4163,32 @@ setInterval(
 
 
 /* =========================================================
+   ESCAPE
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Escape"){
+
+            closeFilterMenu();
+
+            closeContextMenu();
+
+            renameDialog.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    INITIALIZE
-   ========================================================= */
-
-loadSettings();
-
-document
-    .getElementById(
-        "freezeSelect"
-    )
-    .value =
-    String(freezeCount);
-
+========================================================= */
 
 loadData();
 
