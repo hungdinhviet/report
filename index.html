@@ -112,4 +112,3178 @@ body {
 
 /* =========================================================
    TABLE AREA
-   =================================================
+   ========================================================= */
+
+.table-wrapper {
+    width: 100%;
+    height: calc(100vh - 58px);
+
+    overflow: auto;
+
+    background: #fff;
+
+    position: relative;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+
+    table-layout: fixed;
+
+    width: max-content;
+    min-width: 100%;
+}
+
+th,
+td {
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
+    padding: 0 9px;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    background: #fff;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+thead th {
+    position: sticky;
+    top: 0;
+
+    z-index: 80;
+
+    height: 42px;
+
+    background: #f1f3f5;
+
+    font-weight: 600;
+
+    user-select: none;
+}
+
+.header-content {
+    width: 100%;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 5px;
+}
+
+.header-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    cursor: pointer;
+}
+
+.sort-arrow {
+    flex-shrink: 0;
+    color: #777;
+    font-size: 11px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.filter-button {
+    width: 22px;
+    height: 22px;
+
+    border: 0;
+    border-radius: 3px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    color: #555;
+}
+
+.filter-button:hover {
+    background: #ddd;
+}
+
+.filter-button.active {
+    color: #1976d2;
+    font-weight: bold;
+}
+
+/* =========================================================
+   SEARCH ROW
+   ========================================================= */
+
+.search-row th {
+    position: sticky;
+
+    top: 42px;
+
+    z-index: 79;
+
+    height: 42px;
+
+    padding: 5px 6px;
+
+    background: #fff;
+}
+
+.search-box {
+    width: 100%;
+    height: 30px;
+
+    padding: 0 7px;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    outline: none;
+
+    font-size: 13px;
+}
+
+.search-box:focus {
+    border-color: #1976d2;
+
+    box-shadow:
+        0 0 0 1px #1976d2;
+}
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+.resize-handle {
+    position: absolute;
+
+    top: 0;
+    right: -3px;
+
+    width: 7px;
+    height: 100%;
+
+    cursor: col-resize;
+
+    z-index: 200;
+}
+
+.resize-handle:hover {
+    background: rgba(25,118,210,.25);
+}
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+tbody td {
+    height: 34px;
+    line-height: 34px;
+}
+
+tbody tr:hover td {
+    background: #f7fbff;
+}
+
+tbody tr:nth-child(even) td {
+    background: #fafafa;
+}
+
+tbody tr:nth-child(even):hover td {
+    background: #f7fbff;
+}
+
+/* =========================================================
+   VIRTUAL SCROLLING
+   ========================================================= */
+
+.virtual-spacer td {
+    padding: 0 !important;
+    border: 0 !important;
+    height: 0 !important;
+    line-height: 0 !important;
+    background: transparent !important;
+}
+
+.virtual-row td {
+    height: 34px;
+}
+
+/* =========================================================
+   FROZEN COLUMNS
+   ========================================================= */
+
+.frozen {
+    position: sticky !important;
+
+    z-index: 50 !important;
+
+    background: #fff !important;
+}
+
+thead .frozen {
+    z-index: 100 !important;
+    background: #f1f3f5 !important;
+}
+
+.search-row .frozen {
+    z-index: 99 !important;
+    background: #fff !important;
+}
+
+tbody tr:hover .frozen {
+    background: #f7fbff !important;
+}
+
+/* =========================================================
+   FILTER MENU
+   ========================================================= */
+
+.filter-menu {
+    position: fixed;
+
+    z-index: 999999;
+
+    width: 280px;
+
+    background: #fff;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    box-shadow:
+        0 6px 25px rgba(0,0,0,.2);
+
+    display: none;
+
+    overflow: hidden;
+}
+
+.filter-menu.show {
+    display: block;
+}
+
+.filter-top {
+    display: flex;
+    gap: 5px;
+
+    padding: 8px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.filter-top button {
+    flex: 1;
+
+    height: 30px;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    background: #f7f7f7;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+.filter-search {
+    width: calc(100% - 16px);
+
+    height: 30px;
+
+    margin: 8px;
+
+    padding: 0 7px;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    outline: none;
+}
+
+.filter-search:focus {
+    border-color: #1976d2;
+}
+
+.filter-values {
+    max-height: 270px;
+
+    overflow-y: auto;
+
+    padding: 4px 8px;
+}
+
+.filter-value {
+    min-height: 30px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+.filter-value:hover {
+    background: #f4f4f4;
+}
+
+.filter-value span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.filter-bottom {
+    display: flex;
+    gap: 7px;
+
+    padding: 8px;
+
+    border-top: 1px solid #ddd;
+}
+
+.filter-bottom button {
+    flex: 1;
+
+    height: 32px;
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    background: #fff;
+
+    cursor: pointer;
+}
+
+.filter-bottom .apply {
+    background: #1976d2;
+    border-color: #1976d2;
+    color: #fff;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999999;
+
+    background: rgba(255,255,255,.92);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    font-size: 16px;
+}
+
+.loading.hidden {
+    display: none;
+}
+
+.spinner {
+    width: 34px;
+    height: 34px;
+
+    border: 4px solid #ddd;
+
+    border-top-color: #1976d2;
+
+    border-radius: 50%;
+
+    animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.message {
+    padding: 40px;
+
+    text-align: center;
+
+    color: #666;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .title {
+        font-size: 16px;
+    }
+
+    .freeze-control {
+        display: none;
+    }
+
+    .status {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     TOP BAR
+     ======================================================= -->
+
+<div class="topbar">
+
+    <div class="title">
+        📊 REPORT
+    </div>
+
+    <button
+        class="top-button primary"
+        id="refreshButton">
+        🔄 Cập nhật dữ liệu
+    </button>
+
+    <button
+        class="top-button"
+        id="clearAllButton">
+        🧹 Xóa bộ lọc
+    </button>
+
+    <div class="freeze-control">
+
+        <span>
+            📌 Cố định cột:
+        </span>
+
+        <select id="freezeSelect">
+
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+
+        </select>
+
+    </div>
+
+    <div
+        class="status"
+        id="status">
+        Đang tải...
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     TABLE
+     ======================================================= -->
+
+<div
+    class="table-wrapper"
+    id="tableWrapper">
+
+    <table id="dataTable">
+
+        <thead id="tableHead"></thead>
+
+        <tbody id="tableBody"></tbody>
+
+    </table>
+
+</div>
+
+
+<!-- =======================================================
+     FILTER MENU
+     ======================================================= -->
+
+<div
+    class="filter-menu"
+    id="filterMenu">
+
+    <div class="filter-top">
+
+        <button id="selectAllButton">
+            Chọn tất cả
+        </button>
+
+        <button id="deselectAllButton">
+            Bỏ chọn
+        </button>
+
+    </div>
+
+    <input
+        type="text"
+        id="filterSearch"
+        class="filter-search"
+        placeholder="Tìm trong danh sách...">
+
+    <div
+        id="filterValues"
+        class="filter-values">
+    </div>
+
+    <div class="filter-bottom">
+
+        <button id="clearFilterButton">
+            Xóa lọc
+        </button>
+
+        <button
+            id="applyFilterButton"
+            class="apply">
+            Áp dụng
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     LOADING
+     ======================================================= -->
+
+<div
+    class="loading"
+    id="loading">
+
+    <div class="spinner"></div>
+
+    <div id="loadingText">
+        Đang tải dữ liệu...
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   GOOGLE SHEET CONFIG
+   ========================================================= */
+
+const SHEET_ID =
+    "19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS";
+
+const SHEET_GID =
+    "616860962";
+
+const CSV_URL =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${SHEET_GID}`;
+
+
+/* =========================================================
+   PERFORMANCE CONFIG
+   ========================================================= */
+
+const ROW_HEIGHT = 34;
+
+/*
+ * Chỉ render số dòng này.
+ * Có thể tăng lên 80 / 100 nếu muốn.
+ */
+
+const BUFFER_ROWS = 40;
+
+
+/*
+ * Chờ 120ms sau khi người dùng ngừng gõ.
+ */
+
+const SEARCH_DELAY = 120;
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+let headers = [];
+
+let originalData = [];
+
+let filteredData = [];
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let filters = {};
+
+let searches = {};
+
+let sortState = {
+    column: null,
+    direction: null
+};
+
+let columnWidths = {};
+
+let freezeCount = 0;
+
+let activeFilterColumn = null;
+
+let temporaryFilterValues =
+    new Set();
+
+
+let searchTimers = {};
+
+
+/* =========================================================
+   VIRTUAL SCROLL STATE
+   ========================================================= */
+
+let virtualStart = 0;
+
+let lastRenderedStart = -1;
+
+let isRendering = false;
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+const STORAGE_KEY =
+    "report_google_sheet_table_v2";
+
+
+/* =========================================================
+   LOAD SETTINGS
+   ========================================================= */
+
+function loadSettings() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        if (!saved) {
+            return;
+        }
+
+        const settings =
+            JSON.parse(saved);
+
+        filters =
+            settings.filters || {};
+
+        searches =
+            settings.searches || {};
+
+        sortState =
+            settings.sortState || {
+                column: null,
+                direction: null
+            };
+
+        columnWidths =
+            settings.columnWidths || {};
+
+        freezeCount =
+            Number(
+                settings.freezeCount || 0
+            );
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE SETTINGS
+   ========================================================= */
+
+function saveSettings() {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+
+                filters,
+                searches,
+                sortState,
+                columnWidths,
+                freezeCount
+
+            })
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   CSV PARSER
+   ========================================================= */
+
+function parseCSV(text) {
+
+    const rows = [];
+
+    let row = [];
+
+    let value = "";
+
+    let insideQuotes = false;
+
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        const char =
+            text[i];
+
+        const next =
+            text[i + 1];
+
+
+        if (char === '"') {
+
+            if (
+                insideQuotes &&
+                next === '"'
+            ) {
+
+                value += '"';
+
+                i++;
+
+            } else {
+
+                insideQuotes =
+                    !insideQuotes;
+
+            }
+
+        }
+
+        else if (
+            char === "," &&
+            !insideQuotes
+        ) {
+
+            row.push(value);
+
+            value = "";
+
+        }
+
+        else if (
+            (char === "\n" ||
+             char === "\r") &&
+            !insideQuotes
+        ) {
+
+            if (
+                char === "\r" &&
+                next === "\n"
+            ) {
+
+                i++;
+
+            }
+
+            row.push(value);
+
+            value = "";
+
+
+            if (
+                row.some(
+                    cell =>
+                        cell.trim() !== ""
+                )
+            ) {
+
+                rows.push(row);
+
+            }
+
+            row = [];
+
+        }
+
+        else {
+
+            value += char;
+
+        }
+
+    }
+
+
+    if (
+        value !== "" ||
+        row.length > 0
+    ) {
+
+        row.push(value);
+
+        if (
+            row.some(
+                cell =>
+                    cell.trim() !== ""
+            )
+        ) {
+
+            rows.push(row);
+
+        }
+
+    }
+
+
+    return rows;
+
+}
+
+
+/* =========================================================
+   LOAD GOOGLE SHEET
+   ========================================================= */
+
+async function loadData() {
+
+    showLoading(
+        "Đang tải dữ liệu..."
+    );
+
+
+    try {
+
+        const response =
+            await fetch(
+                CSV_URL +
+                "&_=" +
+                Date.now()
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Không thể tải Google Sheet."
+            );
+
+        }
+
+
+        const text =
+            await response.text();
+
+
+        const rows =
+            parseCSV(text);
+
+
+        if (
+            !rows.length
+        ) {
+
+            throw new Error(
+                "Google Sheet không có dữ liệu."
+            );
+
+        }
+
+
+        /*
+         * HEADER
+         */
+
+        headers =
+            rows[0].map(
+                (header, index) => {
+
+                    const value =
+                        String(
+                            header || ""
+                        ).trim();
+
+                    return value ||
+                        `Cột ${index + 1}`;
+
+                }
+            );
+
+
+        /*
+         * DATA
+         */
+
+        originalData =
+            new Array(
+                Math.max(
+                    0,
+                    rows.length - 1
+                )
+            );
+
+
+        for (
+            let i = 1;
+            i < rows.length;
+            i++
+        ) {
+
+            const source =
+                rows[i];
+
+            const item =
+                {};
+
+            for (
+                let j = 0;
+                j < headers.length;
+                j++
+            ) {
+
+                item[headers[j]] =
+                    source[j] ?? "";
+
+            }
+
+            originalData[i - 1] =
+                item;
+
+        }
+
+
+        cleanupSettings();
+
+
+        /*
+         * Render header một lần
+         */
+
+        renderHeader();
+
+
+        /*
+         * Lọc + sort
+         */
+
+        recalculateData();
+
+
+        hideLoading();
+
+        updateStatus();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        hideLoading();
+
+        showError(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAN SETTINGS
+   ========================================================= */
+
+function cleanupSettings() {
+
+    const valid =
+        new Set(headers);
+
+
+    Object.keys(filters)
+        .forEach(column => {
+
+            if (
+                !valid.has(column)
+            ) {
+
+                delete filters[column];
+
+            }
+
+        });
+
+
+    Object.keys(searches)
+        .forEach(column => {
+
+            if (
+                !valid.has(column)
+            ) {
+
+                delete searches[column];
+
+            }
+
+        });
+
+
+    Object.keys(columnWidths)
+        .forEach(column => {
+
+            if (
+                !valid.has(column)
+            ) {
+
+                delete columnWidths[column];
+
+            }
+
+        });
+
+
+    freezeCount =
+        Math.min(
+            freezeCount,
+            headers.length
+        );
+
+
+    document
+        .getElementById("freezeSelect")
+        .value =
+        String(freezeCount);
+
+}
+
+
+/* =========================================================
+   RECALCULATE DATA
+   ========================================================= */
+
+function recalculateData() {
+
+    const activeSearches =
+        [];
+
+    const activeFilters =
+        [];
+
+
+    /*
+     * Chuyển search thành mảng
+     * để xử lý nhanh hơn.
+     */
+
+    for (
+        const column of headers
+    ) {
+
+        const search =
+            String(
+                searches[column] || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        if (search) {
+
+            activeSearches.push({
+                column,
+                value: search
+            });
+
+        }
+
+
+        const selected =
+            filters[column];
+
+
+        if (
+            Array.isArray(selected)
+        ) {
+
+            activeFilters.push({
+                column,
+                values:
+                    new Set(selected)
+            });
+
+        }
+
+    }
+
+
+    /*
+     * Nếu không có filter/search
+     * thì dùng toàn bộ data.
+     */
+
+    if (
+        activeSearches.length === 0 &&
+        activeFilters.length === 0
+    ) {
+
+        filteredData =
+            originalData.slice();
+
+    }
+
+    else {
+
+        const result = [];
+
+
+        for (
+            let i = 0;
+            i < originalData.length;
+            i++
+        ) {
+
+            const row =
+                originalData[i];
+
+
+            let matched = true;
+
+
+            /*
+             * SEARCH
+             */
+
+            for (
+                let j = 0;
+                j < activeSearches.length;
+                j++
+            ) {
+
+                const item =
+                    activeSearches[j];
+
+                const value =
+                    String(
+                        row[item.column] ?? ""
+                    )
+                    .toLowerCase();
+
+
+                if (
+                    !value.includes(
+                        item.value
+                    )
+                ) {
+
+                    matched = false;
+
+                    break;
+
+                }
+
+            }
+
+
+            if (!matched) {
+                continue;
+            }
+
+
+            /*
+             * FILTER
+             */
+
+            for (
+                let j = 0;
+                j < activeFilters.length;
+                j++
+            ) {
+
+                const item =
+                    activeFilters[j];
+
+                const value =
+                    String(
+                        row[item.column] ?? ""
+                    );
+
+
+                if (
+                    !item.values.has(value)
+                ) {
+
+                    matched = false;
+
+                    break;
+
+                }
+
+            }
+
+
+            if (matched) {
+
+                result.push(row);
+
+            }
+
+        }
+
+
+        filteredData =
+            result;
+
+    }
+
+
+    /*
+     * SORT
+     */
+
+    if (
+        sortState.column &&
+        sortState.direction
+    ) {
+
+        const column =
+            sortState.column;
+
+        const direction =
+            sortState.direction === "asc"
+                ? 1
+                : -1;
+
+
+        filteredData.sort(
+            (a, b) => {
+
+                const av =
+                    String(
+                        a[column] ?? ""
+                    );
+
+                const bv =
+                    String(
+                        b[column] ?? ""
+                    );
+
+
+                return (
+                    av.localeCompare(
+                        bv,
+                        "vi",
+                        {
+                            numeric: true,
+                            sensitivity: "base"
+                        }
+                    ) *
+                    direction
+                );
+
+            }
+        );
+
+    }
+
+
+    virtualStart = 0;
+
+    lastRenderedStart = -1;
+
+
+    renderVirtualRows();
+
+    updateStatus();
+
+}
+
+
+/* =========================================================
+   RENDER HEADER
+   ========================================================= */
+
+function renderHeader() {
+
+    const thead =
+        document.getElementById(
+            "tableHead"
+        );
+
+
+    thead.innerHTML = "";
+
+
+    /*
+     * HEADER
+     */
+
+    const headerRow =
+        document.createElement("tr");
+
+
+    headers.forEach(
+        (column, index) => {
+
+            const th =
+                document.createElement("th");
+
+
+            th.dataset.columnIndex =
+                index;
+
+
+            setColumnWidth(
+                th,
+                column
+            );
+
+
+            const content =
+                document.createElement(
+                    "div"
+                );
+
+            content.className =
+                "header-content";
+
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+            title.className =
+                "header-title";
+
+            title.textContent =
+                column;
+
+
+            title.title =
+                "Bấm để sắp xếp";
+
+
+            title.addEventListener(
+                "click",
+                () => {
+
+                    toggleSort(column);
+
+                }
+            );
+
+
+            const right =
+                document.createElement(
+                    "div"
+                );
+
+            right.className =
+                "header-right";
+
+
+            const arrow =
+                document.createElement(
+                    "span"
+                );
+
+            arrow.className =
+                "sort-arrow";
+
+            arrow.dataset.sortColumn =
+                column;
+
+
+            updateSortArrow(
+                arrow,
+                column
+            );
+
+
+            const filterButton =
+                document.createElement(
+                    "button"
+                );
+
+            filterButton.className =
+                "filter-button";
+
+            filterButton.textContent =
+                "▼";
+
+
+            if (
+                Array.isArray(
+                    filters[column]
+                )
+            ) {
+
+                filterButton.classList.add(
+                    "active"
+                );
+
+            }
+
+
+            filterButton.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    openFilter(
+                        column,
+                        filterButton
+                    );
+
+                }
+            );
+
+
+            right.appendChild(arrow);
+
+            right.appendChild(
+                filterButton
+            );
+
+
+            content.appendChild(
+                title
+            );
+
+            content.appendChild(
+                right
+            );
+
+
+            th.appendChild(
+                content
+            );
+
+
+            /*
+             * Resize handle
+             */
+
+            const resize =
+                document.createElement(
+                    "div"
+                );
+
+            resize.className =
+                "resize-handle";
+
+
+            resize.addEventListener(
+                "mousedown",
+                event => {
+
+                    startResize(
+                        event,
+                        index
+                    );
+
+                }
+            );
+
+
+            th.appendChild(
+                resize
+            );
+
+
+            headerRow.appendChild(th);
+
+        }
+    );
+
+
+    thead.appendChild(
+        headerRow
+    );
+
+
+    /*
+     * SEARCH ROW
+     */
+
+    const searchRow =
+        document.createElement("tr");
+
+    searchRow.className =
+        "search-row";
+
+
+    headers.forEach(
+        (column, index) => {
+
+            const th =
+                document.createElement("th");
+
+
+            th.dataset.columnIndex =
+                index;
+
+
+            setColumnWidth(
+                th,
+                column
+            );
+
+
+            const input =
+                document.createElement(
+                    "input"
+                );
+
+
+            input.className =
+                "search-box";
+
+            input.placeholder =
+                "Tìm...";
+
+            input.value =
+                searches[column] || "";
+
+
+            input.dataset.column =
+                column;
+
+
+            input.addEventListener(
+                "input",
+                () => {
+
+                    searches[column] =
+                        input.value;
+
+
+                    clearTimeout(
+                        searchTimers[column]
+                    );
+
+
+                    searchTimers[column] =
+                        setTimeout(
+                            () => {
+
+                                saveSettings();
+
+                                recalculateData();
+
+                            },
+                            SEARCH_DELAY
+                        );
+
+                }
+            );
+
+
+            th.appendChild(
+                input
+            );
+
+            searchRow.appendChild(
+                th
+            );
+
+        }
+    );
+
+
+    thead.appendChild(
+        searchRow
+    );
+
+
+    updateFrozenColumns();
+
+}
+
+
+/* =========================================================
+   SORT ARROW
+   ========================================================= */
+
+function updateSortArrow(
+    element,
+    column
+) {
+
+    if (
+        sortState.column === column
+    ) {
+
+        element.textContent =
+            sortState.direction === "asc"
+                ? "▲"
+                : "▼";
+
+    }
+
+    else {
+
+        element.textContent =
+            "↕";
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE SORT ARROWS
+   ========================================================= */
+
+function updateAllSortArrows() {
+
+    document
+        .querySelectorAll(
+            ".sort-arrow"
+        )
+        .forEach(
+            element => {
+
+                updateSortArrow(
+                    element,
+                    element.dataset.sortColumn
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   VIRTUAL ROWS
+   ========================================================= */
+
+function renderVirtualRows(
+    force = false
+) {
+
+    if (isRendering) {
+        return;
+    }
+
+
+    isRendering = true;
+
+
+    requestAnimationFrame(
+        () => {
+
+            const tbody =
+                document.getElementById(
+                    "tableBody"
+                );
+
+
+            const wrapper =
+                document.getElementById(
+                    "tableWrapper"
+                );
+
+
+            const scrollTop =
+                wrapper.scrollTop;
+
+
+            /*
+             * Header height
+             *
+             * 42 header
+             * 42 search
+             */
+
+            const bodyScrollTop =
+                Math.max(
+                    0,
+                    scrollTop - 84
+                );
+
+
+            const visibleRows =
+                Math.ceil(
+                    wrapper.clientHeight /
+                    ROW_HEIGHT
+                );
+
+
+            const start =
+                Math.max(
+                    0,
+                    Math.floor(
+                        bodyScrollTop /
+                        ROW_HEIGHT
+                    ) - BUFFER_ROWS
+                );
+
+
+            const end =
+                Math.min(
+                    filteredData.length,
+                    start +
+                    visibleRows +
+                    BUFFER_ROWS * 2
+                );
+
+
+            if (
+                !force &&
+                start === lastRenderedStart
+            ) {
+
+                isRendering = false;
+
+                return;
+
+            }
+
+
+            virtualStart =
+                start;
+
+            lastRenderedStart =
+                start;
+
+
+            tbody.innerHTML = "";
+
+
+            /*
+             * TOP SPACER
+             */
+
+            if (start > 0) {
+
+                const spacer =
+                    document.createElement(
+                        "tr"
+                    );
+
+                spacer.className =
+                    "virtual-spacer";
+
+
+                const td =
+                    document.createElement(
+                        "td"
+                    );
+
+
+                td.colSpan =
+                    Math.max(
+                        1,
+                        headers.length
+                    );
+
+
+                td.style.height =
+                    (
+                        start *
+                        ROW_HEIGHT
+                    ) + "px";
+
+
+                spacer.appendChild(td);
+
+                tbody.appendChild(
+                    spacer
+                );
+
+            }
+
+
+            /*
+             * DATA ROWS
+             */
+
+            const fragment =
+                document.createDocumentFragment();
+
+
+            for (
+                let i = start;
+                i < end;
+                i++
+            ) {
+
+                const row =
+                    filteredData[i];
+
+
+                const tr =
+                    document.createElement(
+                        "tr"
+                    );
+
+                tr.className =
+                    "virtual-row";
+
+
+                for (
+                    let c = 0;
+                    c < headers.length;
+                    c++
+                ) {
+
+                    const column =
+                        headers[c];
+
+
+                    const td =
+                        document.createElement(
+                            "td"
+                        );
+
+
+                    td.dataset.columnIndex =
+                        c;
+
+
+                    setColumnWidth(
+                        td,
+                        column
+                    );
+
+
+                    const value =
+                        row[column] ?? "";
+
+
+                    td.textContent =
+                        value;
+
+
+                    td.title =
+                        value;
+
+
+                    tr.appendChild(td);
+
+                }
+
+
+                fragment.appendChild(
+                    tr
+                );
+
+            }
+
+
+            tbody.appendChild(
+                fragment
+            );
+
+
+            /*
+             * BOTTOM SPACER
+             */
+
+            const remaining =
+                filteredData.length -
+                end;
+
+
+            if (remaining > 0) {
+
+                const spacer =
+                    document.createElement(
+                        "tr"
+                    );
+
+                spacer.className =
+                    "virtual-spacer";
+
+
+                const td =
+                    document.createElement(
+                        "td"
+                    );
+
+
+                td.colSpan =
+                    Math.max(
+                        1,
+                        headers.length
+                    );
+
+
+                td.style.height =
+                    (
+                        remaining *
+                        ROW_HEIGHT
+                    ) + "px";
+
+
+                spacer.appendChild(td);
+
+                tbody.appendChild(
+                    spacer
+                );
+
+            }
+
+
+            updateFrozenColumns();
+
+
+            isRendering = false;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL
+   ========================================================= */
+
+let scrollAnimation = false;
+
+
+document
+    .getElementById("tableWrapper")
+    .addEventListener(
+        "scroll",
+        () => {
+
+            if (scrollAnimation) {
+                return;
+            }
+
+
+            scrollAnimation = true;
+
+
+            requestAnimationFrame(
+                () => {
+
+                    renderVirtualRows();
+
+                    scrollAnimation =
+                        false;
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   COLUMN WIDTH
+   ========================================================= */
+
+function setColumnWidth(
+    element,
+    column
+) {
+
+    const width =
+        columnWidths[column] || 150;
+
+
+    element.style.width =
+        width + "px";
+
+
+    element.style.minWidth =
+        width + "px";
+
+}
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+let resizing = false;
+
+let resizeIndex = -1;
+
+let resizeStartX = 0;
+
+let resizeStartWidth = 0;
+
+
+function startResize(
+    event,
+    index
+) {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    resizing = true;
+
+    resizeIndex =
+        index;
+
+    resizeStartX =
+        event.clientX;
+
+
+    const column =
+        headers[index];
+
+
+    resizeStartWidth =
+        columnWidths[column] ||
+        150;
+
+
+    document.body.style.cursor =
+        "col-resize";
+
+}
+
+
+document.addEventListener(
+    "mousemove",
+    event => {
+
+        if (!resizing) {
+            return;
+        }
+
+
+        const column =
+            headers[resizeIndex];
+
+
+        const newWidth =
+            Math.max(
+                30,
+                resizeStartWidth +
+                (
+                    event.clientX -
+                    resizeStartX
+                )
+            );
+
+
+        columnWidths[column] =
+            newWidth;
+
+
+        /*
+         * Chỉ cập nhật cột đang resize.
+         */
+
+        document
+            .querySelectorAll(
+                `[data-column-index="${resizeIndex}"]`
+            )
+            .forEach(
+                element => {
+
+                    element.style.width =
+                        newWidth + "px";
+
+                    element.style.minWidth =
+                        newWidth + "px";
+
+                }
+            );
+
+
+        updateFrozenColumns();
+
+    }
+);
+
+
+document.addEventListener(
+    "mouseup",
+    () => {
+
+        if (!resizing) {
+            return;
+        }
+
+
+        resizing = false;
+
+        document.body.style.cursor =
+            "";
+
+
+        saveSettings();
+
+    }
+);
+
+
+/* =========================================================
+   FROZEN COLUMNS
+   ========================================================= */
+
+function updateFrozenColumns() {
+
+    let left = 0;
+
+
+    for (
+        let i = 0;
+        i < headers.length;
+        i++
+    ) {
+
+        const width =
+            columnWidths[
+                headers[i]
+            ] || 150;
+
+
+        const all =
+            document.querySelectorAll(
+                `[data-column-index="${i}"]`
+            );
+
+
+        all.forEach(
+            element => {
+
+                element.classList.remove(
+                    "frozen"
+                );
+
+                element.style.left =
+                    "";
+
+            }
+        );
+
+
+        if (
+            i < freezeCount
+        ) {
+
+            all.forEach(
+                element => {
+
+                    element.classList.add(
+                        "frozen"
+                    );
+
+                    element.style.left =
+                        left + "px";
+
+                }
+            );
+
+
+            left += width;
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   FREEZE SELECT
+   ========================================================= */
+
+document
+    .getElementById(
+        "freezeSelect"
+    )
+    .addEventListener(
+        "change",
+        event => {
+
+            freezeCount =
+                Number(
+                    event.target.value
+                );
+
+
+            saveSettings();
+
+            updateFrozenColumns();
+
+        }
+    );
+
+
+/* =========================================================
+   SORT
+   ========================================================= */
+
+function toggleSort(column) {
+
+    if (
+        sortState.column !== column
+    ) {
+
+        sortState.column =
+            column;
+
+        sortState.direction =
+            "asc";
+
+    }
+
+    else if (
+        sortState.direction === "asc"
+    ) {
+
+        sortState.direction =
+            "desc";
+
+    }
+
+    else {
+
+        sortState.column =
+            null;
+
+        sortState.direction =
+            null;
+
+    }
+
+
+    saveSettings();
+
+    updateAllSortArrows();
+
+    recalculateData();
+
+}
+
+
+/* =========================================================
+   FILTER MENU
+   ========================================================= */
+
+function openFilter(
+    column,
+    button
+) {
+
+    activeFilterColumn =
+        column;
+
+
+    const current =
+        filters[column];
+
+
+    const values =
+        [
+            ...new Set(
+                originalData.map(
+                    row =>
+                        String(
+                            row[column] ?? ""
+                        )
+                )
+            )
+        ];
+
+
+    values.sort(
+        (a, b) =>
+            a.localeCompare(
+                b,
+                "vi",
+                {
+                    numeric: true,
+                    sensitivity: "base"
+                }
+            )
+    );
+
+
+    if (
+        Array.isArray(current)
+    ) {
+
+        temporaryFilterValues =
+            new Set(current);
+
+    }
+
+    else {
+
+        temporaryFilterValues =
+            new Set(values);
+
+    }
+
+
+    renderFilterValues(values);
+
+
+    const menu =
+        document.getElementById(
+            "filterMenu"
+        );
+
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    let left =
+        rect.left;
+
+
+    let top =
+        rect.bottom + 5;
+
+
+    if (
+        left + 280 >
+        window.innerWidth
+    ) {
+
+        left =
+            window.innerWidth - 285;
+
+    }
+
+
+    if (
+        top + 440 >
+        window.innerHeight
+    ) {
+
+        top =
+            rect.top - 445;
+
+    }
+
+
+    menu.style.left =
+        Math.max(
+            5,
+            left
+        ) + "px";
+
+
+    menu.style.top =
+        Math.max(
+            5,
+            top
+        ) + "px";
+
+
+    menu.classList.add(
+        "show"
+    );
+
+
+    document
+        .getElementById(
+            "filterSearch"
+        )
+        .value = "";
+
+}
+
+
+/* =========================================================
+   FILTER VALUES
+   ========================================================= */
+
+function renderFilterValues(
+    values
+) {
+
+    const container =
+        document.getElementById(
+            "filterValues"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    values.forEach(
+        value => {
+
+            const label =
+                document.createElement(
+                    "label"
+                );
+
+
+            label.className =
+                "filter-value";
+
+
+            const checkbox =
+                document.createElement(
+                    "input"
+                );
+
+
+            checkbox.type =
+                "checkbox";
+
+
+            checkbox.checked =
+                temporaryFilterValues.has(
+                    value
+                );
+
+
+            checkbox.addEventListener(
+                "change",
+                () => {
+
+                    if (
+                        checkbox.checked
+                    ) {
+
+                        temporaryFilterValues.add(
+                            value
+                        );
+
+                    }
+
+                    else {
+
+                        temporaryFilterValues.delete(
+                            value
+                        );
+
+                    }
+
+                }
+            );
+
+
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+
+            span.textContent =
+                value === ""
+                    ? "(Trống)"
+                    : value;
+
+
+            span.title =
+                value;
+
+
+            label.appendChild(
+                checkbox
+            );
+
+            label.appendChild(
+                span
+            );
+
+
+            fragment.appendChild(
+                label
+            );
+
+        }
+    );
+
+
+    container.appendChild(
+        fragment
+    );
+
+}
+
+
+/* =========================================================
+   FILTER SEARCH
+   ========================================================= */
+
+document
+    .getElementById(
+        "filterSearch"
+    )
+    .addEventListener(
+        "input",
+        () => {
+
+            if (
+                !activeFilterColumn
+            ) {
+                return;
+            }
+
+
+            const search =
+                document
+                .getElementById(
+                    "filterSearch"
+                )
+                .value
+                .toLowerCase();
+
+
+            const values =
+                [
+                    ...new Set(
+                        originalData.map(
+                            row =>
+                                String(
+                                    row[
+                                        activeFilterColumn
+                                    ] ?? ""
+                                )
+                        )
+                    )
+                ]
+                .filter(
+                    value =>
+                        value
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+
+            values.sort(
+                (a, b) =>
+                    a.localeCompare(
+                        b,
+                        "vi",
+                        {
+                            numeric: true,
+                            sensitivity: "base"
+                        }
+                    )
+            );
+
+
+            renderFilterValues(
+                values
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   SELECT ALL
+   ========================================================= */
+
+document
+    .getElementById(
+        "selectAllButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                !activeFilterColumn
+            ) {
+                return;
+            }
+
+
+            const values =
+                new Set(
+                    originalData.map(
+                        row =>
+                            String(
+                                row[
+                                    activeFilterColumn
+                                ] ?? ""
+                            )
+                    )
+                );
+
+
+            temporaryFilterValues =
+                values;
+
+
+            const search =
+                document
+                .getElementById(
+                    "filterSearch"
+                )
+                .value
+                .toLowerCase();
+
+
+            const visibleValues =
+                [...values]
+                .filter(
+                    value =>
+                        value
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+
+            renderFilterValues(
+                visibleValues
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   DESELECT ALL
+   ========================================================= */
+
+document
+    .getElementById(
+        "deselectAllButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            temporaryFilterValues =
+                new Set();
+
+
+            const search =
+                document
+                .getElementById(
+                    "filterSearch"
+                )
+                .value
+                .toLowerCase();
+
+
+            const values =
+                [
+                    ...new Set(
+                        originalData.map(
+                            row =>
+                                String(
+                                    row[
+                                        activeFilterColumn
+                                    ] ?? ""
+                                )
+                        )
+                    )
+                ]
+                .filter(
+                    value =>
+                        value
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+
+            renderFilterValues(
+                values
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   APPLY FILTER
+   ========================================================= */
+
+document
+    .getElementById(
+        "applyFilterButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                !activeFilterColumn
+            ) {
+                return;
+            }
+
+
+            const allValues =
+                new Set(
+                    originalData.map(
+                        row =>
+                            String(
+                                row[
+                                    activeFilterColumn
+                                ] ?? ""
+                            )
+                    )
+                );
+
+
+            if (
+                temporaryFilterValues.size ===
+                allValues.size
+            ) {
+
+                delete filters[
+                    activeFilterColumn
+                ];
+
+            }
+
+            else {
+
+                filters[
+                    activeFilterColumn
+                ] =
+                    [
+                        ...temporaryFilterValues
+                    ];
+
+            }
+
+
+            saveSettings();
+
+            closeFilter();
+
+            updateHeaderFilterButtons();
+
+            recalculateData();
+
+        }
+    );
+
+
+/* =========================================================
+   CLEAR FILTER
+   ========================================================= */
+
+document
+    .getElementById(
+        "clearFilterButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                activeFilterColumn
+            ) {
+
+                delete filters[
+                    activeFilterColumn
+                ];
+
+            }
+
+
+            saveSettings();
+
+            closeFilter();
+
+            updateHeaderFilterButtons();
+
+            recalculateData();
+
+        }
+    );
+
+
+/* =========================================================
+   UPDATE FILTER BUTTONS
+   ========================================================= */
+
+function updateHeaderFilterButtons() {
+
+    headers.forEach(
+        (column, index) => {
+
+            const th =
+                document.querySelector(
+                    `thead th[data-column-index="${index}"]`
+                );
+
+
+            if (!th) {
+                return;
+            }
+
+
+            const button =
+                th.querySelector(
+                    ".filter-button"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            button.classList.toggle(
+                "active",
+                Array.isArray(
+                    filters[column]
+                )
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE FILTER
+   ========================================================= */
+
+function closeFilter() {
+
+    document
+        .getElementById(
+            "filterMenu"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
+    activeFilterColumn =
+        null;
+
+}
+
+
+/* =========================================================
+   CLICK OUTSIDE FILTER
+   ========================================================= */
+
+document.addEventListener(
+    "mousedown",
+    event => {
+
+        const menu =
+            document.getElementById(
+                "filterMenu"
+            );
+
+
+        if (
+            !menu.contains(
+                event.target
+            ) &&
+            !event.target.closest(
+                ".filter-button"
+            )
+        ) {
+
+            closeFilter();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CLEAR ALL
+   ========================================================= */
+
+document
+    .getElementById(
+        "clearAllButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            filters = {};
+
+            searches = {};
+
+            sortState = {
+                column: null,
+                direction: null
+            };
+
+
+            saveSettings();
+
+
+            /*
+             * Chỉ reset giá trị input,
+             * không dựng lại header.
+             */
+
+            document
+                .querySelectorAll(
+                    ".search-box"
+                )
+                .forEach(
+                    input => {
+
+                        input.value = "";
+
+                    }
+                );
+
+
+            updateAllSortArrows();
+
+            updateHeaderFilterButtons();
+
+            recalculateData();
+
+        }
+    );
+
+
+/* =========================================================
+   REFRESH
+   ========================================================= */
+
+document
+    .getElementById(
+        "refreshButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            loadData();
+
+        }
+    );
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+function updateStatus() {
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    status.textContent =
+        `${filteredData.length.toLocaleString("vi-VN")} / ${originalData.length.toLocaleString("vi-VN")} dòng`;
+
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+function showLoading(
+    message
+) {
+
+    document
+        .getElementById(
+            "loadingText"
+        )
+        .textContent =
+        message;
+
+
+    document
+        .getElementById(
+            "loading"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
+
+
+function hideLoading() {
+
+    document
+        .getElementById(
+            "loading"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+function showError(
+    message
+) {
+
+    const tbody =
+        document.getElementById(
+            "tableBody"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    const tr =
+        document.createElement(
+            "tr"
+        );
+
+
+    const td =
+        document.createElement(
+            "td"
+        );
+
+
+    td.colSpan =
+        Math.max(
+            1,
+            headers.length
+        );
+
+
+    td.className =
+        "message";
+
+
+    td.innerHTML =
+        "❌ " +
+        message;
+
+
+    tr.appendChild(td);
+
+    tbody.appendChild(tr);
+
+
+    document
+        .getElementById(
+            "status"
+        )
+        .textContent =
+        "Lỗi tải dữ liệu";
+
+}
+
+
+/* =========================================================
+   AUTO REFRESH
+   ========================================================= */
+
+/*
+ * 5 phút cập nhật Google Sheet một lần.
+ *
+ * Lưu ý:
+ * Đây chỉ là tải lại dữ liệu.
+ * Không làm mất search/filter/sort/resize
+ * vì các trạng thái đã lưu trong localStorage.
+ */
+
+setInterval(
+    () => {
+
+        loadData();
+
+    },
+    5 * 60 * 1000
+);
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+loadSettings();
+
+document
+    .getElementById(
+        "freezeSelect"
+    )
+    .value =
+    String(freezeCount);
+
+
+loadData();
+
+</script>
+
+</body>
+</html>
