@@ -7,6 +7,7 @@
 <title>Danh sách gói cước</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -15,9 +16,12 @@ html,
 body {
     margin: 0;
     padding: 0;
+
     width: 100%;
     height: 100%;
+
     font-family: Arial, Helvetica, sans-serif;
+
     background: #f5f6f8;
     color: #222;
 }
@@ -26,208 +30,300 @@ body {
     overflow: hidden;
 }
 
+
 /* =========================================================
    TOP BAR
 ========================================================= */
 
 .topbar {
+
     height: 54px;
+
     background: #fff;
+
     border-bottom: 1px solid #dcdfe4;
+
     display: flex;
+
     align-items: center;
+
     gap: 8px;
+
     padding: 8px 12px;
+
     flex-shrink: 0;
 }
 
 .topbar-title {
+
     font-size: 18px;
+
     font-weight: 700;
+
     margin-right: auto;
 }
 
 button {
+
     border: 1px solid #cfd4da;
+
     background: #fff;
+
     border-radius: 5px;
+
     padding: 7px 12px;
+
     cursor: pointer;
+
     font-size: 13px;
 }
 
 button:hover {
+
     background: #f1f3f5;
 }
 
 button.primary {
+
     background: #1976d2;
+
     color: #fff;
+
     border-color: #1976d2;
 }
 
 button.primary:hover {
+
     background: #1565c0;
 }
 
 .refresh-info {
+
     font-size: 11px;
+
     color: #777;
+
     margin-left: 5px;
 }
+
 
 /* =========================================================
    MAIN
 ========================================================= */
 
 .main {
+
     width: 100%;
+
     height: calc(100vh - 54px);
+
     overflow: hidden;
+
     position: relative;
 }
 
 .table-wrapper {
+
     position: absolute;
+
     inset: 0;
+
     overflow: auto;
+
     background: #fff;
 }
+
 
 /* =========================================================
    TABLE
 ========================================================= */
 
 table {
+
     border-collapse: separate;
+
     border-spacing: 0;
+
     table-layout: fixed;
+
     width: max-content;
+
     min-width: 100%;
 }
 
 thead {
+
     position: relative;
+
     z-index: 50;
 }
 
 thead tr.header-row {
+
     height: 38px;
 }
 
 thead tr.search-row {
+
     height: 36px;
 }
 
 th,
 td {
+
     border-right: 1px solid #d9dde2;
+
     border-bottom: 1px solid #d9dde2;
+
     padding: 6px 8px;
+
     font-size: 14px;
+
     vertical-align: middle;
+
     background: #fff;
 }
 
 th {
+
     background: #f1f3f5;
+
     font-weight: 700;
+
     position: relative;
+
     white-space: nowrap;
 }
+
 
 /* =========================================================
    HEADER
 ========================================================= */
 
 .header-cell {
+
     height: 38px;
+
     min-height: 38px;
+
     max-height: 38px;
 
     padding: 0 8px;
 
     position: sticky;
+
     top: 0;
 
     z-index: 80;
 }
 
 .header-content {
+
     display: flex;
+
     align-items: center;
+
     width: 100%;
+
     height: 38px;
+
     gap: 5px;
 }
 
 .header-name {
+
     overflow: hidden;
+
     text-overflow: ellipsis;
+
     flex: 1;
+
     cursor: pointer;
 }
 
 .header-actions {
+
     display: flex;
+
     align-items: center;
+
     gap: 2px;
 }
 
 .header-sort {
+
     font-size: 12px;
+
     color: #555;
 }
 
 .header-filter-btn {
+
     border: none;
+
     background: transparent;
+
     padding: 2px 4px;
+
     font-size: 13px;
+
     cursor: pointer;
 }
 
 .header-filter-btn:hover {
+
     background: #ddd;
 }
 
 th.filtered {
+
     background: #c8f7c5 !important;
 }
 
 th.sorted {
+
     background: #d8ebff !important;
 }
 
 th.filtered.sorted {
+
     background: #bdecc4 !important;
 }
 
+
 /* =========================================================
-   SEARCH ROW
+   SEARCH
 ========================================================= */
 
 .search-cell {
+
     padding: 4px;
+
     background: #fafafa;
 
     height: 36px;
+
     min-height: 36px;
+
     max-height: 36px;
 
     position: sticky;
+
     top: 38px;
 
     z-index: 79;
 }
 
 .search-input {
+
     width: 100%;
+
     height: 28px;
 
     display: block;
 
     border: 1px solid #cfd4da;
+
     border-radius: 4px;
 
     padding: 4px 7px;
@@ -240,142 +336,149 @@ th.filtered.sorted {
 }
 
 .search-input:focus {
+
     border-color: #1976d2;
-    box-shadow: 0 0 0 2px rgba(25,118,210,.12);
+
+    box-shadow:
+        0 0 0 2px rgba(25,118,210,.12);
 }
+
 
 /* =========================================================
    BODY
 ========================================================= */
 
 td {
-    white-space: nowrap;
+
+    /*
+       QUAN TRỌNG:
+       Cho phép giữ xuống dòng từ Google Sheet.
+    */
+
+    white-space: pre-line;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
+
+
+/*
+   Khi Wrap text được bật
+*/
+td.wrap-text {
+
+    white-space: pre-wrap !important;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+
+    text-overflow: clip;
+}
+
 
 /* =========================================================
    RESIZE
 ========================================================= */
 
 .resize-handle {
+
     position: absolute;
+
     top: 0;
+
     right: -3px;
 
     width: 7px;
+
     height: 100%;
 
     cursor: col-resize;
+
     z-index: 100;
 }
 
 .resize-handle:hover {
+
     background: rgba(25,118,210,.3);
 }
 
+
 /* =========================================================
-   FREEZE COLUMNS
-   FIX QUAN TRỌNG
+   FREEZE
 ========================================================= */
 
-/*
-   Body của cột cố định
-   nằm trên các cột đang cuộn.
-*/
 tbody .frozen-column {
+
     position: sticky !important;
+
     z-index: 90 !important;
+
     background: #fff;
 }
 
-
-/*
-   Header của cột cố định
-   nằm trên body.
-*/
 thead .frozen-column.header-cell {
+
     position: sticky !important;
+
     z-index: 110 !important;
+
     background: #f1f3f5;
 }
 
-
-/*
-   Search của cột cố định
-   cũng nằm trên các cột đang cuộn.
-*/
 thead .frozen-column.search-cell {
+
     position: sticky !important;
+
     z-index: 109 !important;
+
     background: #fafafa;
 }
 
-
-/*
-   Filter + frozen
-*/
 thead th.filtered.frozen-column.header-cell {
+
     background: #c8f7c5 !important;
+
     z-index: 110 !important;
 }
 
-
-/*
-   Sort + frozen
-*/
 thead th.sorted.frozen-column.header-cell {
+
     background: #d8ebff !important;
+
     z-index: 110 !important;
 }
 
-
-/*
-   Filter + Sort + Frozen
-*/
 thead th.filtered.sorted.frozen-column.header-cell {
+
     background: #bdecc4 !important;
+
     z-index: 110 !important;
 }
 
-
-/*
-   Header thường
-*/
 thead .header-cell {
+
     z-index: 80;
 }
 
-
-/*
-   Search thường
-*/
 thead .search-cell {
+
     z-index: 79;
 }
 
-
-/*
-   Cột cố định ở header
-   ưu tiên cao nhất.
-*/
 thead tr.header-row th.frozen-column {
+
     z-index: 120 !important;
 }
 
-
-/*
-   Cột cố định ở search
-*/
 thead tr.search-row th.frozen-column {
+
     z-index: 119 !important;
 }
 
-
-/*
-   Body frozen vẫn thấp hơn header.
-*/
 tbody td.frozen-column {
+
     z-index: 90 !important;
 }
 
@@ -385,72 +488,100 @@ tbody td.frozen-column {
 ========================================================= */
 
 .filter-menu {
+
     position: fixed;
+
     z-index: 10000;
 
-    width: 330px;
-    max-height: 560px;
+    width: 350px;
+
+    max-height: 700px;
 
     background: #fff;
 
     border: 1px solid #cfd4da;
+
     border-radius: 7px;
 
-    box-shadow: 0 8px 30px rgba(0,0,0,.18);
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.18);
 
     display: none;
+
     overflow: hidden;
 }
 
 .filter-menu.open {
+
     display: block;
 }
 
 .filter-title {
+
     font-weight: 700;
+
     padding: 10px 12px;
+
     border-bottom: 1px solid #e2e5e9;
+
     background: #f8f9fa;
 }
 
 .filter-search {
+
     padding: 8px;
+
     border-bottom: 1px solid #e2e5e9;
 }
 
 .filter-search input {
+
     width: 100%;
+
     height: 30px;
 
     border: 1px solid #cfd4da;
+
     border-radius: 4px;
 
     padding: 5px 8px;
 }
 
 .filter-buttons {
+
     display: flex;
+
     gap: 5px;
+
     padding: 8px;
 
     border-bottom: 1px solid #e2e5e9;
 }
 
 .filter-buttons button {
+
     flex: 1;
+
     padding: 6px 5px;
+
     font-size: 12px;
 }
 
 .filter-values {
-    max-height: 280px;
+
+    max-height: 240px;
+
     overflow-y: auto;
+
     padding: 5px 8px;
 }
 
 .filter-value {
+
     display: flex;
+
     align-items: center;
+
     gap: 7px;
 
     padding: 4px 3px;
@@ -459,61 +590,219 @@ tbody td.frozen-column {
 }
 
 .filter-value:hover {
+
     background: #f1f3f5;
 }
 
 .filter-value span {
+
     overflow: hidden;
+
     text-overflow: ellipsis;
+
     white-space: nowrap;
 }
 
+
+/* =========================================================
+   FILTER SORT
+========================================================= */
+
 .filter-sort-section {
+
     border-top: 1px solid #e2e5e9;
+
     padding: 8px;
+
     background: #fafafa;
 }
 
 .filter-sort-title {
+
     font-size: 12px;
+
     font-weight: 700;
+
     margin-bottom: 6px;
 }
 
 .sort-buttons {
+
     display: flex;
+
     gap: 5px;
 }
 
 .sort-buttons button {
+
     flex: 1;
+
     font-size: 12px;
+
     padding: 6px;
 }
 
 .priority-row {
+
     display: flex;
+
     align-items: center;
+
     gap: 7px;
+
     margin-top: 8px;
 }
 
 .priority-row label {
+
     font-size: 12px;
 }
 
 .priority-input {
+
     width: 70px;
+
     height: 28px;
 
     border: 1px solid #cfd4da;
+
     border-radius: 4px;
 
     padding: 3px 6px;
 }
 
-.filter-footer {
+
+/* =========================================================
+   FILTER FORMAT
+========================================================= */
+
+.filter-format-section {
+
+    border-top: 1px solid #e2e5e9;
+
+    padding: 10px 8px;
+
+    background: #fff;
+}
+
+.filter-format-title {
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    margin-bottom: 8px;
+}
+
+.format-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 7px;
+}
+
+.format-item {
+
     display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.format-item label {
+
+    font-size: 11px;
+
+    color: #666;
+}
+
+.format-item select,
+.format-item input[type="number"] {
+
+    width: 100%;
+
+    height: 29px;
+
+    border: 1px solid #cfd4da;
+
+    border-radius: 4px;
+
+    padding: 3px 6px;
+
+    font-size: 12px;
+}
+
+.format-checkboxes {
+
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+    margin-top: 8px;
+}
+
+.format-checkboxes label {
+
+    font-size: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+}
+
+.filter-format-colors {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 7px;
+
+    margin-top: 8px;
+}
+
+.filter-format-colors label {
+
+    font-size: 11px;
+
+    color: #666;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.filter-format-colors input[type="color"] {
+
+    width: 40px;
+
+    height: 26px;
+
+    padding: 0;
+
+    border: none;
+}
+
+
+/* =========================================================
+   FILTER FOOTER
+========================================================= */
+
+.filter-footer {
+
+    display: flex;
+
     gap: 6px;
 
     padding: 8px;
@@ -522,15 +811,19 @@ tbody td.frozen-column {
 }
 
 .filter-footer button {
+
     flex: 1;
 }
+
 
 /* =========================================================
    SETTINGS
 ========================================================= */
 
 .settings-overlay {
+
     position: fixed;
+
     inset: 0;
 
     background: rgba(0,0,0,.25);
@@ -541,16 +834,20 @@ tbody td.frozen-column {
 }
 
 .settings-overlay.open {
+
     display: block;
 }
 
 .settings-panel {
+
     position: fixed;
 
     top: 60px;
+
     right: 15px;
 
     width: 440px;
+
     max-height: calc(100vh - 80px);
 
     overflow-y: auto;
@@ -558,9 +855,11 @@ tbody td.frozen-column {
     background: #fff;
 
     border: 1px solid #d0d4d8;
+
     border-radius: 8px;
 
-    box-shadow: 0 10px 40px rgba(0,0,0,.2);
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.2);
 
     z-index: 9100;
 
@@ -568,52 +867,70 @@ tbody td.frozen-column {
 }
 
 .settings-panel.open {
+
     display: block;
 }
 
 .settings-header {
+
     padding: 12px 15px;
 
     font-size: 17px;
+
     font-weight: 700;
 
     border-bottom: 1px solid #e2e5e9;
 
     display: flex;
+
     align-items: center;
 }
 
 .settings-header button {
+
     margin-left: auto;
 }
 
 .settings-section {
+
     padding: 13px 15px;
+
     border-bottom: 1px solid #e2e5e9;
 }
 
 .settings-section h3 {
+
     margin: 0 0 10px 0;
+
     font-size: 14px;
 }
 
 .settings-help {
+
     font-size: 11px;
+
     color: #777;
+
     margin-bottom: 8px;
 }
 
 .column-selector {
+
     border: 1px solid #cfd4da;
+
     border-radius: 5px;
 
     max-height: 180px;
+
     overflow-y: auto;
 }
 
 .column-option {
+
     display: flex;
+
     align-items: center;
+
     gap: 7px;
 
     padding: 6px 8px;
@@ -622,71 +939,97 @@ tbody td.frozen-column {
 }
 
 .column-option:hover {
+
     background: #f1f3f5;
 }
 
 .setting-row {
+
     display: flex;
+
     align-items: center;
+
     gap: 8px;
+
     margin-bottom: 9px;
 }
 
 .setting-row label {
+
     min-width: 105px;
+
     font-size: 13px;
 }
 
 .setting-row input[type="number"],
 .setting-row input[type="text"],
 .setting-row select {
+
     flex: 1;
 
     height: 30px;
 
     border: 1px solid #cfd4da;
+
     border-radius: 4px;
 
     padding: 4px 7px;
 }
 
 .checkbox-line {
+
     display: flex;
+
     gap: 7px;
+
     align-items: center;
 
     font-size: 13px;
+
     margin-bottom: 8px;
 }
 
 .color-row {
+
     display: flex;
+
     align-items: center;
+
     gap: 8px;
+
     margin-bottom: 8px;
 }
 
 .color-row input[type="color"] {
+
     width: 45px;
+
     height: 30px;
+
     border: none;
+
     padding: 0;
 }
 
 .settings-buttons {
+
     display: flex;
+
     gap: 7px;
 }
 
 .settings-buttons button {
+
     flex: 1;
 }
+
 
 /* =========================================================
    CONTEXT MENU
 ========================================================= */
 
 .context-menu {
+
     position: fixed;
 
     z-index: 12000;
@@ -694,9 +1037,11 @@ tbody td.frozen-column {
     background: #fff;
 
     border: 1px solid #cfd4da;
+
     border-radius: 5px;
 
-    box-shadow: 0 5px 20px rgba(0,0,0,.18);
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.18);
 
     display: none;
 
@@ -704,27 +1049,36 @@ tbody td.frozen-column {
 }
 
 .context-menu button {
+
     width: 100%;
+
     border: none;
+
     border-radius: 0;
+
     text-align: left;
 }
 
 .context-menu.open {
+
     display: block;
 }
+
 
 /* =========================================================
    LOADING
 ========================================================= */
 
 .loading {
+
     position: fixed;
 
     inset: 54px 0 0 0;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     background: rgba(255,255,255,.85);
@@ -735,6 +1089,7 @@ tbody td.frozen-column {
 }
 
 .error-box {
+
     margin: 20px;
 
     padding: 15px;
@@ -748,6 +1103,7 @@ tbody td.frozen-column {
     border-radius: 6px;
 }
 
+
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -755,24 +1111,32 @@ tbody td.frozen-column {
 @media(max-width:700px) {
 
     .topbar-title {
+
         font-size: 14px;
     }
 
     .refresh-info {
+
         display: none;
     }
 
     .settings-panel {
+
         left: 5px;
+
         right: 5px;
+
         width: auto;
     }
 
 }
+
 </style>
 </head>
 
+
 <body>
+
 
 <!-- =======================================================
      TOP BAR
@@ -858,6 +1222,7 @@ tbody td.frozen-column {
         Bộ lọc
     </div>
 
+
     <div class="filter-search">
 
         <input
@@ -868,6 +1233,7 @@ tbody td.frozen-column {
         >
 
     </div>
+
 
     <div class="filter-buttons">
 
@@ -881,10 +1247,16 @@ tbody td.frozen-column {
 
     </div>
 
+
     <div
         class="filter-values"
         id="filterValues"
     ></div>
+
+
+    <!-- ===================================================
+         SORT
+    ==================================================== -->
 
     <div class="filter-sort-section">
 
@@ -908,6 +1280,7 @@ tbody td.frozen-column {
 
         </div>
 
+
         <div class="priority-row">
 
             <label>
@@ -930,6 +1303,185 @@ tbody td.frozen-column {
         </div>
 
     </div>
+
+
+    <!-- ===================================================
+         FORMAT TRỰC TIẾP
+    ==================================================== -->
+
+    <div class="filter-format-section">
+
+        <div class="filter-format-title">
+            Định dạng cột hiện tại
+        </div>
+
+
+        <div class="format-grid">
+
+            <div class="format-item">
+
+                <label>
+                    Canh lề
+                </label>
+
+                <select id="filterFormatAlign">
+
+                    <option value="left">
+                        Trái
+                    </option>
+
+                    <option value="center">
+                        Giữa
+                    </option>
+
+                    <option value="right">
+                        Phải
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="format-item">
+
+                <label>
+                    Font
+                </label>
+
+                <select id="filterFormatFont">
+
+                    <option value="Arial">
+                        Arial
+                    </option>
+
+                    <option value="Tahoma">
+                        Tahoma
+                    </option>
+
+                    <option value="Verdana">
+                        Verdana
+                    </option>
+
+                    <option value="Calibri">
+                        Calibri
+                    </option>
+
+                    <option value="Times New Roman">
+                        Times New Roman
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="format-item">
+
+                <label>
+                    Font size
+                </label>
+
+                <input
+                    type="number"
+                    id="filterFormatSize"
+                    min="8"
+                    max="40"
+                    value="14"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="format-checkboxes">
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="filterFormatBold"
+                >
+
+                In đậm
+
+            </label>
+
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="filterFormatItalic"
+                >
+
+                In nghiêng
+
+            </label>
+
+
+            <label>
+
+                <input
+                    type="checkbox"
+                    id="filterFormatWrap"
+                >
+
+                Wrap text
+
+            </label>
+
+        </div>
+
+
+        <div class="filter-format-colors">
+
+            <label>
+
+                Màu chữ
+
+                <input
+                    type="color"
+                    id="filterFormatTextColor"
+                    value="#222222"
+                >
+
+            </label>
+
+
+            <label>
+
+                Màu nền
+
+                <input
+                    type="color"
+                    id="filterFormatBgColor"
+                    value="#ffffff"
+                >
+
+            </label>
+
+        </div>
+
+
+        <button
+            class="primary"
+            style="
+                width:100%;
+                margin-top:8px;
+            "
+            onclick="applyCurrentColumnFormat()"
+        >
+            Áp dụng định dạng
+        </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         FOOTER
+    ==================================================== -->
 
     <div class="filter-footer">
 
@@ -1003,6 +1555,39 @@ tbody td.frozen-column {
         <h3>
             2. Định dạng
         </h3>
+
+        <div class="setting-row">
+
+            <label>
+                Font
+            </label>
+
+            <select id="formatFont">
+
+                <option value="Arial">
+                    Arial
+                </option>
+
+                <option value="Tahoma">
+                    Tahoma
+                </option>
+
+                <option value="Verdana">
+                    Verdana
+                </option>
+
+                <option value="Calibri">
+                    Calibri
+                </option>
+
+                <option value="Times New Roman">
+                    Times New Roman
+                </option>
+
+            </select>
+
+        </div>
+
 
         <div class="setting-row">
 
@@ -1082,7 +1667,7 @@ tbody td.frozen-column {
             >
 
             <label for="formatWrap">
-                Xuống dòng
+                Xuống dòng / Wrap text
             </label>
 
         </div>
@@ -1263,6 +1848,7 @@ tbody td.frozen-column {
 
 <script>
 
+
 /* =========================================================
    GOOGLE SHEET
 ========================================================= */
@@ -1276,7 +1862,7 @@ const SHEET_CSV_URL =
 ========================================================= */
 
 const STORAGE_KEY =
-    "report_google_sheet_table_v9";
+    "report_google_sheet_table_v10";
 
 
 /* =========================================================
@@ -1284,9 +1870,13 @@ const STORAGE_KEY =
 ========================================================= */
 
 const HIDDEN_COLUMNS = new Set([
+
     "Sort_DATA",
+
     "Sort_NM",
+
     "Sort_NgM"
+
 ]);
 
 
@@ -1306,11 +1896,13 @@ const SORT_BY_MAP = {
 
 
 /* =========================================================
-   DATE COLUMNS
+   DATE
 ========================================================= */
 
 const DATE_COLUMNS = new Set([
+
     "Ngày update"
+
 ]);
 
 
@@ -1351,6 +1943,8 @@ let contextColumn = null;
 
 const DEFAULT_FORMAT = {
 
+    fontFamily: "Arial",
+
     fontSize: 14,
 
     align: "left",
@@ -1382,8 +1976,11 @@ document.addEventListener(
 
 
         setInterval(
+
             refreshData,
+
             5 * 60 * 1000
+
         );
 
 
@@ -1550,10 +2147,7 @@ function loadStorage() {
     }
     catch(error) {
 
-        console.error(
-            "Không đọc được localStorage:",
-            error
-        );
+        console.error(error);
 
     }
 
@@ -1565,7 +2159,9 @@ function saveStorage() {
     try {
 
         localStorage.setItem(
+
             STORAGE_KEY,
+
             JSON.stringify({
 
                 columnNames,
@@ -1583,15 +2179,13 @@ function saveStorage() {
                 freezeCount
 
             })
+
         );
 
     }
     catch(error) {
 
-        console.error(
-            "Không lưu được localStorage:",
-            error
-        );
+        console.error(error);
 
     }
 
@@ -1622,7 +2216,6 @@ function parseCSV(text) {
         const char =
             text[i];
 
-
         const next =
             text[i + 1];
 
@@ -1652,6 +2245,12 @@ function parseCSV(text) {
 
         }
 
+
+        /*
+           QUAN TRỌNG:
+           Nếu newline nằm trong "..."
+           thì giữ nguyên newline.
+        */
 
         if (
             char === "," &&
@@ -1746,10 +2345,14 @@ async function refreshData() {
 
         const response =
             await fetch(
+
                 url,
+
                 {
-                    cache: "no-store"
+                    cache:
+                        "no-store"
                 }
+
             );
 
 
@@ -1793,6 +2396,7 @@ async function refreshData() {
         rows =
             csv
                 .slice(1)
+
                 .filter(
                     row =>
                         row.some(
@@ -1802,6 +2406,7 @@ async function refreshData() {
                                 ).trim() !== ""
                         )
                 )
+
                 .map(
                     row => {
 
@@ -1844,7 +2449,6 @@ async function refreshData() {
     catch(error) {
 
         console.error(error);
-
 
         showError(
             "Không thể tải dữ liệu Google Sheet.<br><br>" +
@@ -1913,7 +2517,7 @@ function initializeColumnNames() {
 
 
 /* =========================================================
-   DEFAULT FILTERS
+   DEFAULT FILTER
 ========================================================= */
 
 function initializeDefaults() {
@@ -1975,24 +2579,12 @@ function initializeDefaults() {
             );
 
 
-        if (
+        defaultFilters[
+            stopIndex
+        ] =
             blank !== undefined
-        ) {
-
-            defaultFilters[
-                stopIndex
-            ] =
-                [blank];
-
-        }
-        else {
-
-            defaultFilters[
-                stopIndex
-            ] =
-                [];
-
-        }
+                ? [blank]
+                : [];
 
     }
 
@@ -2035,12 +2627,10 @@ function cleanStateAfterDataChange() {
         .forEach(
             key => {
 
-                const index =
-                    Number(key);
-
-
                 if (
-                    !headers[index]
+                    !headers[
+                        Number(key)
+                    ]
                 ) {
 
                     delete columnNames[key];
@@ -2057,12 +2647,10 @@ function cleanStateAfterDataChange() {
         .forEach(
             key => {
 
-                const index =
-                    Number(key);
-
-
                 if (
-                    !headers[index]
+                    !headers[
+                        Number(key)
+                    ]
                 ) {
 
                     delete selectedFilters[key];
@@ -2079,12 +2667,10 @@ function cleanStateAfterDataChange() {
         .forEach(
             key => {
 
-                const index =
-                    Number(key);
-
-
                 if (
-                    !headers[index]
+                    !headers[
+                        Number(key)
+                    ]
                 ) {
 
                     delete searchValues[key];
@@ -2101,12 +2687,10 @@ function cleanStateAfterDataChange() {
         .forEach(
             key => {
 
-                const index =
-                    Number(key);
-
-
                 if (
-                    !headers[index]
+                    !headers[
+                        Number(key)
+                    ]
                 ) {
 
                     delete sortOrders[key];
@@ -2143,9 +2727,13 @@ function getDisplayColumnName(
 ) {
 
     return (
+
         columnNames[index] ??
+
         headers[index] ??
+
         ""
+
     );
 
 }
@@ -2155,6 +2743,18 @@ function getDisplayColumnName(
    UNIQUE VALUES
 ========================================================= */
 
+/*
+   QUAN TRỌNG:
+
+   Hàm này LUÔN lấy từ rows gốc.
+
+   KHÔNG lấy từ filterRows(rows).
+
+   Vì vậy:
+   Filter Package sẽ KHÔNG làm mất
+   các giá trị DATA trong menu filter.
+*/
+
 function getUniqueRawValues(
     index
 ) {
@@ -2163,13 +2763,22 @@ function getUniqueRawValues(
         new Set();
 
 
+    const header =
+        headers[index];
+
+
+    if (!header) {
+
+        return [];
+
+    }
+
+
     rows.forEach(
         row => {
 
             set.add(
-                row[
-                    headers[index]
-                ] ??
+                row[header] ??
                 ""
             );
 
@@ -2177,13 +2786,15 @@ function getUniqueRawValues(
     );
 
 
-    return Array.from(set);
+    return Array.from(
+        set
+    );
 
 }
 
 
 /* =========================================================
-   DATE PARSER
+   DATE
 ========================================================= */
 
 function parseVietnameseDate(
@@ -2208,15 +2819,19 @@ function parseVietnameseDate(
     if (match) {
 
         const day =
-            Number(match[1]);
-
+            Number(
+                match[1]
+            );
 
         const month =
-            Number(match[2]);
-
+            Number(
+                match[2]
+            );
 
         const year =
-            Number(match[3]);
+            Number(
+                match[3]
+            );
 
 
         const date =
@@ -2249,9 +2864,13 @@ function parseVietnameseDate(
     if (match) {
 
         return new Date(
+
             Number(match[1]),
+
             Number(match[2]) - 1,
+
             Number(match[3])
+
         );
 
     }
@@ -2263,7 +2882,7 @@ function parseVietnameseDate(
 
 
 /* =========================================================
-   FORMAT DATE
+   DATE DISPLAY
 ========================================================= */
 
 function formatDateValue(
@@ -2294,6 +2913,7 @@ function formatDateValue(
             now.getFullYear() -
             date.getFullYear()
         ) * 12 +
+
         (
             now.getMonth() -
             date.getMonth()
@@ -2334,18 +2954,20 @@ function formatDateValue(
 
 
     return (
+
         day +
         "/" +
         month +
         "/" +
         date.getFullYear()
+
     );
 
 }
 
 
 /* =========================================================
-   NUMBER PARSER
+   NUMBER
 ========================================================= */
 
 function parseVietnameseNumber(
@@ -2484,6 +3106,11 @@ function displayValue(
     }
 
 
+    /*
+       Không replace newline.
+       Giữ nguyên \n từ Google Sheet.
+    */
+
     return String(
         value ?? ""
     );
@@ -2531,8 +3158,11 @@ function getSortValue(
     ) {
 
         return {
+
             type: "number",
+
             value: numeric
+
         };
 
     }
@@ -2547,25 +3177,33 @@ function getSortValue(
     if (date) {
 
         return {
+
             type: "date",
-            value: date.getTime()
+
+            value:
+                date.getTime()
+
         };
 
     }
 
 
     return {
+
         type: "text",
-        value: String(
-            raw
-        ).toLowerCase()
+
+        value:
+            String(
+                raw
+            ).toLowerCase()
+
     };
 
 }
 
 
 /* =========================================================
-   SORT
+   SORT ROWS
 ========================================================= */
 
 function sortRows(
@@ -2576,60 +3214,67 @@ function sortRows(
         Object.entries(
             sortOrders
         )
-            .map(
-                (
-                    [
-                        index,
-                        config
-                    ]
-                ) => ({
 
-                    index:
-                        Number(index),
+        .map(
+            (
+                [
+                    index,
+                    config
+                ]
+            ) => ({
 
-                    direction:
-                        config.direction ||
-                        "asc",
+                index:
+                    Number(index),
 
-                    priority:
-                        Number(
-                            config.priority
-                        )
+                direction:
+                    config.direction ||
+                    "asc",
 
-                })
-            )
-            .filter(
-                item =>
-                    Number.isFinite(
-                        item.priority
+                priority:
+                    Number(
+                        config.priority
                     )
-            )
-            .sort(
-                (
-                    a,
-                    b
-                ) => {
 
-                    if (
-                        a.priority !==
-                        b.priority
-                    ) {
+            })
+        )
 
-                        return (
-                            a.priority -
-                            b.priority
-                        );
+        .filter(
+            item =>
+                Number.isFinite(
+                    item.priority
+                )
+        )
 
-                    }
+        .sort(
+            (
+                a,
+                b
+            ) => {
 
+                if (
+                    a.priority !==
+                    b.priority
+                ) {
 
                     return (
-                        a.index -
-                        b.index
+
+                        a.priority -
+                        b.priority
+
                     );
 
                 }
-            );
+
+
+                return (
+
+                    a.index -
+                    b.index
+
+                );
+
+            }
+        );
 
 
     if (
@@ -2703,7 +3348,8 @@ function sortRows(
                             "vi",
                             {
                                 numeric: true,
-                                sensitivity: "base"
+                                sensitivity:
+                                    "base"
                             }
                         );
 
@@ -2715,8 +3361,10 @@ function sortRows(
                 ) {
 
                     return (
+
                         order.direction ===
                         "asc"
+
                     )
                         ? result
                         : -result;
@@ -2735,7 +3383,7 @@ function sortRows(
 
 
 /* =========================================================
-   FILTER
+   FILTER ROWS
 ========================================================= */
 
 function filterRows(
@@ -2744,6 +3392,11 @@ function filterRows(
 
     return data.filter(
         row => {
+
+
+            /*
+               FILTER
+            */
 
             for (
                 const [
@@ -2776,7 +3429,9 @@ function filterRows(
                 const selectedStrings =
                     selected.map(
                         value =>
-                            String(value)
+                            String(
+                                value
+                            )
                     );
 
 
@@ -2792,6 +3447,10 @@ function filterRows(
 
             }
 
+
+            /*
+               SEARCH
+            */
 
             for (
                 const [
@@ -2874,7 +3533,11 @@ function isColumnFiltered(
         selectedFilters[index];
 
 
-    if (!selected) return false;
+    if (!selected) {
+
+        return false;
+
+    }
 
 
     const a =
@@ -2937,7 +3600,8 @@ function isColumnSearchActive(
 
     return Boolean(
         String(
-            searchValues[index] || ""
+            searchValues[index] ||
+            ""
         ).trim()
     );
 
@@ -2945,7 +3609,7 @@ function isColumnSearchActive(
 
 
 /* =========================================================
-   RENDER TABLE
+   RENDER
 ========================================================= */
 
 function renderTable() {
@@ -2962,7 +3626,7 @@ function renderTable() {
 
 
 /* =========================================================
-   RENDER HEADER
+   RENDER HEAD
 ========================================================= */
 
 function renderHead() {
@@ -3050,7 +3714,7 @@ function renderHead() {
 
 
             name.title =
-                "Double click để đổi tên cột";
+                "Double click để đổi tên";
 
 
             name.ondblclick =
@@ -3088,14 +3752,22 @@ function renderHead() {
             ) {
 
                 sortInfo.textContent =
+
                     "S" +
+
                     sortOrders[index]
                         .priority +
+
                     (
+
                         sortOrders[index]
-                            .direction === "asc"
+                            .direction ===
+                        "asc"
+
                             ? " ▲"
+
                             : " ▼"
+
                     );
 
             }
@@ -3272,7 +3944,9 @@ function renderHead() {
 
                                 saveStorage();
 
+
                                 renderBody();
+
 
                                 updateHeaderClasses();
 
@@ -3372,9 +4046,14 @@ function renderBody() {
                         index;
 
 
+                    /*
+                       textContent giữ nguyên \n.
+                    */
+
                     td.textContent =
                         displayValue(
-                            row[header] ?? "",
+                            row[header] ??
+                            "",
                             index
                         );
 
@@ -3441,6 +4120,11 @@ function applyCellFormat(
         );
 
 
+    cell.style.fontFamily =
+        format.fontFamily ||
+        "Arial";
+
+
     cell.style.fontSize =
         format.fontSize +
         "px";
@@ -3462,10 +4146,22 @@ function applyCellFormat(
             : "normal";
 
 
-    cell.style.whiteSpace =
+    if (
         format.wrap
-            ? "normal"
-            : "nowrap";
+    ) {
+
+        cell.classList.add(
+            "wrap-text"
+        );
+
+    }
+    else {
+
+        cell.classList.remove(
+            "wrap-text"
+        );
+
+    }
 
 
     if (
@@ -3476,6 +4172,11 @@ function applyCellFormat(
             format.textColor;
 
     }
+    else {
+
+        cell.style.color = "";
+
+    }
 
 
     if (
@@ -3484,6 +4185,12 @@ function applyCellFormat(
 
         cell.style.backgroundColor =
             format.bgColor;
+
+    }
+    else {
+
+        cell.style.backgroundColor =
+            "";
 
     }
 
@@ -3546,7 +4253,7 @@ function updateHeaderClasses() {
 
 
 /* =========================================================
-   FILTER MENU
+   OPEN FILTER
 ========================================================= */
 
 function openFilterMenu(
@@ -3557,6 +4264,11 @@ function openFilterMenu(
     currentFilterColumn =
         index;
 
+
+    /*
+       LUÔN LẤY FILTER TỪ DỮ LIỆU GỐC.
+       Không lấy từ dữ liệu đã filter.
+    */
 
     const values =
         getUniqueRawValues(
@@ -3595,6 +4307,16 @@ function openFilterMenu(
         "";
 
 
+    /*
+       Load định dạng hiện tại
+       của cột vào Filter menu.
+    */
+
+    loadCurrentColumnFormat(
+        index
+    );
+
+
     renderFilterValues();
 
 
@@ -3617,25 +4339,25 @@ function openFilterMenu(
 
 
     if (
-        left + 330 >
+        left + 350 >
         window.innerWidth
     ) {
 
         left =
             window.innerWidth -
-            340;
+            360;
 
     }
 
 
     if (
-        top + 560 >
+        top + 700 >
         window.innerHeight
     ) {
 
         top =
             window.innerHeight -
-            570;
+            710;
 
     }
 
@@ -3664,7 +4386,7 @@ function openFilterMenu(
 
 
 /* =========================================================
-   FILTER VALUES
+   RENDER FILTER VALUES
 ========================================================= */
 
 function renderFilterValues() {
@@ -3687,6 +4409,14 @@ function renderFilterValues() {
         currentFilterColumn;
 
 
+    /*
+       QUAN TRỌNG:
+
+       Không dùng filterRows(rows).
+
+       Dùng rows gốc.
+    */
+
     const allValues =
         getUniqueRawValues(
             index
@@ -3702,6 +4432,7 @@ function renderFilterValues() {
 
 
     allValues
+
         .filter(
             value => {
 
@@ -3713,16 +4444,20 @@ function renderFilterValues() {
 
 
                 return (
+
                     !search ||
+
                     text
                         .toLowerCase()
                         .includes(
                             search
                         )
+
                 );
 
             }
         )
+
         .forEach(
             value => {
 
@@ -3748,13 +4483,16 @@ function renderFilterValues() {
 
                 checkbox.checked =
                     temporaryFilterValues.some(
+
                         selected =>
+
                             String(
                                 selected
                             ) ===
                             String(
                                 value
                             )
+
                     );
 
 
@@ -3768,13 +4506,16 @@ function renderFilterValues() {
 
                             if (
                                 !temporaryFilterValues.some(
+
                                     selected =>
+
                                         String(
                                             selected
                                         ) ===
                                         String(
                                             value
                                         )
+
                                 )
                             ) {
 
@@ -3789,13 +4530,16 @@ function renderFilterValues() {
 
                             temporaryFilterValues =
                                 temporaryFilterValues.filter(
+
                                     selected =>
+
                                         String(
                                             selected
                                         ) !==
                                         String(
                                             value
                                         )
+
                                 );
 
                         }
@@ -3827,6 +4571,14 @@ function renderFilterValues() {
                 }
 
 
+                /*
+                   Filter value cũng giữ newline.
+                */
+
+                span.style.whiteSpace =
+                    "pre-line";
+
+
                 span.textContent =
                     display;
 
@@ -3852,7 +4604,7 @@ function renderFilterValues() {
 
 
 /* =========================================================
-   FILTER BUTTONS
+   SELECT ALL
 ========================================================= */
 
 function selectAllFilterValues() {
@@ -3873,6 +4625,10 @@ function selectAllFilterValues() {
 }
 
 
+/* =========================================================
+   CLEAR
+========================================================= */
+
 function clearFilterValues() {
 
     temporaryFilterValues =
@@ -3883,6 +4639,10 @@ function clearFilterValues() {
 
 }
 
+
+/* =========================================================
+   APPLY FILTER
+========================================================= */
 
 function applyFilter() {
 
@@ -3916,6 +4676,10 @@ function applyFilter() {
 }
 
 
+/* =========================================================
+   CANCEL
+========================================================= */
+
 function cancelFilter() {
 
     document.getElementById(
@@ -3928,7 +4692,7 @@ function cancelFilter() {
 
 
 /* =========================================================
-   SORT MENU
+   SORT
 ========================================================= */
 
 function setCurrentSort(
@@ -3949,7 +4713,9 @@ function setCurrentSort(
 
 
     if (
-        !Number.isFinite(priority) ||
+        !Number.isFinite(
+            priority
+        ) ||
         priority < 1
     ) {
 
@@ -3957,25 +4723,29 @@ function setCurrentSort(
             Object.values(
                 sortOrders
             )
-                .map(
-                    item =>
-                        Number(
-                            item.priority
-                        )
-                )
-                .filter(
-                    value =>
-                        Number.isFinite(
-                            value
-                        )
-                );
+
+            .map(
+                item =>
+                    Number(
+                        item.priority
+                    )
+            )
+
+            .filter(
+                value =>
+                    Number.isFinite(
+                        value
+                    )
+            );
 
 
         priority =
             priorities.length
+
                 ? Math.max(
                     ...priorities
                 ) + 1
+
                 : 1;
 
     }
@@ -3986,6 +4756,7 @@ function setCurrentSort(
     ] = {
 
         direction,
+
         priority
 
     };
@@ -3998,7 +4769,6 @@ function setCurrentSort(
 
 
     saveStorage();
-
 
     renderBody();
 
@@ -4027,7 +4797,6 @@ function removeCurrentSort() {
 
     saveStorage();
 
-
     renderBody();
 
     renderHead();
@@ -4051,7 +4820,9 @@ function applyCurrentPriority() {
 
 
     if (
-        !Number.isInteger(priority) ||
+        !Number.isInteger(
+            priority
+        ) ||
         priority < 1
     ) {
 
@@ -4075,7 +4846,8 @@ function applyCurrentPriority() {
             currentFilterColumn
         ] = {
 
-            direction: "asc",
+            direction:
+                "asc",
 
             priority
 
@@ -4094,7 +4866,6 @@ function applyCurrentPriority() {
 
     saveStorage();
 
-
     renderBody();
 
     renderHead();
@@ -4103,7 +4874,158 @@ function applyCurrentPriority() {
 
 
 /* =========================================================
-   RESET
+   LOAD CURRENT FORMAT INTO FILTER
+========================================================= */
+
+function loadCurrentColumnFormat(
+    index
+) {
+
+    const format =
+        getColumnFormat(
+            index
+        );
+
+
+    document.getElementById(
+        "filterFormatAlign"
+    ).value =
+        format.align;
+
+
+    document.getElementById(
+        "filterFormatFont"
+    ).value =
+        format.fontFamily ||
+        "Arial";
+
+
+    document.getElementById(
+        "filterFormatSize"
+    ).value =
+        format.fontSize;
+
+
+    document.getElementById(
+        "filterFormatBold"
+    ).checked =
+        format.bold;
+
+
+    document.getElementById(
+        "filterFormatItalic"
+    ).checked =
+        format.italic;
+
+
+    document.getElementById(
+        "filterFormatWrap"
+    ).checked =
+        format.wrap;
+
+
+    document.getElementById(
+        "filterFormatTextColor"
+    ).value =
+        format.textColor ||
+        "#222222";
+
+
+    document.getElementById(
+        "filterFormatBgColor"
+    ).value =
+        format.bgColor ||
+        "#ffffff";
+
+}
+
+
+/* =========================================================
+   APPLY CURRENT COLUMN FORMAT
+========================================================= */
+
+function applyCurrentColumnFormat() {
+
+    if (
+        currentFilterColumn === null
+    ) return;
+
+
+    const index =
+        currentFilterColumn;
+
+
+    columnFormats[index] = {
+
+        fontFamily:
+            document.getElementById(
+                "filterFormatFont"
+            ).value,
+
+        fontSize:
+            Number(
+                document.getElementById(
+                    "filterFormatSize"
+                ).value
+            ),
+
+        align:
+            document.getElementById(
+                "filterFormatAlign"
+            ).value,
+
+        bold:
+            document.getElementById(
+                "filterFormatBold"
+            ).checked,
+
+        italic:
+            document.getElementById(
+                "filterFormatItalic"
+            ).checked,
+
+        wrap:
+            document.getElementById(
+                "filterFormatWrap"
+            ).checked,
+
+        textColor:
+            document.getElementById(
+                "filterFormatTextColor"
+            ).value,
+
+        bgColor:
+            document.getElementById(
+                "filterFormatBgColor"
+            ).value
+
+    };
+
+
+    saveStorage();
+
+
+    /*
+       Render lại body để áp dụng ngay.
+    */
+
+    renderBody();
+
+
+    /*
+       Giữ Filter menu mở.
+    */
+
+    alert(
+        "Đã áp dụng định dạng cho cột: " +
+        getDisplayColumnName(index)
+    );
+
+}
+
+
+/* =========================================================
+   RESET USER FILTER
 ========================================================= */
 
 function resetUserFilters() {
@@ -4173,10 +5095,8 @@ function applyColumnWidths() {
                     cell.style.width =
                         width + "px";
 
-
                     cell.style.minWidth =
                         width + "px";
-
 
                     cell.style.maxWidth =
                         width + "px";
@@ -4530,6 +5450,13 @@ function loadFormatFromFirstSelected() {
 
 
     document.getElementById(
+        "formatFont"
+    ).value =
+        format.fontFamily ||
+        "Arial";
+
+
+    document.getElementById(
         "formatFontSize"
     ).value =
         format.fontSize;
@@ -4591,6 +5518,10 @@ function loadFormatFromFirstSelected() {
 }
 
 
+/* =========================================================
+   APPLY FORMATTING
+========================================================= */
+
 function applyFormatting() {
 
     const selected =
@@ -4609,6 +5540,12 @@ function applyFormatting() {
         return;
 
     }
+
+
+    const fontFamily =
+        document.getElementById(
+            "formatFont"
+        ).value;
 
 
     const fontSize =
@@ -4671,6 +5608,8 @@ function applyFormatting() {
         index => {
 
             columnFormats[index] = {
+
+                fontFamily,
 
                 fontSize,
 
@@ -4753,7 +5692,6 @@ function renameSelectedColumn() {
 
 
     saveStorage();
-
 
     renderTable();
 
@@ -4943,10 +5881,6 @@ function applyFreezeColumns() {
             );
 
 
-    /*
-       Xóa trạng thái cũ trước
-    */
-
     document.querySelectorAll(
         ".frozen-column"
     )
@@ -4964,10 +5898,6 @@ function applyFreezeColumns() {
             }
         );
 
-
-    /*
-       Tính left cho từng cột frozen.
-    */
 
     let left = 0;
 
@@ -5054,7 +5984,6 @@ function resetAllSettings() {
 
     saveStorage();
 
-
     initializeColumnNames();
 
     renderTable();
@@ -5087,12 +6016,17 @@ function updateRefreshInfo() {
 
 
     element.textContent =
+
         "Cập nhật: " +
+
         now.toLocaleTimeString(
             "vi-VN"
         ) +
+
         " • " +
+
         rows.length +
+
         " dòng";
 
 }
@@ -5122,6 +6056,7 @@ function showError(
 
 
     tbody.innerHTML =
+
         `
         <tr>
             <td>
