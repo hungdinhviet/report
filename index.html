@@ -70,10 +70,6 @@ button.primary:hover {
     background: #1565c0;
 }
 
-button.danger {
-    color: #c62828;
-}
-
 .refresh-info {
     font-size: 11px;
     color: #777;
@@ -110,18 +106,24 @@ table {
     min-width: 100%;
 }
 
+/*
+   QUAN TRỌNG:
+   Không sticky toàn bộ THEAD.
+   Sticky riêng từng ô giúp 2 hàng
+   header + search khớp chính xác.
+*/
+
 thead {
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 50;
 }
 
-thead tr.header-row th {
-    top: 0;
+thead tr.header-row {
+    height: 38px;
 }
 
-thead tr.search-row th {
-    top: 38px;
+thead tr.search-row {
+    height: 36px;
 }
 
 th,
@@ -141,16 +143,27 @@ th {
     white-space: nowrap;
 }
 
+/* =========================================================
+   HEADER
+========================================================= */
+
 .header-cell {
     height: 38px;
     min-height: 38px;
+    max-height: 38px;
+    padding: 0 8px;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 80;
 }
 
 .header-content {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 100%;
+    height: 38px;
     gap: 5px;
 }
 
@@ -196,25 +209,50 @@ th.filtered.sorted {
     background: #bdecc4 !important;
 }
 
+/* =========================================================
+   SEARCH ROW
+========================================================= */
+
 .search-cell {
     padding: 4px;
     background: #fafafa;
+
+    height: 36px;
+    min-height: 36px;
+    max-height: 36px;
+
+    position: sticky;
+    top: 38px;
+
+    z-index: 79;
 }
 
 .search-input {
     width: 100%;
     height: 28px;
+
+    display: block;
+
     border: 1px solid #cfd4da;
     border-radius: 4px;
+
     padding: 4px 7px;
+
     font-size: 12px;
+
     outline: none;
+
+    margin: 0;
 }
 
 .search-input:focus {
     border-color: #1976d2;
     box-shadow: 0 0 0 2px rgba(25,118,210,.12);
 }
+
+/* =========================================================
+   BODY
+========================================================= */
 
 td {
     white-space: nowrap;
@@ -247,13 +285,19 @@ td {
 .filter-menu {
     position: fixed;
     z-index: 10000;
+
     width: 330px;
     max-height: 560px;
+
     background: white;
+
     border: 1px solid #cfd4da;
     border-radius: 7px;
+
     box-shadow: 0 8px 30px rgba(0,0,0,.18);
+
     display: none;
+
     overflow: hidden;
 }
 
@@ -276,8 +320,10 @@ td {
 .filter-search input {
     width: 100%;
     height: 30px;
+
     border: 1px solid #cfd4da;
     border-radius: 4px;
+
     padding: 5px 8px;
 }
 
@@ -285,6 +331,7 @@ td {
     display: flex;
     gap: 5px;
     padding: 8px;
+
     border-bottom: 1px solid #e2e5e9;
 }
 
@@ -304,7 +351,9 @@ td {
     display: flex;
     align-items: center;
     gap: 7px;
+
     padding: 4px 3px;
+
     font-size: 13px;
 }
 
@@ -320,13 +369,16 @@ td {
 
 .filter-sort-section {
     border-top: 1px solid #e2e5e9;
+
     padding: 8px;
+
     background: #fafafa;
 }
 
 .filter-sort-title {
     font-size: 12px;
     font-weight: 700;
+
     margin-bottom: 6px;
 }
 
@@ -345,6 +397,7 @@ td {
     display: flex;
     align-items: center;
     gap: 7px;
+
     margin-top: 8px;
 }
 
@@ -355,15 +408,19 @@ td {
 .priority-input {
     width: 70px;
     height: 28px;
+
     border: 1px solid #cfd4da;
     border-radius: 4px;
+
     padding: 3px 6px;
 }
 
 .filter-footer {
     display: flex;
     gap: 6px;
+
     padding: 8px;
+
     border-top: 1px solid #e2e5e9;
 }
 
@@ -378,8 +435,11 @@ td {
 .settings-overlay {
     position: fixed;
     inset: 0;
+
     background: rgba(0,0,0,.25);
+
     z-index: 9000;
+
     display: none;
 }
 
@@ -389,16 +449,24 @@ td {
 
 .settings-panel {
     position: fixed;
+
     top: 60px;
     right: 15px;
+
     width: 440px;
     max-height: calc(100vh - 80px);
+
     overflow-y: auto;
+
     background: white;
+
     border: 1px solid #d0d4d8;
     border-radius: 8px;
+
     box-shadow: 0 10px 40px rgba(0,0,0,.2);
+
     z-index: 9100;
+
     display: none;
 }
 
@@ -408,9 +476,12 @@ td {
 
 .settings-header {
     padding: 12px 15px;
+
     font-size: 17px;
     font-weight: 700;
+
     border-bottom: 1px solid #e2e5e9;
+
     display: flex;
     align-items: center;
 }
@@ -421,32 +492,41 @@ td {
 
 .settings-section {
     padding: 13px 15px;
+
     border-bottom: 1px solid #e2e5e9;
 }
 
 .settings-section h3 {
     margin: 0 0 10px 0;
+
     font-size: 14px;
 }
 
 .settings-help {
     font-size: 11px;
+
     color: #777;
+
     margin-bottom: 8px;
 }
 
 .column-selector {
     border: 1px solid #cfd4da;
     border-radius: 5px;
+
     max-height: 180px;
+
     overflow-y: auto;
 }
 
 .column-option {
     display: flex;
     align-items: center;
+
     gap: 7px;
+
     padding: 6px 8px;
+
     font-size: 13px;
 }
 
@@ -457,12 +537,15 @@ td {
 .setting-row {
     display: flex;
     align-items: center;
+
     gap: 8px;
+
     margin-bottom: 9px;
 }
 
 .setting-row label {
     min-width: 105px;
+
     font-size: 13px;
 }
 
@@ -470,9 +553,12 @@ td {
 .setting-row input[type="text"],
 .setting-row select {
     flex: 1;
+
     height: 30px;
+
     border: 1px solid #cfd4da;
     border-radius: 4px;
+
     padding: 4px 7px;
 }
 
@@ -480,21 +566,27 @@ td {
     display: flex;
     gap: 7px;
     align-items: center;
+
     font-size: 13px;
+
     margin-bottom: 8px;
 }
 
 .color-row {
     display: flex;
     align-items: center;
+
     gap: 8px;
+
     margin-bottom: 8px;
 }
 
 .color-row input[type="color"] {
     width: 45px;
     height: 30px;
+
     border: none;
+
     padding: 0;
 }
 
@@ -508,24 +600,32 @@ td {
 }
 
 /* =========================================================
-   RENAME CONTEXT MENU
+   CONTEXT MENU
 ========================================================= */
 
 .context-menu {
     position: fixed;
+
     z-index: 12000;
+
     background: white;
+
     border: 1px solid #cfd4da;
     border-radius: 5px;
+
     box-shadow: 0 5px 20px rgba(0,0,0,.18);
+
     display: none;
+
     min-width: 180px;
 }
 
 .context-menu button {
     width: 100%;
+
     border: none;
     border-radius: 0;
+
     text-align: left;
 }
 
@@ -534,26 +634,36 @@ td {
 }
 
 /* =========================================================
-   STATUS
+   LOADING
 ========================================================= */
 
 .loading {
     position: fixed;
+
     inset: 54px 0 0 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     background: rgba(255,255,255,.85);
+
     z-index: 5000;
+
     font-size: 16px;
 }
 
 .error-box {
     margin: 20px;
+
     padding: 15px;
+
     border: 1px solid #ef9a9a;
+
     background: #ffebee;
+
     color: #b71c1c;
+
     border-radius: 6px;
 }
 
@@ -563,11 +673,6 @@ td {
 
 .frozen-column {
     position: sticky !important;
-    z-index: 30;
-}
-
-thead .frozen-column {
-    z-index: 80;
 }
 
 tbody .frozen-column {
@@ -595,6 +700,7 @@ thead th.filtered.sorted.frozen-column {
 ========================================================= */
 
 @media(max-width:700px) {
+
     .topbar-title {
         font-size: 14px;
     }
@@ -606,8 +712,10 @@ thead th.filtered.sorted.frozen-column {
     .settings-panel {
         left: 5px;
         right: 5px;
+
         width: auto;
     }
+
 }
 </style>
 </head>
@@ -636,7 +744,10 @@ thead th.filtered.sorted.frozen-column {
         ⚙ Cài đặt
     </button>
 
-    <span class="refresh-info" id="refreshInfo">
+    <span
+        class="refresh-info"
+        id="refreshInfo"
+    >
         Chưa tải dữ liệu
     </span>
 
@@ -649,7 +760,10 @@ thead th.filtered.sorted.frozen-column {
 
 <div class="main">
 
-    <div class="table-wrapper" id="tableWrapper">
+    <div
+        class="table-wrapper"
+        id="tableWrapper"
+    >
 
         <table id="dataTable">
 
@@ -668,7 +782,10 @@ thead th.filtered.sorted.frozen-column {
      LOADING
 ======================================================= -->
 
-<div class="loading" id="loading">
+<div
+    class="loading"
+    id="loading"
+>
     Đang tải dữ liệu Google Sheet...
 </div>
 
@@ -677,34 +794,49 @@ thead th.filtered.sorted.frozen-column {
      FILTER MENU
 ======================================================= -->
 
-<div class="filter-menu" id="filterMenu">
+<div
+    class="filter-menu"
+    id="filterMenu"
+>
 
-    <div class="filter-title" id="filterTitle">
+    <div
+        class="filter-title"
+        id="filterTitle"
+    >
         Bộ lọc
     </div>
 
     <div class="filter-search">
+
         <input
             type="text"
             id="filterValueSearch"
             placeholder="Tìm giá trị..."
             oninput="renderFilterValues()"
         >
+
     </div>
 
     <div class="filter-buttons">
 
-        <button onclick="selectAllFilterValues()">
+        <button
+            onclick="selectAllFilterValues()"
+        >
             Chọn tất cả
         </button>
 
-        <button onclick="clearFilterValues()">
+        <button
+            onclick="clearFilterValues()"
+        >
             Bỏ chọn
         </button>
 
     </div>
 
-    <div class="filter-values" id="filterValues"></div>
+    <div
+        class="filter-values"
+        id="filterValues"
+    ></div>
 
 
     <div class="filter-sort-section">
@@ -715,15 +847,21 @@ thead th.filtered.sorted.frozen-column {
 
         <div class="sort-buttons">
 
-            <button onclick="setCurrentSort('asc')">
+            <button
+                onclick="setCurrentSort('asc')"
+            >
                 ▲ Tăng dần
             </button>
 
-            <button onclick="setCurrentSort('desc')">
+            <button
+                onclick="setCurrentSort('desc')"
+            >
                 ▼ Giảm dần
             </button>
 
-            <button onclick="removeCurrentSort()">
+            <button
+                onclick="removeCurrentSort()"
+            >
                 ✕ Bỏ sort
             </button>
 
@@ -744,7 +882,9 @@ thead th.filtered.sorted.frozen-column {
                 placeholder="VD: 1"
             >
 
-            <button onclick="applyCurrentPriority()">
+            <button
+                onclick="applyCurrentPriority()"
+            >
                 Áp dụng
             </button>
 
@@ -755,7 +895,9 @@ thead th.filtered.sorted.frozen-column {
 
     <div class="filter-footer">
 
-        <button onclick="cancelFilter()">
+        <button
+            onclick="cancelFilter()"
+        >
             Hủy
         </button>
 
@@ -786,7 +928,10 @@ thead th.filtered.sorted.frozen-column {
      SETTINGS
 ======================================================= -->
 
-<div class="settings-panel" id="settingsPanel">
+<div
+    class="settings-panel"
+    id="settingsPanel"
+>
 
     <div class="settings-header">
 
@@ -798,8 +943,6 @@ thead th.filtered.sorted.frozen-column {
 
     </div>
 
-
-    <!-- COLUMN SELECT -->
 
     <div class="settings-section">
 
@@ -818,8 +961,6 @@ thead th.filtered.sorted.frozen-column {
 
     </div>
 
-
-    <!-- FORMAT -->
 
     <div class="settings-section">
 
@@ -966,8 +1107,6 @@ thead th.filtered.sorted.frozen-column {
     </div>
 
 
-    <!-- RENAME -->
-
     <div class="settings-section">
 
         <h3>
@@ -984,7 +1123,9 @@ thead th.filtered.sorted.frozen-column {
                 Cột
             </label>
 
-            <select id="renameColumnSelect"></select>
+            <select
+                id="renameColumnSelect"
+            ></select>
 
         </div>
 
@@ -1022,8 +1163,6 @@ thead th.filtered.sorted.frozen-column {
     </div>
 
 
-    <!-- FREEZE -->
-
     <div class="settings-section">
 
         <h3>
@@ -1049,13 +1188,13 @@ thead th.filtered.sorted.frozen-column {
     </div>
 
 
-    <!-- SAVE -->
-
     <div class="settings-section">
 
         <div class="settings-buttons">
 
-            <button onclick="resetAllSettings()">
+            <button
+                onclick="resetAllSettings()"
+            >
                 Khôi phục cài đặt
             </button>
 
@@ -1077,9 +1216,14 @@ thead th.filtered.sorted.frozen-column {
      CONTEXT MENU
 ======================================================= -->
 
-<div class="context-menu" id="contextMenu">
+<div
+    class="context-menu"
+    id="contextMenu"
+>
 
-    <button onclick="renameFromContextMenu()">
+    <button
+        onclick="renameFromContextMenu()"
+    >
         ✏ Đổi tên cột
     </button>
 
@@ -1101,11 +1245,11 @@ const SHEET_CSV_URL =
 ========================================================= */
 
 const STORAGE_KEY =
-    "report_google_sheet_table_v7";
+    "report_google_sheet_table_v8";
 
 
 /* =========================================================
-   HIDDEN HELPER COLUMNS
+   HIDDEN COLUMNS
 ========================================================= */
 
 const HIDDEN_COLUMNS = new Set([
@@ -1116,7 +1260,7 @@ const HIDDEN_COLUMNS = new Set([
 
 
 /* =========================================================
-   SORT BY MAP
+   SORT MAP
 ========================================================= */
 
 const SORT_BY_MAP = {
@@ -1131,7 +1275,7 @@ const SORT_BY_MAP = {
 
 
 /* =========================================================
-   SPECIAL COLUMNS
+   DATE COLUMNS
 ========================================================= */
 
 const DATE_COLUMNS = new Set([
@@ -1144,6 +1288,7 @@ const DATE_COLUMNS = new Set([
 ========================================================= */
 
 let headers = [];
+
 let rows = [];
 
 let columnNames = {};
@@ -1193,7 +1338,7 @@ const DEFAULT_FORMAT = {
 
 
 /* =========================================================
-   INITIAL LOAD
+   START
 ========================================================= */
 
 document.addEventListener(
@@ -1204,10 +1349,20 @@ document.addEventListener(
 
         await refreshData();
 
+
+        /*
+           Tự động cập nhật mỗi 5 phút
+        */
+
         setInterval(
             refreshData,
             5 * 60 * 1000
         );
+
+
+        /*
+           Click ngoài filter menu
+        */
 
         document.addEventListener(
             "click",
@@ -1218,52 +1373,79 @@ document.addEventListener(
                         "filterMenu"
                     );
 
+
                 if (
                     menu.classList.contains("open") &&
                     !menu.contains(event.target)
                 ) {
 
-                    const filterButton =
+                    const button =
                         event.target.closest(
                             ".header-filter-btn"
                         );
 
-                    if (!filterButton) {
-                        menu.classList.remove("open");
+
+                    if (!button) {
+
+                        menu.classList.remove(
+                            "open"
+                        );
+
                     }
+
                 }
 
             }
         );
+
+
+        /*
+           Chuột phải header
+        */
 
         document.addEventListener(
             "contextmenu",
             function(event) {
 
                 const th =
-                    event.target.closest("th[data-column]");
+                    event.target.closest(
+                        "th[data-column]"
+                    );
+
 
                 if (!th) return;
 
+
                 event.preventDefault();
 
+
                 contextColumn =
-                    Number(th.dataset.column);
+                    Number(
+                        th.dataset.column
+                    );
+
 
                 const menu =
                     document.getElementById(
                         "contextMenu"
                     );
 
+
                 menu.style.left =
                     event.clientX + "px";
+
 
                 menu.style.top =
                     event.clientY + "px";
 
-                menu.classList.add("open");
+
+                menu.classList.add(
+                    "open"
+                );
+
             }
         );
+
 
         document.addEventListener(
             "click",
@@ -1274,10 +1456,17 @@ document.addEventListener(
                         "contextMenu"
                     );
 
+
                 if (
-                    !menu.contains(event.target)
+                    !menu.contains(
+                        event.target
+                    )
                 ) {
-                    menu.classList.remove("open");
+
+                    menu.classList.remove(
+                        "open"
+                    );
+
                 }
 
             }
@@ -1300,31 +1489,46 @@ function loadStorage() {
                 STORAGE_KEY
             );
 
-        if (!raw) return;
+
+        if (!raw) {
+
+            return;
+
+        }
+
 
         const data =
             JSON.parse(raw);
 
+
         columnNames =
             data.columnNames || {};
+
 
         selectedFilters =
             data.selectedFilters || {};
 
+
         searchValues =
             data.searchValues || {};
+
 
         sortOrders =
             data.sortOrders || {};
 
+
         columnWidths =
             data.columnWidths || {};
+
 
         columnFormats =
             data.columnFormats || {};
 
+
         freezeCount =
-            Number(data.freezeCount || 0);
+            Number(
+                data.freezeCount || 0
+            );
 
     }
     catch(error) {
@@ -1391,6 +1595,7 @@ function parseCSV(text) {
 
     let insideQuotes = false;
 
+
     for (
         let i = 0;
         i < text.length;
@@ -1400,11 +1605,14 @@ function parseCSV(text) {
         const char =
             text[i];
 
+
         const next =
             text[i + 1];
 
 
-        if (char === '"') {
+        if (
+            char === '"'
+        ) {
 
             if (
                 insideQuotes &&
@@ -1443,7 +1651,10 @@ function parseCSV(text) {
 
 
         if (
-            (char === "\n" || char === "\r") &&
+            (
+                char === "\n" ||
+                char === "\r"
+            ) &&
             !insideQuotes
         ) {
 
@@ -1451,8 +1662,11 @@ function parseCSV(text) {
                 char === "\r" &&
                 next === "\n"
             ) {
+
                 i++;
+
             }
+
 
             row.push(value);
 
@@ -1490,7 +1704,7 @@ function parseCSV(text) {
 
 
 /* =========================================================
-   REFRESH DATA
+   REFRESH
 ========================================================= */
 
 async function refreshData() {
@@ -1500,8 +1714,10 @@ async function refreshData() {
             "loading"
         );
 
+
     loading.style.display =
         "flex";
+
 
     try {
 
@@ -1552,7 +1768,8 @@ async function refreshData() {
 
         headers =
             csv[0].map(
-                h => cleanHeader(h)
+                h =>
+                    cleanHeader(h)
             );
 
 
@@ -1563,8 +1780,9 @@ async function refreshData() {
                     row =>
                         row.some(
                             value =>
-                                String(value || "")
-                                    .trim() !== ""
+                                String(
+                                    value || ""
+                                ).trim() !== ""
                         )
                 )
                 .map(
@@ -1572,14 +1790,20 @@ async function refreshData() {
 
                         const obj = {};
 
+
                         headers.forEach(
-                            (header, index) => {
+                            (
+                                header,
+                                index
+                            ) => {
 
                                 obj[header] =
-                                    row[index] ?? "";
+                                    row[index] ??
+                                    "";
 
                             }
                         );
+
 
                         return obj;
 
@@ -1604,6 +1828,7 @@ async function refreshData() {
 
         console.error(error);
 
+
         showError(
             "Không thể tải dữ liệu Google Sheet.<br><br>" +
             error.message
@@ -1626,9 +1851,17 @@ async function refreshData() {
 
 function cleanHeader(value) {
 
-    return String(value || "")
-        .replace(/^\uFEFF/, "")
-        .replace(/\u00A0/g, " ")
+    return String(
+        value || ""
+    )
+        .replace(
+            /^\uFEFF/,
+            ""
+        )
+        .replace(
+            /\u00A0/g,
+            " "
+        )
         .trim();
 
 }
@@ -1641,10 +1874,14 @@ function cleanHeader(value) {
 function initializeColumnNames() {
 
     headers.forEach(
-        (header, index) => {
+        (
+            header,
+            index
+        ) => {
 
             if (
-                columnNames[index] === undefined
+                columnNames[index] ===
+                undefined
             ) {
 
                 columnNames[index] =
@@ -1673,17 +1910,24 @@ function initializeDefaults() {
         );
 
 
-    if (dateIndex !== -1) {
+    if (
+        dateIndex !== -1
+    ) {
 
         const values =
             getUniqueRawValues(
                 dateIndex
             );
 
-        defaultFilters[dateIndex] =
+
+        defaultFilters[
+            dateIndex
+        ] =
             values.filter(
                 value =>
-                    String(value).trim() !== ""
+                    String(
+                        value
+                    ).trim() !== ""
             );
 
     }
@@ -1695,7 +1939,9 @@ function initializeDefaults() {
         );
 
 
-    if (stopIndex !== -1) {
+    if (
+        stopIndex !== -1
+    ) {
 
         const values =
             getUniqueRawValues(
@@ -1703,22 +1949,30 @@ function initializeDefaults() {
             );
 
 
-        const blankValue =
+        const blank =
             values.find(
                 value =>
-                    String(value).trim() === ""
+                    String(
+                        value
+                    ).trim() === ""
             );
 
 
-        if (blankValue !== undefined) {
+        if (
+            blank !== undefined
+        ) {
 
-            defaultFilters[stopIndex] =
-                [blankValue];
+            defaultFilters[
+                stopIndex
+            ] =
+                [blank];
 
         }
         else {
 
-            defaultFilters[stopIndex] =
+            defaultFilters[
+                stopIndex
+            ] =
                 [];
 
         }
@@ -1726,7 +1980,9 @@ function initializeDefaults() {
     }
 
 
-    Object.keys(defaultFilters)
+    Object.keys(
+        defaultFilters
+    )
         .forEach(
             index => {
 
@@ -1738,7 +1994,9 @@ function initializeDefaults() {
                 ) {
 
                     selectedFilters[index] =
-                        [...defaultFilters[index]];
+                        [
+                            ...defaultFilters[index]
+                        ];
 
                 }
 
@@ -1754,16 +2012,15 @@ function initializeDefaults() {
 
 function cleanStateAfterDataChange() {
 
-    const validHeaders =
-        new Set(headers);
-
-
-    Object.keys(columnNames)
+    Object.keys(
+        columnNames
+    )
         .forEach(
             key => {
 
                 const index =
                     Number(key);
+
 
                 if (
                     !headers[index]
@@ -1777,12 +2034,15 @@ function cleanStateAfterDataChange() {
         );
 
 
-    Object.keys(selectedFilters)
+    Object.keys(
+        selectedFilters
+    )
         .forEach(
             key => {
 
                 const index =
                     Number(key);
+
 
                 if (
                     !headers[index]
@@ -1796,12 +2056,15 @@ function cleanStateAfterDataChange() {
         );
 
 
-    Object.keys(searchValues)
+    Object.keys(
+        searchValues
+    )
         .forEach(
             key => {
 
                 const index =
                     Number(key);
+
 
                 if (
                     !headers[index]
@@ -1815,12 +2078,15 @@ function cleanStateAfterDataChange() {
         );
 
 
-    Object.keys(sortOrders)
+    Object.keys(
+        sortOrders
+    )
         .forEach(
             key => {
 
                 const index =
                     Number(key);
+
 
                 if (
                     !headers[index]
@@ -1837,21 +2103,27 @@ function cleanStateAfterDataChange() {
 
 
 /* =========================================================
-   GET COLUMN INDEX
+   COLUMN INDEX
 ========================================================= */
 
-function getColumnIndexByName(name) {
+function getColumnIndexByName(
+    name
+) {
 
-    return headers.indexOf(name);
+    return headers.indexOf(
+        name
+    );
 
 }
 
 
 /* =========================================================
-   DISPLAY COLUMN NAME
+   DISPLAY NAME
 ========================================================= */
 
-function getDisplayColumnName(index) {
+function getDisplayColumnName(
+    index
+) {
 
     return (
         columnNames[index] ??
@@ -1866,16 +2138,22 @@ function getDisplayColumnName(index) {
    UNIQUE VALUES
 ========================================================= */
 
-function getUniqueRawValues(index) {
+function getUniqueRawValues(
+    index
+) {
 
     const set =
         new Set();
+
 
     rows.forEach(
         row => {
 
             set.add(
-                row[headers[index]] ?? ""
+                row[
+                    headers[index]
+                ] ??
+                ""
             );
 
         }
@@ -1888,17 +2166,23 @@ function getUniqueRawValues(index) {
 
 
 /* =========================================================
-   FORMAT DATE
+   DATE PARSER
 ========================================================= */
 
-function parseVietnameseDate(value) {
+function parseVietnameseDate(
+    value
+) {
 
     const text =
-        String(value || "").trim();
+        String(
+            value || ""
+        ).trim();
 
 
     if (!text) {
+
         return null;
+
     }
 
 
@@ -1913,8 +2197,10 @@ function parseVietnameseDate(value) {
         const day =
             Number(match[1]);
 
+
         const month =
             Number(match[2]);
+
 
         const year =
             Number(match[3]);
@@ -1930,7 +2216,8 @@ function parseVietnameseDate(value) {
 
         if (
             date.getFullYear() === year &&
-            date.getMonth() === month - 1 &&
+            date.getMonth() ===
+                month - 1 &&
             date.getDate() === day
         ) {
 
@@ -1964,18 +2251,24 @@ function parseVietnameseDate(value) {
 
 
 /* =========================================================
-   DISPLAY DATE
+   FORMAT DATE
 ========================================================= */
 
-function formatDateValue(value) {
+function formatDateValue(
+    value
+) {
 
     const date =
-        parseVietnameseDate(value);
+        parseVietnameseDate(
+            value
+        );
 
 
     if (!date) {
 
-        return String(value || "");
+        return String(
+            value || ""
+        );
 
     }
 
@@ -1995,22 +2288,38 @@ function formatDateValue(value) {
         );
 
 
-    if (months >= 0) {
+    if (
+        months >= 0
+    ) {
 
-        return String(months)
-            .padStart(2, "0") +
-            " tháng";
+        return String(
+            months
+        ).padStart(
+            2,
+            "0"
+        ) +
+        " tháng";
 
     }
 
 
     const day =
-        String(date.getDate())
-            .padStart(2, "0");
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const month =
-        String(date.getMonth() + 1)
-            .padStart(2, "0");
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const year =
         date.getFullYear();
@@ -2028,10 +2337,12 @@ function formatDateValue(value) {
 
 
 /* =========================================================
-   VIETNAMESE NUMBER
+   NUMBER PARSER
 ========================================================= */
 
-function parseVietnameseNumber(value) {
+function parseVietnameseNumber(
+    value
+) {
 
     if (
         value === null ||
@@ -2044,8 +2355,9 @@ function parseVietnameseNumber(value) {
 
 
     let text =
-        String(value)
-            .trim();
+        String(
+            value
+        ).trim();
 
 
     if (!text) {
@@ -2055,35 +2367,22 @@ function parseVietnameseNumber(value) {
     }
 
 
-    /*
-       Ví dụ:
-
-       100.000.000,1
-       ↓
-       100000000.1
-
-       100.000
-       ↓
-       100000
-
-       1,5
-       ↓
-       1.5
-    */
-
-
     text =
         text
-            .replace(/\s/g, "")
-            .replace(/[₫đĐ]/g, "");
+            .replace(
+                /\s/g,
+                ""
+            )
+            .replace(
+                /[₫đĐ]/g,
+                ""
+            );
 
 
     /*
-       Nếu có cả . và ,
-       thì theo format Việt Nam:
-
-       . = hàng nghìn
-       , = thập phân
+       100.000.000,1
+       →
+       100000000.1
     */
 
     if (
@@ -2093,8 +2392,14 @@ function parseVietnameseNumber(value) {
 
         text =
             text
-                .replace(/\./g, "")
-                .replace(",", ".");
+                .replace(
+                    /\./g,
+                    ""
+                )
+                .replace(
+                    ",",
+                    "."
+                );
 
     }
 
@@ -2102,32 +2407,19 @@ function parseVietnameseNumber(value) {
         text.includes(",")
     ) {
 
-        /*
-           Chỉ có dấu ,
-           xem là dấu thập phân
-        */
-
         text =
-            text.replace(",", ".");
+            text.replace(
+                ",",
+                "."
+            );
 
     }
 
     else {
 
-        /*
-           Chỉ có dấu .
-           Có thể là:
-
-           100.000
-           hoặc
-           100.5
-
-           Nếu phần sau có đúng 3 số
-           thì coi là dấu ngăn cách hàng nghìn.
-        */
-
         const parts =
             text.split(".");
+
 
         if (
             parts.length > 2
@@ -2140,8 +2432,12 @@ function parseVietnameseNumber(value) {
         else if (
             parts.length === 2 &&
             parts[1].length === 3 &&
-            /^\d+$/.test(parts[0]) &&
-            /^\d+$/.test(parts[1])
+            /^\d+$/.test(
+                parts[0]
+            ) &&
+            /^\d+$/.test(
+                parts[1]
+            )
         ) {
 
             text =
@@ -2164,7 +2460,9 @@ function parseVietnameseNumber(value) {
 
 
     if (
-        Number.isFinite(number)
+        Number.isFinite(
+            number
+        )
     ) {
 
         return number;
@@ -2178,17 +2476,21 @@ function parseVietnameseNumber(value) {
 
 
 /* =========================================================
-   DETECT NUMBER
+   DETECT NUMERIC COLUMN
 ========================================================= */
 
-function isNumericColumn(index) {
+function isNumericColumn(
+    index
+) {
 
     const header =
         headers[index];
 
 
     if (
-        DATE_COLUMNS.has(header)
+        DATE_COLUMNS.has(
+            header
+        )
     ) {
 
         return false;
@@ -2201,13 +2503,18 @@ function isNumericColumn(index) {
             .map(
                 row =>
                     String(
-                        row[header] ?? ""
+                        row[header] ??
+                        ""
                     ).trim()
             )
             .filter(
-                value => value !== ""
+                value =>
+                    value !== ""
             )
-            .slice(0, 100);
+            .slice(
+                0,
+                100
+            );
 
 
     if (
@@ -2219,14 +2526,17 @@ function isNumericColumn(index) {
     }
 
 
-    let numericCount = 0;
+    let numericCount =
+        0;
 
 
     values.forEach(
         value => {
 
             if (
-                parseVietnameseNumber(value) !== null
+                parseVietnameseNumber(
+                    value
+                ) !== null
             ) {
 
                 numericCount++;
@@ -2238,7 +2548,9 @@ function isNumericColumn(index) {
 
 
     return (
-        numericCount / values.length >= 0.8
+        numericCount /
+        values.length >=
+        0.8
     );
 
 }
@@ -2258,15 +2570,21 @@ function displayValue(
 
 
     if (
-        DATE_COLUMNS.has(header)
+        DATE_COLUMNS.has(
+            header
+        )
     ) {
 
-        return formatDateValue(value);
+        return formatDateValue(
+            value
+        );
 
     }
 
 
-    return String(value ?? "");
+    return String(
+        value ?? ""
+    );
 
 }
 
@@ -2284,14 +2602,16 @@ function getSortValue(
         headers[columnIndex];
 
 
-    let sortHeader =
-        SORT_BY_MAP[originalHeader] ||
+    const sortHeader =
+        SORT_BY_MAP[
+            originalHeader
+        ] ||
         originalHeader;
 
 
     if (
-        sortHeader &&
-        row[sortHeader] !== undefined
+        row[sortHeader] !==
+        undefined
     ) {
 
         const sortRaw =
@@ -2304,11 +2624,16 @@ function getSortValue(
             );
 
 
-        if (numeric !== null) {
+        if (
+            numeric !== null
+        ) {
 
             return {
+
                 type: "number",
+
                 value: numeric
+
             };
 
         }
@@ -2323,38 +2648,59 @@ function getSortValue(
         if (date) {
 
             return {
+
                 type: "date",
-                value: date.getTime()
+
+                value:
+                    date.getTime()
+
             };
 
         }
 
 
         return {
+
             type: "text",
-            value: String(sortRaw).toLowerCase()
+
+            value:
+                String(
+                    sortRaw
+                ).toLowerCase()
+
         };
 
     }
 
 
     const raw =
-        row[originalHeader] ?? "";
+        row[
+            originalHeader
+        ] ??
+        "";
 
 
     if (
-        DATE_COLUMNS.has(originalHeader)
+        DATE_COLUMNS.has(
+            originalHeader
+        )
     ) {
 
         const date =
-            parseVietnameseDate(raw);
+            parseVietnameseDate(
+                raw
+            );
 
 
         if (date) {
 
             return {
+
                 type: "date",
-                value: date.getTime()
+
+                value:
+                    date.getTime()
+
             };
 
         }
@@ -2363,18 +2709,27 @@ function getSortValue(
 
 
     if (
-        isNumericColumn(columnIndex)
+        isNumericColumn(
+            columnIndex
+        )
     ) {
 
         const number =
-            parseVietnameseNumber(raw);
+            parseVietnameseNumber(
+                raw
+            );
 
 
-        if (number !== null) {
+        if (
+            number !== null
+        ) {
 
             return {
+
                 type: "number",
+
                 value: number
+
             };
 
         }
@@ -2383,8 +2738,14 @@ function getSortValue(
 
 
     return {
+
         type: "text",
-        value: String(raw).toLowerCase()
+
+        value:
+            String(
+                raw
+            ).toLowerCase()
+
     };
 
 }
@@ -2394,29 +2755,47 @@ function getSortValue(
    SORT ROWS
 ========================================================= */
 
-function sortRows(data) {
+function sortRows(
+    data
+) {
 
     const orders =
-        Object.entries(sortOrders)
+        Object.entries(
+            sortOrders
+        )
             .map(
-                ([index, config]) => ({
+                (
+                    [
+                        index,
+                        config
+                    ]
+                ) => ({
 
-                    index: Number(index),
+                    index:
+                        Number(index),
 
                     direction:
-                        config.direction || "asc",
+                        config.direction ||
+                        "asc",
 
                     priority:
-                        Number(config.priority)
+                        Number(
+                            config.priority
+                        )
 
                 })
             )
             .filter(
                 item =>
-                    Number.isFinite(item.priority)
+                    Number.isFinite(
+                        item.priority
+                    )
             )
             .sort(
-                (a, b) => {
+                (
+                    a,
+                    b
+                ) => {
 
                     if (
                         a.priority !==
@@ -2430,12 +2809,11 @@ function sortRows(data) {
 
                     }
 
-                    /*
-                       Nếu 2 cột cùng priority,
-                       giữ thứ tự theo index.
-                    */
 
-                    return a.index - b.index;
+                    return (
+                        a.index -
+                        b.index
+                    );
 
                 }
             );
@@ -2450,11 +2828,17 @@ function sortRows(data) {
     }
 
 
-    return [...data].sort(
-        (a, b) => {
+    return [
+        ...data
+    ].sort(
+        (
+            a,
+            b
+        ) => {
 
             for (
-                const order of orders
+                const order
+                of orders
             ) {
 
                 const av =
@@ -2463,6 +2847,7 @@ function sortRows(data) {
                         order.index
                     );
 
+
                 const bv =
                     getSortValue(
                         b,
@@ -2470,12 +2855,15 @@ function sortRows(data) {
                     );
 
 
-                let result = 0;
+                let result =
+                    0;
 
 
                 if (
-                    av.type === "number" &&
-                    bv.type === "number"
+                    av.type ===
+                        "number" &&
+                    bv.type ===
+                        "number"
                 ) {
 
                     result =
@@ -2484,8 +2872,10 @@ function sortRows(data) {
 
                 }
                 else if (
-                    av.type === "date" &&
-                    bv.type === "date"
+                    av.type ===
+                        "date" &&
+                    bv.type ===
+                        "date"
                 ) {
 
                     result =
@@ -2496,15 +2886,21 @@ function sortRows(data) {
                 else {
 
                     result =
-                        String(av.value)
-                            .localeCompare(
-                                String(bv.value),
-                                "vi",
-                                {
-                                    numeric: true,
-                                    sensitivity: "base"
-                                }
-                            );
+                        String(
+                            av.value
+                        ).localeCompare(
+                            String(
+                                bv.value
+                            ),
+                            "vi",
+                            {
+                                numeric:
+                                    true,
+
+                                sensitivity:
+                                    "base"
+                            }
+                        );
 
                 }
 
@@ -2513,7 +2909,10 @@ function sortRows(data) {
                     result !== 0
                 ) {
 
-                    return order.direction === "asc"
+                    return (
+                        order.direction ===
+                            "asc"
+                    )
                         ? result
                         : -result;
 
@@ -2534,22 +2933,31 @@ function sortRows(data) {
    FILTER ROWS
 ========================================================= */
 
-function filterRows(data) {
+function filterRows(
+    data
+) {
 
     return data.filter(
         row => {
 
             /*
-               Bộ lọc giá trị
+               VALUE FILTER
             */
 
             for (
-                const [indexString, selected]
-                of Object.entries(selectedFilters)
+                const [
+                    indexString,
+                    selected
+                ]
+                of Object.entries(
+                    selectedFilters
+                )
             ) {
 
                 const index =
-                    Number(indexString);
+                    Number(
+                        indexString
+                    );
 
 
                 if (
@@ -2562,13 +2970,18 @@ function filterRows(data) {
 
 
                 const raw =
-                    row[headers[index]] ?? "";
+                    row[
+                        headers[index]
+                    ] ??
+                    "";
 
 
                 const selectedStrings =
                     selected.map(
                         value =>
-                            String(value)
+                            String(
+                                value
+                            )
                     );
 
 
@@ -2586,16 +2999,24 @@ function filterRows(data) {
 
 
             /*
-               Search từng cột
+               SEARCH FILTER
             */
 
             for (
-                const [indexString, search]
-                of Object.entries(searchValues)
+                const [
+                    indexString,
+                    search
+                ]
+                of Object.entries(
+                    searchValues
+                )
             ) {
 
                 const text =
-                    String(search || "")
+                    String(
+                        search ||
+                        ""
+                    )
                         .trim()
                         .toLowerCase();
 
@@ -2608,7 +3029,9 @@ function filterRows(data) {
 
 
                 const index =
-                    Number(indexString);
+                    Number(
+                        indexString
+                    );
 
 
                 if (
@@ -2622,14 +3045,19 @@ function filterRows(data) {
 
                 const raw =
                     displayValue(
-                        row[headers[index]] ?? "",
+                        row[
+                            headers[index]
+                        ] ??
+                        "",
                         index
                     )
-                    .toLowerCase();
+                        .toLowerCase();
 
 
                 if (
-                    !raw.includes(text)
+                    !raw.includes(
+                        text
+                    )
                 ) {
 
                     return false;
@@ -2648,32 +3076,29 @@ function filterRows(data) {
 
 
 /* =========================================================
-   CHECK FILTER ACTIVE
+   FILTER ACTIVE
 ========================================================= */
 
-function isColumnFiltered(index) {
+function isColumnFiltered(
+    index
+) {
 
     const allValues =
-        getUniqueRawValues(index);
+        getUniqueRawValues(
+            index
+        );
 
 
     const selected =
         selectedFilters[index];
 
 
-    if (
-        !selected
-    ) {
+    if (!selected) {
 
         return false;
 
     }
 
-
-    /*
-       Nếu chọn toàn bộ thì không coi
-       là filter active.
-    */
 
     if (
         selected.length ===
@@ -2686,13 +3111,17 @@ function isColumnFiltered(index) {
                 .sort()
                 .join("|");
 
+
         const b =
             allValues
                 .map(String)
                 .sort()
                 .join("|");
 
-        if (a === b) {
+
+        if (
+            a === b
+        ) {
 
             return false;
 
@@ -2700,10 +3129,6 @@ function isColumnFiltered(index) {
 
     }
 
-
-    /*
-       Default filter
-    */
 
     if (
         defaultFilters[index]
@@ -2715,13 +3140,17 @@ function isColumnFiltered(index) {
                 .sort()
                 .join("|");
 
+
         const b =
             defaultFilters[index]
                 .map(String)
                 .sort()
                 .join("|");
 
-        if (a === b) {
+
+        if (
+            a === b
+        ) {
 
             return false;
 
@@ -2739,11 +3168,14 @@ function isColumnFiltered(index) {
    SEARCH ACTIVE
 ========================================================= */
 
-function isColumnSearchActive(index) {
+function isColumnSearchActive(
+    index
+) {
 
     return Boolean(
         String(
-            searchValues[index] || ""
+            searchValues[index] ||
+            ""
         ).trim()
     );
 
@@ -2768,7 +3200,7 @@ function renderTable() {
 
 
 /* =========================================================
-   RENDER HEADER
+   RENDER HEAD
 ========================================================= */
 
 function renderHead() {
@@ -2783,24 +3215,35 @@ function renderHead() {
 
 
     const headerRow =
-        document.createElement("tr");
+        document.createElement(
+            "tr"
+        );
+
 
     headerRow.className =
         "header-row";
 
 
     const searchRow =
-        document.createElement("tr");
+        document.createElement(
+            "tr"
+        );
+
 
     searchRow.className =
         "search-row";
 
 
     headers.forEach(
-        (header, index) => {
+        (
+            header,
+            index
+        ) => {
 
             if (
-                HIDDEN_COLUMNS.has(header)
+                HIDDEN_COLUMNS.has(
+                    header
+                )
             ) {
 
                 return;
@@ -2808,31 +3251,48 @@ function renderHead() {
             }
 
 
+            /*
+               HEADER
+            */
+
             const th =
-                document.createElement("th");
+                document.createElement(
+                    "th"
+                );
+
 
             th.dataset.column =
                 index;
+
 
             th.className =
                 "header-cell";
 
 
             const content =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             content.className =
                 "header-content";
 
 
             const name =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
+
 
             name.className =
                 "header-name";
 
+
             name.textContent =
-                getDisplayColumnName(index);
+                getDisplayColumnName(
+                    index
+                );
 
 
             name.title =
@@ -2842,20 +3302,28 @@ function renderHead() {
             name.ondblclick =
                 function() {
 
-                    renameColumnDirect(index);
+                    renameColumnDirect(
+                        index
+                    );
 
                 };
 
 
             const actions =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             actions.className =
                 "header-actions";
 
 
             const sortInfo =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
+
 
             sortInfo.className =
                 "header-sort";
@@ -2867,9 +3335,14 @@ function renderHead() {
 
                 sortInfo.textContent =
                     "S" +
-                    sortOrders[index].priority +
+                    sortOrders[
+                        index
+                    ].priority +
                     (
-                        sortOrders[index].direction === "asc"
+                        sortOrders[
+                            index
+                        ].direction ===
+                            "asc"
                             ? " ▲"
                             : " ▼"
                     );
@@ -2878,10 +3351,14 @@ function renderHead() {
 
 
             const filterButton =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
+
 
             filterButton.className =
                 "header-filter-btn";
+
 
             filterButton.innerHTML =
                 "▼";
@@ -2891,6 +3368,7 @@ function renderHead() {
                 function(event) {
 
                     event.stopPropagation();
+
 
                     openFilterMenu(
                         index,
@@ -2904,21 +3382,32 @@ function renderHead() {
                 sortInfo
             );
 
+
             actions.appendChild(
                 filterButton
             );
 
 
-            content.appendChild(name);
+            content.appendChild(
+                name
+            );
 
-            content.appendChild(actions);
+
+            content.appendChild(
+                actions
+            );
 
 
-            th.appendChild(content);
+            th.appendChild(
+                content
+            );
 
 
             const resize =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             resize.className =
                 "resize-handle";
@@ -2938,12 +3427,18 @@ function renderHead() {
             );
 
 
-            th.appendChild(resize);
+            th.appendChild(
+                resize
+            );
 
 
             if (
-                isColumnFiltered(index) ||
-                isColumnSearchActive(index)
+                isColumnFiltered(
+                    index
+                ) ||
+                isColumnSearchActive(
+                    index
+                )
             ) {
 
                 th.classList.add(
@@ -2964,33 +3459,52 @@ function renderHead() {
             }
 
 
-            headerRow.appendChild(th);
+            headerRow.appendChild(
+                th
+            );
 
+
+            /*
+               SEARCH CELL
+            */
 
             const searchTh =
-                document.createElement("th");
+                document.createElement(
+                    "th"
+                );
+
 
             searchTh.dataset.column =
                 index;
+
 
             searchTh.className =
                 "search-cell";
 
 
             const input =
-                document.createElement("input");
+                document.createElement(
+                    "input"
+                );
+
 
             input.className =
                 "search-input";
 
+
             input.placeholder =
                 "Tìm kiếm...";
 
+
             input.value =
-                searchValues[index] || "";
+                searchValues[
+                    index
+                ] ||
+                "";
 
 
-            let searchTimer = null;
+            let searchTimer =
+                null;
 
 
             input.addEventListener(
@@ -3006,12 +3520,17 @@ function renderHead() {
                         setTimeout(
                             function() {
 
-                                searchValues[index] =
+                                searchValues[
+                                    index
+                                ] =
                                     input.value;
+
 
                                 saveStorage();
 
+
                                 renderBody();
+
 
                                 updateHeaderClasses();
 
@@ -3023,7 +3542,10 @@ function renderHead() {
             );
 
 
-            searchTh.appendChild(input);
+            searchTh.appendChild(
+                input
+            );
+
 
             searchRow.appendChild(
                 searchTh
@@ -3036,6 +3558,7 @@ function renderHead() {
     thead.appendChild(
         headerRow
     );
+
 
     thead.appendChild(
         searchRow
@@ -3060,11 +3583,15 @@ function renderBody() {
 
 
     let data =
-        filterRows(rows);
+        filterRows(
+            rows
+        );
 
 
     data =
-        sortRows(data);
+        sortRows(
+            data
+        );
 
 
     const fragment =
@@ -3075,14 +3602,21 @@ function renderBody() {
         row => {
 
             const tr =
-                document.createElement("tr");
+                document.createElement(
+                    "tr"
+                );
 
 
             headers.forEach(
-                (header, index) => {
+                (
+                    header,
+                    index
+                ) => {
 
                     if (
-                        HIDDEN_COLUMNS.has(header)
+                        HIDDEN_COLUMNS.has(
+                            header
+                        )
                     ) {
 
                         return;
@@ -3091,7 +3625,9 @@ function renderBody() {
 
 
                     const td =
-                        document.createElement("td");
+                        document.createElement(
+                            "td"
+                        );
 
 
                     td.dataset.column =
@@ -3100,7 +3636,8 @@ function renderBody() {
 
                     td.textContent =
                         displayValue(
-                            row[header] ?? "",
+                            row[header] ??
+                                "",
                             index
                         );
 
@@ -3111,13 +3648,17 @@ function renderBody() {
                     );
 
 
-                    tr.appendChild(td);
+                    tr.appendChild(
+                        td
+                    );
 
                 }
             );
 
 
-            fragment.appendChild(tr);
+            fragment.appendChild(
+                tr
+            );
 
         }
     );
@@ -3134,14 +3675,22 @@ function renderBody() {
 
 
 /* =========================================================
-   APPLY FORMAT
+   FORMAT
 ========================================================= */
 
-function getColumnFormat(index) {
+function getColumnFormat(
+    index
+) {
 
     return {
+
         ...DEFAULT_FORMAT,
-        ...(columnFormats[index] || {})
+
+        ...(
+            columnFormats[index] ||
+            {}
+        )
+
     };
 
 }
@@ -3153,11 +3702,14 @@ function applyCellFormat(
 ) {
 
     const format =
-        getColumnFormat(index);
+        getColumnFormat(
+            index
+        );
 
 
     cell.style.fontSize =
-        format.fontSize + "px";
+        format.fontSize +
+        "px";
 
 
     cell.style.textAlign =
@@ -3205,13 +3757,16 @@ function applyCellFormat(
 
 
 /* =========================================================
-   HEADER CLASSES
+   HEADER CLASS UPDATE
 ========================================================= */
 
 function updateHeaderClasses() {
 
     headers.forEach(
-        (header, index) => {
+        (
+            header,
+            index
+        ) => {
 
             const th =
                 document.querySelector(
@@ -3219,7 +3774,11 @@ function updateHeaderClasses() {
                 );
 
 
-            if (!th) return;
+            if (!th) {
+
+                return;
+
+            }
 
 
             th.classList.remove(
@@ -3229,8 +3788,12 @@ function updateHeaderClasses() {
 
 
             if (
-                isColumnFiltered(index) ||
-                isColumnSearchActive(index)
+                isColumnFiltered(
+                    index
+                ) ||
+                isColumnSearchActive(
+                    index
+                )
             ) {
 
                 th.classList.add(
@@ -3270,13 +3833,19 @@ function openFilterMenu(
 
 
     const values =
-        getUniqueRawValues(index);
+        getUniqueRawValues(
+            index
+        );
 
 
     temporaryFilterValues =
         selectedFilters[index]
-            ? [...selectedFilters[index]]
-            : [...values];
+            ? [
+                ...selectedFilters[index]
+            ]
+            : [
+                ...values
+            ];
 
 
     const menu =
@@ -3288,16 +3857,20 @@ function openFilterMenu(
     document.getElementById(
         "filterTitle"
     ).textContent =
-        getDisplayColumnName(index);
+        getDisplayColumnName(
+            index
+        );
 
 
     document.getElementById(
         "filterValueSearch"
-    ).value = "";
+    ).value =
+        "";
 
 
     const priority =
-        sortOrders[index]?.priority ?? "";
+        sortOrders[index]?.priority ??
+        "";
 
 
     document.getElementById(
@@ -3318,7 +3891,8 @@ function openFilterMenu(
 
 
     let top =
-        rect.bottom + 5;
+        rect.bottom +
+        5;
 
 
     if (
@@ -3327,7 +3901,8 @@ function openFilterMenu(
     ) {
 
         left =
-            window.innerWidth - 340;
+            window.innerWidth -
+            340;
 
     }
 
@@ -3338,25 +3913,37 @@ function openFilterMenu(
     ) {
 
         top =
-            window.innerHeight - 570;
+            window.innerHeight -
+            570;
 
     }
 
 
     menu.style.left =
-        Math.max(5, left) + "px";
+        Math.max(
+            5,
+            left
+        ) +
+        "px";
+
 
     menu.style.top =
-        Math.max(5, top) + "px";
+        Math.max(
+            5,
+            top
+        ) +
+        "px";
 
 
-    menu.classList.add("open");
+    menu.classList.add(
+        "open"
+    );
 
 }
 
 
 /* =========================================================
-   RENDER FILTER VALUES
+   FILTER VALUES
 ========================================================= */
 
 function renderFilterValues() {
@@ -3367,11 +3954,13 @@ function renderFilterValues() {
         );
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     if (
-        currentFilterColumn === null
+        currentFilterColumn ===
+        null
     ) {
 
         return;
@@ -3384,7 +3973,9 @@ function renderFilterValues() {
 
 
     const allValues =
-        getUniqueRawValues(index);
+        getUniqueRawValues(
+            index
+        );
 
 
     const search =
@@ -3410,7 +4001,9 @@ function renderFilterValues() {
                     !search ||
                     text
                         .toLowerCase()
-                        .includes(search)
+                        .includes(
+                            search
+                        )
                 );
 
             }
@@ -3419,14 +4012,20 @@ function renderFilterValues() {
             value => {
 
                 const label =
-                    document.createElement("label");
+                    document.createElement(
+                        "label"
+                    );
+
 
                 label.className =
                     "filter-value";
 
 
                 const checkbox =
-                    document.createElement("input");
+                    document.createElement(
+                        "input"
+                    );
+
 
                 checkbox.type =
                     "checkbox";
@@ -3435,8 +4034,12 @@ function renderFilterValues() {
                 checkbox.checked =
                     temporaryFilterValues.some(
                         selected =>
-                            String(selected) ===
-                            String(value)
+                            String(
+                                selected
+                            ) ===
+                            String(
+                                value
+                            )
                     );
 
 
@@ -3451,8 +4054,12 @@ function renderFilterValues() {
                             if (
                                 !temporaryFilterValues.some(
                                     selected =>
-                                        String(selected) ===
-                                        String(value)
+                                        String(
+                                            selected
+                                        ) ===
+                                        String(
+                                            value
+                                        )
                                 )
                             ) {
 
@@ -3468,8 +4075,12 @@ function renderFilterValues() {
                             temporaryFilterValues =
                                 temporaryFilterValues.filter(
                                     selected =>
-                                        String(selected) !==
-                                        String(value)
+                                        String(
+                                            selected
+                                        ) !==
+                                        String(
+                                            value
+                                        )
                                 );
 
                         }
@@ -3479,7 +4090,9 @@ function renderFilterValues() {
 
 
                 const span =
-                    document.createElement("span");
+                    document.createElement(
+                        "span"
+                    );
 
 
                 let display =
@@ -3507,6 +4120,7 @@ function renderFilterValues() {
                     checkbox
                 );
 
+
                 label.appendChild(
                     span
                 );
@@ -3529,7 +4143,8 @@ function renderFilterValues() {
 function selectAllFilterValues() {
 
     if (
-        currentFilterColumn === null
+        currentFilterColumn ===
+        null
     ) {
 
         return;
@@ -3549,12 +4164,14 @@ function selectAllFilterValues() {
 
 
 /* =========================================================
-   CLEAR FILTER
+   CLEAR
 ========================================================= */
 
 function clearFilterValues() {
 
-    temporaryFilterValues = [];
+    temporaryFilterValues =
+        [];
+
 
     renderFilterValues();
 
@@ -3568,7 +4185,8 @@ function clearFilterValues() {
 function applyFilter() {
 
     if (
-        currentFilterColumn === null
+        currentFilterColumn ===
+        null
     ) {
 
         return;
@@ -3579,17 +4197,23 @@ function applyFilter() {
     selectedFilters[
         currentFilterColumn
     ] =
-        [...temporaryFilterValues];
+        [
+            ...temporaryFilterValues
+        ];
 
 
     saveStorage();
 
+
     document.getElementById(
         "filterMenu"
-    ).classList.remove("open");
+    ).classList.remove(
+        "open"
+    );
 
 
     renderBody();
+
 
     updateHeaderClasses();
 
@@ -3597,14 +4221,16 @@ function applyFilter() {
 
 
 /* =========================================================
-   CANCEL FILTER
+   CANCEL
 ========================================================= */
 
 function cancelFilter() {
 
     document.getElementById(
         "filterMenu"
-    ).classList.remove("open");
+    ).classList.remove(
+        "open"
+    );
 
 }
 
@@ -3613,10 +4239,13 @@ function cancelFilter() {
    SORT
 ========================================================= */
 
-function setCurrentSort(direction) {
+function setCurrentSort(
+    direction
+) {
 
     if (
-        currentFilterColumn === null
+        currentFilterColumn ===
+        null
     ) {
 
         return;
@@ -3633,30 +4262,35 @@ function setCurrentSort(direction) {
 
 
     if (
-        !Number.isFinite(priority) ||
+        !Number.isFinite(
+            priority
+        ) ||
         priority < 1
     ) {
 
-        /*
-           Nếu chưa nhập priority,
-           tự lấy số tiếp theo.
-        */
-
         const priorities =
-            Object.values(sortOrders)
+            Object.values(
+                sortOrders
+            )
                 .map(
                     item =>
-                        Number(item.priority)
+                        Number(
+                            item.priority
+                        )
                 )
                 .filter(
                     value =>
-                        Number.isFinite(value)
+                        Number.isFinite(
+                            value
+                        )
                 );
 
 
         priority =
             priorities.length
-                ? Math.max(...priorities) + 1
+                ? Math.max(
+                    ...priorities
+                ) + 1
                 : 1;
 
     }
@@ -3681,7 +4315,9 @@ function setCurrentSort(direction) {
 
     saveStorage();
 
+
     renderBody();
+
 
     renderHead();
 
@@ -3695,7 +4331,8 @@ function setCurrentSort(direction) {
 function removeCurrentSort() {
 
     if (
-        currentFilterColumn === null
+        currentFilterColumn ===
+        null
     ) {
 
         return;
@@ -3710,12 +4347,15 @@ function removeCurrentSort() {
 
     saveStorage();
 
+
     document.getElementById(
         "sortPriorityInput"
-    ).value = "";
+    ).value =
+        "";
 
 
     renderBody();
+
 
     renderHead();
 
@@ -3729,7 +4369,8 @@ function removeCurrentSort() {
 function applyCurrentPriority() {
 
     if (
-        currentFilterColumn === null
+        currentFilterColumn ===
+        null
     ) {
 
         return;
@@ -3744,11 +4385,15 @@ function applyCurrentPriority() {
 
 
     const priority =
-        Number(input.value);
+        Number(
+            input.value
+        );
 
 
     if (
-        !Number.isInteger(priority) ||
+        !Number.isInteger(
+            priority
+        ) ||
         priority < 1
     ) {
 
@@ -3756,18 +4401,24 @@ function applyCurrentPriority() {
             "Ưu tiên sort phải là số nguyên từ 1 trở lên."
         );
 
+
         return;
 
     }
 
 
     if (
-        !sortOrders[currentFilterColumn]
+        !sortOrders[
+            currentFilterColumn
+        ]
     ) {
 
-        sortOrders[currentFilterColumn] = {
+        sortOrders[
+            currentFilterColumn
+        ] = {
 
-            direction: "asc",
+            direction:
+                "asc",
 
             priority
 
@@ -3775,11 +4426,6 @@ function applyCurrentPriority() {
 
     }
     else {
-
-        /*
-           QUAN TRỌNG:
-           giữ nguyên số priority mà người dùng nhập.
-        */
 
         sortOrders[
             currentFilterColumn
@@ -3791,7 +4437,9 @@ function applyCurrentPriority() {
 
     saveStorage();
 
+
     renderBody();
+
 
     renderHead();
 
@@ -3799,44 +4447,39 @@ function applyCurrentPriority() {
 
 
 /* =========================================================
-   RESET USER FILTERS
+   RESET FILTER
 ========================================================= */
 
 function resetUserFilters() {
 
-    /*
-       Xóa search
-    */
-
     searchValues = {};
 
-
-    /*
-       Xóa sort
-    */
-
     sortOrders = {};
-
-
-    /*
-       Trả filter về DEFAULT
-    */
 
     selectedFilters = {};
 
 
-    Object.keys(defaultFilters)
+    Object.keys(
+        defaultFilters
+    )
         .forEach(
             index => {
 
-                selectedFilters[index] =
-                    [...defaultFilters[index]];
+                selectedFilters[
+                    index
+                ] =
+                    [
+                        ...defaultFilters[
+                            index
+                        ]
+                    ];
 
             }
         );
 
 
     saveStorage();
+
 
     renderTable();
 
@@ -3849,36 +4492,31 @@ function resetUserFilters() {
 
 function applyColumnWidths() {
 
-    const visibleHeaders =
-        headers.filter(
-            header =>
-                !HIDDEN_COLUMNS.has(header)
-        );
-
-
-    visibleHeaders.forEach(
-        (header, visibleIndex) => {
-
-            const originalIndex =
-                headers.indexOf(header);
-
-
-            let width =
-                columnWidths[originalIndex];
-
+    headers.forEach(
+        (
+            header,
+            index
+        ) => {
 
             if (
-                !width
+                HIDDEN_COLUMNS.has(
+                    header
+                )
             ) {
 
-                width = 150;
+                return;
 
             }
 
 
+            const width =
+                columnWidths[index] ||
+                150;
+
+
             const cells =
                 document.querySelectorAll(
-                    `[data-column="${originalIndex}"]`
+                    `[data-column="${index}"]`
                 );
 
 
@@ -3886,13 +4524,18 @@ function applyColumnWidths() {
                 cell => {
 
                     cell.style.width =
-                        width + "px";
+                        width +
+                        "px";
+
 
                     cell.style.minWidth =
-                        width + "px";
+                        width +
+                        "px";
+
 
                     cell.style.maxWidth =
-                        width + "px";
+                        width +
+                        "px";
 
                 }
             );
@@ -3914,6 +4557,7 @@ function startResize(
 ) {
 
     event.preventDefault();
+
 
     const startX =
         event.clientX;
@@ -3944,11 +4588,17 @@ function startResize(
             );
 
 
-        columnWidths[index] =
-            Math.round(newWidth);
+        columnWidths[
+            index
+        ] =
+            Math.round(
+                newWidth
+            );
 
 
         applyColumnWidths();
+
+        applyFreezeColumns();
 
     }
 
@@ -3959,6 +4609,7 @@ function startResize(
             "mousemove",
             move
         );
+
 
         document.removeEventListener(
             "mouseup",
@@ -3976,6 +4627,7 @@ function startResize(
         move
     );
 
+
     document.addEventListener(
         "mouseup",
         stop
@@ -3992,13 +4644,19 @@ function openSettings() {
 
     renderColumnSettings();
 
+
     document.getElementById(
         "settingsOverlay"
-    ).classList.add("open");
+    ).classList.add(
+        "open"
+    );
+
 
     document.getElementById(
         "settingsPanel"
-    ).classList.add("open");
+    ).classList.add(
+        "open"
+    );
 
 
     document.getElementById(
@@ -4009,7 +4667,9 @@ function openSettings() {
 }
 
 
-function closeSettings(event) {
+function closeSettings(
+    event
+) {
 
     if (
         event &&
@@ -4024,11 +4684,16 @@ function closeSettings(event) {
 
     document.getElementById(
         "settingsOverlay"
-    ).classList.remove("open");
+    ).classList.remove(
+        "open"
+    );
+
 
     document.getElementById(
         "settingsPanel"
-    ).classList.remove("open");
+    ).classList.remove(
+        "open"
+    );
 
 }
 
@@ -4045,14 +4710,20 @@ function renderColumnSettings() {
         );
 
 
-    selector.innerHTML = "";
+    selector.innerHTML =
+        "";
 
 
     headers.forEach(
-        (header, index) => {
+        (
+            header,
+            index
+        ) => {
 
             if (
-                HIDDEN_COLUMNS.has(header)
+                HIDDEN_COLUMNS.has(
+                    header
+                )
             ) {
 
                 return;
@@ -4061,32 +4732,45 @@ function renderColumnSettings() {
 
 
             const label =
-                document.createElement("label");
+                document.createElement(
+                    "label"
+                );
+
 
             label.className =
                 "column-option";
 
 
             const checkbox =
-                document.createElement("input");
+                document.createElement(
+                    "input"
+                );
+
 
             checkbox.type =
                 "checkbox";
+
 
             checkbox.value =
                 index;
 
 
             const span =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
+
 
             span.textContent =
-                getDisplayColumnName(index);
+                getDisplayColumnName(
+                    index
+                );
 
 
             label.appendChild(
                 checkbox
             );
+
 
             label.appendChild(
                 span
@@ -4107,14 +4791,20 @@ function renderColumnSettings() {
         );
 
 
-    renameSelect.innerHTML = "";
+    renameSelect.innerHTML =
+        "";
 
 
     headers.forEach(
-        (header, index) => {
+        (
+            header,
+            index
+        ) => {
 
             if (
-                HIDDEN_COLUMNS.has(header)
+                HIDDEN_COLUMNS.has(
+                    header
+                )
             ) {
 
                 return;
@@ -4123,14 +4813,19 @@ function renderColumnSettings() {
 
 
             const option =
-                document.createElement("option");
+                document.createElement(
+                    "option"
+                );
 
 
             option.value =
                 index;
 
+
             option.textContent =
-                getDisplayColumnName(index);
+                getDisplayColumnName(
+                    index
+                );
 
 
             renameSelect.appendChild(
@@ -4147,7 +4842,7 @@ function renderColumnSettings() {
 
 
 /* =========================================================
-   GET SELECTED FORMAT COLUMNS
+   SELECTED FORMAT COLUMNS
 ========================================================= */
 
 function getSelectedFormatColumns() {
@@ -4159,7 +4854,9 @@ function getSelectedFormatColumns() {
     )
         .map(
             checkbox =>
-                Number(checkbox.value)
+                Number(
+                    checkbox.value
+                )
         );
 
 }
@@ -4183,15 +4880,13 @@ function loadFormatFromFirstSelected() {
         index === undefined
     ) {
 
-        const firstVisible =
+        index =
             headers.findIndex(
                 header =>
-                    !HIDDEN_COLUMNS.has(header)
+                    !HIDDEN_COLUMNS.has(
+                        header
+                    )
             );
-
-
-        index =
-            firstVisible;
 
     }
 
@@ -4207,7 +4902,9 @@ function loadFormatFromFirstSelected() {
 
 
     const format =
-        getColumnFormat(index);
+        getColumnFormat(
+            index
+        );
 
 
     document.getElementById(
@@ -4240,13 +4937,17 @@ function loadFormatFromFirstSelected() {
         format.wrap;
 
 
+    document.getElementById(
+        "enableTextColor"
+    ).checked =
+        Boolean(
+            format.textColor
+        );
+
+
     if (
         format.textColor
     ) {
-
-        document.getElementById(
-            "enableTextColor"
-        ).checked = true;
 
         document.getElementById(
             "formatTextColor"
@@ -4256,13 +4957,17 @@ function loadFormatFromFirstSelected() {
     }
 
 
+    document.getElementById(
+        "enableBgColor"
+    ).checked =
+        Boolean(
+            format.bgColor
+        );
+
+
     if (
         format.bgColor
     ) {
-
-        document.getElementById(
-            "enableBgColor"
-        ).checked = true;
 
         document.getElementById(
             "formatBgColor"
@@ -4275,7 +4980,7 @@ function loadFormatFromFirstSelected() {
 
 
 /* =========================================================
-   APPLY FORMATTING
+   APPLY FORMAT
 ========================================================= */
 
 function applyFormatting() {
@@ -4291,6 +4996,7 @@ function applyFormatting() {
         alert(
             "Bạn chưa chọn cột."
         );
+
 
         return;
 
@@ -4356,7 +5062,9 @@ function applyFormatting() {
     selected.forEach(
         index => {
 
-            columnFormats[index] = {
+            columnFormats[
+                index
+            ] = {
 
                 fontSize,
 
@@ -4386,7 +5094,9 @@ function applyFormatting() {
 
     saveStorage();
 
+
     renderBody();
+
 
     alert(
         "Đã áp dụng định dạng cho " +
@@ -4410,7 +5120,9 @@ function renameSelectedColumn() {
 
 
     const index =
-        Number(select.value);
+        Number(
+            select.value
+        );
 
 
     const input =
@@ -4429,18 +5141,23 @@ function renameSelectedColumn() {
             "Vui lòng nhập tên mới."
         );
 
+
         return;
 
     }
 
 
-    columnNames[index] =
+    columnNames[
+        index
+    ] =
         newName;
 
 
     saveStorage();
 
+
     renderTable();
+
 
     renderColumnSettings();
 
@@ -4462,10 +5179,14 @@ function renameSelectedColumn() {
    DIRECT RENAME
 ========================================================= */
 
-function renameColumnDirect(index) {
+function renameColumnDirect(
+    index
+) {
 
     const current =
-        getDisplayColumnName(index);
+        getDisplayColumnName(
+            index
+        );
 
 
     const newName =
@@ -4495,11 +5216,14 @@ function renameColumnDirect(index) {
     }
 
 
-    columnNames[index] =
+    columnNames[
+        index
+    ] =
         trimmed;
 
 
     saveStorage();
+
 
     renderTable();
 
@@ -4507,14 +5231,16 @@ function renameColumnDirect(index) {
 
 
 /* =========================================================
-   RENAME CONTEXT
+   CONTEXT RENAME
 ========================================================= */
 
 function renameFromContextMenu() {
 
     document.getElementById(
         "contextMenu"
-    ).classList.remove("open");
+    ).classList.remove(
+        "open"
+    );
 
 
     if (
@@ -4547,13 +5273,17 @@ function resetSelectedColumnName() {
         );
 
 
-    columnNames[index] =
+    columnNames[
+        index
+    ] =
         headers[index];
 
 
     saveStorage();
 
+
     renderTable();
+
 
     renderColumnSettings();
 
@@ -4561,7 +5291,7 @@ function resetSelectedColumnName() {
 
 
 /* =========================================================
-   FREEZE COLUMNS
+   FREEZE
 ========================================================= */
 
 function changeFreezeCount() {
@@ -4573,11 +5303,15 @@ function changeFreezeCount() {
 
 
     let count =
-        Number(input.value);
+        Number(
+            input.value
+        );
 
 
     if (
-        !Number.isInteger(count) ||
+        !Number.isInteger(
+            count
+        ) ||
         count < 0
     ) {
 
@@ -4589,7 +5323,9 @@ function changeFreezeCount() {
     const visibleHeaders =
         headers.filter(
             header =>
-                !HIDDEN_COLUMNS.has(header)
+                !HIDDEN_COLUMNS.has(
+                    header
+                )
         );
 
 
@@ -4610,6 +5346,7 @@ function changeFreezeCount() {
 
     saveStorage();
 
+
     applyFreezeColumns();
 
 }
@@ -4624,7 +5361,9 @@ function applyFreezeColumns() {
     const visibleHeaders =
         headers.filter(
             header =>
-                !HIDDEN_COLUMNS.has(header)
+                !HIDDEN_COLUMNS.has(
+                    header
+                )
         );
 
 
@@ -4636,7 +5375,9 @@ function applyFreezeColumns() {
             )
             .map(
                 header =>
-                    headers.indexOf(header)
+                    headers.indexOf(
+                        header
+                    )
             );
 
 
@@ -4648,7 +5389,9 @@ function applyFreezeColumns() {
         index => {
 
             const width =
-                columnWidths[index] ||
+                columnWidths[
+                    index
+                ] ||
                 150;
 
 
@@ -4665,8 +5408,10 @@ function applyFreezeColumns() {
                         "frozen-column"
                     );
 
+
                     cell.style.left =
-                        left + "px";
+                        left +
+                        "px";
 
                 }
             );
@@ -4678,20 +5423,19 @@ function applyFreezeColumns() {
     );
 
 
-    /*
-       Xóa sticky khỏi những cột
-       không còn nằm trong freeze.
-    */
-
     headers.forEach(
         header => {
 
             const index =
-                headers.indexOf(header);
+                headers.indexOf(
+                    header
+                );
 
 
             if (
-                frozenIndices.includes(index)
+                frozenIndices.includes(
+                    index
+                )
             ) {
 
                 return;
@@ -4712,6 +5456,7 @@ function applyFreezeColumns() {
                         "frozen-column"
                     );
 
+
                     cell.style.left =
                         "";
 
@@ -4725,7 +5470,7 @@ function applyFreezeColumns() {
 
 
 /* =========================================================
-   RESET ALL SETTINGS
+   RESET SETTINGS
 ========================================================= */
 
 function resetAllSettings() {
@@ -4753,16 +5498,23 @@ function resetAllSettings() {
 
     freezeCount = 0;
 
-
     selectedFilters = {};
 
 
-    Object.keys(defaultFilters)
+    Object.keys(
+        defaultFilters
+    )
         .forEach(
             index => {
 
-                selectedFilters[index] =
-                    [...defaultFilters[index]];
+                selectedFilters[
+                    index
+                ] =
+                    [
+                        ...defaultFilters[
+                            index
+                        ]
+                    ];
 
             }
         );
@@ -4770,16 +5522,20 @@ function resetAllSettings() {
 
     saveStorage();
 
+
     initializeColumnNames();
 
+
     renderTable();
+
 
     renderColumnSettings();
 
 
     document.getElementById(
         "freezeCount"
-    ).value = 0;
+    ).value =
+        0;
 
 }
 
@@ -4816,7 +5572,9 @@ function updateRefreshInfo() {
    ERROR
 ========================================================= */
 
-function showError(message) {
+function showError(
+    message
+) {
 
     const tbody =
         document.getElementById(
@@ -4830,7 +5588,8 @@ function showError(message) {
         );
 
 
-    thead.innerHTML = "";
+    thead.innerHTML =
+        "";
 
 
     tbody.innerHTML =
@@ -4848,7 +5607,7 @@ function showError(message) {
 
 
 /* =========================================================
-   RENAME INPUT SYNC
+   RENAME SELECT CHANGE
 ========================================================= */
 
 document.addEventListener(
@@ -4861,13 +5620,17 @@ document.addEventListener(
         ) {
 
             const index =
-                Number(event.target.value);
+                Number(
+                    event.target.value
+                );
 
 
             document.getElementById(
                 "renameColumnInput"
             ).value =
-                getDisplayColumnName(index);
+                getDisplayColumnName(
+                    index
+                );
 
         }
 
@@ -4876,7 +5639,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   COLUMN SELECT CHANGE
+   COLUMN FORMAT SELECT CHANGE
 ========================================================= */
 
 document.addEventListener(
@@ -4890,32 +5653,6 @@ document.addEventListener(
         ) {
 
             loadFormatFromFirstSelected();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   AUTO REFRESH WHEN TAB RETURNS
-========================================================= */
-
-document.addEventListener(
-    "visibilitychange",
-    function() {
-
-        if (
-            document.visibilityState ===
-            "visible"
-        ) {
-
-            /*
-               Không refresh ngay mỗi lần
-               quay lại tab để tránh tải quá nhiều.
-
-               Dữ liệu vẫn tự refresh 5 phút/lần.
-            */
 
         }
 
