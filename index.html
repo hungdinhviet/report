@@ -1187,6 +1187,88 @@ function loadState(){
     sorts =
     saved.sorts || {};
 
+
+    /*
+       SORT mặc định mỗi lần tải website:
+
+       1. Packageprice       → Tăng dần
+       2. DATA               → Giảm dần
+       3. Thoại nội mạng     → Giảm dần
+       4. Thoại ngoại mạng   → Tăng dần
+    */
+
+    const packagePriceIndex =
+    headers.indexOf(
+        "Packageprice"
+    );
+
+    const dataIndex =
+    headers.indexOf(
+        "DATA"
+    );
+
+    const noiMangIndex =
+    headers.indexOf(
+        "Thoại nội mạng"
+    );
+
+    const ngoaiMangIndex =
+    headers.indexOf(
+        "Thoại ngoại mạng"
+    );
+
+
+    sorts = {};
+
+
+    if(
+        packagePriceIndex >= 0
+    ){
+
+        sorts[packagePriceIndex] = {
+            direction: "asc",
+            priority: 1
+        };
+
+    }
+
+
+    if(
+        dataIndex >= 0
+    ){
+
+        sorts[dataIndex] = {
+            direction: "desc",
+            priority: 2
+        };
+
+    }
+
+
+    if(
+        noiMangIndex >= 0
+    ){
+
+        sorts[noiMangIndex] = {
+            direction: "desc",
+            priority: 3
+        };
+
+    }
+
+
+    if(
+        ngoaiMangIndex >= 0
+    ){
+
+        sorts[ngoaiMangIndex] = {
+            direction: "asc",
+            priority: 4
+        };
+
+    }
+
+
     columnWidths =
     saved.columnWidths || {};
 
@@ -1555,6 +1637,87 @@ function initializeDefaults(){
 
     defaultFiltersInitialized =
     true;
+
+
+    /*
+       SORT mặc định:
+
+       1. Packageprice      → Tăng dần
+       2. DATA              → Giảm dần
+       3. Thoại nội mạng    → Giảm dần
+       4. Thoại ngoại mạng  → Tăng dần
+    */
+
+    const packagePriceIndex =
+    headers.indexOf(
+        "Packageprice"
+    );
+
+    const dataIndex =
+    headers.indexOf(
+        "DATA"
+    );
+
+    const noiMangIndex =
+    headers.indexOf(
+        "Thoại nội mạng"
+    );
+
+    const ngoaiMangIndex =
+    headers.indexOf(
+        "Thoại ngoại mạng"
+    );
+
+
+    sorts = {};
+
+
+    if(
+        packagePriceIndex >= 0
+    ){
+
+        sorts[packagePriceIndex] = {
+            direction: "asc",
+            priority: 1
+        };
+
+    }
+
+
+    if(
+        dataIndex >= 0
+    ){
+
+        sorts[dataIndex] = {
+            direction: "desc",
+            priority: 2
+        };
+
+    }
+
+
+    if(
+        noiMangIndex >= 0
+    ){
+
+        sorts[noiMangIndex] = {
+            direction: "desc",
+            priority: 3
+        };
+
+    }
+
+
+    if(
+        ngoaiMangIndex >= 0
+    ){
+
+        sorts[ngoaiMangIndex] = {
+            direction: "asc",
+            priority: 4
+        };
+
+    }
 
 
     const dateIndex =
