@@ -2605,7 +2605,9 @@ function renderTable() {
                                     left:${fixed
                                         ? left + "px"
                                         : "auto"};
-                                    white-space:nowrap;
+                                    white-space:${format.wrap
+                                        ? "normal"
+                                        : "nowrap"};
                                     overflow-wrap:anywhere;
                                 "
                             >
