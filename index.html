@@ -3,744 +3,425 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DINH VIET HUNG</title>
+
+<title>Danh sách gói cước</title>
 
 <style>
-*{
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    margin:0;
-    padding:0;
-    overflow:hidden;
-    font-family:Arial,sans-serif;
-    font-size:14px;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #111111;
 }
 
-body{
-    background:#fff;
+body {
+    overflow: hidden;
 }
 
-#app{
-    position:relative;
-    width:100%;
-    height:100vh;
-    overflow:hidden;
+#app {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* =========================================================
    TOOLBAR
 ========================================================= */
 
-.toolbar{
-    position:absolute;
-    top:0;
-    left:0;
-    right:0;
-    height:44px;
-
-    display:flex;
-    align-items:center;
-    gap:7px;
-
-    padding:5px 8px;
-
-    background:#f5f5f5;
-    border-bottom:1px solid #ccc;
-
-    z-index:5000;
+.toolbar {
+    height: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #d9d9d9;
+    background: #ffffff;
+    z-index: 1000;
 }
 
-.toolbar button{
-    height:32px;
-    padding:0 12px;
-
-    border:1px solid #bbb;
-    border-radius:4px;
-
-    background:#fff;
-
-    cursor:pointer;
+.toolbar button,
+.toolbar select,
+.toolbar input {
+    height: 32px;
+    border: 1px solid #cfcfcf;
+    border-radius: 4px;
+    background: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
 }
 
-.toolbar button:hover{
-    background:#eef5ff;
+.toolbar button {
+    padding: 0 12px;
+    cursor: pointer;
 }
 
-.toolbar-status{
-    margin-left:auto;
-    color:#666;
-    white-space:nowrap;
+.toolbar button:hover {
+    background: #f3f3f3;
 }
 
-/* =========================================================
-   TABLE SCROLL CONTAINER
-========================================================= */
+.toolbar input {
+    padding: 0 9px;
+    width: 220px;
+}
 
-.table-wrapper{
-    position:absolute;
+.toolbar select {
+    padding: 0 8px;
+}
 
-    left:0;
-    right:0;
-    top:44px;
-    bottom:0;
-
-    overflow:auto;
-
-    background:#fff;
-
-    isolation:isolate;
+.status {
+    margin-left: auto;
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
 }
 
 /* =========================================================
-   TABLE
+   TABLE AREA
 ========================================================= */
 
-table{
-    border-collapse:separate;
-    border-spacing:0;
-
-    table-layout:fixed;
-
-    width:max-content;
-    min-width:100%;
+.table-container {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    overflow: auto;
+    position: relative;
 }
 
-th,td{
-    box-sizing:border-box;
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    width: max-content;
+    min-width: 100%;
+}
+
+th,
+td {
+    border-right: 1px solid #d9d9d9;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 7px 8px;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #f3f3f3;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: normal;
+}
+
+td {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background: #ffffff;
+    white-space: normal;
+}
+
+tbody tr:hover td {
+    background: #f7f7f7;
 }
 
 /* =========================================================
    HEADER
 ========================================================= */
 
-thead th{
-    position:relative;
-
-    padding:0;
-
-    border-right:1px solid #ccc;
-    border-bottom:1px solid #aaa;
-
-    background:#f1f3f5;
+.header-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.header-cell{
-    position:sticky !important;
-
-    top:0 !important;
-
-    height:38px;
-
-    z-index:300 !important;
-
-    background:#f1f3f5 !important;
+.header-top {
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
 }
 
-.search-cell{
-    position:sticky !important;
-
-    top:38px !important;
-
-    height:36px;
-
-    z-index:299 !important;
-
-    background:#fafafa !important;
+.header-title {
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
 }
 
-.header-cell.frozen-column{
-    position:sticky !important;
-
-    top:0 !important;
-
-    z-index:1000 !important;
+.header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
 }
 
-.search-cell.frozen-column{
-    position:sticky !important;
-
-    top:38px !important;
-
-    z-index:999 !important;
+.header-btn {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 2px 3px;
+    font-size: 12px;
 }
 
-/* =========================================================
-   HEADER CONTENT
-========================================================= */
-
-.header-content{
-    width:100%;
-    height:38px;
-
-    display:flex;
-    align-items:center;
-
-    padding:0 5px;
-
-    user-select:none;
+.header-btn:hover {
+    background: #ddd;
+    border-radius: 3px;
 }
 
-.header-title{
-    flex:1;
-
-    min-width:0;
-
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-
-    font-weight:bold;
-
-    cursor:pointer;
+.header-search {
+    width: 100%;
+    height: 25px;
+    border: 1px solid #c9c9c9;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    outline: none;
 }
 
-.header-actions{
-    display:flex;
-    align-items:center;
-
-    flex-shrink:0;
-}
-
-.header-button{
-    width:24px;
-    height:25px;
-
-    border:0;
-    background:transparent;
-
-    padding:0;
-
-    cursor:pointer;
-}
-
-.header-button:hover{
-    background:#ddd;
-    border-radius:3px;
-}
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.search-inner{
-    height:36px;
-    padding:4px;
-}
-
-.column-search{
-    width:100%;
-    height:27px;
-
-    border:1px solid #bbb;
-    border-radius:3px;
-
-    padding:3px 6px;
-
-    outline:none;
-
-    font-size:13px;
-
-    background:#fff;
-}
-
-.column-search:focus{
-    border-color:#4285f4;
-
-    box-shadow:
-        0 0 0 1px #4285f4;
-}
-
-/* =========================================================
-   BODY
-========================================================= */
-
-tbody td{
-    height:34px;
-
-    padding:6px 8px;
-
-    border-right:1px solid #ddd;
-    border-bottom:1px solid #ddd;
-
-    background:#fff;
-
-    vertical-align:middle;
-}
-
-.body-cell{
-    white-space:pre-wrap;
-
-    overflow-wrap:anywhere;
-
-    word-break:break-word;
-}
-
-tbody td.frozen-column{
-    position:sticky !important;
-
-    z-index:100 !important;
-
-    background:#fff;
-}
-
-.frozen-last{
-    box-shadow:
-        4px 0 7px rgba(0,0,0,.12);
-}
-
-/* =========================================================
-   HEADER STATES
-========================================================= */
-
-.header-cell.filtered{
-    background:#c8f7c5 !important;
-}
-
-.header-cell.sorted{
-    background:#d8ebff !important;
-}
-
-.header-cell.filtered.sorted{
-    background:#bdecc4 !important;
-}
-
-.header-cell.frozen-column.filtered{
-    background:#c8f7c5 !important;
-}
-
-.header-cell.frozen-column.sorted{
-    background:#d8ebff !important;
-}
-
-.header-cell.frozen-column.filtered.sorted{
-    background:#bdecc4 !important;
+.header-search:focus {
+    border-color: #888;
 }
 
 /* =========================================================
    RESIZE
 ========================================================= */
 
-.resize-handle{
-    position:absolute;
-
-    right:-3px;
-    top:0;
-
-    width:7px;
-    height:100%;
-
-    cursor:col-resize;
-
-    z-index:1500;
+.resize-handle {
+    position: absolute;
+    top: 0;
+    right: -3px;
+    width: 7px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 100;
 }
 
-.resize-handle:hover{
-    background:rgba(0,120,255,.25);
+.resize-handle:hover {
+    background: rgba(0, 0, 0, 0.12);
 }
 
 /* =========================================================
    FILTER MENU
 ========================================================= */
 
-.filter-menu{
-    position:fixed;
-
-    width:350px;
-    max-height:calc(100vh - 20px);
-
-    background:#fff;
-
-    border:1px solid #aaa;
-    border-radius:5px;
-
-    box-shadow:
-        0 6px 25px rgba(0,0,0,.22);
-
-    z-index:10000;
-
-    overflow:hidden;
+.filter-menu {
+    position: fixed;
+    min-width: 260px;
+    max-width: 360px;
+    max-height: 480px;
+    background: #ffffff;
+    border: 1px solid #cfcfcf;
+    box-shadow: 0 5px 18px rgba(0,0,0,.18);
+    border-radius: 5px;
+    z-index: 5000;
+    display: none;
+    overflow: hidden;
 }
 
-.filter-menu-inner{
-    max-height:calc(100vh - 20px);
-
-    overflow-y:auto;
-
-    padding:9px;
+.filter-menu-header {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    background: #f7f7f7;
 }
 
-.menu-title{
-    font-weight:bold;
-
-    margin-bottom:8px;
-
-    font-size:14px;
+.filter-menu-search {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 13px;
 }
 
-.filter-search{
-    width:100%;
-
-    height:30px;
-
-    border:1px solid #bbb;
-    border-radius:3px;
-
-    padding:4px 7px;
-
-    margin-bottom:7px;
-
-    outline:none;
+.filter-actions {
+    display: flex;
+    gap: 5px;
+    padding: 7px 8px;
+    border-bottom: 1px solid #ddd;
 }
 
-.filter-search:focus{
-    border-color:#4285f4;
+.filter-actions button {
+    flex: 1;
+    height: 29px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
 }
 
-.filter-actions{
-    display:flex;
-
-    gap:5px;
-
-    margin-bottom:7px;
+.filter-actions button:hover {
+    background: #f1f1f1;
 }
 
-.menu-button{
-    border:1px solid #bbb;
-
-    background:#fff;
-
-    border-radius:3px;
-
-    padding:5px 8px;
-
-    cursor:pointer;
+.filter-values {
+    max-height: 320px;
+    overflow: auto;
+    padding: 5px 8px;
 }
 
-.menu-button:hover{
-    background:#eef5ff;
+.filter-value {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 2px;
+    font-size: 13px;
+    cursor: pointer;
 }
 
-.filter-values{
-    border-top:1px solid #ddd;
-    border-bottom:1px solid #ddd;
-
-    max-height:230px;
-
-    overflow-y:auto;
-
-    padding:4px 0;
+.filter-value:hover {
+    background: #f4f4f4;
 }
 
-.filter-value-row{
-    display:flex;
-
-    align-items:center;
-
-    gap:6px;
-
-    min-height:28px;
-
-    padding:3px 5px;
+.filter-footer {
+    display: flex;
+    gap: 7px;
+    padding: 8px;
+    border-top: 1px solid #ddd;
 }
 
-.filter-value-row:hover{
-    background:#f4f4f4;
+.filter-footer button {
+    flex: 1;
+    height: 31px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
 }
 
-.filter-value-row label{
-    flex:1;
+.filter-apply {
+    background: #eeeeee;
+}
 
-    overflow-wrap:anywhere;
-
-    cursor:pointer;
+.filter-clear {
+    background: #ffffff;
 }
 
 /* =========================================================
-   SORT
+   FIXED COLUMNS
 ========================================================= */
 
-.menu-section{
-    margin-top:10px;
-
-    padding-top:9px;
-
-    border-top:1px solid #ddd;
+.fixed-cell {
+    position: sticky;
+    z-index: 20;
 }
 
-.menu-section-title{
-    font-weight:bold;
-
-    margin-bottom:7px;
+.fixed-header {
+    z-index: 100 !important;
 }
 
-.form-row{
-    display:flex;
-
-    align-items:center;
-
-    gap:7px;
-
-    margin-bottom:7px;
-}
-
-.form-row > label{
-    width:90px;
-
-    flex-shrink:0;
-}
-
-.form-row select,
-.form-row input[type="number"],
-.form-row input[type="text"]{
-    flex:1;
-
-    height:29px;
-
-    border:1px solid #bbb;
-
-    border-radius:3px;
-
-    padding:3px 6px;
-}
-
-.sort-direction{
-    display:flex;
-
-    gap:15px;
-
-    align-items:center;
-
-    flex-wrap:wrap;
-}
-
-.sort-direction label{
-    display:flex;
-
-    align-items:center;
-
-    gap:4px;
+.fixed-cell-shadow {
+    box-shadow: 2px 0 4px rgba(0,0,0,.08);
 }
 
 /* =========================================================
-   FORMAT
+   FORMAT PANEL
 ========================================================= */
 
-.format-checks{
-    display:flex;
-
-    gap:12px;
-
-    flex-wrap:wrap;
-
-    margin-bottom:7px;
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.25);
+    z-index: 8000;
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
-.format-checks label{
-    display:flex;
-
-    align-items:center;
-
-    gap:4px;
+.modal {
+    width: 420px;
+    max-width: calc(100vw - 30px);
+    max-height: calc(100vh - 30px);
+    overflow: auto;
+    background: #ffffff;
+    border-radius: 7px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.25);
+    padding: 18px;
 }
 
-.color-row{
-    display:flex;
-
-    align-items:center;
-
-    gap:7px;
-
-    margin-bottom:7px;
+.modal h3 {
+    margin: 0 0 15px 0;
+    font-size: 17px;
 }
 
-.color-row label{
-    width:90px;
+.form-row {
+    margin-bottom: 12px;
 }
 
-.color-input{
-    width:55px;
-    height:29px;
-
-    padding:0;
-
-    border:1px solid #bbb;
+.form-row label {
+    display: block;
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 5px;
 }
 
-/* =========================================================
-   MENU FOOTER
-========================================================= */
-
-.menu-footer{
-    display:flex;
-
-    justify-content:flex-end;
-
-    gap:5px;
-
-    margin-top:9px;
+.form-row input,
+.form-row select {
+    width: 100%;
+    height: 34px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
 }
 
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-.settings-overlay{
-    position:fixed;
-
-    inset:0;
-
-    display:none;
-
-    background:rgba(0,0,0,.25);
-
-    z-index:12000;
+.modal-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
 }
 
-.settings-panel{
-    position:absolute;
-
-    top:55px;
-    right:15px;
-
-    width:430px;
-
-    max-height:calc(100vh - 70px);
-
-    overflow-y:auto;
-
-    background:#fff;
-
-    border:1px solid #aaa;
-    border-radius:6px;
-
-    box-shadow:
-        0 6px 25px rgba(0,0,0,.25);
-
-    padding:12px;
-}
-
-.settings-title{
-    font-size:17px;
-
-    font-weight:bold;
-
-    margin-bottom:12px;
-}
-
-.settings-row{
-    margin-bottom:10px;
-}
-
-.settings-row > label{
-    display:block;
-
-    margin-bottom:4px;
-
-    font-weight:bold;
-}
-
-.settings-row input,
-.settings-row select{
-    width:100%;
-
-    height:30px;
-
-    border:1px solid #bbb;
-
-    border-radius:3px;
-
-    padding:3px 6px;
-}
-
-/* =========================================================
-   RENAME PANEL
-========================================================= */
-
-.rename-list{
-    border:1px solid #ddd;
-
-    max-height:350px;
-
-    overflow-y:auto;
-}
-
-.rename-item{
-    display:flex;
-
-    align-items:center;
-
-    gap:7px;
-
-    padding:5px;
-
-    border-bottom:1px solid #eee;
-}
-
-.rename-item:last-child{
-    border-bottom:0;
-}
-
-.rename-original{
-    width:135px;
-
-    flex-shrink:0;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-    white-space:nowrap;
-}
-
-.rename-item input{
-    flex:1;
-
-    height:29px;
+.modal-buttons button {
+    flex: 1;
+    height: 35px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 /* =========================================================
    LOADING
 ========================================================= */
 
-.loading{
-    position:absolute;
-
-    left:0;
-    right:0;
-    top:44px;
-    bottom:0;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:rgba(255,255,255,.85);
-
-    z-index:11000;
-
-    font-size:16px;
+.loading {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,.7);
+    z-index: 10000;
 }
 
-.hidden{
-    display:none !important;
+.loading-box {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 18px 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.15);
 }
 
 /* =========================================================
-   MESSAGE
+   EMPTY
 ========================================================= */
 
-.message{
-    padding:30px;
-
-    text-align:center;
-
-    color:#777;
+.empty {
+    padding: 30px;
+    text-align: center;
+    color: #777;
 }
 </style>
 </head>
@@ -756,163 +437,134 @@ tbody td.frozen-column{
         </button>
 
         <button id="resetBtn">
-            ⟳ Tổng / Reset
+            ⟳ Đặt lại
         </button>
 
-        <button id="settingsBtn">
-            ⚙ Cài đặt
+        <button id="formatBtn">
+            ⚙ Định dạng
         </button>
 
-        <span
-            id="status"
-            class="toolbar-status"
+        <label style="font-size:12px;color:#555;">
+            Cố định:
+        </label>
+
+        <select id="freezeSelect">
+            <option value="0">0 cột</option>
+            <option value="1">1 cột</option>
+            <option value="2">2 cột</option>
+            <option value="3">3 cột</option>
+            <option value="4">4 cột</option>
+            <option value="5">5 cột</option>
+            <option value="6" selected>6 cột</option>
+            <option value="7">7 cột</option>
+            <option value="8">8 cột</option>
+            <option value="9">9 cột</option>
+            <option value="10">10 cột</option>
+        </select>
+
+        <input
+            id="globalSearch"
+            type="text"
+            placeholder="Tìm kiếm toàn bộ bảng..."
         >
+
+        <div class="status" id="status">
             Đang tải...
-        </span>
+        </div>
 
     </div>
 
+    <div class="table-container" id="tableContainer">
+        <div class="empty">Đang tải dữ liệu...</div>
+    </div>
 
-    <div
-        id="loading"
-        class="loading"
-    >
+</div>
+
+<div class="filter-menu" id="filterMenu"></div>
+
+<div class="modal-backdrop" id="formatModal">
+    <div class="modal">
+
+        <h3>Định dạng cột</h3>
+
+        <div class="form-row">
+            <label>Cột</label>
+            <select id="formatColumn"></select>
+        </div>
+
+        <div class="form-row">
+            <label>Căn chỉnh</label>
+            <select id="formatAlign">
+                <option value="left">Trái</option>
+                <option value="center">Giữa</option>
+                <option value="right">Phải</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>Font</label>
+            <select id="formatFont">
+                <option value="Arial">Arial</option>
+                <option value="Calibri">Calibri</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Times New Roman">Times New Roman</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <label>Kích thước chữ</label>
+            <input
+                id="formatSize"
+                type="number"
+                min="8"
+                max="40"
+            >
+        </div>
+
+        <div class="form-row">
+            <label>
+                <input type="checkbox" id="formatBold">
+                In đậm
+            </label>
+        </div>
+
+        <div class="form-row">
+            <label>
+                <input type="checkbox" id="formatItalic">
+                In nghiêng
+            </label>
+        </div>
+
+        <div class="form-row">
+            <label>
+                <input type="checkbox" id="formatWrap">
+                Wrap Text
+            </label>
+        </div>
+
+        <div class="modal-buttons">
+            <button id="formatCancel">Hủy</button>
+            <button id="formatSave">Lưu</button>
+        </div>
+
+    </div>
+</div>
+
+<div class="loading" id="loading">
+    <div class="loading-box">
         Đang tải dữ liệu...
     </div>
-
-
-    <div
-        id="tableWrapper"
-        class="table-wrapper"
-    >
-
-        <table id="dataTable">
-
-            <thead></thead>
-
-            <tbody></tbody>
-
-        </table>
-
-    </div>
-
 </div>
-
-
-<div
-    id="settingsOverlay"
-    class="settings-overlay"
->
-
-    <div
-        id="settingsPanel"
-        class="settings-panel"
-    >
-
-        <div class="settings-title">
-            ⚙ Cài đặt bảng
-        </div>
-
-
-        <div class="settings-row">
-
-            <label>
-                Số cột cố định
-            </label>
-
-            <input
-                id="freezeCountInput"
-                type="number"
-                min="0"
-                value="6"
-            >
-
-        </div>
-
-
-        <div class="settings-row">
-
-            <label>
-                Tự động làm mới
-            </label>
-
-            <select
-                id="autoRefreshSelect"
-            >
-
-                <option value="0">
-                    Tắt
-                </option>
-
-                <option value="5">
-                    5 phút
-                </option>
-
-                <option value="10">
-                    10 phút
-                </option>
-
-                <option value="30">
-                    30 phút
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="settings-row">
-
-            <label>
-                Đổi tên cột
-            </label>
-
-            <div
-                id="renameList"
-                class="rename-list"
-            ></div>
-
-        </div>
-
-
-        <div
-            style="
-                display:flex;
-                justify-content:flex-end;
-                gap:6px;
-            "
-        >
-
-            <button
-                id="saveSettingsBtn"
-                class="menu-button"
-            >
-                Lưu
-            </button>
-
-            <button
-                id="closeSettingsBtn"
-                class="menu-button"
-            >
-                Đóng
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
 
 <script>
-"use strict";
 
 /* =========================================================
    GOOGLE SHEET
 ========================================================= */
 
 const CSV_URL =
-"https://docs.google.com/spreadsheets/d/19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS/gviz/tq?tqx=out%3Acsv&gid=616860962";
+    "https://docs.google.com/spreadsheets/d/19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS/gviz/tq?tqx=out%3Acsv&gid=616860962";
 
 
 /* =========================================================
@@ -920,7 +572,7 @@ const CSV_URL =
 ========================================================= */
 
 const STORAGE_KEY =
-"report_google_sheet_table_v12";
+    "report_google_sheet_table_v12";
 
 const OLD_KEYS = [
     "report_google_sheet_table_v11",
@@ -929,30 +581,11 @@ const OLD_KEYS = [
     "report_google_sheet_table_v8"
 ];
 
-
-/*
-   ========================================================
-   AUTO WIDTH MIGRATION VERSION
-   ========================================================
-
-   Đây là điểm sửa quan trọng.
-
-   Ở các bản trước, width cũ trong localStorage có thể
-   đã bị hiểu nhầm là width user kéo thủ công.
-
-   Từ bây giờ:
-
-   0 = chưa chạy migration
-   1 = đã chạy migration
-
-   Migration chỉ chạy 1 lần.
-*/
-
-const AUTO_WIDTH_MIGRATION_VERSION = 2;
+const AUTO_WIDTH_MIGRATION_VERSION = 3;
 
 
 /* =========================================================
-   HIDDEN COLUMNS
+   DEFAULT SETTINGS
 ========================================================= */
 
 const HIDDEN_COLUMNS = new Set([
@@ -962,33 +595,18 @@ const HIDDEN_COLUMNS = new Set([
 ]);
 
 
-/* =========================================================
-   SPECIAL SORT MAPPING
-========================================================= */
-
 const SORT_BY_MAP = {
-
-    "DATA":
-        "Sort_DATA",
-
-    "Thoại nội mạng":
-        "Sort_NM",
-
-    "Thoại ngoại mạng":
-        "Sort_NgM"
-
+    "DATA": "Sort_DATA",
+    "Thoại nội mạng": "Sort_NM",
+    "Thoại ngoại mạng": "Sort_NgM"
 };
 
-
-/* =========================================================
-   DEFAULT SETTINGS
-========================================================= */
 
 const DEFAULT_FREEZE_COUNT = 6;
 
 
 /* =========================================================
-   DEFAULT COLUMN RENAMES
+   RENAME
 ========================================================= */
 
 const DEFAULT_COLUMN_RENAMES = {
@@ -998,12 +616,6 @@ const DEFAULT_COLUMN_RENAMES = {
 
     "TOTAL PRICE":
         "Giá gói",
-
-    /*
-       Phòng trường hợp Google Sheet
-       sử dụng Total Price thay vì
-       TOTAL PRICE.
-    */
 
     "Total Price":
         "Giá gói",
@@ -1019,21 +631,20 @@ const DEFAULT_COLUMN_RENAMES = {
 
     "Ngày update":
         "Update"
-
 };
 
 
 /* =========================================================
-   DEFAULT CENTER COLUMNS
+   ALIGNMENT
 ========================================================= */
 
 const DEFAULT_CENTER_COLUMNS = new Set([
 
     "REVENUE",
 
-    "Kỳ",
-
     "Cách tính chu kỳ",
+
+    "Kỳ",
 
     "Pre/Post",
 
@@ -1042,13 +653,8 @@ const DEFAULT_CENTER_COLUMNS = new Set([
     "Cam kết MNP",
 
     "Ngày update"
-
 ]);
 
-
-/* =========================================================
-   DEFAULT RIGHT COLUMNS
-========================================================= */
 
 const DEFAULT_RIGHT_COLUMNS = new Set([
 
@@ -1057,90 +663,78 @@ const DEFAULT_RIGHT_COLUMNS = new Set([
     "Total Price",
 
     "Packageprice"
-
 ]);
 
 
 /* =========================================================
-   DEFAULT WIDTH MULTIPLIERS
+   SPECIAL WIDTH
 ========================================================= */
 
-const DEFAULT_WIDTH_MULTIPLIERS = {
-
-    "Đối tượng áp dụng":
-        4,
-
-    "Phạm vi cung cấp":
-        2,
-
-    "Free truy cập":
-        2,
-
-    "Khác":
-        2
-
-};
-
-
-/* =========================================================
-   DEFAULT HEADER WIDTH COLUMNS
-========================================================= */
+/*
+   Những cột này PHẢI tự động vừa theo HEADER.
+*/
 
 const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
+
+    "REVENUE",
+
+    "Cách tính chu kỳ",
+
+    "Kỳ",
 
     "Thoại nội mạng",
 
     "Thoại ngoại mạng",
 
-    "Loại gói cước",
-
-    "KHDN/KHCN",
-
     "Hạ băng thông",
+
+    "Loại gói cước",
 
     "Tự động gia hạn",
 
-    "Dừng đăng kí mới"
+    "Dừng đăng kí mới",
 
+    "KHDN/KHCN"
 ]);
 
 
-/* =========================================================
-   DEFAULT CONTENT WIDTH COLUMNS
-========================================================= */
+/*
+   Những cột này tự động vừa theo nội dung.
+*/
 
 const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
-
-    /*
-       Giữ nguyên nhóm cũ
-    */
-
-    "REVENUE",
-
-    "Kỳ",
-
-    "Cách tính chu kỳ",
-
-    "Pre/Post",
-
-    "Facebook/Youtube/Tiktok",
-
-    /*
-       Bổ sung nhóm giá
-    */
 
     "TOTAL PRICE",
 
     "Total Price",
 
-    "Packageprice"
+    "Packageprice",
 
+    "Facebook",
+
+    "Youtube",
+
+    "Tiktok",
+
+    "Pre/Post"
 ]);
 
 
-/* =========================================================
-   DEFAULT WIDTH
-========================================================= */
+/*
+   Một số cột cần rộng hơn bình thường.
+*/
+
+const DEFAULT_WIDTH_MULTIPLIERS = {
+
+    "Đối tượng áp dụng": 4,
+
+    "Phạm vi cung cấp": 2,
+
+    "Free truy cập": 2,
+
+    "Khác": 2
+};
+
 
 const DEFAULT_WIDTH_BASE = 150;
 
@@ -1148,17 +742,12 @@ const MAX_CONTENT_WIDTH = 500;
 
 
 /* =========================================================
-   DATA
+   STATE
 ========================================================= */
 
 let headers = [];
 
 let rows = [];
-
-
-/* =========================================================
-   STATE
-========================================================= */
 
 let filters = {};
 
@@ -1172,575 +761,155 @@ let columnFormats = {};
 
 let renamedHeaders = {};
 
-let freezeCount =
-DEFAULT_FREEZE_COUNT;
+let freezeCount = DEFAULT_FREEZE_COUNT;
 
 let autoRefreshMinutes = 0;
 
+let defaultFiltersInitialized = false;
 
-/*
-   Chỉ chứa các cột mà user thực sự
-   đã kéo resize bằng chuột.
+let openFilterIndex = null;
 
-   Không còn tự động đánh dấu width
-   cũ trong localStorage là manual.
-*/
+let filterMenuElement = null;
+
+let filterValueSearch = "";
+
+let resizeState = null;
+
+let autoRefreshTimer = null;
 
 let manuallyResizedColumns = {};
 
-
-/*
-   Phiên bản migration đã chạy.
-*/
-
 let autoWidthMigrationVersion = 0;
-
-
-/* =========================================================
-   DEFAULT FILTER
-========================================================= */
-
-let defaultFiltersInitialized =
-false;
-
-
-/* =========================================================
-   FILTER MENU
-========================================================= */
-
-let openFilterIndex =
-null;
-
-let filterMenuElement =
-null;
-
-let filterValueSearch =
-"";
-
-
-/* =========================================================
-   RESIZE
-========================================================= */
-
-let resizeState =
-null;
-
-
-/* =========================================================
-   AUTO REFRESH
-========================================================= */
-
-let autoRefreshTimer =
-null;
 
 
 /* =========================================================
    DOM
 ========================================================= */
 
-const table =
-document.getElementById(
-    "dataTable"
-);
+const tableContainer =
+    document.getElementById("tableContainer");
 
-const thead =
-table.querySelector(
-    "thead"
-);
+const statusElement =
+    document.getElementById("status");
 
-const tbody =
-table.querySelector(
-    "tbody"
-);
+const globalSearch =
+    document.getElementById("globalSearch");
 
-const tableWrapper =
-document.getElementById(
-    "tableWrapper"
-);
+const freezeSelect =
+    document.getElementById("freezeSelect");
+
+const filterMenu =
+    document.getElementById("filterMenu");
 
 const loading =
-document.getElementById(
-    "loading"
-);
-
-const statusEl =
-document.getElementById(
-    "status"
-);
-
-const settingsOverlay =
-document.getElementById(
-    "settingsOverlay"
-);
-
-const freezeCountInput =
-document.getElementById(
-    "freezeCountInput"
-);
-
-const autoRefreshSelect =
-document.getElementById(
-    "autoRefreshSelect"
-);
-
-const renameList =
-document.getElementById(
-    "renameList"
-);
+    document.getElementById("loading");
 
 
 /* =========================================================
-   DEFAULT HEADER
+   STORAGE
 ========================================================= */
 
-function getDefaultDisplayHeader(
-    originalHeader
-){
-
-    return (
-        DEFAULT_COLUMN_RENAMES[
-            originalHeader
-        ] ||
-        originalHeader
-    );
-}
-
-
-/* =========================================================
-   DISPLAY HEADER
-========================================================= */
-
-function getDisplayHeader(
-    originalHeader
-){
-
-    return (
-        renamedHeaders[
-            originalHeader
-        ] ||
-        getDefaultDisplayHeader(
-            originalHeader
-        )
-    );
-}
-
-
-/* =========================================================
-   DEFAULT ALIGNMENT
-========================================================= */
-
-function getDefaultColumnAlignment(
-    originalHeader
-){
-
-    if(
-        DEFAULT_RIGHT_COLUMNS.has(
-            originalHeader
-        )
-    ){
-
-        return "right";
-    }
-
-
-    if(
-        DEFAULT_CENTER_COLUMNS.has(
-            originalHeader
-        )
-    ){
-
-        return "center";
-    }
-
-
-    return "left";
-}
-
-
-/* =========================================================
-   MEASURE TEXT WIDTH
-========================================================= */
-
-function measureTextWidth(
-    text,
-    font =
-    "14px Arial"
-){
-
-    const canvas =
-    measureTextWidth.canvas ||
-    (
-        measureTextWidth.canvas =
-        document.createElement(
-            "canvas"
-        )
-    );
-
-
-    const context =
-    canvas.getContext(
-        "2d"
-    );
-
-
-    context.font =
-    font;
-
-
-    return context.measureText(
-        String(text ?? "")
-    ).width;
-}
-
-
-/* =========================================================
-   DEFAULT HEADER WIDTH
-========================================================= */
-
-function getDefaultHeaderWidth(
-    originalHeader
-){
-
-    const displayHeader =
-    getDisplayHeader(
-        originalHeader
-    );
-
-
-    const width =
-    measureTextWidth(
-        displayHeader,
-        "bold 14px Arial"
-    ) +
-    50;
-
-
-    return Math.max(
-        DEFAULT_WIDTH_BASE,
-        Math.ceil(width)
-    );
-}
-
-
-/* =========================================================
-   DEFAULT CONTENT WIDTH
-========================================================= */
-
-function getDefaultContentWidth(
-    index
-){
-
-    const originalHeader =
-    headers[index];
-
-
-    const displayHeader =
-    getDisplayHeader(
-        originalHeader
-    );
-
-
-    let maxWidth =
-    measureTextWidth(
-        displayHeader,
-        "bold 14px Arial"
-    );
-
-
-    rows.forEach(
-        row => {
-
-            const value =
-            getDisplayValue(
-                row[index],
-                originalHeader
-            );
-
-
-            const width =
-            measureTextWidth(
-                value,
-                "14px Arial"
-            );
-
-
-            maxWidth =
-            Math.max(
-                maxWidth,
-                Math.min(
-                    width,
-                    MAX_CONTENT_WIDTH
-                )
-            );
-
-        }
-    );
-
-
-    maxWidth += 30;
-
-
-    return Math.max(
-        100,
-        Math.ceil(maxWidth)
-    );
-}
-
-
-/* =========================================================
-   DEFAULT COLUMN WIDTH
-========================================================= */
-
-function getDefaultColumnWidth(
-    index
-){
-
-    const originalHeader =
-    headers[index];
-
-
-    /*
-       Nhóm nhân hệ số.
-    */
-
-    if(
-        DEFAULT_WIDTH_MULTIPLIERS[
-            originalHeader
-        ]
-    ){
-
-        return (
-            DEFAULT_WIDTH_BASE *
-            DEFAULT_WIDTH_MULTIPLIERS[
-                originalHeader
-            ]
-        );
-    }
-
-
-    /*
-       Nhóm lấy width theo header.
-    */
-
-    if(
-        DEFAULT_HEADER_WIDTH_COLUMNS.has(
-            originalHeader
-        )
-    ){
-
-        return getDefaultHeaderWidth(
-            originalHeader
-        );
-    }
-
-
-    /*
-       Nhóm lấy width theo content.
-    */
-
-    if(
-        DEFAULT_CONTENT_WIDTH_COLUMNS.has(
-            originalHeader
-        )
-    ){
-
-        return getDefaultContentWidth(
-            index
-        );
-    }
-
-
-    return DEFAULT_WIDTH_BASE;
-}
-
-
-/* =========================================================
-   LOAD STATE
-========================================================= */
-
-function loadState(){
+function loadState() {
 
     let saved = null;
 
+    try {
 
-    try{
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
 
-        const current =
-        localStorage.getItem(
-            STORAGE_KEY
-        );
-
-
-        if(current){
-
-            saved =
-            JSON.parse(
-                current
-            );
+        if (raw) {
+            saved = JSON.parse(raw);
         }
 
+    } catch (error) {
 
-        if(!saved){
+        console.error(
+            "Không đọc được localStorage:",
+            error
+        );
 
-            for(
-                const key of OLD_KEYS
-            ){
-
-                const old =
-                localStorage.getItem(
-                    key
-                );
+    }
 
 
-                if(old){
+    /*
+       Nếu chưa có state mới,
+       thử lấy state cũ.
+    */
+
+    if (!saved) {
+
+        for (const key of OLD_KEYS) {
+
+            try {
+
+                const raw =
+                    localStorage.getItem(key);
+
+                if (raw) {
 
                     saved =
-                    JSON.parse(
-                        old
-                    );
+                        JSON.parse(raw);
 
                     break;
                 }
-            }
+
+            } catch (error) {}
+
         }
 
     }
-    catch(error){
-
-        console.warn(
-            "Không đọc được LocalStorage",
-            error
-        );
-    }
 
 
-    if(!saved){
+    if (!saved) {
 
         freezeCount =
-        DEFAULT_FREEZE_COUNT;
-
-        autoRefreshMinutes =
-        0;
-
-        manuallyResizedColumns =
-        {};
-
-        autoWidthMigrationVersion =
-        0;
+            DEFAULT_FREEZE_COUNT;
 
         return;
     }
 
 
     filters =
-    saved.filters || {};
+        saved.filters || {};
 
     searches =
-    saved.searches || {};
+        saved.searches || {};
 
     sorts =
-    saved.sorts || {};
+        saved.sorts || {};
 
     columnWidths =
-    saved.columnWidths || {};
+        saved.columnWidths || {};
 
     columnFormats =
-    saved.columnFormats || {};
+        saved.columnFormats || {};
 
     renamedHeaders =
-    saved.renamedHeaders || {};
+        saved.renamedHeaders || {};
 
-
-    /*
-       QUAN TRỌNG:
-
-       Chỉ đọc manuallyResizedColumns
-       nếu state thực sự có trường này.
-
-       Không còn đoạn code cũ:
-
-       Object.keys(columnWidths).forEach(...)
-       manuallyResizedColumns[key] = true
-
-       vì chính đoạn đó làm migration
-       trước đây không thể xóa width cũ.
-    */
-
-    if(
-        saved.manuallyResizedColumns &&
-        typeof saved.manuallyResizedColumns === "object"
-    ){
-
-        manuallyResizedColumns =
-        saved.manuallyResizedColumns;
-
-    }
-    else{
-
-        manuallyResizedColumns = {};
-    }
-
-
-    autoWidthMigrationVersion =
-    Number(
-        saved.autoWidthMigrationVersion || 0
-    );
-
-
-    if(
-        !Number.isFinite(
-            autoWidthMigrationVersion
+    freezeCount =
+        Number.isFinite(
+            Number(saved.freezeCount)
         )
-    ){
-
-        autoWidthMigrationVersion =
-        0;
-    }
-
-
-    if(
-        saved.freezeCount !== undefined
-    ){
-
-        freezeCount =
-        Number(
-            saved.freezeCount
-        );
-
-
-        if(
-            !Number.isFinite(
-                freezeCount
-            )
-        ){
-
-            freezeCount =
-            DEFAULT_FREEZE_COUNT;
-        }
-
-    }
-    else{
-
-        freezeCount =
-        DEFAULT_FREEZE_COUNT;
-    }
-
+            ? Number(saved.freezeCount)
+            : DEFAULT_FREEZE_COUNT;
 
     autoRefreshMinutes =
-    Number(
-        saved.autoRefreshMinutes || 0
-    );
+        Number(saved.autoRefreshMinutes) || 0;
+
+    manuallyResizedColumns =
+        saved.manuallyResizedColumns || {};
+
+    autoWidthMigrationVersion =
+        Number(
+            saved.autoWidthMigrationVersion
+        ) || 0;
 
 
-    if(
-        !Number.isFinite(
-            autoRefreshMinutes
-        )
-    ){
+    freezeSelect.value =
+        String(freezeCount);
 
-        autoRefreshMinutes =
-        0;
-    }
 }
 
 
@@ -1748,11 +917,12 @@ function loadState(){
    SAVE STATE
 ========================================================= */
 
-function saveState(){
+function saveState() {
 
-    try{
+    try {
 
         localStorage.setItem(
+
             STORAGE_KEY,
 
             JSON.stringify({
@@ -1769,786 +939,65 @@ function saveState(){
 
                 renamedHeaders,
 
-                manuallyResizedColumns,
-
-                autoWidthMigrationVersion,
-
                 freezeCount,
 
-                autoRefreshMinutes
+                autoRefreshMinutes,
+
+                manuallyResizedColumns,
+
+                autoWidthMigrationVersion
 
             })
+
         );
 
-    }
-    catch(error){
+    } catch (error) {
 
-        console.warn(
-            "Không lưu được LocalStorage",
+        console.error(
+            "Không lưu được state:",
             error
         );
+
     }
+
 }
 
 
 /* =========================================================
-   CSV PARSER
+   DISPLAY HEADER
 ========================================================= */
 
-function parseCSV(text){
-
-    const result = [];
-
-    let row = [];
-
-    let cell = "";
-
-    let inQuotes = false;
-
-
-    for(
-        let i = 0;
-        i < text.length;
-        i++
-    ){
-
-        const c =
-        text[i];
-
-        const next =
-        text[i + 1];
-
-
-        if(c === '"'){
-
-            if(
-                inQuotes &&
-                next === '"'
-            ){
-
-                cell += '"';
-
-                i++;
-
-            }
-            else{
-
-                inQuotes =
-                !inQuotes;
-            }
-
-        }
-
-        else if(
-            c === "," &&
-            !inQuotes
-        ){
-
-            row.push(cell);
-
-            cell = "";
-        }
-
-        else if(
-            (
-                c === "\n" ||
-                c === "\r"
-            ) &&
-            !inQuotes
-        ){
-
-            if(
-                c === "\r" &&
-                next === "\n"
-            ){
-
-                i++;
-            }
-
-
-            row.push(cell);
-
-            cell = "";
-
-
-            if(
-                row.length > 1 ||
-                row[0] !== ""
-            ){
-
-                result.push(row);
-            }
-
-
-            row = [];
-        }
-
-        else{
-
-            cell += c;
-        }
-    }
-
-
-    if(
-        cell.length > 0 ||
-        row.length > 0
-    ){
-
-        row.push(cell);
-
-        result.push(row);
-    }
-
-
-    return result;
-}
-
-
-/* =========================================================
-   LOAD DATA
-========================================================= */
-
-async function loadData(){
-
-    loading.classList.remove(
-        "hidden"
-    );
-
-    statusEl.textContent =
-    "Đang tải dữ liệu...";
-
-
-    try{
-
-        const response =
-        await fetch(
-            CSV_URL +
-            "&cachebust=" +
-            Date.now(),
-            {
-                cache:"no-store"
-            }
-        );
-
-
-        if(!response.ok){
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-        }
-
-
-        const text =
-        await response.text();
-
-
-        if(!text.trim()){
-
-            throw new Error(
-                "Google Sheet trả về rỗng."
-            );
-        }
-
-
-        const parsed =
-        parseCSV(text);
-
-
-        if(
-            !parsed.length ||
-            !parsed[0].length
-        ){
-
-            throw new Error(
-                "Không tìm thấy header."
-            );
-        }
-
-
-        headers =
-        parsed[0].map(
-            value =>
-            String(value).trim()
-        );
-
-
-        rows =
-        parsed
-        .slice(1)
-        .map(sourceRow => {
-
-            const row =
-            new Array(
-                headers.length
-            ).fill("");
-
-
-            for(
-                let i = 0;
-                i < headers.length;
-                i++
-            ){
-
-                row[i] =
-                sourceRow[i] == null
-                    ? ""
-                    : String(
-                        sourceRow[i]
-                    );
-            }
-
-
-            return row;
-        });
-
-
-        initializeDefaults();
-
-
-        autoRefreshSelect.value =
-        String(
-            autoRefreshMinutes
-        );
-
-
-        /*
-           Migration phải chạy SAU KHI
-           headers và rows đã được tải.
-
-           Như vậy chúng ta biết chính xác
-           cột nào cần reset width.
-        */
-
-        migrateAutoWidthColumns();
-
-
-        /*
-           Migration alignment cũng chạy
-           cùng lúc.
-        */
-
-        migrateColumnAlignments();
-
-
-        renderTable();
-
-
-        setupAutoRefresh();
-
-
-        statusEl.textContent =
-        `${rows.length.toLocaleString("vi-VN")} dòng • cập nhật ${new Date().toLocaleTimeString("vi-VN")}`;
-
-    }
-    catch(error){
-
-        console.error(error);
-
-
-        statusEl.textContent =
-        "Lỗi tải dữ liệu";
-
-
-        thead.innerHTML = "";
-
-        tbody.innerHTML = "";
-
-
-        const tr =
-        document.createElement("tr");
-
-
-        const td =
-        document.createElement("td");
-
-
-        td.colSpan =
-        Math.max(
-            headers.length,
-            1
-        );
-
-
-        td.className =
-        "message";
-
-
-        td.textContent =
-        "Không tải được Google Sheet: " +
-        error.message;
-
-
-        tr.appendChild(td);
-
-        tbody.appendChild(tr);
-
-    }
-    finally{
-
-        loading.classList.add(
-            "hidden"
-        );
-    }
-}
-
-
-/* =========================================================
-   AUTO WIDTH MIGRATION
-========================================================= */
-
-function migrateAutoWidthColumns(){
-
-    /*
-       Chỉ migration một lần.
-
-       Các cột này phải tự tính width.
-    */
-
-    if(
-        autoWidthMigrationVersion >=
-        AUTO_WIDTH_MIGRATION_VERSION
-    ){
-
-        return;
-    }
-
-
-    const autoWidthHeaders =
-    new Set([
-
-        "Thoại nội mạng",
-
-        "Thoại ngoại mạng",
-
-        "Loại gói cước",
-
-        "KHDN/KHCN",
-
-        "Hạ băng thông",
-
-        "Tự động gia hạn",
-
-        "Dừng đăng kí mới",
-
-        "TOTAL PRICE",
-
-        "Total Price",
-
-        "Packageprice",
-
-        "REVENUE",
-
-        "Kỳ",
-
-        "Cách tính chu kỳ",
-
-        "Pre/Post",
-
-        "Facebook",
-
-        "Youtube",
-
-        "Tiktok"
-
-    ]);
-
-
-    headers.forEach(
-        (header,index) => {
-
-            if(
-                autoWidthHeaders.has(
-                    header
-                )
-            ){
-
-                /*
-                   Nếu đây là width cũ
-                   từ các phiên bản trước,
-                   xóa nó.
-
-                   Vì state cũ không có cách
-                   xác định chắc chắn width đó
-                   là do user kéo hay do hệ thống.
-
-                   Sau migration mới, width thủ công
-                   sẽ được ghi rõ trong
-                   manuallyResizedColumns.
-                */
-
-                delete columnWidths[
-                    index
-                ];
-
-                /*
-                   Đồng thời xóa cờ manual cũ
-                   của các cột này.
-                */
-
-                delete manuallyResizedColumns[
-                    index
-                ];
-            }
-
-        }
-    );
-
-
-    autoWidthMigrationVersion =
-    AUTO_WIDTH_MIGRATION_VERSION;
-
-
-    saveState();
-}
-
-
-/* =========================================================
-   ALIGNMENT MIGRATION
-========================================================= */
-
-function migrateColumnAlignments(){
-
-    /*
-       Migration alignment chỉ chạy một lần.
-
-       Xóa align cũ của các cột mà
-       hệ thống có default alignment rõ ràng.
-
-       Những cột khác giữ nguyên format
-       user đã chọn.
-    */
-
-    if(
-        autoWidthMigrationVersion <
-        AUTO_WIDTH_MIGRATION_VERSION
-    ){
-
-        return;
-    }
-
-
-    const alignmentHeaders =
-    new Set([
-
-        "TOTAL PRICE",
-
-        "Total Price",
-
-        "Packageprice",
-
-        "REVENUE",
-
-        "Kỳ",
-
-        "Cách tính chu kỳ",
-
-        "Pre/Post",
-
-        "KHDN/KHCN",
-
-        "Cam kết MNP",
-
-        "Ngày update"
-
-    ]);
-
-
-    let changed = false;
-
-
-    headers.forEach(
-        (header,index) => {
-
-            if(
-                !alignmentHeaders.has(
-                    header
-                )
-            ){
-
-                return;
-            }
-
-
-            const format =
-            columnFormats[index];
-
-
-            if(
-                format &&
-                Object.prototype.hasOwnProperty.call(
-                    format,
-                    "align"
-                )
-            ){
-
-                /*
-                   Chỉ xóa alignment cũ.
-
-                   Các thiết lập khác:
-                   font, size, bold, màu...
-                   vẫn giữ nguyên.
-                */
-
-                delete format.align;
-
-                changed = true;
-            }
-
-        }
-    );
-
-
-    if(changed){
-
-        saveState();
-    }
-}
-
-
-/* =========================================================
-   DEFAULT FILTER
-========================================================= */
-
-function initializeDefaults(){
-
-    if(
-        defaultFiltersInitialized
-    ){
-
-        return;
-    }
-
-
-    defaultFiltersInitialized =
-    true;
-
-
-    const dateIndex =
-    headers.indexOf(
-        "Ngày update"
-    );
-
-
-    const stopIndex =
-    headers.indexOf(
-        "Dừng gói"
-    );
-
-
-    if(
-        dateIndex >= 0 &&
-        filters[dateIndex] === undefined
-    ){
-
-        filters[dateIndex] =
-        getAllColumnValues(
-            dateIndex
+function getDisplayHeader(originalHeader) {
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            renamedHeaders,
+            originalHeader
         )
-        .filter(
-            value =>
-            String(value).trim() !== ""
-        );
+    ) {
+
+        return renamedHeaders[
+            originalHeader
+        ];
+
     }
 
 
-    if(
-        stopIndex >= 0 &&
-        filters[stopIndex] === undefined
-    ){
+    if (
+        Object.prototype.hasOwnProperty.call(
+            DEFAULT_COLUMN_RENAMES,
+            originalHeader
+        )
+    ) {
 
-        filters[stopIndex] = [""];
+        return DEFAULT_COLUMN_RENAMES[
+            originalHeader
+        ];
+
     }
 
 
-    saveState();
-}
-
-
-/* =========================================================
-   COLUMN VALUES
-========================================================= */
-
-function getAllColumnValues(index){
-
-    const set =
-    new Set();
-
-
-    rows.forEach(row => {
-
-        set.add(
-            String(
-                row[index] ?? ""
-            )
-        );
-
-    });
-
-
-    return Array.from(set);
-}
-
-
-/* =========================================================
-   NUMBER
-========================================================= */
-
-function parseVNNumber(value){
-
-    const s =
-    String(
-        value ?? ""
-    ).trim();
-
-
-    if(!s){
-        return null;
-    }
-
-
-    if(
-        /^-?\d{1,3}(\.\d{3})+(,\d+)?$/
-        .test(s)
-    ){
-
-        return Number(
-            s
-            .replace(/\./g,"")
-            .replace(",",".")
-        );
-    }
-
-
-    if(
-        /^-?\d+(,\d+)?$/
-        .test(s)
-    ){
-
-        return Number(
-            s.replace(",",".")
-        );
-    }
-
-
-    if(
-        /^-?\d+(\.\d+)?$/
-        .test(s)
-    ){
-
-        return Number(s);
-    }
-
-
-    return null;
-}
-
-
-/* =========================================================
-   DATE
-========================================================= */
-
-function parseVietnameseDate(value){
-
-    const s =
-    String(
-        value ?? ""
-    ).trim();
-
-
-    const match =
-    s.match(
-        /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-    );
-
-
-    if(!match){
-        return null;
-    }
-
-
-    const day =
-    Number(match[1]);
-
-    const month =
-    Number(match[2]) - 1;
-
-    const year =
-    Number(match[3]);
-
-
-    const date =
-    new Date(
-        year,
-        month,
-        day
-    );
-
-
-    if(
-        date.getFullYear() !== year ||
-        date.getMonth() !== month ||
-        date.getDate() !== day
-    ){
-
-        return null;
-    }
-
-
-    return date;
-}
-
-
-/* =========================================================
-   DATE DISPLAY
-========================================================= */
-
-function displayDateRelative(value){
-
-    const date =
-    parseVietnameseDate(value);
-
-
-    if(!date){
-        return value;
-    }
-
-
-    const now =
-    new Date();
-
-
-    const months =
-    (
-        now.getFullYear() -
-        date.getFullYear()
-    ) * 12
-    +
-    (
-        now.getMonth() -
-        date.getMonth()
-    );
-
-
-    const n =
-    Math.max(
-        0,
-        months
-    );
-
-
-    if(n === 0){
-
-        return "0 tháng";
-    }
-
-
-    return (
-        String(n).padStart(2,"0") +
-        " tháng"
-    );
+    return originalHeader;
 }
 
 
@@ -2556,1364 +1005,979 @@ function displayDateRelative(value){
    DISPLAY VALUE
 ========================================================= */
 
-function getDisplayValue(
-    value,
-    header
-){
+function getDisplayValue(value, originalHeader) {
 
-    if(
-        header === "Ngày update"
-    ){
+    if (
+        value === null ||
+        value === undefined
+    ) {
 
-        return displayDateRelative(
-            value
-        );
+        return "";
+
     }
 
+    return String(value);
 
-    return String(
-        value ?? ""
-    );
 }
 
 
 /* =========================================================
-   SORT VALUE
+   TEXT MEASURE
 ========================================================= */
 
-function getSortValue(
-    row,
-    index
-){
+function measureTextWidth(
+    text,
+    font = "14px Arial"
+) {
+
+    const canvas =
+        measureTextWidth.canvas ||
+        (
+            measureTextWidth.canvas =
+            document.createElement("canvas")
+        );
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.font = font;
+
+    return ctx.measureText(
+        String(text || "")
+    ).width;
+
+}
+
+
+/* =========================================================
+   DEFAULT ALIGNMENT
+========================================================= */
+
+function getDefaultColumnAlignment(
+    originalHeader
+) {
+
+    if (
+        DEFAULT_RIGHT_COLUMNS.has(
+            originalHeader
+        )
+    ) {
+
+        return "right";
+
+    }
+
+
+    if (
+        DEFAULT_CENTER_COLUMNS.has(
+            originalHeader
+        )
+    ) {
+
+        return "center";
+
+    }
+
+
+    return "left";
+
+}
+
+
+/* =========================================================
+   DEFAULT HEADER WIDTH
+========================================================= */
+
+function getDefaultHeaderWidth(
+    originalHeader
+) {
+
+    const displayHeader =
+        getDisplayHeader(
+            originalHeader
+        );
+
+
+    /*
+       Header được đo bằng:
+       bold + Arial + 14px
+    */
+
+    const width =
+        measureTextWidth(
+            displayHeader,
+            "bold 14px Arial"
+        ) + 40;
+
+
+    return Math.max(
+        80,
+        Math.ceil(width)
+    );
+
+}
+
+
+/* =========================================================
+   DEFAULT CONTENT WIDTH
+========================================================= */
+
+function getDefaultContentWidth(index) {
 
     const originalHeader =
-    headers[index];
+        headers[index];
 
-
-    const helperHeader =
-    SORT_BY_MAP[
-        originalHeader
-    ];
-
-
-    let value =
-    row[index];
-
-
-    if(helperHeader){
-
-        const helperIndex =
-        headers.indexOf(
-            helperHeader
+    const displayHeader =
+        getDisplayHeader(
+            originalHeader
         );
 
 
-        if(
-            helperIndex >= 0 &&
-            String(
-                row[helperIndex] ?? ""
-            ).trim() !== ""
-        ){
-
-            value =
-            row[helperIndex];
-        }
-    }
+    let maxWidth =
+        measureTextWidth(
+            displayHeader,
+            "bold 14px Arial"
+        );
 
 
-    const number =
-    parseVNNumber(value);
-
-
-    if(number !== null){
-
-        return {
-
-            type:"number",
-
-            value:number
-
-        };
-    }
-
-
-    const date =
-    parseVietnameseDate(value);
-
-
-    if(date){
-
-        return {
-
-            type:"date",
-
-            value:date.getTime()
-
-        };
-    }
-
-
-    return {
-
-        type:"text",
-
-        value:
-        String(
-            value ?? ""
-        )
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
-
-    };
-}
-
-
-/* =========================================================
-   ROW MATCH
-========================================================= */
-
-function rowMatchesFilters(
-    row,
-    ignoreColumn = -1
-){
-
-    for(
-        const key of Object.keys(filters)
-    ){
-
-        const index =
-        Number(key);
-
-
-        if(
-            index === ignoreColumn
-        ){
-
-            continue;
-        }
-
-
-        const selected =
-        filters[key];
-
-
-        if(
-            selected === undefined
-        ){
-
-            continue;
-        }
-
-
-        if(
-            Array.isArray(selected) &&
-            selected.length === 0
-        ){
-
-            return false;
-        }
-
+    rows.forEach(row => {
 
         const value =
-        String(
-            row[index] ?? ""
-        );
+            getDisplayValue(
+                row[index],
+                originalHeader
+            );
 
 
-        if(
-            Array.isArray(selected) &&
-            selected.length > 0 &&
-            !selected.includes(value)
-        ){
-
-            return false;
-        }
-    }
+        const width =
+            measureTextWidth(
+                value,
+                "14px Arial"
+            );
 
 
-    for(
-        const key of Object.keys(searches)
-    ){
-
-        const index =
-        Number(key);
-
-
-        if(
-            index === ignoreColumn
-        ){
-
-            continue;
-        }
-
-
-        const query =
-        String(
-            searches[key] ?? ""
-        )
-        .trim()
-        .toLowerCase();
-
-
-        if(!query){
-            continue;
-        }
-
-
-        const value =
-        String(
-            row[index] ?? ""
-        )
-        .toLowerCase();
-
-
-        if(
-            !value.includes(query)
-        ){
-
-            return false;
-        }
-    }
-
-
-    return true;
-}
-
-
-/* =========================================================
-   FILTER VALUES
-========================================================= */
-
-function getFilterValuesForColumn(
-    index
-){
-
-    const source =
-    rows.filter(
-        row =>
-        rowMatchesFilters(
-            row,
-            index
-        )
-    );
-
-
-    const set =
-    new Set();
-
-
-    source.forEach(row => {
-
-        set.add(
-            String(
-                row[index] ?? ""
-            )
-        );
+        maxWidth =
+            Math.max(
+                maxWidth,
+                Math.min(
+                    width,
+                    MAX_CONTENT_WIDTH
+                )
+            );
 
     });
 
 
-    return Array.from(set);
+    maxWidth += 30;
+
+
+    return Math.max(
+        100,
+        Math.ceil(maxWidth)
+    );
+
 }
 
 
 /* =========================================================
-   VISIBLE ROWS
+   DEFAULT COLUMN WIDTH
 ========================================================= */
 
-function getVisibleRows(){
+function getDefaultColumnWidth(index) {
 
-    const result =
-    rows
-    .map(
-        (row,originalIndex) => ({
-            row,
-            originalIndex
-        })
-    )
-    .filter(
-        item =>
-        rowMatchesFilters(
-            item.row
-        )
-    );
+    const originalHeader =
+        headers[index];
 
-
-    const activeSorts =
-    Object.keys(sorts)
-    .map(key => {
-
-        const priority =
-        Number(
-            sorts[key].priority
-        );
-
-
-        return {
-
-            index:
-            Number(key),
-
-            priority,
-
-            direction:
-            sorts[key].direction ||
-            "asc"
-
-        };
-
-    })
-    .filter(
-        item =>
-        Number.isFinite(
-            item.priority
-        )
-    )
-    .sort(
-        (a,b) =>
-        a.priority -
-        b.priority
-    );
-
-
-    if(
-        activeSorts.length === 0
-    ){
-
-        return result;
-    }
-
-
-    result.sort(
-        (a,b) => {
-
-            for(
-                const sort of activeSorts
-            ){
-
-                const av =
-                getSortValue(
-                    a.row,
-                    sort.index
-                );
-
-
-                const bv =
-                getSortValue(
-                    b.row,
-                    sort.index
-                );
-
-
-                let compare = 0;
-
-
-                if(
-                    av.type === "number" &&
-                    bv.type === "number"
-                ){
-
-                    compare =
-                    av.value -
-                    bv.value;
-                }
-
-                else if(
-                    av.type === "date" &&
-                    bv.type === "date"
-                ){
-
-                    compare =
-                    av.value -
-                    bv.value;
-                }
-
-                else{
-
-                    compare =
-                    String(av.value)
-                    .localeCompare(
-                        String(bv.value),
-                        "vi",
-                        {
-                            numeric:true,
-                            sensitivity:"base"
-                        }
-                    );
-                }
-
-
-                if(compare !== 0){
-
-                    return (
-                        sort.direction === "desc"
-                            ? -compare
-                            : compare
-                    );
-                }
-            }
-
-
-            return (
-                a.originalIndex -
-                b.originalIndex
-            );
-        }
-    );
-
-
-    return result;
-}
-
-
-/* =========================================================
-   VISIBLE COLUMNS
-========================================================= */
-
-function getVisibleHeaderIndexes(){
-
-    const result = [];
-
-
-    headers.forEach(
-        (header,index) => {
-
-            if(
-                !HIDDEN_COLUMNS.has(
-                    header
-                )
-            ){
-
-                result.push(index);
-            }
-
-        }
-    );
-
-
-    return result;
-}
-
-
-/* =========================================================
-   WIDTH
-========================================================= */
-
-function getColumnWidth(index){
 
     /*
-       Chỉ width mà user đã kéo
-       mới được lấy từ columnWidths.
+       QUAN TRỌNG:
+
+       Các cột trong nhóm này
+       luôn lấy width theo HEADER.
     */
 
-    if(
-        manuallyResizedColumns[index]
-    ){
+    if (
+        DEFAULT_HEADER_WIDTH_COLUMNS.has(
+            originalHeader
+        )
+    ) {
 
-        const savedWidth =
-        Number(
-            columnWidths[index]
+        return getDefaultHeaderWidth(
+            originalHeader
         );
 
-
-        if(
-            Number.isFinite(
-                savedWidth
-            ) &&
-            savedWidth > 0
-        ){
-
-            return savedWidth;
-        }
     }
 
 
     /*
-       Nếu không phải width manual,
-       LUÔN tính lại default width.
+       Các cột đặc biệt cần rộng.
+    */
+
+    if (
+        DEFAULT_WIDTH_MULTIPLIERS[
+            originalHeader
+        ]
+    ) {
+
+        return (
+            DEFAULT_WIDTH_BASE *
+            DEFAULT_WIDTH_MULTIPLIERS[
+                originalHeader
+            ]
+        );
+
+    }
+
+
+    /*
+       Các cột tự động theo nội dung.
+    */
+
+    if (
+        DEFAULT_CONTENT_WIDTH_COLUMNS.has(
+            originalHeader
+        )
+    ) {
+
+        return getDefaultContentWidth(
+            index
+        );
+
+    }
+
+
+    return DEFAULT_WIDTH_BASE;
+
+}
+
+
+/* =========================================================
+   COLUMN WIDTH
+========================================================= */
+
+function getColumnWidth(index) {
+
+    /*
+       Chỉ sử dụng width đã lưu
+       nếu người dùng THỰC SỰ kéo cột.
+    */
+
+    if (
+        manuallyResizedColumns[index]
+    ) {
+
+        const savedWidth =
+            Number(
+                columnWidths[index]
+            );
+
+
+        if (
+            Number.isFinite(savedWidth) &&
+            savedWidth > 0
+        ) {
+
+            return savedWidth;
+
+        }
+
+    }
+
+
+    /*
+       Nếu không kéo tay:
+       luôn tính lại auto-width.
     */
 
     return getDefaultColumnWidth(
         index
     );
+
 }
 
 
 /* =========================================================
-   FORMAT
+   COLUMN FORMAT
 ========================================================= */
 
-function getColumnFormat(index){
+function getColumnFormat(index) {
 
     const originalHeader =
-    headers[index];
+        headers[index];
 
 
     return {
 
         align:
-        getDefaultColumnAlignment(
-            originalHeader
-        ),
+            getDefaultColumnAlignment(
+                originalHeader
+            ),
 
         fontFamily:
-        "Arial",
+            "Arial",
 
         fontSize:
-        14,
+            14,
 
         bold:
-        false,
+            false,
 
         italic:
-        false,
+            false,
 
         wrap:
-        true,
+            true,
 
         color:
-        "#111111",
+            "#111111",
 
         background:
-        "#ffffff",
+            "#ffffff",
 
         ...(columnFormats[index] || {})
 
     };
+
 }
 
 
-function applyFormatToCell(
-    cell,
+/* =========================================================
+   AUTO WIDTH MIGRATION
+========================================================= */
+
+function migrateAutoWidthColumns() {
+
+    if (
+        autoWidthMigrationVersion >=
+        AUTO_WIDTH_MIGRATION_VERSION
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Những cột này phải được
+       reset width cũ.
+    */
+
+    const resetHeaders =
+        new Set([
+
+            "REVENUE",
+
+            "Cách tính chu kỳ",
+
+            "Kỳ",
+
+            "Thoại nội mạng",
+
+            "Thoại ngoại mạng",
+
+            "Hạ băng thông",
+
+            "Loại gói cước",
+
+            "Tự động gia hạn",
+
+            "Dừng đăng kí mới",
+
+            "KHDN/KHCN",
+
+            "TOTAL PRICE",
+
+            "Total Price",
+
+            "Packageprice"
+
+        ]);
+
+
+    headers.forEach(
+        (header, index) => {
+
+            if (
+                resetHeaders.has(header)
+            ) {
+
+                /*
+                   Không xóa trạng thái
+                   kéo tay nếu đã có
+                   từ phiên bản mới.
+
+                   Nhưng nếu đây là
+                   migration cũ thì
+                   width cũ không còn
+                   được dùng.
+                */
+
+                if (
+                    !Object.prototype.hasOwnProperty.call(
+                        manuallyResizedColumns,
+                        index
+                    )
+                ) {
+
+                    delete columnWidths[index];
+
+                }
+
+            }
+
+        }
+    );
+
+
+    autoWidthMigrationVersion =
+        AUTO_WIDTH_MIGRATION_VERSION;
+
+
+    saveState();
+
+}
+
+
+/* =========================================================
+   CSV PARSER
+========================================================= */
+
+function parseCSV(text) {
+
+    const result = [];
+
+    let row = [];
+
+    let value = "";
+
+    let insideQuotes = false;
+
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        const char =
+            text[i];
+
+        const next =
+            text[i + 1];
+
+
+        if (
+            char === '"' &&
+            insideQuotes &&
+            next === '"'
+        ) {
+
+            value += '"';
+
+            i++;
+
+            continue;
+
+        }
+
+
+        if (char === '"') {
+
+            insideQuotes =
+                !insideQuotes;
+
+            continue;
+
+        }
+
+
+        if (
+            char === "," &&
+            !insideQuotes
+        ) {
+
+            row.push(value);
+
+            value = "";
+
+            continue;
+
+        }
+
+
+        if (
+            (char === "\n" ||
+             char === "\r") &&
+            !insideQuotes
+        ) {
+
+            if (
+                char === "\r" &&
+                next === "\n"
+            ) {
+
+                i++;
+
+            }
+
+
+            row.push(value);
+
+            result.push(row);
+
+            row = [];
+
+            value = "";
+
+            continue;
+
+        }
+
+
+        value += char;
+
+    }
+
+
+    if (
+        value !== "" ||
+        row.length
+    ) {
+
+        row.push(value);
+
+        result.push(row);
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   LOAD DATA
+========================================================= */
+
+async function loadData() {
+
+    loading.style.display =
+        "flex";
+
+
+    try {
+
+        const response =
+            await fetch(
+                CSV_URL +
+                "&_=" +
+                Date.now()
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const text =
+            await response.text();
+
+
+        const parsed =
+            parseCSV(text);
+
+
+        if (
+            !parsed.length
+        ) {
+
+            throw new Error(
+                "Không có dữ liệu"
+            );
+
+        }
+
+
+        let rawHeaders =
+            parsed[0]
+                .map(
+                    x => String(x || "").trim()
+                );
+
+
+        const visibleIndexes = [];
+
+
+        rawHeaders.forEach(
+            (header, index) => {
+
+                if (
+                    !HIDDEN_COLUMNS.has(
+                        header
+                    )
+                ) {
+
+                    visibleIndexes.push(
+                        index
+                    );
+
+                }
+
+            }
+        );
+
+
+        headers =
+            visibleIndexes.map(
+                index =>
+                    rawHeaders[index]
+            );
+
+
+        rows =
+            parsed
+                .slice(1)
+                .filter(
+                    row =>
+                        row.some(
+                            value =>
+                                String(
+                                    value || ""
+                                ).trim() !== ""
+                        )
+                )
+                .map(
+                    row =>
+                        visibleIndexes.map(
+                            index =>
+                                row[index] ?? ""
+                        )
+                );
+
+
+        migrateAutoWidthColumns();
+
+        renderTable();
+
+        updateStatus();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        tableContainer.innerHTML = `
+            <div class="empty">
+                Không tải được dữ liệu.<br>
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+
+        statusElement.textContent =
+            "Lỗi tải dữ liệu";
+
+
+    } finally {
+
+        loading.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   FILTER / SEARCH
+========================================================= */
+
+function rowMatchesSearch(
+    row
+) {
+
+    const search =
+        globalSearch.value
+            .trim()
+            .toLowerCase();
+
+
+    if (!search) {
+
+        return true;
+
+    }
+
+
+    return row.some(
+        value =>
+            String(
+                value ?? ""
+            )
+                .toLowerCase()
+                .includes(search)
+    );
+
+}
+
+
+function rowMatchesColumnSearch(
+    row,
     index
-){
+) {
 
-    const f =
-    getColumnFormat(index);
-
-
-    cell.style.textAlign =
-    f.align;
-
-
-    cell.style.fontFamily =
-    f.fontFamily;
+    const search =
+        String(
+            searches[index] || ""
+        )
+            .trim()
+            .toLowerCase();
 
 
-    cell.style.fontSize =
-    `${Number(f.fontSize) || 14}px`;
+    if (!search) {
 
-
-    cell.style.fontWeight =
-    f.bold
-        ? "700"
-        : "400";
-
-
-    cell.style.fontStyle =
-    f.italic
-        ? "italic"
-        : "normal";
-
-
-    cell.style.color =
-    f.color || "#111111";
-
-
-    cell.style.backgroundColor =
-    f.background || "#ffffff";
-
-
-    if(f.wrap){
-
-        cell.style.whiteSpace =
-        "pre-wrap";
-
-        cell.style.overflowWrap =
-        "anywhere";
-
-        cell.style.wordBreak =
-        "break-word";
+        return true;
 
     }
-    else{
 
-        cell.style.whiteSpace =
-        "nowrap";
 
-        cell.style.overflowWrap =
-        "normal";
+    return String(
+        row[index] ?? ""
+    )
+        .toLowerCase()
+        .includes(search);
 
-        cell.style.wordBreak =
-        "normal";
-    }
 }
 
 
-/* =========================================================
-   RENDER TABLE
-========================================================= */
+function rowMatchesFilter(
+    row,
+    index
+) {
 
-function renderTable(){
-
-    closeFilterMenu();
-
-    renderHeader();
-
-    renderBody();
+    const selected =
+        filters[index];
 
 
-    requestAnimationFrame(
-        () => {
+    if (
+        !Array.isArray(selected) ||
+        selected.length === 0
+    ) {
 
-            applyFreezeColumns();
+        return true;
 
-        }
+    }
+
+
+    const value =
+        String(
+            row[index] ?? ""
+        );
+
+
+    return selected.includes(
+        value
     );
+
 }
 
 
-/* =========================================================
-   RENDER HEADER
-========================================================= */
+function getFilteredRows() {
 
-function renderHeader(){
+    let result =
+        rows.filter(
+            row => {
 
-    thead.innerHTML = "";
+                if (
+                    !rowMatchesSearch(row)
+                ) {
 
+                    return false;
 
-    const visibleIndexes =
-    getVisibleHeaderIndexes();
-
-
-    const headerRow =
-    document.createElement("tr");
-
-    headerRow.className =
-    "header-row";
-
-
-    visibleIndexes.forEach(
-        index => {
-
-            const th =
-            document.createElement("th");
-
-
-            th.className =
-            "header-cell";
-
-
-            th.dataset.column =
-            String(index);
-
-
-            const width =
-            getColumnWidth(index);
-
-
-            th.style.width =
-            `${width}px`;
-
-            th.style.minWidth =
-            `${width}px`;
-
-            th.style.maxWidth =
-            `${width}px`;
-
-
-            const content =
-            document.createElement("div");
-
-            content.className =
-            "header-content";
-
-
-            const title =
-            document.createElement("div");
-
-            title.className =
-            "header-title";
-
-
-            title.textContent =
-            getDisplayHeader(
-                headers[index]
-            );
-
-
-            title.addEventListener(
-                "dblclick",
-                event => {
-
-                    event.preventDefault();
-
-                    openRenamePrompt(
-                        index
-                    );
                 }
-            );
 
 
-            const actions =
-            document.createElement("div");
+                for (
+                    let i = 0;
+                    i < headers.length;
+                    i++
+                ) {
 
-            actions.className =
-            "header-actions";
+                    if (
+                        !rowMatchesColumnSearch(
+                            row,
+                            i
+                        )
+                    ) {
 
+                        return false;
 
-            const sortButton =
-            document.createElement("button");
+                    }
 
-            sortButton.className =
-            "header-button";
 
-            sortButton.textContent =
-            getSortIcon(index);
+                    if (
+                        !rowMatchesFilter(
+                            row,
+                            i
+                        )
+                    ) {
 
-            sortButton.title =
-            "Sort By";
+                        return false;
 
-
-            sortButton.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-
-                    openFilterMenu(
-                        index,
-                        th
-                    );
-                }
-            );
-
-
-            const filterButton =
-            document.createElement("button");
-
-            filterButton.className =
-            "header-button";
-
-            filterButton.textContent =
-            "▼";
-
-            filterButton.title =
-            "Filter / Sort / Định dạng";
-
-
-            filterButton.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    openFilterMenu(
-                        index,
-                        th
-                    );
-                }
-            );
-
-
-            actions.appendChild(
-                sortButton
-            );
-
-            actions.appendChild(
-                filterButton
-            );
-
-
-            content.appendChild(
-                title
-            );
-
-            content.appendChild(
-                actions
-            );
-
-
-            th.appendChild(
-                content
-            );
-
-
-            const resize =
-            document.createElement("div");
-
-            resize.className =
-            "resize-handle";
-
-
-            resize.addEventListener(
-                "mousedown",
-                event => {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    startResize(
-                        event,
-                        index
-                    );
-                }
-            );
-
-
-            th.appendChild(
-                resize
-            );
-
-
-            headerRow.appendChild(
-                th
-            );
-
-        }
-    );
-
-
-    thead.appendChild(
-        headerRow
-    );
-
-
-    const searchRow =
-    document.createElement("tr");
-
-    searchRow.className =
-    "search-row";
-
-
-    visibleIndexes.forEach(
-        index => {
-
-            const th =
-            document.createElement("th");
-
-
-            th.className =
-            "search-cell";
-
-
-            th.dataset.column =
-            String(index);
-
-
-            const width =
-            getColumnWidth(index);
-
-
-            th.style.width =
-            `${width}px`;
-
-            th.style.minWidth =
-            `${width}px`;
-
-            th.style.maxWidth =
-            `${width}px`;
-
-
-            const inner =
-            document.createElement("div");
-
-            inner.className =
-            "search-inner";
-
-
-            const input =
-            document.createElement("input");
-
-            input.className =
-            "column-search";
-
-
-            input.type =
-            "text";
-
-
-            input.placeholder =
-            "Tìm kiếm...";
-
-
-            input.value =
-            searches[index] || "";
-
-
-            input.addEventListener(
-                "input",
-                () => {
-
-                    searches[index] =
-                    input.value;
-
-
-                    saveState();
-
-
-                    renderBody();
-
-
-                    updateHeaderStates();
-
-
-                    if(
-                        openFilterIndex !== null
-                    ){
-
-                        refreshOpenFilterMenu(
-                            true
-                        );
                     }
 
                 }
-            );
 
 
-            inner.appendChild(
-                input
-            );
+                return true;
+
+            }
+        );
 
 
-            th.appendChild(
-                inner
-            );
+    result =
+        applySorting(result);
 
 
-            searchRow.appendChild(
-                th
-            );
+    return result;
 
-        }
-    );
-
-
-    thead.appendChild(
-        searchRow
-    );
-
-
-    updateHeaderStates();
 }
 
 
 /* =========================================================
-   RENDER BODY
+   SORT
 ========================================================= */
 
-function renderBody(){
+function applySorting(data) {
 
-    tbody.innerHTML = "";
-
-
-    const visibleIndexes =
-    getVisibleHeaderIndexes();
-
-
-    const visibleRows =
-    getVisibleRows();
-
-
-    if(
-        visibleRows.length === 0
-    ){
-
-        const tr =
-        document.createElement("tr");
+    const activeSorts =
+        Object.keys(sorts)
+            .map(Number)
+            .filter(
+                index =>
+                    sorts[index] ===
+                    "asc" ||
+                    sorts[index] ===
+                    "desc"
+            );
 
 
-        const td =
-        document.createElement("td");
+    if (
+        !activeSorts.length
+    ) {
 
+        return data;
 
-        td.colSpan =
-        Math.max(
-            visibleIndexes.length,
-            1
-        );
-
-
-        td.className =
-        "message";
-
-
-        td.textContent =
-        "Không có dữ liệu phù hợp.";
-
-
-        tr.appendChild(td);
-
-        tbody.appendChild(tr);
-
-
-        requestAnimationFrame(
-            applyFreezeColumns
-        );
-
-
-        return;
     }
 
 
-    visibleRows.forEach(
-        item => {
+    return [...data].sort(
+        (a, b) => {
 
-            const tr =
-            document.createElement("tr");
+            for (
+                const index of activeSorts
+            ) {
 
-
-            visibleIndexes.forEach(
-                index => {
-
-                    const td =
-                    document.createElement("td");
+                const direction =
+                    sorts[index];
 
 
-                    td.className =
-                    "body-cell";
-
-
-                    td.dataset.column =
-                    String(index);
-
-
-                    const width =
-                    getColumnWidth(index);
-
-
-                    td.style.width =
-                    `${width}px`;
-
-                    td.style.minWidth =
-                    `${width}px`;
-
-                    td.style.maxWidth =
-                    `${width}px`;
-
-
-                    td.textContent =
-                    getDisplayValue(
-                        item.row[index],
-                        headers[index]
+                const av =
+                    String(
+                        a[index] ?? ""
                     );
 
 
-                    applyFormatToCell(
-                        td,
-                        index
+                const bv =
+                    String(
+                        b[index] ?? ""
                     );
 
 
-                    tr.appendChild(td);
+                const cmp =
+                    av.localeCompare(
+                        bv,
+                        "vi",
+                        {
+                            numeric: true,
+                            sensitivity: "base"
+                        }
+                    );
+
+
+                if (cmp !== 0) {
+
+                    return direction ===
+                        "asc"
+                        ? cmp
+                        : -cmp;
 
                 }
-            );
+
+            }
 
 
-            tbody.appendChild(tr);
+            return 0;
 
         }
     );
 
-
-    requestAnimationFrame(
-        applyFreezeColumns
-    );
 }
 
 
 /* =========================================================
-   HEADER STATES
+   SORT BUTTON
 ========================================================= */
 
-function updateHeaderStates(){
+function toggleSort(index) {
 
-    thead
-    .querySelectorAll(
-        ".header-cell"
-    )
-    .forEach(
-        th => {
-
-            const index =
-            Number(
-                th.dataset.column
-            );
+    const current =
+        sorts[index];
 
 
-            const searchActive =
-            String(
-                searches[index] || ""
-            ).trim() !== "";
+    if (!current) {
 
+        sorts[index] = "asc";
 
-            const filterActive =
-            isEffectiveFilter(
-                index
-            );
+    } else if (
+        current === "asc"
+    ) {
 
+        sorts[index] = "desc";
 
-            const sorted =
-            sorts[index] !== undefined;
+    } else {
 
+        delete sorts[index];
 
-            th.classList.toggle(
-                "filtered",
-                searchActive ||
-                filterActive
-            );
-
-
-            th.classList.toggle(
-                "sorted",
-                sorted
-            );
-
-
-            const sortButton =
-            th.querySelector(
-                ".header-button"
-            );
-
-
-            if(sortButton){
-
-                sortButton.textContent =
-                getSortIcon(index);
-            }
-
-        }
-    );
-}
-
-
-/* =========================================================
-   EFFECTIVE FILTER
-========================================================= */
-
-function isEffectiveFilter(index){
-
-    if(
-        filters[index] === undefined
-    ){
-
-        return false;
     }
 
 
-    const selected =
-    filters[index];
+    saveState();
 
+    renderTable();
 
-    if(
-        !Array.isArray(selected)
-    ){
-
-        return false;
-    }
-
-
-    if(
-        selected.length === 0
-    ){
-
-        return true;
-    }
-
-
-    const allValues =
-    getAllColumnValues(index);
-
-
-    if(
-        selected.length ===
-        allValues.length
-    ){
-
-        return false;
-    }
-
-
-    return true;
-}
-
-
-/* =========================================================
-   SORT ICON
-========================================================= */
-
-function getSortIcon(index){
-
-    if(
-        sorts[index] === undefined
-    ){
-
-        return "↕";
-    }
-
-
-    const direction =
-    sorts[index].direction ||
-    "asc";
-
-
-    const priority =
-    sorts[index].priority;
-
-
-    return (
-        direction === "asc"
-            ? "▲"
-            : "▼"
-    ) +
-    (
-        priority !== undefined &&
-        priority !== ""
-            ? String(priority)
-            : ""
-    );
-}
-
-
-/* =========================================================
-   OPEN FILTER MENU
-========================================================= */
-
-function openFilterMenu(
-    index,
-    anchor
-){
-
-    closeFilterMenu();
-
-
-    openFilterIndex =
-    index;
-
-
-    filterValueSearch =
-    "";
-
-
-    filterMenuElement =
-    document.createElement(
-        "div"
-    );
-
-
-    filterMenuElement.className =
-    "filter-menu";
-
-
-    document.body.appendChild(
-        filterMenuElement
-    );
-
-
-    renderFilterMenu(
-        index
-    );
-
-
-    positionMenu(
-        anchor
-    );
-}
-
-
-/* =========================================================
-   POSITION MENU
-========================================================= */
-
-function positionMenu(anchor){
-
-    if(
-        !filterMenuElement ||
-        !anchor
-    ){
-
-        return;
-    }
-
-
-    const rect =
-    anchor.getBoundingClientRect();
-
-
-    let left =
-    rect.left;
-
-
-    let top =
-    rect.bottom + 4;
-
-
-    requestAnimationFrame(
-        () => {
-
-            const width =
-            filterMenuElement.offsetWidth;
-
-
-            const height =
-            filterMenuElement.offsetHeight;
-
-
-            if(
-                left + width >
-                window.innerWidth - 10
-            ){
-
-                left =
-                window.innerWidth -
-                width -
-                10;
-            }
-
-
-            if(
-                top + height >
-                window.innerHeight - 10
-            ){
-
-                top =
-                rect.top -
-                height -
-                4;
-            }
-
-
-            left =
-            Math.max(
-                10,
-                left
-            );
-
-
-            top =
-            Math.max(
-                10,
-                top
-            );
-
-
-            filterMenuElement.style.left =
-            `${left}px`;
-
-
-            filterMenuElement.style.top =
-            `${top}px`;
-
-        }
-    );
 }
 
 
@@ -3921,1641 +1985,291 @@ function positionMenu(anchor){
    FILTER MENU
 ========================================================= */
 
-function renderFilterMenu(index){
+function openFilter(
+    index,
+    button
+) {
 
-    if(
-        !filterMenuElement
-    ){
+    closeFilter();
+
+
+    openFilterIndex =
+        index;
+
+
+    filterValueSearch =
+        "";
+
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    filterMenu.style.left =
+        Math.min(
+            rect.left,
+            window.innerWidth - 370
+        ) + "px";
+
+
+    filterMenu.style.top =
+        (rect.bottom + 3) + "px";
+
+
+    renderFilterMenu();
+
+
+    filterMenu.style.display =
+        "block";
+
+}
+
+
+function renderFilterMenu() {
+
+    if (
+        openFilterIndex === null
+    ) {
 
         return;
-    }
 
-
-    filterMenuElement.innerHTML =
-    "";
-
-
-    const inner =
-    document.createElement(
-        "div"
-    );
-
-
-    inner.className =
-    "filter-menu-inner";
-
-
-    const title =
-    document.createElement(
-        "div"
-    );
-
-
-    title.className =
-    "menu-title";
-
-
-    title.textContent =
-    getDisplayHeader(
-        headers[index]
-    );
-
-
-    inner.appendChild(
-        title
-    );
-
-
-    const filterSearch =
-    document.createElement(
-        "input"
-    );
-
-
-    filterSearch.className =
-    "filter-search";
-
-
-    filterSearch.placeholder =
-    "Tìm trong danh sách filter...";
-
-
-    filterSearch.value =
-    filterValueSearch;
-
-
-    filterSearch.addEventListener(
-        "input",
-        event => {
-
-            event.stopPropagation();
-
-            filterValueSearch =
-            filterSearch.value;
-
-
-            renderFilterValuesOnly(
-                index
-            );
-        }
-    );
-
-
-    inner.appendChild(
-        filterSearch
-    );
-
-
-    const actions =
-    document.createElement(
-        "div"
-    );
-
-
-    actions.className =
-    "filter-actions";
-
-
-    const selectAll =
-    document.createElement(
-        "button"
-    );
-
-
-    selectAll.className =
-    "menu-button";
-
-
-    selectAll.textContent =
-    "Chọn tất cả";
-
-
-    selectAll.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-
-            filters[index] =
-            getFilterValuesForColumn(
-                index
-            ).slice();
-
-
-            saveState();
-
-
-            renderBody();
-
-
-            updateHeaderStates();
-
-
-            renderFilterValuesOnly(
-                index
-            );
-
-        }
-    );
-
-
-    const deselectAll =
-    document.createElement(
-        "button"
-    );
-
-
-    deselectAll.className =
-    "menu-button";
-
-
-    deselectAll.textContent =
-    "Bỏ chọn";
-
-
-    deselectAll.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-
-            filters[index] =
-            [];
-
-
-            saveState();
-
-
-            renderBody();
-
-
-            updateHeaderStates();
-
-
-            renderFilterValuesOnly(
-                index
-            );
-
-        }
-    );
-
-
-    actions.appendChild(
-        selectAll
-    );
-
-
-    actions.appendChild(
-        deselectAll
-    );
-
-
-    inner.appendChild(
-        actions
-    );
-
-
-    const valuesContainer =
-    document.createElement(
-        "div"
-    );
-
-
-    valuesContainer.className =
-    "filter-values";
-
-
-    valuesContainer.id =
-    "filterValuesContainer";
-
-
-    inner.appendChild(
-        valuesContainer
-    );
-
-
-    const sortSection =
-    createSortSection(
-        index
-    );
-
-
-    inner.appendChild(
-        sortSection
-    );
-
-
-    const formatSection =
-    createFormatSection(
-        index
-    );
-
-
-    inner.appendChild(
-        formatSection
-    );
-
-
-    const footer =
-    document.createElement(
-        "div"
-    );
-
-
-    footer.className =
-    "menu-footer";
-
-
-    const clearFilter =
-    document.createElement(
-        "button"
-    );
-
-
-    clearFilter.className =
-    "menu-button";
-
-
-    clearFilter.textContent =
-    "Xóa lọc";
-
-
-    clearFilter.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-
-            delete filters[index];
-
-
-            saveState();
-
-
-            renderBody();
-
-
-            updateHeaderStates();
-
-
-            renderFilterValuesOnly(
-                index
-            );
-
-        }
-    );
-
-
-    const close =
-    document.createElement(
-        "button"
-    );
-
-
-    close.className =
-    "menu-button";
-
-
-    close.textContent =
-    "Đóng";
-
-
-    close.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            closeFilterMenu();
-
-        }
-    );
-
-
-    footer.appendChild(
-        clearFilter
-    );
-
-
-    footer.appendChild(
-        close
-    );
-
-
-    inner.appendChild(
-        footer
-    );
-
-
-    filterMenuElement.appendChild(
-        inner
-    );
-
-
-    renderFilterValuesOnly(
-        index
-    );
-}
-
-
-/* =========================================================
-   FILTER VALUES
-========================================================= */
-
-function renderFilterValuesOnly(
-    index
-){
-
-    if(
-        !filterMenuElement
-    ){
-
-        return;
-    }
-
-
-    const container =
-    filterMenuElement.querySelector(
-        "#filterValuesContainer"
-    );
-
-
-    if(!container){
-        return;
-    }
-
-
-    container.innerHTML =
-    "";
-
-
-    const allValues =
-    getFilterValuesForColumn(
-        index
-    );
-
-
-    const query =
-    String(
-        filterValueSearch || ""
-    )
-    .trim()
-    .toLowerCase();
-
-
-    const values =
-    allValues.filter(
-        value => {
-
-            if(!query){
-                return true;
-            }
-
-
-            return String(value)
-            .toLowerCase()
-            .includes(query);
-
-        }
-    );
-
-
-    const selected =
-    filters[index] === undefined
-        ? allValues.slice()
-        : filters[index];
-
-
-    values.forEach(
-        value => {
-
-            const row =
-            document.createElement(
-                "div"
-            );
-
-
-            row.className =
-            "filter-value-row";
-
-
-            const checkbox =
-            document.createElement(
-                "input"
-            );
-
-
-            checkbox.type =
-            "checkbox";
-
-
-            checkbox.checked =
-            selected.includes(
-                value
-            );
-
-
-            checkbox.addEventListener(
-                "change",
-                event => {
-
-                    event.stopPropagation();
-
-
-                    let current;
-
-
-                    if(
-                        filters[index] === undefined
-                    ){
-
-                        current =
-                        allValues.slice();
-
-                    }
-                    else{
-
-                        current =
-                        filters[index].slice();
-                    }
-
-
-                    if(
-                        checkbox.checked
-                    ){
-
-                        if(
-                            !current.includes(
-                                value
-                            )
-                        ){
-
-                            current.push(
-                                value
-                            );
-                        }
-
-                    }
-                    else{
-
-                        current =
-                        current.filter(
-                            item =>
-                            item !== value
-                        );
-                    }
-
-
-                    filters[index] =
-                    current;
-
-
-                    saveState();
-
-
-                    renderBody();
-
-
-                    updateHeaderStates();
-
-
-                    const savedSearch =
-                    filterValueSearch;
-
-
-                    renderFilterMenu(
-                        index
-                    );
-
-
-                    filterValueSearch =
-                    savedSearch;
-
-
-                    const searchInput =
-                    filterMenuElement.querySelector(
-                        ".filter-search"
-                    );
-
-
-                    if(searchInput){
-
-                        searchInput.value =
-                        savedSearch;
-                    }
-
-
-                    renderFilterValuesOnly(
-                        index
-                    );
-
-                }
-            );
-
-
-            const label =
-            document.createElement(
-                "label"
-            );
-
-
-            label.textContent =
-            value === ""
-                ? "(Trống)"
-                : value;
-
-
-            label.addEventListener(
-                "click",
-                event => {
-
-                    event.stopPropagation();
-
-                }
-            );
-
-
-            row.appendChild(
-                checkbox
-            );
-
-
-            row.appendChild(
-                label
-            );
-
-
-            container.appendChild(
-                row
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   SORT SECTION
-========================================================= */
-
-function createSortSection(index){
-
-    const section =
-    document.createElement(
-        "div"
-    );
-
-
-    section.className =
-    "menu-section";
-
-
-    const title =
-    document.createElement(
-        "div"
-    );
-
-
-    title.className =
-    "menu-section-title";
-
-
-    title.textContent =
-    "Sort By";
-
-
-    section.appendChild(
-    title
-    );
-
-
-    const originalHeader =
-    headers[index];
-
-
-    const helper =
-    SORT_BY_MAP[
-        originalHeader
-    ];
-
-
-    if(helper){
-
-        const info =
-        document.createElement(
-            "div"
-        );
-
-
-        info.style.fontSize =
-        "12px";
-
-
-        info.style.color =
-        "#666";
-
-
-        info.style.marginBottom =
-        "7px";
-
-
-        info.textContent =
-        "Sắp xếp theo: " +
-        helper;
-
-
-        section.appendChild(
-            info
-        );
-    }
-
-
-    const priorityRow =
-    document.createElement(
-        "div"
-    );
-
-
-    priorityRow.className =
-    "form-row";
-
-
-    const priorityLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    priorityLabel.textContent =
-    "Ưu tiên";
-
-
-    const priority =
-    document.createElement(
-        "input"
-    );
-
-
-    priority.type =
-    "number";
-
-
-    priority.step =
-    "any";
-
-
-    priority.placeholder =
-    "VD: 1, 1.5, 10, 100";
-
-
-    if(
-        sorts[index] !== undefined
-    ){
-
-        priority.value =
-        sorts[index].priority;
-    }
-
-
-    priorityRow.appendChild(
-        priorityLabel
-    );
-
-
-    priorityRow.appendChild(
-        priority
-    );
-
-
-    section.appendChild(
-        priorityRow
-    );
-
-
-    const directionRow =
-    document.createElement(
-        "div"
-    );
-
-
-    directionRow.className =
-    "form-row";
-
-
-    const directionLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    directionLabel.textContent =
-    "Chiều";
-
-
-    const directionWrap =
-    document.createElement(
-        "div"
-    );
-
-
-    directionWrap.className =
-    "sort-direction";
-
-
-    const ascLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    const asc =
-    document.createElement(
-        "input"
-    );
-
-
-    asc.type =
-    "radio";
-
-
-    asc.name =
-    "sortDirection";
-
-
-    asc.value =
-    "asc";
-
-
-    const descLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    const desc =
-    document.createElement(
-        "input"
-    );
-
-
-    desc.type =
-    "radio";
-
-
-    desc.name =
-    "sortDirection";
-
-
-    desc.value =
-    "desc";
-
-
-    const currentDirection =
-    sorts[index]?.direction ||
-    "asc";
-
-
-    asc.checked =
-    currentDirection === "asc";
-
-
-    desc.checked =
-    currentDirection === "desc";
-
-
-    ascLabel.appendChild(
-        asc
-    );
-
-
-    ascLabel.appendChild(
-        document.createTextNode(
-            "Tăng dần"
-        )
-    );
-
-
-    descLabel.appendChild(
-        desc
-    );
-
-
-    descLabel.appendChild(
-        document.createTextNode(
-            "Giảm dần"
-        )
-    );
-
-
-    directionWrap.appendChild(
-        ascLabel
-    );
-
-
-    directionWrap.appendChild(
-        descLabel
-    );
-
-
-    directionRow.appendChild(
-        directionLabel
-    );
-
-
-    directionRow.appendChild(
-        directionWrap
-    );
-
-
-    section.appendChild(
-        directionRow
-    );
-
-
-    const buttons =
-    document.createElement(
-        "div"
-    );
-
-
-    buttons.style.display =
-    "flex";
-
-
-    buttons.style.gap =
-    "5px";
-
-
-    const apply =
-    document.createElement(
-        "button"
-    );
-
-
-    apply.className =
-    "menu-button";
-
-
-    apply.textContent =
-    "Áp dụng Sort";
-
-
-    apply.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-
-            const raw =
-            priority.value.trim();
-
-
-            if(raw === ""){
-
-                delete sorts[index];
-
-            }
-            else{
-
-                const number =
-                Number(raw);
-
-
-                if(
-                    Number.isFinite(number)
-                ){
-
-                    sorts[index] = {
-
-                        priority:number,
-
-                        direction:
-                        desc.checked
-                            ? "desc"
-                            : "asc"
-
-                    };
-
-                }
-            }
-
-
-            saveState();
-
-
-            renderBody();
-
-
-            updateHeaderStates();
-
-
-            renderFilterMenu(
-                index
-            );
-
-        }
-    );
-
-
-    const clear =
-    document.createElement(
-        "button"
-    );
-
-
-    clear.className =
-    "menu-button";
-
-
-    clear.textContent =
-    "Xóa Sort";
-
-
-    clear.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-
-            delete sorts[index];
-
-
-            saveState();
-
-
-            renderBody();
-
-
-            updateHeaderStates();
-
-
-            renderFilterMenu(
-                index
-            );
-
-        }
-    );
-
-
-    buttons.appendChild(
-        apply
-    );
-
-
-    buttons.appendChild(
-        clear
-    );
-
-
-    section.appendChild(
-        buttons
-    );
-
-
-    return section;
-}
-
-
-/* =========================================================
-   FORMAT SECTION
-========================================================= */
-
-function createFormatSection(index){
-
-    const section =
-    document.createElement(
-        "div"
-    );
-
-
-    section.className =
-    "menu-section";
-
-
-    const title =
-    document.createElement(
-        "div"
-    );
-
-
-    title.className =
-    "menu-section-title";
-
-
-    title.textContent =
-    "Định dạng cột";
-
-
-    section.appendChild(
-        title
-    );
-
-
-    const format =
-    getColumnFormat(
-        index
-    );
-
-
-    const alignRow =
-    document.createElement(
-        "div"
-    );
-
-
-    alignRow.className =
-    "form-row";
-
-
-    const alignLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    alignLabel.textContent =
-    "Căn lề";
-
-
-    const align =
-    document.createElement(
-        "select"
-    );
-
-
-    [
-        ["left","Trái"],
-        ["center","Giữa"],
-        ["right","Phải"]
-    ]
-    .forEach(
-        item => {
-
-            const option =
-            document.createElement(
-                "option"
-            );
-
-
-            option.value =
-            item[0];
-
-
-            option.textContent =
-            item[1];
-
-
-            align.appendChild(
-                option
-            );
-
-        }
-    );
-
-
-    align.value =
-    format.align;
-
-
-    alignRow.appendChild(
-        alignLabel
-    );
-
-
-    alignRow.appendChild(
-        align
-    );
-
-
-    section.appendChild(
-        alignRow
-    );
-
-
-    const fontRow =
-    document.createElement(
-        "div"
-    );
-
-
-    fontRow.className =
-    "form-row";
-
-
-    const fontLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    fontLabel.textContent =
-    "Font";
-
-
-    const font =
-    document.createElement(
-        "select"
-    );
-
-
-    [
-        "Arial",
-        "Calibri",
-        "Tahoma",
-        "Verdana",
-        "Times New Roman"
-    ]
-    .forEach(
-        name => {
-
-            const option =
-            document.createElement(
-                "option"
-            );
-
-
-            option.value =
-            name;
-
-
-            option.textContent =
-            name;
-
-
-            font.appendChild(
-                option
-            );
-
-        }
-    );
-
-
-    font.value =
-    format.fontFamily;
-
-
-    fontRow.appendChild(
-        fontLabel
-    );
-
-
-    fontRow.appendChild(
-        font
-    );
-
-
-    section.appendChild(
-        fontRow
-    );
-
-
-    const sizeRow =
-    document.createElement(
-        "div"
-    );
-
-
-    sizeRow.className =
-    "form-row";
-
-
-    const sizeLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    sizeLabel.textContent =
-    "Cỡ chữ";
-
-
-    const size =
-    document.createElement(
-        "input"
-    );
-
-
-    size.type =
-    "number";
-
-
-    size.min =
-    "8";
-
-
-    size.max =
-    "48";
-
-
-    size.value =
-    format.fontSize;
-
-
-    sizeRow.appendChild(
-        sizeLabel
-    );
-
-
-    sizeRow.appendChild(
-        size
-    );
-
-
-    section.appendChild(
-        sizeRow
-    );
-
-
-    const checks =
-    document.createElement(
-        "div"
-    );
-
-
-    checks.className =
-    "format-checks";
-
-
-    const boldLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    const bold =
-    document.createElement(
-        "input"
-    );
-
-
-    bold.type =
-    "checkbox";
-
-
-    bold.checked =
-    !!format.bold;
-
-
-    boldLabel.appendChild(
-        bold
-    );
-
-
-    boldLabel.appendChild(
-        document.createTextNode(
-            "Đậm"
-        )
-    );
-
-
-    const italicLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    const italic =
-    document.createElement(
-        "input"
-    );
-
-
-    italic.type =
-    "checkbox";
-
-
-    italic.checked =
-    !!format.italic;
-
-
-    italicLabel.appendChild(
-        italic
-    );
-
-
-    italicLabel.appendChild(
-        document.createTextNode(
-            "Nghiêng"
-        )
-    );
-
-
-    const wrapLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    const wrap =
-    document.createElement(
-        "input"
-    );
-
-
-    wrap.type =
-    "checkbox";
-
-
-    wrap.checked =
-    !!format.wrap;
-
-
-    wrapLabel.appendChild(
-        wrap
-    );
-
-
-    wrapLabel.appendChild(
-        document.createTextNode(
-            "Xuống dòng"
-        )
-    );
-
-
-    checks.appendChild(
-        boldLabel
-    );
-
-
-    checks.appendChild(
-        italicLabel
-    );
-
-
-    checks.appendChild(
-        wrapLabel
-    );
-
-
-    section.appendChild(
-        checks
-    );
-
-
-    const textColorRow =
-    document.createElement(
-        "div"
-    );
-
-
-    textColorRow.className =
-    "color-row";
-
-
-    const textColorLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    textColorLabel.textContent =
-    "Màu chữ";
-
-
-    const textColor =
-    document.createElement(
-        "input"
-    );
-
-
-    textColor.type =
-    "color";
-
-
-    textColor.className =
-    "color-input";
-
-
-    textColor.value =
-    validColor(format.color)
-        ? format.color
-        : "#111111";
-
-
-    textColorRow.appendChild(
-        textColorLabel
-    );
-
-
-    textColorRow.appendChild(
-        textColor
-    );
-
-
-    section.appendChild(
-        textColorRow
-    );
-
-
-    const backgroundRow =
-    document.createElement(
-        "div"
-    );
-
-
-    backgroundRow.className =
-    "color-row";
-
-
-    const backgroundLabel =
-    document.createElement(
-        "label"
-    );
-
-
-    backgroundLabel.textContent =
-    "Màu nền";
-
-
-    const background =
-    document.createElement(
-        "input"
-    );
-
-
-    background.type =
-    "color";
-
-
-    background.className =
-    "color-input";
-
-
-    background.value =
-    validColor(format.background)
-        ? format.background
-        : "#ffffff";
-
-
-    backgroundRow.appendChild(
-        backgroundLabel
-    );
-
-
-    backgroundRow.appendChild(
-        background
-    );
-
-
-    section.appendChild(
-        backgroundRow
-    );
-
-
-    const apply =
-    document.createElement(
-        "button"
-    );
-
-
-    apply.className =
-    "menu-button";
-
-
-    apply.style.width =
-    "100%";
-
-
-    apply.textContent =
-    "Áp dụng định dạng";
-
-
-    apply.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-
-            columnFormats[index] = {
-
-                align:
-                align.value,
-
-                fontFamily:
-                font.value,
-
-                fontSize:
-                Number(
-                    size.value
-                ) || 14,
-
-                bold:
-                bold.checked,
-
-                italic:
-                italic.checked,
-
-                wrap:
-                wrap.checked,
-
-                color:
-                textColor.value,
-
-                background:
-                background.value
-
-            };
-
-
-            saveState();
-
-
-            renderBody();
-
-            updateHeaderStates();
-
-        }
-    );
-
-
-    section.appendChild(
-        apply
-    );
-
-
-    return section;
-}
-
-
-/* =========================================================
-   COLOR VALID
-========================================================= */
-
-function validColor(value){
-
-    return (
-        typeof value === "string" &&
-        /^#[0-9a-fA-F]{6}$/.test(value)
-    );
-}
-
-
-/* =========================================================
-   REFRESH OPEN MENU
-========================================================= */
-
-function refreshOpenFilterMenu(
-    preserveSearch = true
-){
-
-    if(
-        openFilterIndex === null ||
-        !filterMenuElement
-    ){
-
-        return;
     }
 
 
     const index =
-    openFilterIndex;
+        openFilterIndex;
 
 
-    const oldSearch =
-    filterValueSearch;
+    const values =
+        [...new Set(
+            rows.map(
+                row =>
+                    String(
+                        row[index] ?? ""
+                    )
+            )
+        )]
+            .sort(
+                (a, b) =>
+                    a.localeCompare(
+                        b,
+                        "vi",
+                        {
+                            numeric: true
+                        }
+                    )
+            );
 
 
-    renderFilterMenu(
-        index
+    const selected =
+        Array.isArray(
+            filters[index]
+        )
+            ? new Set(
+                filters[index]
+            )
+            : new Set(values);
+
+
+    const search =
+        filterValueSearch
+            .toLowerCase();
+
+
+    const visibleValues =
+        values.filter(
+            value =>
+                value
+                    .toLowerCase()
+                    .includes(search)
+        );
+
+
+    filterMenu.innerHTML = `
+
+        <div class="filter-menu-header">
+
+            <input
+                class="filter-menu-search"
+                id="filterValueSearch"
+                placeholder="Tìm giá trị..."
+                value="${escapeHtml(filterValueSearch)}"
+            >
+
+        </div>
+
+        <div class="filter-actions">
+
+            <button
+                id="filterSelectAll"
+            >
+                Chọn tất cả
+            </button>
+
+            <button
+                id="filterClearAll"
+            >
+                Bỏ chọn
+            </button>
+
+        </div>
+
+        <div
+            class="filter-values"
+            id="filterValues"
+        >
+
+            ${visibleValues.map(
+                value => `
+
+                <label class="filter-value">
+
+                    <input
+                        type="checkbox"
+                        value="${escapeHtml(value)}"
+                        ${selected.has(value)
+                            ? "checked"
+                            : ""}
+                    >
+
+                    <span>
+                        ${escapeHtml(value || "(Trống)")}
+                    </span>
+
+                </label>
+
+                `
+            ).join("")}
+
+        </div>
+
+        <div class="filter-footer">
+
+            <button
+                class="filter-clear"
+                id="filterRemove"
+            >
+                Xóa lọc
+            </button>
+
+            <button
+                class="filter-apply"
+                id="filterApply"
+            >
+                Áp dụng
+            </button>
+
+        </div>
+    `;
+
+
+    const searchInput =
+        document.getElementById(
+            "filterValueSearch"
+        );
+
+
+    searchInput.addEventListener(
+        "input",
+        event => {
+
+            filterValueSearch =
+                event.target.value;
+
+            renderFilterMenu();
+
+        }
     );
 
 
-    if(preserveSearch){
+    document
+        .getElementById(
+            "filterSelectAll"
+        )
+        .onclick = () => {
 
-        filterValueSearch =
-        oldSearch;
+            filters[index] =
+                values;
 
+            renderFilterMenu();
 
-        const input =
-        filterMenuElement.querySelector(
-            ".filter-search"
-        );
-
-
-        if(input){
-
-            input.value =
-            oldSearch;
-        }
+        };
 
 
-        renderFilterValuesOnly(
-            index
-        );
-    }
+    document
+        .getElementById(
+            "filterClearAll"
+        )
+        .onclick = () => {
+
+            filters[index] =
+                [];
+
+            renderFilterMenu();
+
+        };
+
+
+    document
+        .getElementById(
+            "filterRemove"
+        )
+        .onclick = () => {
+
+            delete filters[index];
+
+            saveState();
+
+            closeFilter();
+
+            renderTable();
+
+        };
+
+
+    document
+        .getElementById(
+            "filterApply"
+        )
+        .onclick = () => {
+
+            const checked =
+                [...filterMenu.querySelectorAll(
+                    "#filterValues input:checked"
+                )]
+                    .map(
+                        input =>
+                            input.value
+                    );
+
+
+            filters[index] =
+                checked;
+
+
+            /*
+               Nếu chọn tất cả thì
+               không cần lưu filter.
+            */
+
+            if (
+                checked.length ===
+                values.length
+            ) {
+
+                delete filters[index];
+
+            }
+
+
+            saveState();
+
+            closeFilter();
+
+            renderTable();
+
+        };
+
 }
 
 
@@ -5563,553 +2277,594 @@ function refreshOpenFilterMenu(
    CLOSE FILTER
 ========================================================= */
 
-function closeFilterMenu(){
+function closeFilter() {
 
-    if(
-        filterMenuElement
-    ){
-
-        filterMenuElement.remove();
-
-        filterMenuElement =
-        null;
-    }
-
+    filterMenu.style.display =
+        "none";
 
     openFilterIndex =
-    null;
+        null;
 
-
-    filterValueSearch =
-    "";
 }
 
 
-/* =========================================================
-   RENAME PROMPT
-========================================================= */
-
-function openRenamePrompt(index){
-
-    const original =
-    headers[index];
-
-
-    const current =
-    getDisplayHeader(
-        original
-    );
-
-
-    const newName =
-    prompt(
-        "Tên mới của cột:",
-        current
-    );
-
-
-    if(
-        newName === null
-    ){
-
-        return;
-    }
-
-
-    const trimmed =
-    newName.trim();
-
-
-    if(
-        trimmed === "" ||
-        trimmed ===
-        getDefaultDisplayHeader(
-            original
-        )
-    ){
-
-        delete renamedHeaders[
-            original
-        ];
-
-    }
-    else{
-
-        renamedHeaders[
-            original
-        ] =
-        trimmed;
-    }
-
-
-    saveState();
-
-
-    renderTable();
-}
-
-
-/* =========================================================
-   SETTINGS RENAME LIST
-========================================================= */
-
-function renderRenameList(){
-
-    renameList.innerHTML =
-    "";
-
-
-    headers.forEach(
-        (header,index) => {
-
-            if(
-                HIDDEN_COLUMNS.has(
-                    header
-                )
-            ){
-
-                return;
-            }
-
-
-            const item =
-            document.createElement(
-                "div"
-            );
-
-
-            item.className =
-            "rename-item";
-
-
-            const original =
-            document.createElement(
-                "div"
-            );
-
-
-            original.className =
-            "rename-original";
-
-
-            original.title =
-            header;
-
-
-            original.textContent =
-            header;
-
-
-            const input =
-            document.createElement(
-                "input"
-            );
-
-
-            input.type =
-            "text";
-
-
-            input.value =
-            getDisplayHeader(
-                header
-            );
-
-
-            input.dataset.index =
-            String(index);
-
-
-            input.addEventListener(
-                "change",
-                () => {
-
-                    const value =
-                    input.value.trim();
-
-
-                    if(
-                        value === "" ||
-                        value ===
-                        getDefaultDisplayHeader(
-                            header
-                        )
-                    ){
-
-                        delete renamedHeaders[
-                            header
-                        ];
-
-                    }
-                    else{
-
-                        renamedHeaders[
-                            header
-                        ] =
-                        value;
-                    }
-
-                }
-            );
-
-
-            item.appendChild(
-                original
-            );
-
-
-            item.appendChild(
-                input
-            );
-
-
-            renameList.appendChild(
-                item
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   SETTINGS OPEN
-========================================================= */
-
-document
-.getElementById(
-    "settingsBtn"
-)
-.addEventListener(
-    "click",
-    () => {
-
-        freezeCountInput.value =
-        freezeCount;
-
-
-        autoRefreshSelect.value =
-        String(
-            autoRefreshMinutes
-        );
-
-
-        renderRenameList();
-
-
-        settingsOverlay.style.display =
-        "block";
-    }
-);
-
-
-/* =========================================================
-   SETTINGS SAVE
-========================================================= */
-
-document
-.getElementById(
-    "saveSettingsBtn"
-)
-.addEventListener(
-    "click",
-    () => {
-
-        const requested =
-        Number(
-            freezeCountInput.value
-        );
-
-
-        freezeCount =
-        Math.max(
-            0,
-            Math.min(
-                Number.isFinite(
-                    requested
-                )
-                    ? requested
-                    : DEFAULT_FREEZE_COUNT,
-                getVisibleHeaderIndexes().length
-            )
-        );
-
-
-        renameList
-        .querySelectorAll(
-            ".rename-item input"
-        )
-        .forEach(
-            input => {
-
-                const index =
-                Number(
-                    input.dataset.index
-                );
-
-
-                const original =
-                headers[index];
-
-
-                const value =
-                input.value.trim();
-
-
-                if(
-                    value === "" ||
-                    value ===
-                    getDefaultDisplayHeader(
-                        original
-                    )
-                ){
-
-                    delete renamedHeaders[
-                        original
-                    ];
-
-                }
-                else{
-
-                    renamedHeaders[
-                    original
-                    ] =
-                    value;
-                }
-
-            }
-        );
-
-
-        autoRefreshMinutes =
-        Number(
-            autoRefreshSelect.value
-        ) || 0;
-
-
-        saveState();
-
-
-        renderTable();
-
-
-        setupAutoRefresh();
-
-
-        settingsOverlay.style.display =
-        "none";
-    }
-);
-
-
-/* =========================================================
-   SETTINGS CLOSE
-========================================================= */
-
-document
-.getElementById(
-    "closeSettingsBtn"
-)
-.addEventListener(
-    "click",
-    () => {
-
-        settingsOverlay.style.display =
-        "none";
-    }
-);
-
-
-settingsOverlay.addEventListener(
+document.addEventListener(
     "click",
     event => {
 
-        if(
-            event.target ===
-            settingsOverlay
-        ){
+        if (
+            !filterMenu.contains(
+                event.target
+            ) &&
+            !event.target.closest(
+                ".filter-btn"
+            )
+        ) {
 
-            settingsOverlay.style.display =
-            "none";
+            closeFilter();
+
         }
+
     }
 );
 
 
 /* =========================================================
-   FREEZE COLUMNS
+   FREEZE POSITION
 ========================================================= */
 
-function applyFreezeColumns(){
+function calculateLeftPositions() {
 
-    document
-    .querySelectorAll(
-        ".frozen-column"
-    )
-    .forEach(
-        cell => {
-
-            cell.classList.remove(
-                "frozen-column"
-            );
-
-
-            cell.classList.remove(
-                "frozen-last"
-            );
-
-
-            cell.style.left =
-            "";
-
-        }
-    );
-
-
-    const visibleIndexes =
-    getVisibleHeaderIndexes();
-
-
-    const count =
-    Math.max(
-        0,
-        Math.min(
-            Number(freezeCount) || 0,
-            visibleIndexes.length
-        )
-    );
-
-
-    if(
-        count === 0
-    ){
-
-        return;
-    }
-
-
-    const frozenIndexes =
-    visibleIndexes.slice(
-        0,
-        count
-    );
-
+    const positions = [];
 
     let left = 0;
 
 
-    frozenIndexes.forEach(
-        (index,position) => {
+    for (
+        let i = 0;
+        i < headers.length;
+        i++
+    ) {
 
-            const width =
-            getColumnWidth(
-                index
-            );
+        positions[i] =
+            left;
 
+        left +=
+            getColumnWidth(i);
 
-            const cells =
-            document.querySelectorAll(
-                `[data-column="${index}"]`
-            );
-
-
-            cells.forEach(
-                cell => {
-
-                    cell.classList.add(
-                        "frozen-column"
-                    );
+    }
 
 
-                    if(
-                        position ===
-                        frozenIndexes.length - 1
-                    ){
+    return positions;
 
-                        cell.classList.add(
-                            "frozen-last"
-                        );
-                    }
-
-
-                    cell.style.left =
-                    `${left}px`;
-
-
-                    if(
-                        cell.classList.contains(
-                            "header-cell"
-                        )
-                    ){
-
-                        cell.style.top =
-                        "0px";
-
-                        cell.style.zIndex =
-                        "1000";
-
-                    }
-
-
-                    else if(
-                        cell.classList.contains(
-                            "search-cell"
-                        )
-                    ){
-
-                        cell.style.top =
-                        "38px";
-
-                        cell.style.zIndex =
-                        "999";
-
-                    }
-
-
-                    else{
-
-                        cell.style.zIndex =
-                        "100";
-                    }
-
-                }
-            );
-
-
-            left += width;
-        }
-    );
 }
 
 
 /* =========================================================
-   RESIZE START
+   RENDER TABLE
 ========================================================= */
 
-function startResize(
-    event,
-    index
-){
+function renderTable() {
 
-    resizeState = {
+    if (
+        !headers.length
+    ) {
 
-        index,
+        tableContainer.innerHTML = `
+            <div class="empty">
+                Không có dữ liệu
+            </div>
+        `;
 
-        startX:
-        event.clientX,
+        return;
 
-        startWidth:
-        getColumnWidth(index)
-
-    };
-
-
-    document.body.style.cursor =
-    "col-resize";
+    }
 
 
-    document.body.style.userSelect =
-    "none";
+    const visibleRows =
+        getFilteredRows();
+
+
+    const leftPositions =
+        calculateLeftPositions();
+
+
+    let html = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+    `;
+
+
+    headers.forEach(
+        (header, index) => {
+
+            const width =
+                getColumnWidth(index);
+
+
+            const format =
+                getColumnFormat(index);
+
+
+            const fixed =
+                index < freezeCount;
+
+
+            const left =
+                leftPositions[index];
+
+
+            const sort =
+                sorts[index];
+
+
+            let sortIcon = "↕";
+
+
+            if (
+                sort === "asc"
+            ) {
+
+                sortIcon = "▲";
+
+            } else if (
+                sort === "desc"
+            ) {
+
+                sortIcon = "▼";
+
+            }
+
+
+            html += `
+
+                <th
+                    class="${fixed
+                        ? "fixed-cell fixed-header fixed-cell-shadow"
+                        : ""}"
+                    style="
+                        width:${width}px;
+                        min-width:${width}px;
+                        max-width:${width}px;
+                        text-align:${format.align};
+                        font-family:${escapeHtml(format.fontFamily)};
+                        font-size:${format.fontSize}px;
+                        font-weight:bold;
+                        font-style:${format.italic
+                            ? "italic"
+                            : "normal"};
+                        background:${format.background};
+                        color:${format.color};
+                        left:${fixed
+                            ? left + "px"
+                            : "auto"};
+                        white-space:${format.wrap
+                            ? "normal"
+                            : "nowrap"};
+                    "
+                >
+
+                    <div class="header-inner">
+
+                        <div class="header-top">
+
+                            <div class="header-title">
+                                ${escapeHtml(
+                                    getDisplayHeader(header)
+                                )}
+                            </div>
+
+                            <div class="header-buttons">
+
+                                <button
+                                    class="header-btn filter-btn"
+                                    title="Lọc"
+                                    data-filter-index="${index}"
+                                >
+                                    ▼
+                                </button>
+
+                                <button
+                                    class="header-btn sort-btn"
+                                    title="Sắp xếp"
+                                    data-sort-index="${index}"
+                                >
+                                    ${sortIcon}
+                                </button>
+
+                                <button
+                                    class="header-btn format-column-btn"
+                                    title="Định dạng"
+                                    data-format-index="${index}"
+                                >
+                                    ⚙
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <input
+                            class="header-search"
+                            data-search-index="${index}"
+                            value="${escapeHtml(
+                                searches[index] || ""
+                            )}"
+                            placeholder="Tìm..."
+                        >
+
+                    </div>
+
+                    <div
+                        class="resize-handle"
+                        data-resize-index="${index}"
+                    ></div>
+
+                </th>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+    `;
+
+
+    if (
+        !visibleRows.length
+    ) {
+
+        html += `
+
+            <tr>
+
+                <td
+                    colspan="${headers.length}"
+                    class="empty"
+                >
+                    Không tìm thấy dữ liệu
+                </td>
+
+            </tr>
+
+        `;
+
+    } else {
+
+        visibleRows.forEach(
+            row => {
+
+                html += "<tr>";
+
+
+                headers.forEach(
+                    (header, index) => {
+
+                        const width =
+                            getColumnWidth(
+                                index
+                            );
+
+
+                        const format =
+                            getColumnFormat(
+                                index
+                            );
+
+
+                        const fixed =
+                            index < freezeCount;
+
+
+                        const left =
+                            leftPositions[
+                                index
+                            ];
+
+
+                        const value =
+                            getDisplayValue(
+                                row[index],
+                                header
+                            );
+
+
+                        html += `
+
+                            <td
+                                class="${fixed
+                                    ? "fixed-cell fixed-cell-shadow"
+                                    : ""}"
+                                style="
+                                    width:${width}px;
+                                    min-width:${width}px;
+                                    max-width:${width}px;
+                                    text-align:${format.align};
+                                    font-family:${escapeHtml(format.fontFamily)};
+                                    font-size:${format.fontSize}px;
+                                    font-weight:${format.bold
+                                        ? "bold"
+                                        : "normal"};
+                                    font-style:${format.italic
+                                        ? "italic"
+                                        : "normal"};
+                                    color:${format.color};
+                                    background:${format.background};
+                                    left:${fixed
+                                        ? left + "px"
+                                        : "auto"};
+                                    white-space:${format.wrap
+                                        ? "normal"
+                                        : "nowrap"};
+                                    overflow-wrap:anywhere;
+                                "
+                            >
+                                ${escapeHtml(value)}
+                            </td>
+
+                        `;
+
+                    }
+                );
+
+
+                html += "</tr>";
+
+            }
+        );
+
+    }
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    tableContainer.innerHTML =
+        html;
+
+
+    bindTableEvents();
+
+}
+
+
+/* =========================================================
+   BIND EVENTS
+========================================================= */
+
+function bindTableEvents() {
+
+    /*
+       Header search
+    */
+
+    document
+        .querySelectorAll(
+            ".header-search"
+        )
+        .forEach(
+            input => {
+
+                input.addEventListener(
+                    "input",
+                    event => {
+
+                        const index =
+                            Number(
+                                event.target
+                                    .dataset
+                                    .searchIndex
+                            );
+
+
+                        searches[index] =
+                            event.target.value;
+
+
+                        saveState();
+
+                        renderTable();
+
+                        /*
+                           Đặt cursor cuối input.
+                        */
+
+                        setTimeout(
+                            () => {
+
+                                const el =
+                                    document.querySelector(
+                                        `.header-search[data-search-index="${index}"]`
+                                    );
+
+                                if (el) {
+
+                                    el.focus();
+
+                                    el.setSelectionRange(
+                                        el.value.length,
+                                        el.value.length
+                                    );
+
+                                }
+
+                            },
+                            0
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+       Filter
+    */
+
+    document
+        .querySelectorAll(
+            ".filter-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.stopPropagation();
+
+                        const index =
+                            Number(
+                                button.dataset
+                                    .filterIndex
+                            );
+
+
+                        openFilter(
+                            index,
+                            button
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+       Sort
+    */
+
+    document
+        .querySelectorAll(
+            ".sort-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.stopPropagation();
+
+                        const index =
+                            Number(
+                                button.dataset
+                                    .sortIndex
+                            );
+
+
+                        toggleSort(index);
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+       Format từng cột
+    */
+
+    document
+        .querySelectorAll(
+            ".format-column-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.stopPropagation();
+
+                        const index =
+                            Number(
+                                button.dataset
+                                    .formatIndex
+                            );
+
+
+                        openFormatModal(
+                            index
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+       Resize
+    */
+
+    document
+        .querySelectorAll(
+            ".resize-handle"
+        )
+        .forEach(
+            handle => {
+
+                handle.addEventListener(
+                    "mousedown",
+                    event => {
+
+                        event.preventDefault();
+
+                        const index =
+                            Number(
+                                handle.dataset
+                                    .resizeIndex
+                            );
+
+
+                        resizeState = {
+
+                            index,
+
+                            startX:
+                                event.clientX,
+
+                            startWidth:
+                                getColumnWidth(
+                                    index
+                                )
+
+                        };
+
+                    }
+                );
+
+            }
+        );
+
 }
 
 
@@ -6121,335 +2876,481 @@ document.addEventListener(
     "mousemove",
     event => {
 
-        if(
-            !resizeState
-        ){
+        if (!resizeState) {
 
             return;
+
         }
 
 
         const delta =
-        event.clientX -
-        resizeState.startX;
+            event.clientX -
+            resizeState.startX;
 
 
-        const width =
-        Math.max(
-            30,
-            resizeState.startWidth +
-            delta
-        );
+        const newWidth =
+            Math.max(
+                60,
+                resizeState.startWidth +
+                delta
+            );
 
 
         columnWidths[
             resizeState.index
         ] =
-        width;
+            newWidth;
 
-
-        /*
-           Đây mới là lúc đánh dấu
-           width là manual.
-        */
 
         manuallyResizedColumns[
             resizeState.index
         ] =
-        true;
+            true;
 
 
-        document
-        .querySelectorAll(
-            `[data-column="${resizeState.index}"]`
-        )
-        .forEach(
-            cell => {
+        renderTable();
 
-                cell.style.width =
-                `${width}px`;
-
-                cell.style.minWidth =
-                `${width}px`;
-
-                cell.style.maxWidth =
-                `${width}px`;
-            }
-        );
+    }
+);
 
 
-        applyFreezeColumns();
+document.addEventListener(
+    "mouseup",
+    () => {
+
+        if (!resizeState) {
+
+            return;
+
+        }
+
+
+        saveState();
+
+        resizeState =
+            null;
 
     }
 );
 
 
 /* =========================================================
-   RESIZE END
+   FORMAT MODAL
 ========================================================= */
 
-document.addEventListener(
-    "mouseup",
-    () => {
+function openFormatModal(index) {
 
-        if(
-            !resizeState
-        ){
+    const modal =
+        document.getElementById(
+            "formatModal"
+        );
 
-            return;
+
+    const select =
+        document.getElementById(
+            "formatColumn"
+        );
+
+
+    select.innerHTML =
+        headers.map(
+            (header, i) => `
+
+                <option value="${i}">
+                    ${escapeHtml(
+                        getDisplayHeader(header)
+                    )}
+                </option>
+
+            `
+        ).join("");
+
+
+    select.value =
+        String(index);
+
+
+    loadFormatForm(index);
+
+
+    modal.style.display =
+        "flex";
+
+}
+
+
+function loadFormatForm(index) {
+
+    const format =
+        getColumnFormat(index);
+
+
+    document.getElementById(
+        "formatAlign"
+    ).value =
+        format.align;
+
+
+    document.getElementById(
+        "formatFont"
+    ).value =
+        format.fontFamily;
+
+
+    document.getElementById(
+        "formatSize"
+    ).value =
+        format.fontSize;
+
+
+    document.getElementById(
+        "formatBold"
+    ).checked =
+        !!format.bold;
+
+
+    document.getElementById(
+        "formatItalic"
+    ).checked =
+        !!format.italic;
+
+
+    document.getElementById(
+        "formatWrap"
+    ).checked =
+        !!format.wrap;
+
+}
+
+
+document
+    .getElementById(
+        "formatColumn"
+    )
+    .addEventListener(
+        "change",
+        event => {
+
+            loadFormatForm(
+                Number(
+                    event.target.value
+                )
+            );
+
         }
+    );
+
+
+document
+    .getElementById(
+        "formatCancel"
+    )
+    .onclick = () => {
+
+        document.getElementById(
+            "formatModal"
+        ).style.display =
+            "none";
+
+    };
+
+
+document
+    .getElementById(
+        "formatSave"
+    )
+    .onclick = () => {
+
+        const index =
+            Number(
+                document.getElementById(
+                    "formatColumn"
+                ).value
+            );
+
+
+        columnFormats[index] = {
+
+            ...(columnFormats[index] || {}),
+
+            align:
+                document.getElementById(
+                    "formatAlign"
+                ).value,
+
+            fontFamily:
+                document.getElementById(
+                    "formatFont"
+                ).value,
+
+            fontSize:
+                Number(
+                    document.getElementById(
+                        "formatSize"
+                    ).value
+                ) || 14,
+
+            bold:
+                document.getElementById(
+                    "formatBold"
+                ).checked,
+
+            italic:
+                document.getElementById(
+                    "formatItalic"
+                ).checked,
+
+            wrap:
+                document.getElementById(
+                    "formatWrap"
+                ).checked
+
+        };
 
 
         saveState();
 
-
-        resizeState =
-        null;
-
-
-        document.body.style.cursor =
-        "";
+        document.getElementById(
+            "formatModal"
+        ).style.display =
+            "none";
 
 
-        document.body.style.userSelect =
-        "";
+        renderTable();
+
+    };
+
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+globalSearch.addEventListener(
+    "input",
+    () => {
+
+        renderTable();
 
     }
 );
+
+
+/* =========================================================
+   FREEZE
+========================================================= */
+
+freezeSelect.addEventListener(
+    "change",
+    () => {
+
+        freezeCount =
+            Number(
+                freezeSelect.value
+            );
+
+
+        saveState();
+
+        renderTable();
+
+    }
+);
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+document
+    .getElementById(
+        "refreshBtn"
+    )
+    .onclick = async () => {
+
+        await loadData();
+
+    };
 
 
 /* =========================================================
    RESET
 ========================================================= */
 
-function resetUserState(){
+document
+    .getElementById(
+        "resetBtn"
+    )
+    .onclick = () => {
 
-    searches = {};
-
-    sorts = {};
-
-    filters = {};
-
-    defaultFiltersInitialized =
-    false;
-
-
-    initializeDefaults();
+        const ok =
+            confirm(
+                "Bạn có chắc muốn đặt lại toàn bộ bộ lọc, tìm kiếm, sort và kích thước cột?"
+            );
 
 
-    saveState();
+        if (!ok) {
+
+            return;
+
+        }
 
 
-    renderTable();
+        filters = {};
+
+        searches = {};
+
+        sorts = {};
+
+        columnWidths = {};
+
+        manuallyResizedColumns = {};
+
+        columnFormats = {};
+
+        renamedHeaders = {};
+
+        freezeCount =
+            DEFAULT_FREEZE_COUNT;
+
+        freezeSelect.value =
+            String(
+                DEFAULT_FREEZE_COUNT
+            );
+
+
+        saveState();
+
+        renderTable();
+
+    };
+
+
+/* =========================================================
+   FORMAT BUTTON
+========================================================= */
+
+document
+    .getElementById(
+        "formatBtn"
+    )
+    .onclick = () => {
+
+        openFormatModal(
+            0
+        );
+
+    };
+
+
+/* =========================================================
+   UPDATE STATUS
+========================================================= */
+
+function updateStatus() {
+
+    const visibleRows =
+        getFilteredRows();
+
+
+    statusElement.textContent =
+        `${visibleRows.length.toLocaleString("vi-VN")} / ${rows.length.toLocaleString("vi-VN")} dòng`;
+
 }
 
 
 /* =========================================================
-   REFRESH BUTTON
+   KEEP STATUS UPDATED
 ========================================================= */
 
-document
-.getElementById(
-    "refreshBtn"
-)
-.addEventListener(
-    "click",
-    async () => {
-
-        await loadData();
-    }
-);
+const originalRenderTable =
+    renderTable;
 
 
-/* =========================================================
-   RESET BUTTON
-========================================================= */
+/*
+   Không override renderTable.
+   Status được cập nhật ở đây.
+*/
 
-document
-.getElementById(
-    "resetBtn"
-)
-.addEventListener(
-    "click",
-    () => {
+function renderTableWithStatus() {
 
-        resetUserState();
-    }
-);
+    renderTable();
+
+    updateStatus();
+
+}
 
 
 /* =========================================================
    AUTO REFRESH
 ========================================================= */
 
-function setupAutoRefresh(){
+function setupAutoRefresh() {
 
-    if(
-        autoRefreshTimer
-    ){
+    if (autoRefreshTimer) {
 
         clearInterval(
             autoRefreshTimer
         );
 
-
         autoRefreshTimer =
-        null;
+            null;
+
     }
 
 
-    const minutes =
-    Number(
-        autoRefreshMinutes
-    );
-
-
-    if(
-        !minutes
-    ){
+    if (
+        !autoRefreshMinutes ||
+        autoRefreshMinutes <= 0
+    ) {
 
         return;
+
     }
 
 
     autoRefreshTimer =
-    setInterval(
-        async () => {
+        setInterval(
+            () => {
 
-            await loadData();
+                loadData();
 
-        },
-        minutes *
-        60 *
-        1000
-    );
+            },
+            autoRefreshMinutes *
+            60 *
+            1000
+        );
+
 }
 
 
 /* =========================================================
-   AUTO REFRESH CHANGE
-========================================================= */
-
-autoRefreshSelect.addEventListener(
-    "change",
-    () => {
-
-        autoRefreshMinutes =
-        Number(
-            autoRefreshSelect.value
-        ) || 0;
-
-
-        saveState();
-
-
-        setupAutoRefresh();
-    }
-);
-
-
-/* =========================================================
-   CLICK OUTSIDE MENU
-========================================================= */
-
-document.addEventListener(
-    "mousedown",
-    event => {
-
-        if(
-            !filterMenuElement
-        ){
-
-            return;
-        }
-
-
-        if(
-            filterMenuElement.contains(
-                event.target
-            )
-        ){
-
-            return;
-        }
-
-
-        if(
-            event.target.closest(
-                ".header-button"
-            )
-        ){
-
-            return;
-        }
-
-
-        closeFilterMenu();
-
-    }
-);
-
-
-/* =========================================================
-   ESC
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if(
-            event.key === "Escape"
-        ){
-
-            closeFilterMenu();
-
-
-            settingsOverlay.style.display =
-            "none";
-        }
-    }
-);
-
-
-/* =========================================================
-   WINDOW RESIZE
+   WINDOW EVENTS
 ========================================================= */
 
 window.addEventListener(
     "resize",
     () => {
 
-        applyFreezeColumns();
+        if (
+            filterMenu.style.display ===
+            "block"
+        ) {
 
+            closeFilter();
 
-        if(
-            openFilterIndex !== null &&
-            filterMenuElement
-        ){
-
-            const header =
-            thead.querySelector(
-                `.header-cell[data-column="${openFilterIndex}"]`
-            );
-
-
-            if(header){
-
-                positionMenu(
-                    header
-                );
-            }
         }
+
     }
 );
 
 
 /* =========================================================
-   INITIAL LOAD
+   INITIALIZE
 ========================================================= */
 
 loadState();
+
+setupAutoRefresh();
 
 loadData();
 
