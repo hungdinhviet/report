@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Report</title>
+<title>DINHVIETHUNG</title>
 
 <style>
 *{
@@ -2600,45 +2600,52 @@ function getColumnWidth(index){
     const originalHeader =
     headers[index];
 
+    // ==============================
+    // CỘT CÓ KÍCH THƯỚC ĐẶC BIỆT
+    // ==============================
 
-    /*
-       =====================================================
-       RIÊNG REVENUE VÀ KỲ
-       =====================================================
+    // Phạm vi cung cấp = 2 lần mặc định
+    if(originalHeader === "Phạm vi cung cấp"){
+        return 150 * 2;
+    }
 
-       Luôn tự tính theo header hiện tại.
-    */
+    // Free truy cập = 2 lần mặc định
+    if(originalHeader === "Free truy cập"){
+        return 150 * 2;
+    }
+
+    // Đối tượng áp dụng = 4 lần mặc định
+    if(originalHeader === "Đối tượng áp dụng"){
+        return 150 * 4;
+    }
+
+    // ==============================
+    // CÁC CỘT AUTO WIDTH THEO HEADER
+    // ==============================
+
     if(
         originalHeader === "Package" ||
-        originalHeader === "TOTAL PRICE" ||
         originalHeader === "REVENUE" ||
         originalHeader === "Kỳ" ||
         originalHeader === "Cách tính chu kỳ" ||
-        originalHeader === "Packageprice" ||
         originalHeader === "Thoại ngoại mạng" ||
         originalHeader === "Hạ băng thông" ||
         originalHeader === "Loại gói cước" ||
         originalHeader === "Tự động gia hạn"
-        
     ){
-
-        return calculateHeaderWidth(
-            index
-        );
+        return calculateHeaderWidth(index);
     }
 
+    // ==============================
+    // CÁC CỘT BÌNH THƯỜNG
+    // ==============================
 
-    /*
-       Các cột khác giữ nguyên
-       cơ chế chiều rộng hiện tại.
-    */
     return (
         Number(
             columnWidths[index]
         ) || 150
     );
 }
-
 
 
 /* =========================================================
