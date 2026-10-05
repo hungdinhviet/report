@@ -1194,12 +1194,12 @@ function loadState(){
     saved.columnFormats || {};
 
     renamedHeaders = {
+        ...(saved.renamedHeaders || {}),
         "Package": "Gói cước",
         "TOTAL PRICE": "Giá gói",
         "REVENUE": "Chu kỳ",
         "Cách tính chu kỳ": "1 chu kỳ",
-        "Packageprice": "Giá/kỳ",
-        ...(saved.renamedHeaders || {})
+        "Packageprice": "Giá/kỳ"
     };
 
     freezeCount =
