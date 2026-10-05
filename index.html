@@ -2311,32 +2311,10 @@ function getColumnWidth(index){
 ========================================================= */
 
 function getColumnFormat(index){
-    const displayHeader = getDisplayHeader(headers[index]);
+    const originalHeader = headers[index];
 
-    let defaultAlign = "left";
-
-    // Canh phải
-    if(
-        displayHeader === "TOTAL PRICE" ||
-        displayHeader === "Packageprice"
-    ){
-        defaultAlign = "right";
-    }
-
-    // Canh giữa
-    if(
-        displayHeader === "REVENUE" ||
-        displayHeader === "Kỳ" ||
-        displayHeader === "Cách tính chu kỳ" ||
-        displayHeader === "Pre/Post" ||
-        displayHeader === "KHDN/KHCN"
-        
-    ){
-        defaultAlign = "center";
-    }
-
-    return {
-        align: defaultAlign,
+    const format = {
+        align:"left",
         fontFamily:"Arial",
         fontSize:14,
         bold:false,
@@ -2346,8 +2324,32 @@ function getColumnFormat(index){
         background:"#ffffff",
         ...(columnFormats[index] || {})
     };
-}
 
+    // ==========================================
+    // CANH PHẢI - DỰA THEO TÊN CỘT GỐC
+    // ==========================================
+    if(
+        originalHeader === "TOTAL PRICE" ||
+        originalHeader === "Packageprice"
+    ){
+        format.align = "right";
+    }
+
+    // ==========================================
+    // CANH GIỮA - DỰA THEO TÊN CỘT GỐC
+    // ==========================================
+    if(
+        originalHeader === "REVENUE" ||
+        originalHeader === "Kỳ" ||
+        originalHeader === "Cách tính chu kỳ" ||
+        originalHeader === "Pre/Post" ||
+        originalHeader === "KHDN/KHCN" 
+    ){
+        format.align = "center";
+    }
+
+    return format;
+}
 
 function applyFormatToCell(
     cell,
