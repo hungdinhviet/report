@@ -1017,7 +1017,10 @@ let columnWidths = {};
 
 let columnFormats = {};
 
-let renamedHeaders = {};
+let renamedHeaders = {
+    "Package": "Gói cước",
+    "TOTAL PRICE": "Giá gói"
+};
 
 let freezeCount = 0;
 
@@ -1187,8 +1190,11 @@ function loadState(){
     columnFormats =
     saved.columnFormats || {};
 
-    renamedHeaders =
-    saved.renamedHeaders || {};
+    renamedHeaders = {
+        "Package": "Gói cước",
+        "TOTAL PRICE": "Giá gói",
+        ...(saved.renamedHeaders || {})
+    };
 
     freezeCount =
     Number(
