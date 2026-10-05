@@ -75,6 +75,132 @@ body{
     color:#666;
     white-space:nowrap;
 }
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+.global-search-wrap{
+    position:relative;
+
+    width:260px;
+    height:32px;
+
+    display:flex;
+    align-items:center;
+}
+
+.global-search-icon{
+    position:absolute;
+
+    left:8px;
+
+    font-size:14px;
+
+    pointer-events:none;
+
+    z-index:2;
+}
+
+.global-search{
+    width:100%;
+    height:32px;
+
+    border:1px solid #bbb;
+    border-radius:4px;
+
+    padding:0 30px 0 30px;
+
+    outline:none;
+
+    font-family:Arial,sans-serif;
+    font-size:14px;
+
+    background:#fff;
+}
+
+.global-search:focus{
+    border-color:#4285f4;
+
+    box-shadow:
+        0 0 0 1px #4285f4;
+}
+
+.global-search-clear{
+    position:absolute;
+
+    right:5px;
+    top:4px;
+
+    width:24px;
+    height:24px;
+
+    padding:0;
+
+    border:0;
+
+    background:transparent;
+
+    color:#777;
+
+    font-size:20px;
+
+    line-height:22px;
+
+    cursor:pointer;
+
+    display:none;
+}
+
+.global-search-clear:hover{
+    background:#eee;
+
+    border-radius:3px;
+}
+
+
+/* =========================================================
+   FREEZE TOOLBAR
+========================================================= */
+
+.freeze-toolbar{
+    height:32px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+
+    white-space:nowrap;
+
+    color:#444;
+
+    font-size:13px;
+}
+
+.freeze-toolbar input{
+    width:52px;
+    height:30px;
+
+    border:1px solid #bbb;
+    border-radius:4px;
+
+    padding:3px 5px;
+
+    text-align:center;
+
+    font-family:Arial,sans-serif;
+    font-size:14px;
+
+    outline:none;
+}
+
+.freeze-toolbar input:focus{
+    border-color:#4285f4;
+
+    box-shadow:
+        0 0 0 1px #4285f4;
+}
 
 /* =========================================================
    TABLE SCROLL CONTAINER
@@ -795,6 +921,54 @@ tbody td.frozen-column{
             ⚙ Cài đặt
         </button>
 
+        <!-- CỐ ĐỊNH CỘT -->
+        <div class="freeze-toolbar">
+
+            <span>
+                📌 Cố định:
+            </span>
+
+            <input
+                id="toolbarFreezeCount"
+                type="number"
+                min="0"
+                value="6"
+                title="Số cột cố định"
+            >
+
+            <span>
+                cột
+            </span>
+
+        </div>
+
+        <!-- TÌM KIẾM TOÀN BẢNG -->
+        <div class="global-search-wrap">
+
+            <span class="global-search-icon">
+                🔎
+            </span>
+
+            <input
+                id="globalSearchInput"
+                class="global-search"
+                type="text"
+                placeholder="Tìm kiếm thông tin..."
+            >
+
+            <button
+                id="clearGlobalSearchBtn"
+                class="global-search-clear"
+                title="Xóa tìm kiếm"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        
+
         <span
             id="status"
             class="toolbar-status"
@@ -1013,6 +1187,11 @@ let searches = {};
 
 let sorts = {};
 
+/*
+Tìm kiếm toàn bộ bảng.
+*/
+let globalSearch = "";
+
 let columnWidths = {};
 
 let columnFormats = {};
@@ -1025,7 +1204,7 @@ let renamedHeaders = {
     "Packageprice": "Giá/kỳ" 
 };
 
-let freezeCount = 0;
+let freezeCount = 6;
 
 
 /* =========================================================
@@ -1187,6 +1366,14 @@ function loadState(){
     sorts =
     saved.sorts || {};
 
+    /*
+   Tìm kiếm toàn bảng.
+    */
+    globalSearch =
+    String(
+        saved.globalSearch || ""
+    );
+
 
     /*
        SORT mặc định mỗi lần tải website:
@@ -1283,11 +1470,12 @@ function loadState(){
         "Cách tính chu kỳ": "1 chu kỳ",
         "Packageprice": "Giá/kỳ"
     };
-
     freezeCount =
-    Number(
-        saved.freezeCount || 0
-    );
+    saved.freezeCount !== undefined
+        ? Number(saved.freezeCount)
+        : 6;
+
+    
 
 
     /*
@@ -1314,6 +1502,8 @@ function saveState(){
                 searches,
 
                 sorts,
+                
+                globalSearch,
 
                 columnWidths,
 
@@ -2164,6 +2354,161 @@ function rowMatchesFilters(
             Array.isArray(selected) &&
             selected.length > 0 &&
             !selected.includes(value)
+        ){
+
+            return false;
+        }
+    }
+    /* =========================================================
+   FREEZE COUNT - TOOLBAR
+========================================================= */
+
+const toolbarFreezeCount =
+document.getElementById(
+    "toolbarFreezeCount"
+);
+
+
+/*
+   Cập nhật ô trên toolbar.
+*/
+function updateToolbarFreezeCount(){
+
+    if(!toolbarFreezeCount){
+        return;
+    }
+
+
+    toolbarFreezeCount.value =
+    Number(freezeCount) || 0;
+}
+
+
+/*
+   Khi nhập số cột.
+*/
+toolbarFreezeCount.addEventListener(
+    "change",
+    () => {
+
+        let value =
+        Number(
+            toolbarFreezeCount.value
+        );
+
+
+        if(
+            !Number.isFinite(value)
+        ){
+
+            value = 6;
+        }
+
+
+        value =
+        Math.max(
+            0,
+            Math.min(
+                Math.floor(value),
+                getVisibleHeaderIndexes().length
+            )
+        );
+
+
+        freezeCount =
+        value;
+
+
+        toolbarFreezeCount.value =
+        value;
+
+
+        saveState();
+
+
+        /*
+           Áp dụng ngay.
+        */
+        applyFreezeColumns();
+    }
+);
+
+
+/*
+   Enter cũng áp dụng ngay.
+*/
+toolbarFreezeCount.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            toolbarFreezeCount.blur();
+        }
+    }
+);
+
+        /*
+       =====================================================
+       GLOBAL SEARCH
+       =====================================================
+
+       Tìm trên TOÀN BỘ thông tin của dòng.
+
+       Không phân biệt:
+       - Hoa / thường
+       - Có / không dấu tiếng Việt
+
+       Ví dụ:
+
+       C99N
+       120.000
+       5G
+       doanh nghiệp
+       1GB
+       ...
+    */
+
+    const globalQuery =
+    String(
+        globalSearch || ""
+    )
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    );
+
+
+    if(globalQuery){
+
+        const rowText =
+        row
+        .map(
+            value =>
+            String(
+                value ?? ""
+            )
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(
+                /[\u0300-\u036f]/g,
+                ""
+            )
+        )
+        .join(" ");
+
+
+        if(
+            !rowText.includes(
+                globalQuery
+            )
         ){
 
             return false;
@@ -5558,6 +5903,8 @@ document
 
         freezeCountInput.value =
         freezeCount;
+        updateToolbarFreezeCount();
+        updateGlobalSearchUI();
 
 
         /*
@@ -6008,6 +6355,12 @@ function resetUserState(){
 
     searches = {};
 
+    globalSearch = "";
+
+    if(globalSearchInput){
+    globalSearchInput.value = "";
+    }
+
     sorts = {};
 
     /*
@@ -6221,6 +6574,136 @@ window.addEventListener(
     }
 );
 
+    /* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+const globalSearchInput =
+document.getElementById(
+    "globalSearchInput"
+);
+
+const clearGlobalSearchBtn =
+document.getElementById(
+    "clearGlobalSearchBtn"
+);
+
+
+/*
+   Cập nhật trạng thái nút X.
+*/
+function updateGlobalSearchUI(){
+
+    if(!globalSearchInput){
+        return;
+    }
+
+
+    globalSearchInput.value =
+    globalSearch;
+
+
+    if(
+        String(
+            globalSearch || ""
+        ).trim() !== ""
+    ){
+
+        clearGlobalSearchBtn.style.display =
+        "block";
+
+    }
+    else{
+
+        clearGlobalSearchBtn.style.display =
+        "none";
+
+    }
+}
+
+
+/*
+   Nhập tìm kiếm.
+*/
+globalSearchInput.addEventListener(
+    "input",
+    () => {
+
+        globalSearch =
+        globalSearchInput.value;
+
+
+        saveState();
+
+
+        /*
+           Chỉ render body.
+
+           Không render header
+           => ô tìm kiếm không mất focus.
+        */
+
+        renderBody();
+
+
+        updateHeaderStates();
+
+
+        /*
+           Nếu filter menu đang mở,
+           cập nhật lại danh sách.
+        */
+
+        if(
+            openFilterIndex !== null
+        ){
+
+            refreshOpenFilterMenu(
+                true
+            );
+        }
+
+
+        updateGlobalSearchUI();
+    }
+);
+
+
+/*
+   Xóa tìm kiếm.
+*/
+clearGlobalSearchBtn.addEventListener(
+    "click",
+    event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+
+        globalSearch =
+        "";
+
+
+        globalSearchInput.value =
+        "";
+
+
+        saveState();
+
+
+        renderBody();
+
+
+        updateHeaderStates();
+
+
+        updateGlobalSearchUI();
+
+
+        globalSearchInput.focus();
+    }
+);
+
 
 /* =========================================================
    INITIAL LOAD
@@ -6234,4 +6717,5 @@ loadData();
 
 </body>
 </html>
+
 
