@@ -6625,6 +6625,8 @@ function updateGlobalSearchUI(){
 /*
    Nhập tìm kiếm.
 */
+let globalSearchTimer = null;
+
 globalSearchInput.addEventListener(
     "input",
     () => {
@@ -6632,42 +6634,35 @@ globalSearchInput.addEventListener(
         globalSearch =
         globalSearchInput.value;
 
-
-        saveState();
-
-
-        /*
-           Chỉ render body.
-
-           Không render header
-           => ô tìm kiếm không mất focus.
-        */
-
-        renderBody();
-
-
-        updateHeaderStates();
-
-
-        /*
-           Nếu filter menu đang mở,
-           cập nhật lại danh sách.
-        */
-
-        if(
-            openFilterIndex !== null
-        ){
-
-            refreshOpenFilterMenu(
-                true
-            );
-        }
-
-
         updateGlobalSearchUI();
+
+        clearTimeout(
+            globalSearchTimer
+        );
+
+        globalSearchTimer =
+        setTimeout(
+            () => {
+
+                saveState();
+
+                renderBody();
+
+                updateHeaderStates();
+
+                if(
+                    openFilterIndex !== null
+                ){
+                    refreshOpenFilterMenu(
+                        true
+                    );
+                }
+
+            },
+            250
+        );
     }
 );
-
 
 /*
    Xóa tìm kiếm.
