@@ -2311,27 +2311,40 @@ function getColumnWidth(index){
 ========================================================= */
 
 function getColumnFormat(index){
+    const displayHeader = getDisplayHeader(headers[index]);
+
+    let defaultAlign = "left";
+
+    // Canh phải
+    if(
+        displayHeader === "TOTAL PRICE" ||
+        displayHeader === "Packageprice"
+    ){
+        defaultAlign = "right";
+    }
+
+    // Canh giữa
+    if(
+        displayHeader === "REVENUE" ||
+        displayHeader === "Kỳ" ||
+        displayHeader === "Cách tính chu kỳ" ||
+        displayHeader === "Pre/Post" ||
+        displayHeader === "KHDN/KHCN"
+        
+    ){
+        defaultAlign = "center";
+    }
 
     return {
-
-        align:"left",
-
+        align: defaultAlign,
         fontFamily:"Arial",
-
         fontSize:14,
-
         bold:false,
-
         italic:false,
-
         wrap:true,
-
         color:"#111111",
-
         background:"#ffffff",
-
         ...(columnFormats[index] || {})
-
     };
 }
 
