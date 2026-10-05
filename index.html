@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DINHVIETHUNG</title>
+<title>Report</title>
 
 <style>
 *{
@@ -40,11 +40,11 @@ body{
     top:0;
     left:0;
     right:0;
-
-    height:82px;
+    height:44px;
 
     display:flex;
-    flex-direction:column;
+    align-items:center;
+    gap:7px;
 
     padding:5px 8px;
 
@@ -54,63 +54,8 @@ body{
     z-index:5000;
 }
 
-/* =========================================================
-   GLOBAL SEARCH ROW
-========================================================= */
-
-.toolbar-search-row{
-    width:100%;
-    height:32px;
-
-    flex:0 0 32px;
-
-    display:flex;
-    align-items:center;
-}
-
-.global-search{
-    width:100%;
-    height:29px;
-
-    border:1px solid #bbb;
-    border-radius:4px;
-
-    padding:4px 9px;
-
-    outline:none;
-
-    font-family:Arial,sans-serif;
-    font-size:13px;
-
-    background:#fff;
-}
-
-.global-search:focus{
-    border-color:#4285f4;
-
-    box-shadow:
-        0 0 0 1px #4285f4;
-}
-
-/* =========================================================
-   TOOLBAR MAIN
-========================================================= */
-
-.toolbar-main{
-    width:100%;
-    height:38px;
-
-    flex:0 0 38px;
-
-    display:flex;
-    align-items:center;
-
-    gap:7px;
-}
-
 .toolbar button{
     height:32px;
-
     padding:0 12px;
 
     border:1px solid #bbb;
@@ -127,9 +72,7 @@ body{
 
 .toolbar-status{
     margin-left:auto;
-
     color:#666;
-
     white-space:nowrap;
 }
 
@@ -142,14 +85,17 @@ body{
 
     left:0;
     right:0;
-
-    top:82px;
+    top:44px;
     bottom:0;
 
     overflow:auto;
 
     background:#fff;
 
+    /*
+       Đây phải là scroll container duy nhất
+       của bảng.
+    */
     isolation:isolate;
 }
 
@@ -186,6 +132,9 @@ thead th{
     background:#f1f3f5;
 }
 
+/*
+   Header chính.
+*/
 .header-cell{
     position:sticky !important;
 
@@ -198,6 +147,9 @@ thead th{
     background:#f1f3f5 !important;
 }
 
+/*
+   Dòng search.
+*/
 .search-cell{
     position:sticky !important;
 
@@ -210,6 +162,10 @@ thead th{
     background:#fafafa !important;
 }
 
+/*
+   Header + frozen column.
+   Cao nhất.
+*/
 .header-cell.frozen-column{
     position:sticky !important;
 
@@ -239,8 +195,6 @@ thead th{
 
     padding:0 5px;
 
-    gap:2px;
-
     user-select:none;
 }
 
@@ -261,8 +215,6 @@ thead th{
 .header-actions{
     display:flex;
     align-items:center;
-
-    gap:2px;
 
     flex-shrink:0;
 }
@@ -341,6 +293,9 @@ tbody td{
     word-break:break-word;
 }
 
+/*
+   Frozen body.
+*/
 tbody td.frozen-column{
     position:sticky !important;
 
@@ -349,6 +304,9 @@ tbody td.frozen-column{
     background:#fff;
 }
 
+/*
+   Ranh giới cột frozen cuối.
+*/
 .frozen-last{
     box-shadow:
         4px 0 7px rgba(0,0,0,.12);
@@ -785,8 +743,7 @@ tbody td.frozen-column{
 
     left:0;
     right:0;
-
-    top:82px;
+    top:44px;
     bottom:0;
 
     display:flex;
@@ -826,45 +783,24 @@ tbody td.frozen-column{
 
     <div class="toolbar">
 
-        <!-- TÌM KIẾM TOÀN BỘ BẢNG -->
+        <button id="refreshBtn">
+            ↻ Làm mới
+        </button>
 
-        <div class="toolbar-search-row">
+        <button id="resetBtn">
+            ⟳ Tổng / Reset
+        </button>
 
-            <input
-                id="globalSearch"
-                class="global-search"
-                type="text"
-                placeholder="🔎 Tìm kiếm toàn bộ bảng..."
-                autocomplete="off"
-            >
+        <button id="settingsBtn">
+            ⚙ Cài đặt
+        </button>
 
-        </div>
-
-
-        <!-- TOOLBAR CHÍNH -->
-
-        <div class="toolbar-main">
-
-            <button id="refreshBtn">
-                ↻ Làm mới
-            </button>
-
-            <button id="resetBtn">
-                ⟳ Tổng / Reset
-            </button>
-
-            <button id="settingsBtn">
-                ⚙ Cài đặt
-            </button>
-
-            <span
-                id="status"
-                class="toolbar-status"
-            >
-                Đang tải...
-            </span>
-
-        </div>
+        <span
+            id="status"
+            class="toolbar-status"
+        >
+            Đang tải...
+        </span>
 
     </div>
 
@@ -1059,62 +995,6 @@ const SORT_BY_MAP = {
 
 
 /* =========================================================
-   HEADER WIDTH
-========================================================= */
-
-const MIN_HEADER_WIDTH = 90;
-
-const MAX_HEADER_WIDTH = 320;
-
-/*
-   Phần chiều rộng dành cho:
-   - 2 nút header: 24 + 24
-   - khoảng cách giữa 2 nút
-   - padding trái/phải header
-*/
-
-const HEADER_ACTION_WIDTH =
-24 * 2;
-
-const HEADER_ACTION_GAP =
-2;
-
-const HEADER_HORIZONTAL_PADDING =
-10;
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-/*
-   Debounce giúp khi gõ nhanh:
-   không render lại body ở từng
-   phím ngay lập tức.
-*/
-
-const SEARCH_DEBOUNCE_MS =
-180;
-
-
-/*
-   Cache tìm kiếm toàn bộ dòng.
-
-   rowSearchCache[index]
-   = toàn bộ nội dung của dòng đã
-   normalize thành một chuỗi.
-*/
-
-let rowSearchCache = [];
-
-let globalSearch = "";
-
-let columnSearchTimer = null;
-
-let globalSearchTimer = null;
-
-
-/* =========================================================
    DATA
 ========================================================= */
 
@@ -1214,11 +1094,6 @@ document.getElementById(
     "status"
 );
 
-const globalSearchInput =
-document.getElementById(
-    "globalSearch"
-);
-
 const settingsOverlay =
 document.getElementById(
     "settingsOverlay"
@@ -1241,51 +1116,6 @@ document.getElementById(
 
 
 /* =========================================================
-   NORMALIZE SEARCH TEXT
-========================================================= */
-
-function normalizeSearchText(value){
-
-    return String(
-        value ?? ""
-    )
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(
-        /[\u0300-\u036f]/g,
-        ""
-    )
-    .replace(
-        /\s+/g,
-        " "
-    )
-    .trim();
-}
-
-
-/* =========================================================
-   REBUILD SEARCH CACHE
-========================================================= */
-
-function rebuildRowSearchCache(){
-
-    rowSearchCache =
-    rows.map(
-        row => {
-
-            return row
-            .map(
-                value =>
-                normalizeSearchText(value)
-            )
-            .join(" ");
-
-        }
-    );
-}
-
-
-/* =========================================================
    LOAD STATE
 ========================================================= */
 
@@ -1301,7 +1131,6 @@ function loadState(){
         );
 
         if(current){
-
             saved =
             JSON.parse(current);
         }
@@ -1367,17 +1196,9 @@ function loadState(){
     );
 
 
-    globalSearch =
-    String(
-        saved.globalSearch || ""
-    );
-
-
-    if(globalSearchInput){
-
-        globalSearchInput.value =
-        globalSearch;
-    }
+    /*
+       Không tự đánh lại priority.
+    */
 }
 
 
@@ -1406,9 +1227,7 @@ function saveState(){
 
                 renamedHeaders,
 
-                freezeCount,
-
-                globalSearch
+                freezeCount
 
             })
         );
@@ -1642,12 +1461,9 @@ async function loadData(){
 
 
         /*
-           Tạo cache tìm kiếm ngay sau
-           khi load dữ liệu.
+           Nếu Google Sheet có thêm cột mới,
+           vẫn không phá state cũ.
         */
-
-        rebuildRowSearchCache();
-
 
         initializeDefaults();
 
@@ -1741,6 +1557,11 @@ function initializeDefaults(){
     );
 
 
+    /*
+       Ngày update:
+       chọn non-blank.
+    */
+
     if(
         dateIndex >= 0 &&
         filters[dateIndex] === undefined
@@ -1756,6 +1577,11 @@ function initializeDefaults(){
         );
     }
 
+
+    /*
+       Dừng gói:
+       chỉ chọn blank.
+    */
 
     if(
         stopIndex >= 0 &&
@@ -2010,6 +1836,12 @@ function getSortValue(
     headers[index];
 
 
+    /*
+       DATA → Sort_DATA
+       Nội mạng → Sort_NM
+       Ngoại mạng → Sort_NgM
+    */
+
     const helperHeader =
     SORT_BY_MAP[
         originalHeader
@@ -2078,7 +1910,15 @@ function getSortValue(
         type:"text",
 
         value:
-        normalizeSearchText(value)
+        String(
+            value ?? ""
+        )
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
 
     };
 }
@@ -2090,56 +1930,8 @@ function getSortValue(
 
 function rowMatchesFilters(
     row,
-    rowIndex = -1,
     ignoreColumn = -1
 ){
-
-    /*
-       GLOBAL SEARCH
-    */
-
-    const globalQuery =
-    normalizeSearchText(
-        globalSearch
-    );
-
-
-    if(globalQuery){
-
-        let rowText;
-
-
-        if(
-            rowIndex >= 0 &&
-            rowSearchCache[rowIndex] !== undefined
-        ){
-
-            rowText =
-            rowSearchCache[rowIndex];
-
-        }
-        else{
-
-            rowText =
-            row
-            .map(
-                value =>
-                normalizeSearchText(value)
-            )
-            .join(" ");
-        }
-
-
-        if(
-            !rowText.includes(
-                globalQuery
-            )
-        ){
-
-            return false;
-        }
-    }
-
 
     /*
        FILTER
@@ -2173,6 +1965,11 @@ function rowMatchesFilters(
         }
 
 
+        /*
+           Bỏ chọn hết
+           = không có dòng.
+        */
+
         if(
             Array.isArray(selected) &&
             selected.length === 0
@@ -2200,7 +1997,7 @@ function rowMatchesFilters(
 
 
     /*
-       COLUMN SEARCH
+       SEARCH
     */
 
     for(
@@ -2220,9 +2017,11 @@ function rowMatchesFilters(
 
 
         const query =
-        normalizeSearchText(
-            searches[key]
-        );
+        String(
+            searches[key] ?? ""
+        )
+        .trim()
+        .toLowerCase();
 
 
         if(!query){
@@ -2231,9 +2030,10 @@ function rowMatchesFilters(
 
 
         const value =
-        normalizeSearchText(
-            row[index]
-        );
+        String(
+            row[index] ?? ""
+        )
+        .toLowerCase();
 
 
         if(
@@ -2257,12 +2057,20 @@ function getFilterValuesForColumn(
     index
 ){
 
+    /*
+       Rất quan trọng:
+       bỏ qua filter/search của chính
+       cột đang mở.
+
+       Nhưng áp dụng toàn bộ filter/search
+       của các cột khác.
+    */
+
     const source =
     rows.filter(
-        (row,rowIndex) =>
+        row =>
         rowMatchesFilters(
             row,
-            rowIndex,
             index
         )
     );
@@ -2304,11 +2112,15 @@ function getVisibleRows(){
     .filter(
         item =>
         rowMatchesFilters(
-            item.row,
-            item.originalIndex
+            item.row
         )
     );
 
+
+    /*
+       SORTS
+       Priority hoàn toàn linh hoạt.
+    */
 
     const activeSorts =
     Object.keys(sorts)
@@ -2469,115 +2281,15 @@ function getVisibleHeaderIndexes(){
 
 
 /* =========================================================
-   TEXT MEASURE
-========================================================= */
-
-function measureTextWidth(
-    text,
-    font = "bold 13px Arial"
-){
-
-    const canvas =
-    measureTextWidth.canvas ||
-    (
-        measureTextWidth.canvas =
-        document.createElement(
-            "canvas"
-        )
-    );
-
-
-    const context =
-    canvas.getContext("2d");
-
-
-    context.font =
-    font;
-
-
-    return context.measureText(
-        String(text ?? "")
-    ).width;
-}
-
-
-/* =========================================================
-   DEFAULT HEADER WIDTH
-========================================================= */
-
-function getDefaultHeaderWidth(index){
-
-    const originalHeader =
-    headers[index];
-
-
-    const displayHeader =
-    getDisplayHeader(
-        originalHeader
-    );
-
-
-    /*
-       Tính:
-       - chiều rộng text
-       - 2 nút ↕ và ▼
-       - khoảng cách giữa 2 nút
-       - padding trái/phải
-    */
-
-    const titleWidth =
-    measureTextWidth(
-        displayHeader,
-        "bold 13px Arial"
-    );
-
-
-    const width =
-    titleWidth +
-    HEADER_ACTION_WIDTH +
-    HEADER_ACTION_GAP +
-    HEADER_HORIZONTAL_PADDING;
-
-
-    return Math.max(
-        MIN_HEADER_WIDTH,
-        Math.min(
-            MAX_HEADER_WIDTH,
-            Math.ceil(width)
-        )
-    );
-}
-
-
-/* =========================================================
-   COLUMN WIDTH
+   WIDTH
 ========================================================= */
 
 function getColumnWidth(index){
 
-    /*
-       Nếu user đã resize thủ công:
-       giữ nguyên width đó.
-
-       Nếu chưa resize:
-       tự tính theo header.
-    */
-
-    if(
-        columnWidths[index] !== undefined
-    ){
-
-        return (
-            Number(
-                columnWidths[index]
-            ) ||
-            getDefaultHeaderWidth(index)
-        );
-    }
-
-
-    return getDefaultHeaderWidth(
-        index
+    return (
+        Number(
+            columnWidths[index]
+        ) || 150
     );
 }
 
@@ -2762,6 +2474,10 @@ function renderHeader(){
             "header-content";
 
 
+            /*
+               TITLE
+            */
+
             const title =
             document.createElement("div");
 
@@ -2774,6 +2490,11 @@ function renderHeader(){
                 headers[index]
             );
 
+
+            /*
+               Double click title
+               = đổi tên nhanh.
+            */
 
             title.addEventListener(
                 "dblclick",
@@ -2788,12 +2509,20 @@ function renderHeader(){
             );
 
 
+            /*
+               ACTIONS
+            */
+
             const actions =
             document.createElement("div");
 
             actions.className =
             "header-actions";
 
+
+            /*
+               SORT ICON
+            */
 
             const sortButton =
             document.createElement("button");
@@ -2816,6 +2545,11 @@ function renderHeader(){
                     event.stopPropagation();
 
 
+                    /*
+                       Mở cùng menu filter,
+                       trong đó có Sort By.
+                    */
+
                     openFilterMenu(
                         index,
                         th
@@ -2823,6 +2557,10 @@ function renderHeader(){
                 }
             );
 
+
+            /*
+               FILTER
+            */
 
             const filterButton =
             document.createElement("button");
@@ -2874,6 +2612,10 @@ function renderHeader(){
                 content
             );
 
+
+            /*
+               RESIZE
+            */
 
             const resize =
             document.createElement("div");
@@ -2982,51 +2724,44 @@ function renderHeader(){
 
 
             /*
-               Debounce tìm kiếm theo cột.
+               QUAN TRỌNG:
+               không renderHeader()
+               khi nhập.
+
+               Chỉ render body.
+               => focus không mất.
             */
 
             input.addEventListener(
                 "input",
                 () => {
 
-                    const value =
+                    searches[index] =
                     input.value;
 
 
-                    clearTimeout(
-                        columnSearchTimer
-                    );
+                    saveState();
 
 
-                    columnSearchTimer =
-                    setTimeout(
-                        () => {
-
-                            searches[index] =
-                            value;
+                    renderBody();
 
 
-                            saveState();
+                    updateHeaderStates();
 
 
-                            renderBody();
+                    /*
+                       Nếu menu filter đang mở,
+                       refresh danh sách.
+                    */
 
+                    if(
+                        openFilterIndex !== null
+                    ){
 
-                            updateHeaderStates();
-
-
-                            if(
-                                openFilterIndex !== null
-                            ){
-
-                                refreshOpenFilterMenu(
-                                    true
-                                );
-                            }
-
-                        },
-                        SEARCH_DEBOUNCE_MS
-                    );
+                        refreshOpenFilterMenu(
+                            true
+                        );
+                    }
 
                 }
             );
@@ -3287,6 +3022,10 @@ function isEffectiveFilter(index){
     getAllColumnValues(index);
 
 
+    /*
+       Chọn toàn bộ = không active.
+    */
+
     if(
         selected.length ===
         allValues.length
@@ -3499,6 +3238,10 @@ function renderFilterMenu(index){
     "filter-menu-inner";
 
 
+    /*
+       TITLE
+    */
+
     const title =
     document.createElement(
         "div"
@@ -3519,6 +3262,10 @@ function renderFilterMenu(index){
         title
     );
 
+
+    /*
+       FILTER SEARCH
+    */
 
     const filterSearch =
     document.createElement(
@@ -3559,6 +3306,10 @@ function renderFilterMenu(index){
         filterSearch
     );
 
+
+    /*
+       FILTER BUTTONS
+    */
 
     const actions =
     document.createElement(
@@ -3673,6 +3424,10 @@ function renderFilterMenu(index){
     );
 
 
+    /*
+       VALUES
+    */
+
     const valuesContainer =
     document.createElement(
         "div"
@@ -3692,6 +3447,10 @@ function renderFilterMenu(index){
     );
 
 
+    /*
+       SORT
+    */
+
     const sortSection =
     createSortSection(
         index
@@ -3703,6 +3462,10 @@ function renderFilterMenu(index){
     );
 
 
+    /*
+       FORMAT
+    */
+
     const formatSection =
     createFormatSection(
         index
@@ -3713,6 +3476,10 @@ function renderFilterMenu(index){
         formatSection
     );
 
+
+    /*
+       FOOTER
+    */
 
     const footer =
     document.createElement(
@@ -3857,9 +3624,11 @@ function renderFilterValuesOnly(
 
 
     const query =
-    normalizeSearchText(
-        filterValueSearch
-    );
+    String(
+        filterValueSearch || ""
+    )
+    .trim()
+    .toLowerCase();
 
 
     const values =
@@ -3871,13 +3640,18 @@ function renderFilterValuesOnly(
             }
 
 
-            return normalizeSearchText(
-                value
-            ).includes(query);
+            return String(value)
+            .toLowerCase()
+            .includes(query);
 
         }
     );
 
+
+    /*
+       Nếu chưa có filter:
+       coi như tất cả được chọn.
+    */
 
     const selected =
     filters[index] === undefined
@@ -3972,11 +3746,21 @@ function renderFilterValuesOnly(
                     saveState();
 
 
+                    /*
+                       LỌC NGAY.
+                    */
+
                     renderBody();
 
 
                     updateHeaderStates();
 
+
+                    /*
+                       Không đóng menu.
+                       Cập nhật lại danh sách filter
+                       theo trạng thái mới.
+                    */
 
                     const savedSearch =
                     filterValueSearch;
@@ -4088,6 +3872,10 @@ function createSortSection(index){
     );
 
 
+    /*
+       Helper sort info
+    */
+
     const originalHeader =
     headers[index];
 
@@ -4129,6 +3917,10 @@ function createSortSection(index){
     }
 
 
+    /*
+       PRIORITY
+    */
+
     const priorityRow =
     document.createElement(
         "div"
@@ -4158,6 +3950,10 @@ function createSortSection(index){
     priority.type =
     "number";
 
+
+    /*
+       Cho số thập phân.
+    */
 
     priority.step =
     "any";
@@ -4190,6 +3986,10 @@ function createSortSection(index){
         priorityRow
     );
 
+
+    /*
+       DIRECTION
+    */
 
     const directionRow =
     document.createElement(
@@ -4331,6 +4131,10 @@ function createSortSection(index){
     );
 
 
+    /*
+       BUTTONS
+    */
+
     const buttons =
     document.createElement(
         "div"
@@ -4388,6 +4192,11 @@ function createSortSection(index){
 
                     sorts[index] = {
 
+                        /*
+                           Giữ nguyên số user nhập
+                           dưới dạng number.
+                        */
+
                         priority:number,
 
                         direction:
@@ -4409,6 +4218,10 @@ function createSortSection(index){
 
             updateHeaderStates();
 
+
+            /*
+               Cập nhật icon nhưng giữ menu.
+            */
 
             renderFilterMenu(
                 index
@@ -4520,6 +4333,10 @@ function createFormatSection(index){
     );
 
 
+    /*
+       ALIGN
+    */
+
     const alignRow =
     document.createElement(
         "div"
@@ -4594,6 +4411,10 @@ function createFormatSection(index){
         alignRow
     );
 
+
+    /*
+       FONT
+    */
 
     const fontRow =
     document.createElement(
@@ -4672,6 +4493,10 @@ function createFormatSection(index){
     );
 
 
+    /*
+       FONT SIZE
+    */
+
     const sizeRow =
     document.createElement(
         "div"
@@ -4728,6 +4553,10 @@ function createFormatSection(index){
         sizeRow
     );
 
+
+    /*
+       CHECKBOX
+    */
 
     const checks =
     document.createElement(
@@ -4855,6 +4684,10 @@ function createFormatSection(index){
     );
 
 
+    /*
+       TEXT COLOR
+    */
+
     const textColorRow =
     document.createElement(
         "div"
@@ -4910,6 +4743,10 @@ function createFormatSection(index){
     );
 
 
+    /*
+       BACKGROUND
+    */
+
     const backgroundRow =
     document.createElement(
         "div"
@@ -4964,6 +4801,10 @@ function createFormatSection(index){
         backgroundRow
     );
 
+
+    /*
+       APPLY
+    */
 
     const apply =
     document.createElement(
@@ -5024,6 +4865,11 @@ function createFormatSection(index){
 
             saveState();
 
+
+            /*
+               Chỉ body.
+               Không render header.
+            */
 
             renderBody();
 
@@ -5333,7 +5179,25 @@ document
         freezeCount;
 
 
+        /*
+           Nếu đã load dữ liệu.
+        */
+
         renderRenameList();
+
+
+        /*
+           Auto refresh.
+        */
+
+        if(
+            autoRefreshTimer
+        ){
+
+            /*
+               Không cần đọc ngược timer.
+            */
+        }
 
 
         settingsOverlay.style.display =
@@ -5354,6 +5218,10 @@ document
     "click",
     () => {
 
+        /*
+           Freeze
+        */
+
         const requested =
         Number(
             freezeCountInput.value
@@ -5369,6 +5237,10 @@ document
             )
         );
 
+
+        /*
+           Rename
+        */
 
         renameList
         .querySelectorAll(
@@ -5468,6 +5340,10 @@ settingsOverlay.addEventListener(
 
 function applyFreezeColumns(){
 
+    /*
+       Xóa trạng thái cũ.
+    */
+
     document
     .querySelectorAll(
         ".frozen-column"
@@ -5561,6 +5437,11 @@ function applyFreezeColumns(){
                     cell.style.left =
                     `${left}px`;
 
+
+                    /*
+                       Đảm bảo header có top
+                       độc lập với left.
+                    */
 
                     if(
                         cell.classList.contains(
@@ -5674,6 +5555,11 @@ document.addEventListener(
         width;
 
 
+        /*
+           Không render table.
+           Chỉ update width.
+        */
+
         document
         .querySelectorAll(
             `[data-column="${resizeState.index}"]`
@@ -5744,19 +5630,6 @@ function resetUserState(){
     sorts = {};
 
     /*
-       Xóa tìm kiếm toàn bảng.
-    */
-
-    globalSearch = "";
-
-    if(globalSearchInput){
-
-        globalSearchInput.value =
-        "";
-    }
-
-
-    /*
        Giữ default filter.
     */
 
@@ -5774,63 +5647,6 @@ function resetUserState(){
 
     renderTable();
 }
-
-
-/* =========================================================
-   GLOBAL SEARCH
-========================================================= */
-
-globalSearchInput.addEventListener(
-    "input",
-    () => {
-
-        const value =
-        globalSearchInput.value;
-
-
-        clearTimeout(
-            globalSearchTimer
-        );
-
-
-        globalSearchTimer =
-        setTimeout(
-            () => {
-
-                globalSearch =
-                value;
-
-
-                saveState();
-
-
-                /*
-                   Không render header.
-                   Chỉ render body để giữ
-                   trạng thái ô tìm kiếm.
-                */
-
-                renderBody();
-
-
-                updateHeaderStates();
-
-
-                if(
-                    openFilterIndex !== null
-                ){
-
-                    refreshOpenFilterMenu(
-                        true
-                    );
-                }
-
-            },
-            SEARCH_DEBOUNCE_MS
-        );
-
-    }
-);
 
 
 /* =========================================================
@@ -6037,3 +5853,4 @@ loadData();
 
 </body>
 </html>
+
