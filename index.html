@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DINH VIET HUNG</title>
+<title>Report</title>
 
 <style>
 *{
@@ -923,9 +923,6 @@ const CSV_URL =
    STORAGE
 ========================================================= */
 
-/*
-   V12 để các mặc định mới được áp dụng.
-*/
 const STORAGE_KEY =
 "report_google_sheet_table_v12";
 
@@ -970,22 +967,22 @@ const SORT_BY_MAP = {
    DEFAULT SETTINGS
 ========================================================= */
 
-/*
-   Mặc định cố định 6 cột.
-*/
 const DEFAULT_FREEZE_COUNT = 6;
 
 
-/*
-   Tên cột mặc định.
-   Người dùng vẫn có thể đổi lại trong Cài đặt.
-*/
+/* =========================================================
+   DEFAULT COLUMN RENAMES
+========================================================= */
+
 const DEFAULT_COLUMN_RENAMES = {
 
     "Package":
         "Gói cước",
 
     "TOTAL PRICE":
+        "Giá gói",
+
+    "Total Price":
         "Giá gói",
 
     "REVENUE":
@@ -1003,16 +1000,15 @@ const DEFAULT_COLUMN_RENAMES = {
 };
 
 
-/*
-   Cột căn giữa mặc định.
-*/
+/* =========================================================
+   DEFAULT CENTER COLUMNS
+========================================================= */
+
 const DEFAULT_CENTER_COLUMNS = new Set([
 
     "REVENUE",
 
     "Cách tính chu kỳ",
-
-    "Kỳ",
 
     "Pre/Post",
 
@@ -1025,22 +1021,25 @@ const DEFAULT_CENTER_COLUMNS = new Set([
 ]);
 
 
-/*
-   Cột căn phải mặc định.
-*/
+/* =========================================================
+   DEFAULT RIGHT COLUMNS
+========================================================= */
+
 const DEFAULT_RIGHT_COLUMNS = new Set([
 
     "TOTAL PRICE",
+
+    "Total Price",
 
     "Packageprice"
 
 ]);
 
 
-/*
-   Các cột có độ rộng gấp nhiều lần
-   độ rộng cơ bản.
-*/
+/* =========================================================
+   DEFAULT WIDTH MULTIPLIERS
+========================================================= */
+
 const DEFAULT_WIDTH_MULTIPLIERS = {
 
     "Đối tượng áp dụng":
@@ -1058,18 +1057,15 @@ const DEFAULT_WIDTH_MULTIPLIERS = {
 };
 
 
-/*
-   Các cột lấy độ rộng theo HEADER.
-*/
+/* =========================================================
+   DEFAULT HEADER WIDTH COLUMNS
+========================================================= */
+
 const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 
-    "KHDN/KHCN",
-    
     "Thoại nội mạng",
 
     "Thoại ngoại mạng",
-
-    "Hạ băng thông",
 
     "Loại gói cước",
 
@@ -1080,9 +1076,10 @@ const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 ]);
 
 
-/*
-   Các cột lấy độ rộng theo CONTENT.
-*/
+/* =========================================================
+   DEFAULT CONTENT WIDTH COLUMNS
+========================================================= */
+
 const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
 
     "REVENUE",
@@ -1093,21 +1090,23 @@ const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
 
     "Pre/Post",
 
-    "Facebook/Youtube/Tiktok"
-  
+    "KHDN/KHCN",
+
+    "Facebook",
+
+    "Youtube",
+
+    "Tiktok"
+
 ]);
 
 
-/*
-   Độ rộng cơ bản.
-*/
+/* =========================================================
+   DEFAULT WIDTH
+========================================================= */
+
 const DEFAULT_WIDTH_BASE = 150;
 
-
-/*
-   Giới hạn để một ô có nội dung cực dài
-   không làm bảng rộng vô hạn.
-*/
 const MAX_CONTENT_WIDTH = 500;
 
 
@@ -1139,10 +1138,6 @@ let renamedHeaders = {};
 let freezeCount =
 DEFAULT_FREEZE_COUNT;
 
-
-/*
-   Auto refresh được lưu riêng.
-*/
 let autoRefreshMinutes = 0;
 
 
@@ -1257,6 +1252,25 @@ function getDefaultDisplayHeader(
 
 
 /* =========================================================
+   DISPLAY HEADER
+========================================================= */
+
+function getDisplayHeader(
+    originalHeader
+){
+
+    return (
+        renamedHeaders[
+            originalHeader
+        ] ||
+        getDefaultDisplayHeader(
+            originalHeader
+        )
+    );
+}
+
+
+/* =========================================================
    DEFAULT ALIGNMENT
 ========================================================= */
 
@@ -1328,12 +1342,27 @@ function measureTextWidth(
    DEFAULT HEADER WIDTH
 ========================================================= */
 
+/*
+   QUAN TRỌNG:
+
+   Hàm này luôn dùng getDisplayHeader().
+
+   Vì vậy nếu:
+
+   Cách tính chu kỳ
+          ↓
+      1 chu kỳ
+
+   thì width sẽ được tính theo
+   "1 chu kỳ", không phải tên cũ.
+*/
+
 function getDefaultHeaderWidth(
     originalHeader
 ){
 
     const displayHeader =
-    getDefaultDisplayHeader(
+    getDisplayHeader(
         originalHeader
     );
 
@@ -1357,6 +1386,24 @@ function getDefaultHeaderWidth(
    DEFAULT CONTENT WIDTH
 ========================================================= */
 
+/*
+   QUAN TRỌNG:
+
+   Các cột thuộc nhóm CONTENT sẽ được tính
+   dựa trên:
+
+   1. Header hiện tại sau khi rename
+   2. Nội dung thực tế của toàn bộ cột
+
+   Ví dụ:
+
+   Cách tính chu kỳ
+          ↓
+      1 chu kỳ
+
+   Header "1 chu kỳ" được đo lại ngay.
+*/
+
 function getDefaultContentWidth(
     index
 ){
@@ -1365,17 +1412,29 @@ function getDefaultContentWidth(
     headers[index];
 
 
+    /*
+       Lấy tên hiển thị THỰC TẾ.
+    */
+
+    const displayHeader =
+    getDisplayHeader(
+        originalHeader
+    );
+
+
+    /*
+       Đo header trước.
+    */
+
     let maxWidth =
     measureTextWidth(
-        getDefaultDisplayHeader(
-            originalHeader
-        ),
+        displayHeader,
         "bold 14px Arial"
     );
 
 
     /*
-       Đo nội dung thực tế.
+       Đo toàn bộ nội dung.
     */
 
     rows.forEach(
@@ -1409,7 +1468,7 @@ function getDefaultContentWidth(
 
 
     /*
-       Padding cho cell.
+       Padding trái + phải.
     */
 
     maxWidth += 30;
@@ -1454,7 +1513,7 @@ function getDefaultColumnWidth(
 
 
     /*
-       Theo header.
+       Nhóm lấy width theo header.
     */
 
     if(
@@ -1470,7 +1529,7 @@ function getDefaultColumnWidth(
 
 
     /*
-       Theo content.
+       Nhóm lấy width theo content.
     */
 
     if(
@@ -1522,8 +1581,8 @@ function loadState(){
 
 
         /*
-           Nếu chưa có V12 thì thử lấy state
-           từ phiên bản cũ.
+           Nếu chưa có V12,
+           thử lấy state phiên bản cũ.
         */
 
         if(!saved){
@@ -1561,7 +1620,7 @@ function loadState(){
 
 
     /*
-       Không có state cũ.
+       Không có state.
     */
 
     if(!saved){
@@ -1596,11 +1655,11 @@ function loadState(){
 
 
     /*
-       Nếu là state V12:
-       giữ nguyên lựa chọn freeze của user.
+       V12:
+       giữ freeze user đã chọn.
 
-       Nếu là state cũ:
-       mặc định mới = 6.
+       State cũ:
+       dùng mặc định mới = 6.
     */
 
     if(
@@ -1741,7 +1800,6 @@ function parseCSV(text){
 
         }
 
-
         else if(
             c === "," &&
             !inQuotes
@@ -1751,7 +1809,6 @@ function parseCSV(text){
 
             cell = "";
         }
-
 
         else if(
             (
@@ -1786,7 +1843,6 @@ function parseCSV(text){
 
             row = [];
         }
-
 
         else{
 
@@ -1913,11 +1969,6 @@ async function loadData(){
         initializeDefaults();
 
 
-        /*
-           Auto refresh select phải đồng bộ
-           sau khi load state.
-        */
-
         autoRefreshSelect.value =
         String(
             autoRefreshMinutes
@@ -1932,7 +1983,6 @@ async function loadData(){
 
         statusEl.textContent =
         `${rows.length.toLocaleString("vi-VN")} dòng • cập nhật ${new Date().toLocaleTimeString("vi-VN")}`;
-
 
     }
     catch(error){
@@ -1951,6 +2001,7 @@ async function loadData(){
 
         const tr =
         document.createElement("tr");
+
 
         const td =
         document.createElement("td");
@@ -2016,11 +2067,6 @@ function initializeDefaults(){
     );
 
 
-    /*
-       Ngày update:
-       chọn non-blank.
-    */
-
     if(
         dateIndex >= 0 &&
         filters[dateIndex] === undefined
@@ -2036,11 +2082,6 @@ function initializeDefaults(){
         );
     }
 
-
-    /*
-       Dừng gói:
-       chỉ chọn blank.
-    */
 
     if(
         stopIndex >= 0 &&
@@ -2077,25 +2118,6 @@ function getAllColumnValues(index){
 
 
     return Array.from(set);
-}
-
-
-/* =========================================================
-   DISPLAY HEADER
-========================================================= */
-
-function getDisplayHeader(
-    originalHeader
-){
-
-    return (
-        renamedHeaders[
-            originalHeader
-        ] ||
-        getDefaultDisplayHeader(
-            originalHeader
-        )
-    );
 }
 
 
@@ -2492,7 +2514,7 @@ function rowMatchesFilters(
 
 
 /* =========================================================
-   FILTER VALUES FOR CURRENT COLUMN
+   FILTER VALUES
 ========================================================= */
 
 function getFilterValuesForColumn(
@@ -2629,7 +2651,6 @@ function getVisibleRows(){
                     bv.value;
                 }
 
-
                 else if(
                     av.type === "date" &&
                     bv.type === "date"
@@ -2639,7 +2660,6 @@ function getVisibleRows(){
                     av.value -
                     bv.value;
                 }
-
 
                 else{
 
@@ -2722,7 +2742,7 @@ function getColumnWidth(index){
 
     /*
        Nếu user đã tự kéo cột,
-       luôn ưu tiên kích thước user chọn.
+       luôn ưu tiên width user chọn.
     */
 
     if(
@@ -2735,6 +2755,11 @@ function getColumnWidth(index){
         return savedWidth;
     }
 
+
+    /*
+       Nếu chưa resize thủ công,
+       width sẽ được tính động.
+    */
 
     return getDefaultColumnWidth(
         index
@@ -2754,18 +2779,10 @@ function getColumnFormat(index){
 
     return {
 
-        /*
-           Mặc định căn theo yêu cầu.
-        */
-
         align:
         getDefaultColumnAlignment(
             originalHeader
         ),
-
-        /*
-           Tất cả Arial 14.
-        */
 
         fontFamily:
         "Arial",
@@ -2773,19 +2790,11 @@ function getColumnFormat(index){
         fontSize:
         14,
 
-        /*
-           Không mặc định đậm/nghiêng.
-        */
-
         bold:
         false,
 
         italic:
         false,
-
-        /*
-           Tất cả Wrap Text.
-        */
 
         wrap:
         true,
@@ -2795,11 +2804,6 @@ function getColumnFormat(index){
 
         background:
         "#ffffff",
-
-        /*
-           Format user đã lưu sẽ ghi đè
-           mặc định.
-        */
 
         ...(columnFormats[index] || {})
 
@@ -2909,10 +2913,6 @@ function renderHeader(){
     const visibleIndexes =
     getVisibleHeaderIndexes();
 
-
-    /*
-       HEADER ROW
-    */
 
     const headerRow =
     document.createElement("tr");
@@ -5317,6 +5317,16 @@ function closeFilterMenu(){
    RENAME PROMPT
 ========================================================= */
 
+/*
+   Khi rename:
+
+   1. Lưu tên mới.
+   2. Không xóa width user đã resize.
+   3. Nếu chưa resize thủ công,
+      getColumnWidth() sẽ tính lại width
+      theo tên mới.
+*/
+
 function openRenamePrompt(index){
 
     const original =
@@ -5349,8 +5359,8 @@ function openRenamePrompt(index){
 
 
     /*
-       Nếu người dùng nhập đúng tên mặc định,
-       không cần lưu custom rename.
+       Nếu nhập lại tên mặc định,
+       bỏ custom rename.
     */
 
     if(
@@ -5377,6 +5387,21 @@ function openRenamePrompt(index){
 
     saveState();
 
+
+    /*
+       renderTable() sẽ chạy lại:
+
+       getColumnWidth()
+            ↓
+       getDefaultColumnWidth()
+            ↓
+       getDefaultContentWidth()
+            ↓
+       getDisplayHeader()
+
+       nên width sẽ tự tính theo
+       tên header mới.
+    */
 
     renderTable();
 }
@@ -5634,6 +5659,15 @@ document
 
         saveState();
 
+
+        /*
+           Quan trọng:
+           renderTable() được gọi sau khi
+           renameHeaders đã cập nhật.
+
+           Vì vậy width mặc định sẽ được
+           tính theo tên mới.
+        */
 
         renderTable();
 
@@ -5961,10 +5995,6 @@ function resetUserState(){
     searches = {};
 
     sorts = {};
-
-    /*
-       Giữ default filter.
-    */
 
     filters = {};
 
