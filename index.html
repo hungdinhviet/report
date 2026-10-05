@@ -1019,7 +1019,10 @@ let columnFormats = {};
 
 let renamedHeaders = {
     "Package": "Gói cước",
-    "TOTAL PRICE": "Giá gói"
+    "TOTAL PRICE": "Giá gói",
+    "REVENUE": "Chu kỳ",
+    "Cách tính chu kỳ": "1 chu kỳ",
+    "Packageprice": "Giá/kỳ" 
 };
 
 let freezeCount = 0;
@@ -1193,6 +1196,9 @@ function loadState(){
     renamedHeaders = {
         "Package": "Gói cước",
         "TOTAL PRICE": "Giá gói",
+        "REVENUE": "Chu kỳ",
+        "Cách tính chu kỳ": "1 chu kỳ",
+        "Packageprice": "Giá/kỳ" 
         ...(saved.renamedHeaders || {})
     };
 
