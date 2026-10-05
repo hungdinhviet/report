@@ -132,6 +132,8 @@ td {
     font-family: Arial, sans-serif;
     font-size: 14px;
     background: #ffffff;
+
+    /* DATA VẪN WRAP */
     white-space: normal;
 }
 
@@ -161,7 +163,11 @@ tbody tr:hover td {
 .header-title {
     flex: 1;
     min-width: 0;
-    word-break: break-word;
+
+    /* HEADER KHÔNG WRAP */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header-buttons {
@@ -672,10 +678,6 @@ const DEFAULT_RIGHT_COLUMNS = new Set([
    SPECIAL WIDTH
 ========================================================= */
 
-/*
-   Những cột này PHẢI tự động vừa theo HEADER.
-*/
-
 const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 
     "REVENUE",
@@ -700,10 +702,6 @@ const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 ]);
 
 
-/*
-   Những cột này tự động vừa theo nội dung.
-*/
-
 const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
 
     "TOTAL PRICE",
@@ -721,10 +719,6 @@ const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
     "Pre/Post"
 ]);
 
-
-/*
-   Một số cột cần rộng hơn bình thường.
-*/
 
 const DEFAULT_WIDTH_MULTIPLIERS = {
 
@@ -833,11 +827,6 @@ function loadState() {
 
     }
 
-
-    /*
-       Nếu chưa có state mới,
-       thử lấy state cũ.
-    */
 
     if (!saved) {
 
@@ -1000,6 +989,7 @@ function getDisplayHeader(originalHeader) {
 
 
     return originalHeader;
+
 }
 
 
@@ -1100,11 +1090,6 @@ function getDefaultHeaderWidth(
         );
 
 
-    /*
-       Header được đo bằng:
-       bold + Arial + 14px
-    */
-
     const width =
         measureTextWidth(
             displayHeader,
@@ -1191,13 +1176,6 @@ function getDefaultColumnWidth(index) {
         headers[index];
 
 
-    /*
-       QUAN TRỌNG:
-
-       Các cột trong nhóm này
-       luôn lấy width theo HEADER.
-    */
-
     if (
         DEFAULT_HEADER_WIDTH_COLUMNS.has(
             originalHeader
@@ -1210,10 +1188,6 @@ function getDefaultColumnWidth(index) {
 
     }
 
-
-    /*
-       Các cột đặc biệt cần rộng.
-    */
 
     if (
         DEFAULT_WIDTH_MULTIPLIERS[
@@ -1230,10 +1204,6 @@ function getDefaultColumnWidth(index) {
 
     }
 
-
-    /*
-       Các cột tự động theo nội dung.
-    */
 
     if (
         DEFAULT_CONTENT_WIDTH_COLUMNS.has(
@@ -1259,11 +1229,6 @@ function getDefaultColumnWidth(index) {
 
 function getColumnWidth(index) {
 
-    /*
-       Chỉ sử dụng width đã lưu
-       nếu người dùng THỰC SỰ kéo cột.
-    */
-
     if (
         manuallyResizedColumns[index]
     ) {
@@ -1285,11 +1250,6 @@ function getColumnWidth(index) {
 
     }
 
-
-    /*
-       Nếu không kéo tay:
-       luôn tính lại auto-width.
-    */
 
     return getDefaultColumnWidth(
         index
@@ -1359,11 +1319,6 @@ function migrateAutoWidthColumns() {
     }
 
 
-    /*
-       Những cột này phải được
-       reset width cũ.
-    */
-
     const resetHeaders =
         new Set([
 
@@ -1402,17 +1357,6 @@ function migrateAutoWidthColumns() {
             if (
                 resetHeaders.has(header)
             ) {
-
-                /*
-                   Không xóa trạng thái
-                   kéo tay nếu đã có
-                   từ phiên bản mới.
-
-                   Nhưng nếu đây là
-                   migration cũ thì
-                   width cũ không còn
-                   được dùng.
-                */
 
                 if (
                     !Object.prototype.hasOwnProperty.call(
@@ -2249,11 +2193,6 @@ function renderFilterMenu() {
                 checked;
 
 
-            /*
-               Nếu chọn tất cả thì
-               không cần lưu filter.
-            */
-
             if (
                 checked.length ===
                 values.length
@@ -2444,6 +2383,8 @@ function renderTable() {
                         left:${fixed
                             ? left + "px"
                             : "auto"};
+
+                        /* HEADER LUÔN KHÔNG WRAP */
                         white-space:nowrap;
                     "
                 >
@@ -2652,10 +2593,6 @@ function renderTable() {
 
 function bindTableEvents() {
 
-    /*
-       Header search
-    */
-
     document
         .querySelectorAll(
             ".header-search"
@@ -2683,9 +2620,6 @@ function bindTableEvents() {
 
                         renderTable();
 
-                        /*
-                           Đặt cursor cuối input.
-                        */
 
                         setTimeout(
                             () => {
@@ -2716,10 +2650,6 @@ function bindTableEvents() {
             }
         );
 
-
-    /*
-       Filter
-    */
 
     document
         .querySelectorAll(
@@ -2753,10 +2683,6 @@ function bindTableEvents() {
         );
 
 
-    /*
-       Sort
-    */
-
     document
         .querySelectorAll(
             ".sort-btn"
@@ -2785,10 +2711,6 @@ function bindTableEvents() {
             }
         );
 
-
-    /*
-       Format từng cột
-    */
 
     document
         .querySelectorAll(
@@ -2820,10 +2742,6 @@ function bindTableEvents() {
             }
         );
 
-
-    /*
-       Resize
-    */
 
     document
         .querySelectorAll(
@@ -3265,11 +3183,6 @@ function updateStatus() {
 const originalRenderTable =
     renderTable;
 
-
-/*
-   Không override renderTable.
-   Status được cập nhật ở đây.
-*/
 
 function renderTableWithStatus() {
 
