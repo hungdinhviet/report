@@ -2311,46 +2311,79 @@ function getColumnWidth(index){
 ========================================================= */
 
 function getColumnFormat(index){
-    const originalHeader = headers[index];
+
+    const originalHeader =
+    headers[index];
+
+
+    /*
+       FORMAT MẶC ĐỊNH
+    */
 
     const format = {
+
         align:"left",
+
         fontFamily:"Arial",
+
         fontSize:14,
+
         bold:false,
+
         italic:false,
+
         wrap:true,
+
         color:"#111111",
+
         background:"#ffffff",
+
+        /*
+           Cho phép giữ các định dạng
+           mà người dùng đã lưu.
+        */
         ...(columnFormats[index] || {})
+
     };
 
-    // ==========================================
-    // CANH PHẢI - DỰA THEO TÊN CỘT GỐC
-    // ==========================================
+
+    /* =====================================================
+       CANH PHẢI
+       DỰA THEO TÊN GỐC CỦA CỘT
+       ===================================================== */
+
     if(
         originalHeader === "TOTAL PRICE" ||
         originalHeader === "Packageprice"
     ){
-        format.align = "right";
+
+        format.align =
+        "right";
+
     }
 
-    // ==========================================
-    // CANH GIỮA - DỰA THEO TÊN CỘT GỐC
-    // ==========================================
+
+    /* =====================================================
+       CANH GIỮA
+       DỰA THEO TÊN GỐC CỦA CỘT
+       ===================================================== */
+
     if(
         originalHeader === "REVENUE" ||
         originalHeader === "Kỳ" ||
         originalHeader === "Cách tính chu kỳ" ||
         originalHeader === "Pre/Post" ||
-        originalHeader === "KHDN/KHCN" 
+        originalHeader === "KHDN/KHCN"
     ){
-        format.align = "center";
+
+        format.align =
+        "center";
+
     }
+
 
     return format;
 }
-
 function applyFormatToCell(
     cell,
     index
