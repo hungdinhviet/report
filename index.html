@@ -2296,14 +2296,177 @@ function getVisibleHeaderIndexes(){
    WIDTH
 ========================================================= */
 
+/* =========================================================
+   WIDTH
+========================================================= */
+
+/*
+   Đo độ rộng chữ bằng Canvas.
+*/
+function measureHeaderText(
+    text,
+    font = "bold 14px Arial"
+){
+
+    const canvas =
+    document.createElement("canvas");
+
+    const context =
+    canvas.getContext("2d");
+
+    context.font =
+    font;
+
+    return context.measureText(
+        String(text ?? "")
+    ).width;
+}
+
+
+/*
+   Tính chiều rộng header.
+
+   Bao gồm:
+   - Tên header hiện tại
+   - Mũi tên Sort
+   - Nút Filter
+   - Padding
+*/
+function calculateHeaderWidth(index){
+
+    const originalHeader =
+    headers[index];
+
+
+    /*
+       QUAN TRỌNG:
+       Lấy tên đang hiển thị.
+
+       Ví dụ:
+       REVENUE -> Chu kỳ
+
+       thì sẽ tính theo "Chu kỳ",
+       không tính theo "REVENUE".
+    */
+    const displayHeader =
+    getDisplayHeader(
+        originalHeader
+    );
+
+
+    /*
+       Độ rộng tên header.
+    */
+    const titleWidth =
+    measureHeaderText(
+        displayHeader,
+        "bold 14px Arial"
+    );
+
+
+    /*
+       Độ rộng nút Sort.
+
+       Dùng chính icon hiện tại,
+       nên nếu Sort có priority:
+
+       ▲
+       ▲1
+       ▲1.5
+       ▼10
+
+       đều được tính.
+    */
+    const sortIcon =
+    getSortIcon(index);
+
+
+    const sortWidth =
+    Math.max(
+        24,
+        measureHeaderText(
+            sortIcon,
+            "14px Arial"
+        ) + 8
+    );
+
+
+    /*
+       Độ rộng nút Filter.
+    */
+    const filterWidth =
+    Math.max(
+        24,
+        measureHeaderText(
+            "▼",
+            "14px Arial"
+        ) + 8
+    );
+
+
+    /*
+       Padding trái + phải
+       và một khoảng an toàn nhỏ.
+    */
+    const paddingWidth =
+    20;
+
+
+    const totalWidth =
+    titleWidth +
+    sortWidth +
+    filterWidth +
+    paddingWidth;
+
+
+    /*
+       Không cho nhỏ hơn 70px.
+    */
+    return Math.max(
+        70,
+        Math.ceil(totalWidth)
+    );
+}
+
+
+/*
+   Lấy chiều rộng cột.
+*/
 function getColumnWidth(index){
 
+    const originalHeader =
+    headers[index];
+
+
+    /*
+       =====================================================
+       RIÊNG REVENUE VÀ KỲ
+       =====================================================
+
+       Luôn tự tính theo header hiện tại.
+    */
+    if(
+        originalHeader === "REVENUE" ||
+        originalHeader === "Kỳ"
+    ){
+
+        return calculateHeaderWidth(
+            index
+        );
+    }
+
+
+    /*
+       Các cột khác giữ nguyên
+       cơ chế chiều rộng hiện tại.
+    */
     return (
         Number(
             columnWidths[index]
         ) || 150
     );
 }
+
 
 
 /* =========================================================
@@ -5048,60 +5211,37 @@ function closeFilterMenu(){
 ========================================================= */
 
 function openRenamePrompt(index){
+    const original = headers[index];
+    const current = getDisplayHeader(original);
 
-    const original =
-    headers[index];
-
-
-    const current =
-    getDisplayHeader(
-        original
-    );
-
-
-    const newName =
-    prompt(
+    const newName = prompt(
         "Tên mới của cột:",
         current
     );
 
+    if(newName === null) return;
 
-    if(
-        newName === null
-    ){
+    const trimmed = newName.trim();
 
-        return;
-    }
-
-
-    const trimmed =
-    newName.trim();
-
-
-    if(
-        trimmed === ""
-    ){
-
-        delete renamedHeaders[
-            original
-        ];
-
+    if(trimmed === ""){
+        delete renamedHeaders[original];
     }
     else{
-
-        renamedHeaders[
-            original
-        ] =
-        trimmed;
+        renamedHeaders[original] = trimmed;
     }
 
+    // Nếu là REVENUE hoặc Kỳ thì
+    // luôn tính lại kích thước theo tên mới
+    if(
+        original === "REVENUE" ||
+        original === "Kỳ"
+    ){
+        delete columnWidths[index];
+    }
 
     saveState();
-
-
     renderTable();
 }
-
 
 /* =========================================================
    SETTINGS RENAME LIST
