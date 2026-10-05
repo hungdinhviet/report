@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Report</title>
+<title>DINHVIETHUNG</title>
 
 <style>
 *{
@@ -40,11 +40,11 @@ body{
     top:0;
     left:0;
     right:0;
-    height:44px;
+
+    height:82px;
 
     display:flex;
-    align-items:center;
-    gap:7px;
+    flex-direction:column;
 
     padding:5px 8px;
 
@@ -54,8 +54,63 @@ body{
     z-index:5000;
 }
 
+/* =========================================================
+   GLOBAL SEARCH ROW
+========================================================= */
+
+.toolbar-search-row{
+    width:100%;
+    height:32px;
+
+    flex:0 0 32px;
+
+    display:flex;
+    align-items:center;
+}
+
+.global-search{
+    width:100%;
+    height:29px;
+
+    border:1px solid #bbb;
+    border-radius:4px;
+
+    padding:4px 9px;
+
+    outline:none;
+
+    font-family:Arial,sans-serif;
+    font-size:13px;
+
+    background:#fff;
+}
+
+.global-search:focus{
+    border-color:#4285f4;
+
+    box-shadow:
+        0 0 0 1px #4285f4;
+}
+
+/* =========================================================
+   TOOLBAR MAIN
+========================================================= */
+
+.toolbar-main{
+    width:100%;
+    height:38px;
+
+    flex:0 0 38px;
+
+    display:flex;
+    align-items:center;
+
+    gap:7px;
+}
+
 .toolbar button{
     height:32px;
+
     padding:0 12px;
 
     border:1px solid #bbb;
@@ -72,7 +127,9 @@ body{
 
 .toolbar-status{
     margin-left:auto;
+
     color:#666;
+
     white-space:nowrap;
 }
 
@@ -85,7 +142,8 @@ body{
 
     left:0;
     right:0;
-    top:44px;
+
+    top:82px;
     bottom:0;
 
     overflow:auto;
@@ -181,6 +239,8 @@ thead th{
 
     padding:0 5px;
 
+    gap:2px;
+
     user-select:none;
 }
 
@@ -201,6 +261,8 @@ thead th{
 .header-actions{
     display:flex;
     align-items:center;
+
+    gap:2px;
 
     flex-shrink:0;
 }
@@ -381,6 +443,10 @@ tbody td.frozen-column{
     font-size:14px;
 }
 
+/* =========================================================
+   FILTER SEARCH
+========================================================= */
+
 .filter-search{
     width:100%;
 
@@ -399,6 +465,10 @@ tbody td.frozen-column{
 .filter-search:focus{
     border-color:#4285f4;
 }
+
+/* =========================================================
+   FILTER ACTIONS
+========================================================= */
 
 .filter-actions{
     display:flex;
@@ -423,6 +493,10 @@ tbody td.frozen-column{
 .menu-button:hover{
     background:#eef5ff;
 }
+
+/* =========================================================
+   FILTER VALUES
+========================================================= */
 
 .filter-values{
     border-top:1px solid #ddd;
@@ -711,7 +785,8 @@ tbody td.frozen-column{
 
     left:0;
     right:0;
-    top:44px;
+
+    top:82px;
     bottom:0;
 
     display:flex;
@@ -751,29 +826,61 @@ tbody td.frozen-column{
 
     <div class="toolbar">
 
-        <button id="refreshBtn">
-            ↻ Làm mới
-        </button>
+        <!-- TÌM KIẾM TOÀN BỘ BẢNG -->
 
-        <button id="resetBtn">
-            ⟳ Tổng / Reset
-        </button>
+        <div class="toolbar-search-row">
 
-        <button id="settingsBtn">
-            ⚙ Cài đặt
-        </button>
+            <input
+                id="globalSearch"
+                class="global-search"
+                type="text"
+                placeholder="🔎 Tìm kiếm toàn bộ bảng..."
+                autocomplete="off"
+            >
 
-        <span id="status" class="toolbar-status">
-            Đang tải...
-        </span>
+        </div>
+
+
+        <!-- TOOLBAR CHÍNH -->
+
+        <div class="toolbar-main">
+
+            <button id="refreshBtn">
+                ↻ Làm mới
+            </button>
+
+            <button id="resetBtn">
+                ⟳ Tổng / Reset
+            </button>
+
+            <button id="settingsBtn">
+                ⚙ Cài đặt
+            </button>
+
+            <span
+                id="status"
+                class="toolbar-status"
+            >
+                Đang tải...
+            </span>
+
+        </div>
 
     </div>
 
-    <div id="loading" class="loading">
+
+    <div
+        id="loading"
+        class="loading"
+    >
         Đang tải dữ liệu...
     </div>
 
-    <div id="tableWrapper" class="table-wrapper">
+
+    <div
+        id="tableWrapper"
+        class="table-wrapper"
+    >
 
         <table id="dataTable">
 
@@ -792,13 +899,20 @@ tbody td.frozen-column{
      SETTINGS
 ===================================================== -->
 
-<div id="settingsOverlay" class="settings-overlay">
+<div
+    id="settingsOverlay"
+    class="settings-overlay"
+>
 
-    <div id="settingsPanel" class="settings-panel">
+    <div
+        id="settingsPanel"
+        class="settings-panel"
+    >
 
         <div class="settings-title">
             ⚙ Cài đặt bảng
         </div>
+
 
         <div class="settings-row">
 
@@ -810,10 +924,11 @@ tbody td.frozen-column{
                 id="freezeCountInput"
                 type="number"
                 min="0"
-                value="6"
+                value="0"
             >
 
         </div>
+
 
         <div class="settings-row">
 
@@ -821,7 +936,9 @@ tbody td.frozen-column{
                 Tự động làm mới
             </label>
 
-            <select id="autoRefreshSelect">
+            <select
+                id="autoRefreshSelect"
+            >
 
                 <option value="0">
                     Tắt
@@ -843,15 +960,20 @@ tbody td.frozen-column{
 
         </div>
 
+
         <div class="settings-row">
 
             <label>
                 Đổi tên cột
             </label>
 
-            <div id="renameList" class="rename-list"></div>
+            <div
+                id="renameList"
+                class="rename-list"
+            ></div>
 
         </div>
+
 
         <div
             style="
@@ -898,26 +1020,13 @@ const CSV_URL =
 ========================================================= */
 
 const STORAGE_KEY =
-"report_google_sheet_table_v12";
+"report_google_sheet_table_v11";
 
 const OLD_KEYS = [
-    "report_google_sheet_table_v11",
     "report_google_sheet_table_v10",
     "report_google_sheet_table_v9",
     "report_google_sheet_table_v8"
 ];
-
-
-/*
-   Version migration cho Auto Width.
-
-   Mục đích:
-   Xóa kích thước cũ của các cột cần
-   tự động vừa theo Header.
-
-   Chỉ chạy một lần.
-*/
-const AUTO_WIDTH_MIGRATION_VERSION = 3;
 
 
 /* =========================================================
@@ -950,178 +1059,59 @@ const SORT_BY_MAP = {
 
 
 /* =========================================================
-   DEFAULT SETTINGS
+   HEADER WIDTH
 ========================================================= */
 
-/*
-   Mặc định cố định 6 cột.
-*/
-const DEFAULT_FREEZE_COUNT = 6;
-
-
-/*
-   Tên cột mặc định.
-*/
-const DEFAULT_COLUMN_RENAMES = {
-
-    "Package":
-        "Gói cước",
-
-    "TOTAL PRICE":
-        "Giá gói",
-
-    "Total Price":
-        "Giá gói",
-
-    "REVENUE":
-        "Chu kỳ",
-
-    "Cách tính chu kỳ":
-        "1 chu kỳ",
-
-    "Packageprice":
-        "Giá/kỳ",
-
-    "Ngày update":
-        "Update"
-
-};
-
-
-/*
-   Các cột mặc định căn giữa.
-*/
-const DEFAULT_CENTER_COLUMNS = new Set([
-
-    "REVENUE",
-
-    "Cách tính chu kỳ",
-
-    "Kỳ",
-
-    "Pre/Post",
-
-    "KHDN/KHCN",
-
-    "Cam kết MNP",
-
-    "Ngày update"
-
-]);
-
-
-/*
-   Các cột mặc định căn phải.
-*/
-const DEFAULT_RIGHT_COLUMNS = new Set([
-
-    "TOTAL PRICE",
-
-    "Total Price",
-
-    "Packageprice"
-
-]);
-
-
-/*
-   Một số cột đặc biệt có độ rộng lớn hơn.
-*/
-const DEFAULT_WIDTH_MULTIPLIERS = {
-
-    "Đối tượng áp dụng":4,
-
-    "Phạm vi cung cấp":2,
-
-    "Free truy cập":2,
-
-    "Khác":2
-
-};
-
-
-/*
-   Các cột phải vừa theo HEADER.
-
-   Dùng tên hiển thị để đảm bảo:
-
-   REVENUE
-       -> Chu kỳ
-
-   Cách tính chu kỳ
-       -> 1 chu kỳ
-*/
-const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
-
-    "Chu kỳ",
-
-    "1 chu kỳ",
-
-    "Kỳ",
-
-    "Thoại nội mạng",
-
-    "Thoại ngoại mạng",
-
-    "Hạ băng thông",
-
-    "Loại gói cước",
-
-    "Tự động gia hạn",
-
-    "Dừng đăng kí mới",
-
-    /*
-       Giữ KHDN/KHCN theo logic cũ.
-    */
-    "KHDN/KHCN"
-
-]);
-
-
-/*
-   Các cột vừa theo nội dung.
-
-   Chỉ áp dụng cho các cột không nằm trong
-   nhóm HEADER phía trên.
-*/
-const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
-
-    "Facebook",
-
-    "Youtube",
-
-    "Tiktok",
-
-    "TOTAL PRICE",
-
-    "Total Price",
-
-    "Packageprice"
-
-]);
-
-
-const DEFAULT_WIDTH_BASE = 150;
-
-const MAX_CONTENT_WIDTH = 500;
-
-
-/*
-   Độ rộng tính theo Header.
-
-   +32 = padding 2 bên + khoảng trống cho nút
-   sort/filter.
-*/
-const HEADER_WIDTH_PADDING = 32;
-
-
-/*
-   Giới hạn hợp lý để header không quá dài.
-*/
 const MIN_HEADER_WIDTH = 90;
 
 const MAX_HEADER_WIDTH = 320;
+
+/*
+   Phần chiều rộng dành cho:
+   - 2 nút header: 24 + 24
+   - khoảng cách giữa 2 nút
+   - padding trái/phải header
+*/
+
+const HEADER_ACTION_WIDTH =
+24 * 2;
+
+const HEADER_ACTION_GAP =
+2;
+
+const HEADER_HORIZONTAL_PADDING =
+10;
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+/*
+   Debounce giúp khi gõ nhanh:
+   không render lại body ở từng
+   phím ngay lập tức.
+*/
+
+const SEARCH_DEBOUNCE_MS =
+180;
+
+
+/*
+   Cache tìm kiếm toàn bộ dòng.
+
+   rowSearchCache[index]
+   = toàn bộ nội dung của dòng đã
+   normalize thành một chuỗi.
+*/
+
+let rowSearchCache = [];
+
+let globalSearch = "";
+
+let columnSearchTimer = null;
+
+let globalSearchTimer = null;
 
 
 /* =========================================================
@@ -1149,26 +1139,7 @@ let columnFormats = {};
 
 let renamedHeaders = {};
 
-let freezeCount =
-DEFAULT_FREEZE_COUNT;
-
-
-/*
-   Đánh dấu những cột mà người dùng đã tự resize.
-
-   Nếu chưa resize:
-   dùng Auto Width.
-
-   Nếu đã resize:
-   giữ kích thước user chọn.
-*/
-let manuallyResizedColumns = {};
-
-
-/*
-   Version migration.
-*/
-let autoWidthMigrationVersion = 0;
+let freezeCount = 0;
 
 
 /* =========================================================
@@ -1243,6 +1214,11 @@ document.getElementById(
     "status"
 );
 
+const globalSearchInput =
+document.getElementById(
+    "globalSearch"
+);
+
 const settingsOverlay =
 document.getElementById(
     "settingsOverlay"
@@ -1265,13 +1241,57 @@ document.getElementById(
 
 
 /* =========================================================
+   NORMALIZE SEARCH TEXT
+========================================================= */
+
+function normalizeSearchText(value){
+
+    return String(
+        value ?? ""
+    )
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    )
+    .replace(
+        /\s+/g,
+        " "
+    )
+    .trim();
+}
+
+
+/* =========================================================
+   REBUILD SEARCH CACHE
+========================================================= */
+
+function rebuildRowSearchCache(){
+
+    rowSearchCache =
+    rows.map(
+        row => {
+
+            return row
+            .map(
+                value =>
+                normalizeSearchText(value)
+            )
+            .join(" ");
+
+        }
+    );
+}
+
+
+/* =========================================================
    LOAD STATE
 ========================================================= */
 
 function loadState(){
 
     let saved = null;
-
 
     try{
 
@@ -1280,13 +1300,10 @@ function loadState(){
             STORAGE_KEY
         );
 
-
         if(current){
 
             saved =
-            JSON.parse(
-                current
-            );
+            JSON.parse(current);
         }
 
 
@@ -1301,13 +1318,10 @@ function loadState(){
                     key
                 );
 
-
                 if(old){
 
                     saved =
-                    JSON.parse(
-                        old
-                    );
+                    JSON.parse(old);
 
                     break;
                 }
@@ -1325,10 +1339,6 @@ function loadState(){
 
 
     if(!saved){
-
-        freezeCount =
-        DEFAULT_FREEZE_COUNT;
-
         return;
     }
 
@@ -1351,48 +1361,22 @@ function loadState(){
     renamedHeaders =
     saved.renamedHeaders || {};
 
-
-    /*
-       Nếu state cũ chưa có freezeCount
-       thì mặc định 6.
-    */
     freezeCount =
-    saved.freezeCount !== undefined
-        ? Number(saved.freezeCount)
-        : DEFAULT_FREEZE_COUNT;
-
-
-    /*
-       State cũ không có manuallyResizedColumns.
-
-       KHÔNG được đánh tất cả columnWidths
-       thành manual.
-
-       Nếu làm vậy thì Auto Width mới
-       sẽ không thể sửa các kích thước cũ.
-    */
-    manuallyResizedColumns =
-    saved.manuallyResizedColumns || {};
-
-
-    autoWidthMigrationVersion =
     Number(
-        saved.autoWidthMigrationVersion || 0
+        saved.freezeCount || 0
     );
 
 
-    /*
-       Nếu freezeCount bị lỗi.
-    */
-    if(
-        !Number.isFinite(
-            freezeCount
-        ) ||
-        freezeCount < 0
-    ){
+    globalSearch =
+    String(
+        saved.globalSearch || ""
+    );
 
-        freezeCount =
-        DEFAULT_FREEZE_COUNT;
+
+    if(globalSearchInput){
+
+        globalSearchInput.value =
+        globalSearch;
     }
 }
 
@@ -1406,7 +1390,6 @@ function saveState(){
     try{
 
         localStorage.setItem(
-
             STORAGE_KEY,
 
             JSON.stringify({
@@ -1425,12 +1408,9 @@ function saveState(){
 
                 freezeCount,
 
-                manuallyResizedColumns,
-
-                autoWidthMigrationVersion
+                globalSearch
 
             })
-
         );
 
     }
@@ -1492,6 +1472,7 @@ function parseCSV(text){
 
         }
 
+
         else if(
             c === "," &&
             !inQuotes
@@ -1501,6 +1482,7 @@ function parseCSV(text){
 
             cell = "";
         }
+
 
         else if(
             (
@@ -1535,6 +1517,7 @@ function parseCSV(text){
 
             row = [];
         }
+
 
         else{
 
@@ -1576,15 +1559,12 @@ async function loadData(){
 
         const response =
         await fetch(
-
             CSV_URL +
             "&cachebust=" +
             Date.now(),
-
             {
                 cache:"no-store"
             }
-
         );
 
 
@@ -1634,45 +1614,42 @@ async function loadData(){
         rows =
         parsed
         .slice(1)
-        .map(
-            sourceRow => {
+        .map(sourceRow => {
 
-                const row =
-                new Array(
-                    headers.length
-                ).fill("");
-
-
-                for(
-                    let i = 0;
-                    i < headers.length;
-                    i++
-                ){
-
-                    row[i] =
-                    sourceRow[i] == null
-                        ? ""
-                        : String(
-                            sourceRow[i]
-                        );
-                }
+            const row =
+            new Array(
+                headers.length
+            ).fill("");
 
 
-                return row;
+            for(
+                let i = 0;
+                i < headers.length;
+                i++
+            ){
+
+                row[i] =
+                sourceRow[i] == null
+                    ? ""
+                    : String(
+                        sourceRow[i]
+                    );
             }
-        );
+
+
+            return row;
+        });
 
 
         /*
-           Defaults.
+           Tạo cache tìm kiếm ngay sau
+           khi load dữ liệu.
         */
+
+        rebuildRowSearchCache();
+
+
         initializeDefaults();
-
-
-        /*
-           Migration Auto Width.
-        */
-        migrateAutoWidthColumns();
 
 
         renderTable();
@@ -1698,15 +1675,10 @@ async function loadData(){
 
 
         const tr =
-        document.createElement(
-            "tr"
-        );
-
+        document.createElement("tr");
 
         const td =
-        document.createElement(
-            "td"
-        );
+        document.createElement("td");
 
 
         td.colSpan =
@@ -1740,144 +1712,10 @@ async function loadData(){
 
 
 /* =========================================================
-   INITIALIZE DEFAULTS
+   DEFAULT FILTER
 ========================================================= */
 
 function initializeDefaults(){
-
-    /*
-       Áp dụng tên mặc định nếu user
-       chưa từng đổi tên.
-    */
-    Object.keys(
-        DEFAULT_COLUMN_RENAMES
-    )
-    .forEach(
-        original => {
-
-            if(
-                headers.includes(
-                    original
-                ) &&
-                renamedHeaders[original] ===
-                undefined
-            ){
-
-                renamedHeaders[original] =
-                DEFAULT_COLUMN_RENAMES[
-                    original
-                ];
-            }
-
-        }
-    );
-
-
-    /*
-       Nếu state cũ đang dùng tên hiển thị
-       sai do những phiên bản trước,
-       đảm bảo các tên chuẩn tồn tại.
-    */
-
-    if(
-        headers.includes("Package")
-    ){
-
-        renamedHeaders["Package"] =
-        "Gói cước";
-    }
-
-
-    if(
-        headers.includes("TOTAL PRICE")
-    ){
-
-        renamedHeaders["TOTAL PRICE"] =
-        "Giá gói";
-    }
-
-
-    if(
-        headers.includes("Total Price")
-    ){
-
-        renamedHeaders["Total Price"] =
-        "Giá gói";
-    }
-
-
-    if(
-        headers.includes("REVENUE")
-    ){
-
-        renamedHeaders["REVENUE"] =
-        "Chu kỳ";
-    }
-
-
-    if(
-        headers.includes("Cách tính chu kỳ")
-    ){
-
-        renamedHeaders["Cách tính chu kỳ"] =
-        "1 chu kỳ";
-    }
-
-
-    if(
-        headers.includes("Packageprice")
-    ){
-
-        renamedHeaders["Packageprice"] =
-        "Giá/kỳ";
-    }
-
-
-    if(
-        headers.includes("Ngày update")
-    ){
-
-        renamedHeaders["Ngày update"] =
-        "Update";
-    }
-
-
-    /*
-       Freeze mặc định = 6.
-    */
-    if(
-        !Number.isFinite(
-            freezeCount
-        )
-    ){
-
-        freezeCount =
-        DEFAULT_FREEZE_COUNT;
-    }
-
-
-    /*
-       Nếu đây là state mới hoàn toàn
-       và freezeCount đang 0,
-       dùng mặc định 6.
-
-       Chỉ làm khi chưa có state explicit.
-    */
-    if(
-        localStorage.getItem(
-            STORAGE_KEY
-        ) === null &&
-        freezeCount === 0
-    ){
-
-        freezeCount =
-        DEFAULT_FREEZE_COUNT;
-    }
-
-
-    /*
-       Default filter.
-    */
 
     if(
         defaultFiltersInitialized
@@ -1924,95 +1762,8 @@ function initializeDefaults(){
         filters[stopIndex] === undefined
     ){
 
-        filters[stopIndex] =
-        [""];
+        filters[stopIndex] = [""];
     }
-
-
-    saveState();
-}
-
-
-/* =========================================================
-   AUTO WIDTH MIGRATION
-========================================================= */
-
-function migrateAutoWidthColumns(){
-
-    /*
-       Chỉ migrate một lần.
-
-       Quan trọng:
-       Không dựa vào manuallyResizedColumns
-       của state cũ vì những bản cũ không lưu
-       thông tin này chính xác.
-    */
-
-    if(
-        autoWidthMigrationVersion >=
-        AUTO_WIDTH_MIGRATION_VERSION
-    ){
-
-        return;
-    }
-
-
-    const targetDisplayNames =
-    new Set([
-
-        "Chu kỳ",
-
-        "1 chu kỳ",
-
-        "Kỳ",
-
-        "Thoại nội mạng",
-
-        "Thoại ngoại mạng",
-
-        "Hạ băng thông",
-
-        "Loại gói cước",
-
-        "Tự động gia hạn",
-
-        "Dừng đăng kí mới"
-
-    ]);
-
-
-    headers.forEach(
-        (header,index) => {
-
-            const display =
-            getDisplayHeader(
-                header
-            );
-
-
-            if(
-                targetDisplayNames.has(
-                    display
-                )
-            ){
-
-                /*
-                   Xóa width cũ.
-
-                   Từ phiên bản này trở đi,
-                   cột sẽ Auto Width theo Header.
-                */
-                delete columnWidths[index];
-
-                delete manuallyResizedColumns[index];
-            }
-
-        }
-    );
-
-
-    autoWidthMigrationVersion =
-    AUTO_WIDTH_MIGRATION_VERSION;
 
 
     saveState();
@@ -2029,17 +1780,15 @@ function getAllColumnValues(index){
     new Set();
 
 
-    rows.forEach(
-        row => {
+    rows.forEach(row => {
 
-            set.add(
-                String(
-                    row[index] ?? ""
-                )
-            );
+        set.add(
+            String(
+                row[index] ?? ""
+            )
+        );
 
-        }
-    );
+    });
 
 
     return Array.from(set);
@@ -2058,327 +1807,7 @@ function getDisplayHeader(
         renamedHeaders[
             originalHeader
         ] ||
-        DEFAULT_COLUMN_RENAMES[
-            originalHeader
-        ] ||
         originalHeader
-    );
-}
-
-
-/* =========================================================
-   MEASURE TEXT
-========================================================= */
-
-function measureTextWidth(
-    text,
-    font
-){
-
-    const canvas =
-    measureTextWidth.canvas ||
-    (
-        measureTextWidth.canvas =
-        document.createElement(
-            "canvas"
-        )
-    );
-
-
-    const context =
-    canvas.getContext(
-        "2d"
-    );
-
-
-    context.font =
-    font;
-
-
-    return context.measureText(
-        String(text ?? "")
-    ).width;
-}
-
-
-/* =========================================================
-   DEFAULT COLUMN ALIGNMENT
-========================================================= */
-
-function getDefaultColumnAlignment(
-    originalHeader
-){
-
-    if(
-        DEFAULT_RIGHT_COLUMNS.has(
-            originalHeader
-        )
-    ){
-
-        return "right";
-    }
-
-
-    if(
-        DEFAULT_CENTER_COLUMNS.has(
-            originalHeader
-        )
-    ){
-
-        return "center";
-    }
-
-
-    /*
-       Alias hiển thị.
-    */
-
-    const display =
-    getDisplayHeader(
-        originalHeader
-    );
-
-
-    if(
-        display === "Giá gói" ||
-        display === "Giá/kỳ"
-    ){
-
-        return "right";
-    }
-
-
-    if(
-        display === "Chu kỳ" ||
-        display === "1 chu kỳ" ||
-        display === "Kỳ"
-    ){
-
-        return "center";
-    }
-
-
-    return "left";
-}
-
-
-/* =========================================================
-   DEFAULT HEADER WIDTH
-========================================================= */
-
-function getDefaultHeaderWidth(
-    index
-){
-
-    const originalHeader =
-    headers[index];
-
-
-    const displayHeader =
-    getDisplayHeader(
-        originalHeader
-    );
-
-
-    /*
-       Header dùng Arial 13,
-       đúng với font mặc định của bảng.
-    */
-    const width =
-    measureTextWidth(
-        displayHeader,
-        "bold 13px Arial"
-    )
-    +
-    HEADER_WIDTH_PADDING;
-
-
-    return Math.max(
-        MIN_HEADER_WIDTH,
-        Math.min(
-            MAX_HEADER_WIDTH,
-            Math.ceil(width)
-        )
-    );
-}
-
-
-/* =========================================================
-   DEFAULT CONTENT WIDTH
-========================================================= */
-
-function getDefaultContentWidth(
-    index
-){
-
-    const originalHeader =
-    headers[index];
-
-
-    const displayHeader =
-    getDisplayHeader(
-        originalHeader
-    );
-
-
-    let maxWidth =
-    measureTextWidth(
-        displayHeader,
-        "bold 13px Arial"
-    );
-
-
-    rows.forEach(
-        row => {
-
-            const value =
-            getDisplayValue(
-                row[index],
-                originalHeader
-            );
-
-
-            const width =
-            measureTextWidth(
-                value,
-                "13px Arial"
-            );
-
-
-            maxWidth =
-            Math.max(
-                maxWidth,
-                Math.min(
-                    width,
-                    MAX_CONTENT_WIDTH
-                )
-            );
-
-        }
-    );
-
-
-    maxWidth += 30;
-
-
-    return Math.max(
-        100,
-        Math.ceil(maxWidth)
-    );
-}
-
-
-/* =========================================================
-   DEFAULT COLUMN WIDTH
-========================================================= */
-
-function getDefaultColumnWidth(
-    index
-){
-
-    const originalHeader =
-    headers[index];
-
-
-    const displayHeader =
-    getDisplayHeader(
-        originalHeader
-    );
-
-
-    /*
-       1. Ưu tiên nhóm Header.
-    */
-    if(
-        DEFAULT_HEADER_WIDTH_COLUMNS.has(
-            displayHeader
-        )
-    ){
-
-        return getDefaultHeaderWidth(
-            index
-        );
-    }
-
-
-    /*
-       2. Nhóm độ rộng đặc biệt.
-    */
-    if(
-        DEFAULT_WIDTH_MULTIPLIERS[
-            originalHeader
-        ]
-    ){
-
-        return (
-            DEFAULT_WIDTH_BASE *
-            DEFAULT_WIDTH_MULTIPLIERS[
-                originalHeader
-            ]
-        );
-    }
-
-
-    /*
-       3. Content Width.
-    */
-    if(
-        DEFAULT_CONTENT_WIDTH_COLUMNS.has(
-            originalHeader
-        )
-    ){
-
-        return getDefaultContentWidth(
-            index
-        );
-    }
-
-
-    /*
-       4. Mặc định.
-    */
-    return DEFAULT_WIDTH_BASE;
-}
-
-
-/* =========================================================
-   COLUMN WIDTH
-========================================================= */
-
-function getColumnWidth(index){
-
-    /*
-       Chỉ lấy width lưu nếu user thực sự
-       đã kéo resize.
-
-       Như vậy width cũ trong LocalStorage
-       không thể phá Auto Width.
-    */
-
-    if(
-        manuallyResizedColumns[index]
-    ){
-
-        const savedWidth =
-        Number(
-            columnWidths[index]
-        );
-
-
-        if(
-            Number.isFinite(
-                savedWidth
-            ) &&
-            savedWidth > 0
-        ){
-
-            return savedWidth;
-        }
-    }
-
-
-    return getDefaultColumnWidth(
-        index
     );
 }
 
@@ -2638,8 +2067,7 @@ function getSortValue(
 
             type:"date",
 
-            value:
-            date.getTime()
+            value:date.getTime()
 
         };
     }
@@ -2650,15 +2078,7 @@ function getSortValue(
         type:"text",
 
         value:
-        String(
-            value ?? ""
-        )
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
+        normalizeSearchText(value)
 
     };
 }
@@ -2670,8 +2090,60 @@ function getSortValue(
 
 function rowMatchesFilters(
     row,
+    rowIndex = -1,
     ignoreColumn = -1
 ){
+
+    /*
+       GLOBAL SEARCH
+    */
+
+    const globalQuery =
+    normalizeSearchText(
+        globalSearch
+    );
+
+
+    if(globalQuery){
+
+        let rowText;
+
+
+        if(
+            rowIndex >= 0 &&
+            rowSearchCache[rowIndex] !== undefined
+        ){
+
+            rowText =
+            rowSearchCache[rowIndex];
+
+        }
+        else{
+
+            rowText =
+            row
+            .map(
+                value =>
+                normalizeSearchText(value)
+            )
+            .join(" ");
+        }
+
+
+        if(
+            !rowText.includes(
+                globalQuery
+            )
+        ){
+
+            return false;
+        }
+    }
+
+
+    /*
+       FILTER
+    */
 
     for(
         const key of Object.keys(filters)
@@ -2727,6 +2199,10 @@ function rowMatchesFilters(
     }
 
 
+    /*
+       COLUMN SEARCH
+    */
+
     for(
         const key of Object.keys(searches)
     ){
@@ -2744,11 +2220,9 @@ function rowMatchesFilters(
 
 
         const query =
-        String(
-            searches[key] ?? ""
-        )
-        .trim()
-        .toLowerCase();
+        normalizeSearchText(
+            searches[key]
+        );
 
 
         if(!query){
@@ -2757,10 +2231,9 @@ function rowMatchesFilters(
 
 
         const value =
-        String(
-            row[index] ?? ""
-        )
-        .toLowerCase();
+        normalizeSearchText(
+            row[index]
+        );
 
 
         if(
@@ -2777,7 +2250,7 @@ function rowMatchesFilters(
 
 
 /* =========================================================
-   FILTER VALUES
+   FILTER VALUES FOR CURRENT COLUMN
 ========================================================= */
 
 function getFilterValuesForColumn(
@@ -2786,9 +2259,10 @@ function getFilterValuesForColumn(
 
     const source =
     rows.filter(
-        row =>
+        (row,rowIndex) =>
         rowMatchesFilters(
             row,
+            rowIndex,
             index
         )
     );
@@ -2798,17 +2272,15 @@ function getFilterValuesForColumn(
     new Set();
 
 
-    source.forEach(
-        row => {
+    source.forEach(row => {
 
-            set.add(
-                String(
-                    row[index] ?? ""
-                )
-            );
+        set.add(
+            String(
+                row[index] ?? ""
+            )
+        );
 
-        }
-    );
+    });
 
 
     return Array.from(set);
@@ -2832,37 +2304,36 @@ function getVisibleRows(){
     .filter(
         item =>
         rowMatchesFilters(
-            item.row
+            item.row,
+            item.originalIndex
         )
     );
 
 
     const activeSorts =
     Object.keys(sorts)
-    .map(
-        key => {
+    .map(key => {
 
-            const priority =
-            Number(
-                sorts[key].priority
-            );
+        const priority =
+        Number(
+            sorts[key].priority
+        );
 
 
-            return {
+        return {
 
-                index:
-                Number(key),
+            index:
+            Number(key),
 
-                priority,
+            priority,
 
-                direction:
-                sorts[key].direction ||
-                "asc"
+            direction:
+            sorts[key].direction ||
+            "asc"
 
-            };
+        };
 
-        }
-    )
+    })
     .filter(
         item =>
         Number.isFinite(
@@ -2918,6 +2389,7 @@ function getVisibleRows(){
                     bv.value;
                 }
 
+
                 else if(
                     av.type === "date" &&
                     bv.type === "date"
@@ -2927,6 +2399,7 @@ function getVisibleRows(){
                     av.value -
                     bv.value;
                 }
+
 
                 else{
 
@@ -2996,48 +2469,142 @@ function getVisibleHeaderIndexes(){
 
 
 /* =========================================================
-   FORMAT
+   TEXT MEASURE
 ========================================================= */
 
-function getColumnFormat(index){
+function measureTextWidth(
+    text,
+    font = "bold 13px Arial"
+){
+
+    const canvas =
+    measureTextWidth.canvas ||
+    (
+        measureTextWidth.canvas =
+        document.createElement(
+            "canvas"
+        )
+    );
+
+
+    const context =
+    canvas.getContext("2d");
+
+
+    context.font =
+    font;
+
+
+    return context.measureText(
+        String(text ?? "")
+    ).width;
+}
+
+
+/* =========================================================
+   DEFAULT HEADER WIDTH
+========================================================= */
+
+function getDefaultHeaderWidth(index){
 
     const originalHeader =
     headers[index];
 
 
+    const displayHeader =
+    getDisplayHeader(
+        originalHeader
+    );
+
+
+    /*
+       Tính:
+       - chiều rộng text
+       - 2 nút ↕ và ▼
+       - khoảng cách giữa 2 nút
+       - padding trái/phải
+    */
+
+    const titleWidth =
+    measureTextWidth(
+        displayHeader,
+        "bold 13px Arial"
+    );
+
+
+    const width =
+    titleWidth +
+    HEADER_ACTION_WIDTH +
+    HEADER_ACTION_GAP +
+    HEADER_HORIZONTAL_PADDING;
+
+
+    return Math.max(
+        MIN_HEADER_WIDTH,
+        Math.min(
+            MAX_HEADER_WIDTH,
+            Math.ceil(width)
+        )
+    );
+}
+
+
+/* =========================================================
+   COLUMN WIDTH
+========================================================= */
+
+function getColumnWidth(index){
+
+    /*
+       Nếu user đã resize thủ công:
+       giữ nguyên width đó.
+
+       Nếu chưa resize:
+       tự tính theo header.
+    */
+
+    if(
+        columnWidths[index] !== undefined
+    ){
+
+        return (
+            Number(
+                columnWidths[index]
+            ) ||
+            getDefaultHeaderWidth(index)
+        );
+    }
+
+
+    return getDefaultHeaderWidth(
+        index
+    );
+}
+
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
+function getColumnFormat(index){
+
     return {
 
-        /*
-           Mặc định Arial 13.
-        */
-        align:
-        getDefaultColumnAlignment(
-            originalHeader
-        ),
+        align:"left",
 
-        fontFamily:
-        "Arial",
+        fontFamily:"Arial",
 
-        fontSize:
-        13,
+        fontSize:14,
 
-        bold:
-        false,
+        bold:false,
 
-        italic:
-        false,
+        italic:false,
 
-        /*
-           Mặc định Wrap Text.
-        */
-        wrap:
-        true,
+        wrap:true,
 
-        color:
-        "#111111",
+        color:"#111111",
 
-        background:
-        "#ffffff",
+        background:"#ffffff",
 
         ...(columnFormats[index] || {})
 
@@ -3063,7 +2630,7 @@ function applyFormatToCell(
 
 
     cell.style.fontSize =
-    `${Number(f.fontSize) || 13}px`;
+    `${Number(f.fontSize) || 14}px`;
 
 
     cell.style.fontWeight =
@@ -3079,13 +2646,11 @@ function applyFormatToCell(
 
 
     cell.style.color =
-    f.color ||
-    "#111111";
+    f.color || "#111111";
 
 
     cell.style.backgroundColor =
-    f.background ||
-    "#ffffff";
+    f.background || "#ffffff";
 
 
     if(f.wrap){
@@ -3150,9 +2715,12 @@ function renderHeader(){
     getVisibleHeaderIndexes();
 
 
+    /*
+       HEADER ROW
+    */
+
     const headerRow =
     document.createElement("tr");
-
 
     headerRow.className =
     "header-row";
@@ -3190,14 +2758,12 @@ function renderHeader(){
             const content =
             document.createElement("div");
 
-
             content.className =
             "header-content";
 
 
             const title =
             document.createElement("div");
-
 
             title.className =
             "header-title";
@@ -3218,14 +2784,12 @@ function renderHeader(){
                     openRenamePrompt(
                         index
                     );
-
                 }
             );
 
 
             const actions =
             document.createElement("div");
-
 
             actions.className =
             "header-actions";
@@ -3234,14 +2798,11 @@ function renderHeader(){
             const sortButton =
             document.createElement("button");
 
-
             sortButton.className =
             "header-button";
 
-
             sortButton.textContent =
             getSortIcon(index);
-
 
             sortButton.title =
             "Sort By";
@@ -3252,7 +2813,6 @@ function renderHeader(){
                 event => {
 
                     event.preventDefault();
-
                     event.stopPropagation();
 
 
@@ -3260,7 +2820,6 @@ function renderHeader(){
                         index,
                         th
                     );
-
                 }
             );
 
@@ -3268,14 +2827,11 @@ function renderHeader(){
             const filterButton =
             document.createElement("button");
 
-
             filterButton.className =
             "header-button";
 
-
             filterButton.textContent =
             "▼";
-
 
             filterButton.title =
             "Filter / Sort / Định dạng";
@@ -3286,15 +2842,12 @@ function renderHeader(){
                 event => {
 
                     event.preventDefault();
-
                     event.stopPropagation();
-
 
                     openFilterMenu(
                         index,
                         th
                     );
-
                 }
             );
 
@@ -3302,7 +2855,6 @@ function renderHeader(){
             actions.appendChild(
                 sortButton
             );
-
 
             actions.appendChild(
                 filterButton
@@ -3312,7 +2864,6 @@ function renderHeader(){
             content.appendChild(
                 title
             );
-
 
             content.appendChild(
                 actions
@@ -3327,7 +2878,6 @@ function renderHeader(){
             const resize =
             document.createElement("div");
 
-
             resize.className =
             "resize-handle";
 
@@ -3337,15 +2887,12 @@ function renderHeader(){
                 event => {
 
                     event.preventDefault();
-
                     event.stopPropagation();
-
 
                     startResize(
                         event,
                         index
                     );
-
                 }
             );
 
@@ -3374,7 +2921,6 @@ function renderHeader(){
 
     const searchRow =
     document.createElement("tr");
-
 
     searchRow.className =
     "search-row";
@@ -3412,14 +2958,12 @@ function renderHeader(){
             const inner =
             document.createElement("div");
 
-
             inner.className =
             "search-inner";
 
 
             const input =
             document.createElement("input");
-
 
             input.className =
             "column-search";
@@ -3434,35 +2978,55 @@ function renderHeader(){
 
 
             input.value =
-            searches[index] ||
-            "";
+            searches[index] || "";
 
+
+            /*
+               Debounce tìm kiếm theo cột.
+            */
 
             input.addEventListener(
                 "input",
                 () => {
 
-                    searches[index] =
+                    const value =
                     input.value;
 
 
-                    saveState();
+                    clearTimeout(
+                        columnSearchTimer
+                    );
 
 
-                    renderBody();
+                    columnSearchTimer =
+                    setTimeout(
+                        () => {
+
+                            searches[index] =
+                            value;
 
 
-                    updateHeaderStates();
+                            saveState();
 
 
-                    if(
-                        openFilterIndex !== null
-                    ){
+                            renderBody();
 
-                        refreshOpenFilterMenu(
-                            true
-                        );
-                    }
+
+                            updateHeaderStates();
+
+
+                            if(
+                                openFilterIndex !== null
+                            ){
+
+                                refreshOpenFilterMenu(
+                                    true
+                                );
+                            }
+
+                        },
+                        SEARCH_DEBOUNCE_MS
+                    );
 
                 }
             );
@@ -3720,9 +3284,7 @@ function isEffectiveFilter(index){
 
 
     const allValues =
-    getAllColumnValues(
-        index
-    );
+    getAllColumnValues(index);
 
 
     if(
@@ -3982,7 +3544,6 @@ function renderFilterMenu(index){
 
             event.stopPropagation();
 
-
             filterValueSearch =
             filterSearch.value;
 
@@ -3990,7 +3551,6 @@ function renderFilterMenu(index){
             renderFilterValuesOnly(
                 index
             );
-
         }
     );
 
@@ -4029,7 +3589,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -4075,7 +3634,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -4185,7 +3743,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -4228,7 +3785,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
             closeFilterMenu();
@@ -4301,11 +3857,9 @@ function renderFilterValuesOnly(
 
 
     const query =
-    String(
-        filterValueSearch || ""
-    )
-    .trim()
-    .toLowerCase();
+    normalizeSearchText(
+        filterValueSearch
+    );
 
 
     const values =
@@ -4317,9 +3871,9 @@ function renderFilterValuesOnly(
             }
 
 
-            return String(value)
-            .toLowerCase()
-            .includes(query);
+            return normalizeSearchText(
+                value
+            ).includes(query);
 
         }
     );
@@ -4810,7 +4364,6 @@ function createSortSection(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -4830,15 +4383,12 @@ function createSortSection(index){
 
 
                 if(
-                    Number.isFinite(
-                        number
-                    )
+                    Number.isFinite(number)
                 ){
 
                     sorts[index] = {
 
-                        priority:
-                        number,
+                        priority:number,
 
                         direction:
                         desc.checked
@@ -4887,7 +4437,6 @@ function createSortSection(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -5439,7 +4988,6 @@ function createFormatSection(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -5454,7 +5002,7 @@ function createFormatSection(index){
                 fontSize:
                 Number(
                     size.value
-                ) || 13,
+                ) || 14,
 
                 bold:
                 bold.checked,
@@ -6028,6 +5576,7 @@ function applyFreezeColumns(){
 
                     }
 
+
                     else if(
                         cell.classList.contains(
                             "search-cell"
@@ -6041,6 +5590,7 @@ function applyFreezeColumns(){
                         "999";
 
                     }
+
 
                     else{
 
@@ -6078,14 +5628,6 @@ function startResize(
         getColumnWidth(index)
 
     };
-
-
-    /*
-       Một khi user kéo cột,
-       cột đó trở thành manual width.
-    */
-    manuallyResizedColumns[index] =
-    true;
 
 
     document.body.style.cursor =
@@ -6147,7 +5689,6 @@ document.addEventListener(
 
                 cell.style.maxWidth =
                 `${width}px`;
-
             }
         );
 
@@ -6202,35 +5743,27 @@ function resetUserState(){
 
     sorts = {};
 
+    /*
+       Xóa tìm kiếm toàn bảng.
+    */
+
+    globalSearch = "";
+
+    if(globalSearchInput){
+
+        globalSearchInput.value =
+        "";
+    }
+
+
+    /*
+       Giữ default filter.
+    */
+
     filters = {};
 
     defaultFiltersInitialized =
     false;
-
-
-    /*
-       Reset về Auto Width mặc định.
-
-       Các cột user resize trước đó
-       cũng trở về Auto Width.
-    */
-    columnWidths = {};
-
-    manuallyResizedColumns = {};
-
-
-    /*
-       Reset format về mặc định.
-    */
-    columnFormats = {};
-
-
-    /*
-       Giữ tên cột đã cấu hình.
-       Giữ freeze = 6.
-    */
-    freezeCount =
-    DEFAULT_FREEZE_COUNT;
 
 
     initializeDefaults();
@@ -6241,6 +5774,63 @@ function resetUserState(){
 
     renderTable();
 }
+
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+globalSearchInput.addEventListener(
+    "input",
+    () => {
+
+        const value =
+        globalSearchInput.value;
+
+
+        clearTimeout(
+            globalSearchTimer
+        );
+
+
+        globalSearchTimer =
+        setTimeout(
+            () => {
+
+                globalSearch =
+                value;
+
+
+                saveState();
+
+
+                /*
+                   Không render header.
+                   Chỉ render body để giữ
+                   trạng thái ô tìm kiếm.
+                */
+
+                renderBody();
+
+
+                updateHeaderStates();
+
+
+                if(
+                    openFilterIndex !== null
+                ){
+
+                    refreshOpenFilterMenu(
+                        true
+                    );
+                }
+
+            },
+            SEARCH_DEBOUNCE_MS
+        );
+
+    }
+);
 
 
 /* =========================================================
@@ -6256,7 +5846,6 @@ document
     async () => {
 
         await loadData();
-
     }
 );
 
@@ -6274,7 +5863,6 @@ document
     () => {
 
         resetUserState();
-
     }
 );
 
@@ -6336,7 +5924,6 @@ autoRefreshSelect.addEventListener(
     () => {
 
         setupAutoRefresh();
-
     }
 );
 
