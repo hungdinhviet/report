@@ -799,10 +799,6 @@ tbody td.frozen-column{
 </div>
 
 
-<!-- =====================================================
-     SETTINGS
-===================================================== -->
-
 <div
     id="settingsOverlay"
     class="settings-overlay"
@@ -934,6 +930,27 @@ const OLD_KEYS = [
 ];
 
 
+/*
+   ========================================================
+   AUTO WIDTH MIGRATION VERSION
+   ========================================================
+
+   Đây là điểm sửa quan trọng.
+
+   Ở các bản trước, width cũ trong localStorage có thể
+   đã bị hiểu nhầm là width user kéo thủ công.
+
+   Từ bây giờ:
+
+   0 = chưa chạy migration
+   1 = đã chạy migration
+
+   Migration chỉ chạy 1 lần.
+*/
+
+const AUTO_WIDTH_MIGRATION_VERSION = 2;
+
+
 /* =========================================================
    HIDDEN COLUMNS
 ========================================================= */
@@ -982,6 +999,15 @@ const DEFAULT_COLUMN_RENAMES = {
     "TOTAL PRICE":
         "Giá gói",
 
+    /*
+       Phòng trường hợp Google Sheet
+       sử dụng Total Price thay vì
+       TOTAL PRICE.
+    */
+
+    "Total Price":
+        "Giá gói",
+
     "REVENUE":
         "Chu kỳ",
 
@@ -1028,6 +1054,8 @@ const DEFAULT_RIGHT_COLUMNS = new Set([
 
     "TOTAL PRICE",
 
+    "Total Price",
+
     "Packageprice"
 
 ]);
@@ -1066,6 +1094,8 @@ const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 
     "Loại gói cước",
 
+    "KHDN/KHCN",
+
     "Hạ băng thông",
 
     "Tự động gia hạn",
@@ -1080,6 +1110,28 @@ const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 ========================================================= */
 
 const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
+
+    /*
+       Giữ nguyên nhóm cũ
+    */
+
+    "REVENUE",
+
+    "Kỳ",
+
+    "Cách tính chu kỳ",
+
+    "Pre/Post",
+
+    "Facebook",
+
+    "Youtube",
+
+    "Tiktok",
+
+    /*
+       Bổ sung nhóm giá
+    */
 
     "TOTAL PRICE",
 
@@ -1131,18 +1183,21 @@ let autoRefreshMinutes = 0;
 
 
 /*
-   Ghi nhớ các cột đã được user kéo thủ công.
+   Chỉ chứa các cột mà user thực sự
+   đã kéo resize bằng chuột.
 
-   Đây là điểm rất quan trọng:
-
-   - false = chưa resize thủ công
-   - true  = user đã kéo cột
-
-   Chỉ cột resize thủ công mới giữ width
-   cố định trong columnWidths.
+   Không còn tự động đánh dấu width
+   cũ trong localStorage là manual.
 */
 
 let manuallyResizedColumns = {};
+
+
+/*
+   Phiên bản migration đã chạy.
+*/
+
+let autoWidthMigrationVersion = 0;
 
 
 /* =========================================================
@@ -1511,9 +1566,6 @@ function loadState(){
 
     let saved = null;
 
-    let loadedCurrentVersion =
-    false;
-
 
     try{
 
@@ -1529,9 +1581,6 @@ function loadState(){
             JSON.parse(
                 current
             );
-
-            loadedCurrentVersion =
-            true;
         }
 
 
@@ -1580,6 +1629,9 @@ function loadState(){
         manuallyResizedColumns =
         {};
 
+        autoWidthMigrationVersion =
+        0;
+
         return;
     }
 
@@ -1604,14 +1656,18 @@ function loadState(){
 
 
     /*
-       State mới.
+       QUAN TRỌNG:
 
-       Nếu state cũ chưa có
-       manuallyResizedColumns thì
-       xem width cũ là width đã lưu.
+       Chỉ đọc manuallyResizedColumns
+       nếu state thực sự có trường này.
 
-       Điều này giúp không làm mất
-       width user đã kéo từ phiên bản trước.
+       Không còn đoạn code cũ:
+
+       Object.keys(columnWidths).forEach(...)
+       manuallyResizedColumns[key] = true
+
+       vì chính đoạn đó làm migration
+       trước đây không thể xóa width cũ.
     */
 
     if(
@@ -1626,22 +1682,27 @@ function loadState(){
     else{
 
         manuallyResizedColumns = {};
+    }
 
-        Object.keys(
-            columnWidths
-        ).forEach(
-            key => {
 
-                manuallyResizedColumns[key] =
-                true;
+    autoWidthMigrationVersion =
+    Number(
+        saved.autoWidthMigrationVersion || 0
+    );
 
-            }
-        );
+
+    if(
+        !Number.isFinite(
+            autoWidthMigrationVersion
+        )
+    ){
+
+        autoWidthMigrationVersion =
+        0;
     }
 
 
     if(
-        loadedCurrentVersion &&
         saved.freezeCount !== undefined
     ){
 
@@ -1713,6 +1774,8 @@ function saveState(){
                 renamedHeaders,
 
                 manuallyResizedColumns,
+
+                autoWidthMigrationVersion,
 
                 freezeCount,
 
@@ -1956,16 +2019,22 @@ async function loadData(){
 
 
         /*
-           Migration width.
+           Migration phải chạy SAU KHI
+           headers và rows đã được tải.
 
-           Những cột được yêu cầu
-           auto width sẽ không lấy
-           width cũ nếu width đó
-           chưa được xác nhận là
-           resize thủ công.
+           Như vậy chúng ta biết chính xác
+           cột nào cần reset width.
         */
 
         migrateAutoWidthColumns();
+
+
+        /*
+           Migration alignment cũng chạy
+           cùng lúc.
+        */
+
+        migrateColumnAlignments();
 
 
         renderTable();
@@ -2037,31 +2106,56 @@ async function loadData(){
 function migrateAutoWidthColumns(){
 
     /*
-       Các cột này phải tự động
-       theo header/content.
+       Chỉ migration một lần.
 
-       Nếu width cũ chưa được
-       user resize thủ công,
-       xóa width cũ để hệ thống
-       tính lại.
+       Các cột này phải tự tính width.
     */
+
+    if(
+        autoWidthMigrationVersion >=
+        AUTO_WIDTH_MIGRATION_VERSION
+    ){
+
+        return;
+    }
+
 
     const autoWidthHeaders =
     new Set([
+
+        "Thoại nội mạng",
 
         "Thoại ngoại mạng",
 
         "Loại gói cước",
 
+        "KHDN/KHCN",
+
         "Hạ băng thông",
 
         "Tự động gia hạn",
+
+        "Dừng đăng kí mới",
 
         "TOTAL PRICE",
 
         "Total Price",
 
-        "Packageprice"
+        "Packageprice",
+
+        "REVENUE",
+
+        "Kỳ",
+
+        "Cách tính chu kỳ",
+
+        "Pre/Post",
+
+        "Facebook",
+
+        "Youtube",
+
+        "Tiktok"
 
     ]);
 
@@ -2075,31 +2169,146 @@ function migrateAutoWidthColumns(){
                 )
             ){
 
-                if(
-                    !manuallyResizedColumns[
-                        index
-                    ]
-                ){
+                /*
+                   Nếu đây là width cũ
+                   từ các phiên bản trước,
+                   xóa nó.
 
-                    delete columnWidths[
-                        index
-                    ];
+                   Vì state cũ không có cách
+                   xác định chắc chắn width đó
+                   là do user kéo hay do hệ thống.
 
-                }
+                   Sau migration mới, width thủ công
+                   sẽ được ghi rõ trong
+                   manuallyResizedColumns.
+                */
+
+                delete columnWidths[
+                    index
+                ];
+
+                /*
+                   Đồng thời xóa cờ manual cũ
+                   của các cột này.
+                */
+
+                delete manuallyResizedColumns[
+                    index
+                ];
             }
 
         }
     );
 
 
-    /*
-       Kỳ chỉ là center,
-       không thuộc nhóm width
-       auto content trong yêu cầu
-       hiện tại.
-    */
+    autoWidthMigrationVersion =
+    AUTO_WIDTH_MIGRATION_VERSION;
+
 
     saveState();
+}
+
+
+/* =========================================================
+   ALIGNMENT MIGRATION
+========================================================= */
+
+function migrateColumnAlignments(){
+
+    /*
+       Migration alignment chỉ chạy một lần.
+
+       Xóa align cũ của các cột mà
+       hệ thống có default alignment rõ ràng.
+
+       Những cột khác giữ nguyên format
+       user đã chọn.
+    */
+
+    if(
+        autoWidthMigrationVersion <
+        AUTO_WIDTH_MIGRATION_VERSION
+    ){
+
+        return;
+    }
+
+
+    const alignmentHeaders =
+    new Set([
+
+        "TOTAL PRICE",
+
+        "Total Price",
+
+        "Packageprice",
+
+        "REVENUE",
+
+        "Kỳ",
+
+        "Cách tính chu kỳ",
+
+        "Pre/Post",
+
+        "KHDN/KHCN",
+
+        "Cam kết MNP",
+
+        "Ngày update"
+
+    ]);
+
+
+    let changed = false;
+
+
+    headers.forEach(
+        (header,index) => {
+
+            if(
+                !alignmentHeaders.has(
+                    header
+                )
+            ){
+
+                return;
+            }
+
+
+            const format =
+            columnFormats[index];
+
+
+            if(
+                format &&
+                Object.prototype.hasOwnProperty.call(
+                    format,
+                    "align"
+                )
+            ){
+
+                /*
+                   Chỉ xóa alignment cũ.
+
+                   Các thiết lập khác:
+                   font, size, bold, màu...
+                   vẫn giữ nguyên.
+                */
+
+                delete format.align;
+
+                changed = true;
+            }
+
+        }
+    );
+
+
+    if(changed){
+
+        saveState();
+    }
 }
 
 
@@ -2801,8 +3010,8 @@ function getVisibleHeaderIndexes(){
 function getColumnWidth(index){
 
     /*
-       Chỉ width do user kéo thủ công
-       mới được ưu tiên.
+       Chỉ width mà user đã kéo
+       mới được lấy từ columnWidths.
     */
 
     if(
@@ -2828,8 +3037,8 @@ function getColumnWidth(index){
 
 
     /*
-       Các cột auto width sẽ luôn
-       tính lại theo header/content.
+       Nếu không phải width manual,
+       LUÔN tính lại default width.
     */
 
     return getDefaultColumnWidth(
@@ -3180,10 +3389,6 @@ function renderHeader(){
         headerRow
     );
 
-
-    /*
-       SEARCH ROW
-    */
 
     const searchRow =
     document.createElement("tr");
@@ -4331,7 +4536,7 @@ function createSortSection(index){
 
 
     section.appendChild(
-        title
+    title
     );
 
 
@@ -5098,7 +5303,7 @@ function createFormatSection(index){
 
 
     section.appendChild(
-    checks
+        checks
     );
 
 
@@ -5671,7 +5876,7 @@ document
                 else{
 
                     renamedHeaders[
-                        original
+                    original
                     ] =
                     value;
                 }
@@ -5948,8 +6153,8 @@ document.addEventListener(
 
 
         /*
-           Đánh dấu đây là width
-           do user tự resize.
+           Đây mới là lúc đánh dấu
+           width là manual.
         */
 
         manuallyResizedColumns[
