@@ -982,6 +982,9 @@ const DEFAULT_COLUMN_RENAMES = {
     "TOTAL PRICE":
         "Giá gói",
 
+    "Total Price":
+        "Giá gói",
+
     "REVENUE":
         "Chu kỳ",
 
@@ -1005,6 +1008,8 @@ const DEFAULT_CENTER_COLUMNS = new Set([
 
     "REVENUE",
 
+    "Kỳ",
+
     "Cách tính chu kỳ",
 
     "Pre/Post",
@@ -1025,6 +1030,8 @@ const DEFAULT_CENTER_COLUMNS = new Set([
 const DEFAULT_RIGHT_COLUMNS = new Set([
 
     "TOTAL PRICE",
+
+    "Total Price",
 
     "Packageprice"
 
@@ -1064,8 +1071,6 @@ const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 
     "Loại gói cước",
 
-    "KHDN/KHCN",
-
     "Hạ băng thông",
 
     "Tự động gia hạn",
@@ -1081,19 +1086,11 @@ const DEFAULT_HEADER_WIDTH_COLUMNS = new Set([
 
 const DEFAULT_CONTENT_WIDTH_COLUMNS = new Set([
 
-    "REVENUE",
+    "TOTAL PRICE",
 
-    "Kỳ",
+    "Total Price",
 
-    "Cách tính chu kỳ",
-
-    "Pre/Post",
-
-    "Facebook",
-
-    "Youtube",
-
-    "Tiktok"
+    "Packageprice"
 
 ]);
 
@@ -1136,6 +1133,21 @@ let freezeCount =
 DEFAULT_FREEZE_COUNT;
 
 let autoRefreshMinutes = 0;
+
+
+/*
+   Ghi nhớ các cột đã được user kéo thủ công.
+
+   Đây là điểm rất quan trọng:
+
+   - false = chưa resize thủ công
+   - true  = user đã kéo cột
+
+   Chỉ cột resize thủ công mới giữ width
+   cố định trong columnWidths.
+*/
+
+let manuallyResizedColumns = {};
 
 
 /* =========================================================
@@ -1339,21 +1351,6 @@ function measureTextWidth(
    DEFAULT HEADER WIDTH
 ========================================================= */
 
-/*
-   QUAN TRỌNG:
-
-   Hàm này luôn dùng getDisplayHeader().
-
-   Vì vậy nếu:
-
-   Cách tính chu kỳ
-          ↓
-      1 chu kỳ
-
-   thì width sẽ được tính theo
-   "1 chu kỳ", không phải tên cũ.
-*/
-
 function getDefaultHeaderWidth(
     originalHeader
 ){
@@ -1383,24 +1380,6 @@ function getDefaultHeaderWidth(
    DEFAULT CONTENT WIDTH
 ========================================================= */
 
-/*
-   QUAN TRỌNG:
-
-   Các cột thuộc nhóm CONTENT sẽ được tính
-   dựa trên:
-
-   1. Header hiện tại sau khi rename
-   2. Nội dung thực tế của toàn bộ cột
-
-   Ví dụ:
-
-   Cách tính chu kỳ
-          ↓
-      1 chu kỳ
-
-   Header "1 chu kỳ" được đo lại ngay.
-*/
-
 function getDefaultContentWidth(
     index
 ){
@@ -1409,19 +1388,11 @@ function getDefaultContentWidth(
     headers[index];
 
 
-    /*
-       Lấy tên hiển thị THỰC TẾ.
-    */
-
     const displayHeader =
     getDisplayHeader(
         originalHeader
     );
 
-
-    /*
-       Đo header trước.
-    */
 
     let maxWidth =
     measureTextWidth(
@@ -1429,10 +1400,6 @@ function getDefaultContentWidth(
         "bold 14px Arial"
     );
 
-
-    /*
-       Đo toàn bộ nội dung.
-    */
 
     rows.forEach(
         row => {
@@ -1463,10 +1430,6 @@ function getDefaultContentWidth(
         }
     );
 
-
-    /*
-       Padding trái + phải.
-    */
 
     maxWidth += 30;
 
@@ -1577,11 +1540,6 @@ function loadState(){
         }
 
 
-        /*
-           Nếu chưa có V12,
-           thử lấy state phiên bản cũ.
-        */
-
         if(!saved){
 
             for(
@@ -1616,10 +1574,6 @@ function loadState(){
     }
 
 
-    /*
-       Không có state.
-    */
-
     if(!saved){
 
         freezeCount =
@@ -1627,6 +1581,9 @@ function loadState(){
 
         autoRefreshMinutes =
         0;
+
+        manuallyResizedColumns =
+        {};
 
         return;
     }
@@ -1652,12 +1609,41 @@ function loadState(){
 
 
     /*
-       V12:
-       giữ freeze user đã chọn.
+       State mới.
 
-       State cũ:
-       dùng mặc định mới = 6.
+       Nếu state cũ chưa có
+       manuallyResizedColumns thì
+       xem width cũ là width đã lưu.
+
+       Điều này giúp không làm mất
+       width user đã kéo từ phiên bản trước.
     */
+
+    if(
+        saved.manuallyResizedColumns &&
+        typeof saved.manuallyResizedColumns === "object"
+    ){
+
+        manuallyResizedColumns =
+        saved.manuallyResizedColumns;
+
+    }
+    else{
+
+        manuallyResizedColumns = {};
+
+        Object.keys(
+            columnWidths
+        ).forEach(
+            key => {
+
+                manuallyResizedColumns[key] =
+                true;
+
+            }
+        );
+    }
+
 
     if(
         loadedCurrentVersion &&
@@ -1730,6 +1716,8 @@ function saveState(){
                 columnFormats,
 
                 renamedHeaders,
+
+                manuallyResizedColumns,
 
                 freezeCount,
 
@@ -1972,6 +1960,19 @@ async function loadData(){
         );
 
 
+        /*
+           Migration width.
+
+           Những cột được yêu cầu
+           auto width sẽ không lấy
+           width cũ nếu width đó
+           chưa được xác nhận là
+           resize thủ công.
+        */
+
+        migrateAutoWidthColumns();
+
+
         renderTable();
 
 
@@ -2031,6 +2032,79 @@ async function loadData(){
             "hidden"
         );
     }
+}
+
+
+/* =========================================================
+   AUTO WIDTH MIGRATION
+========================================================= */
+
+function migrateAutoWidthColumns(){
+
+    /*
+       Các cột này phải tự động
+       theo header/content.
+
+       Nếu width cũ chưa được
+       user resize thủ công,
+       xóa width cũ để hệ thống
+       tính lại.
+    */
+
+    const autoWidthHeaders =
+    new Set([
+
+        "Thoại ngoại mạng",
+
+        "Loại gói cước",
+
+        "Hạ băng thông",
+
+        "Tự động gia hạn",
+
+        "TOTAL PRICE",
+
+        "Total Price",
+
+        "Packageprice"
+
+    ]);
+
+
+    headers.forEach(
+        (header,index) => {
+
+            if(
+                autoWidthHeaders.has(
+                    header
+                )
+            ){
+
+                if(
+                    !manuallyResizedColumns[
+                        index
+                    ]
+                ){
+
+                    delete columnWidths[
+                        index
+                    ];
+
+                }
+            }
+
+        }
+    );
+
+
+    /*
+       Kỳ chỉ là center,
+       không thuộc nhóm width
+       auto content trong yêu cầu
+       hiện tại.
+    */
+
+    saveState();
 }
 
 
@@ -2731,31 +2805,36 @@ function getVisibleHeaderIndexes(){
 
 function getColumnWidth(index){
 
-    const savedWidth =
-    Number(
-        columnWidths[index]
-    );
-
-
     /*
-       Nếu user đã tự kéo cột,
-       luôn ưu tiên width user chọn.
+       Chỉ width do user kéo thủ công
+       mới được ưu tiên.
     */
 
     if(
-        Number.isFinite(
-            savedWidth
-        ) &&
-        savedWidth > 0
+        manuallyResizedColumns[index]
     ){
 
-        return savedWidth;
+        const savedWidth =
+        Number(
+            columnWidths[index]
+        );
+
+
+        if(
+            Number.isFinite(
+                savedWidth
+            ) &&
+            savedWidth > 0
+        ){
+
+            return savedWidth;
+        }
     }
 
 
     /*
-       Nếu chưa resize thủ công,
-       width sẽ được tính động.
+       Các cột auto width sẽ luôn
+       tính lại theo header/content.
     */
 
     return getDefaultColumnWidth(
@@ -5024,7 +5103,7 @@ function createFormatSection(index){
 
 
     section.appendChild(
-        checks
+    checks
     );
 
 
@@ -5314,16 +5393,6 @@ function closeFilterMenu(){
    RENAME PROMPT
 ========================================================= */
 
-/*
-   Khi rename:
-
-   1. Lưu tên mới.
-   2. Không xóa width user đã resize.
-   3. Nếu chưa resize thủ công,
-      getColumnWidth() sẽ tính lại width
-      theo tên mới.
-*/
-
 function openRenamePrompt(index){
 
     const original =
@@ -5355,11 +5424,6 @@ function openRenamePrompt(index){
     newName.trim();
 
 
-    /*
-       Nếu nhập lại tên mặc định,
-       bỏ custom rename.
-    */
-
     if(
         trimmed === "" ||
         trimmed ===
@@ -5384,21 +5448,6 @@ function openRenamePrompt(index){
 
     saveState();
 
-
-    /*
-       renderTable() sẽ chạy lại:
-
-       getColumnWidth()
-            ↓
-       getDefaultColumnWidth()
-            ↓
-       getDefaultContentWidth()
-            ↓
-       getDisplayHeader()
-
-       nên width sẽ tự tính theo
-       tên header mới.
-    */
 
     renderTable();
 }
@@ -5570,10 +5619,6 @@ document
     "click",
     () => {
 
-        /*
-           Freeze
-        */
-
         const requested =
         Number(
             freezeCountInput.value
@@ -5593,10 +5638,6 @@ document
             )
         );
 
-
-        /*
-           Rename
-        */
 
         renameList
         .querySelectorAll(
@@ -5644,10 +5685,6 @@ document
         );
 
 
-        /*
-           Auto refresh
-        */
-
         autoRefreshMinutes =
         Number(
             autoRefreshSelect.value
@@ -5656,15 +5693,6 @@ document
 
         saveState();
 
-
-        /*
-           Quan trọng:
-           renderTable() được gọi sau khi
-           renameHeaders đã cập nhật.
-
-           Vì vậy width mặc định sẽ được
-           tính theo tên mới.
-        */
 
         renderTable();
 
@@ -5922,6 +5950,17 @@ document.addEventListener(
             resizeState.index
         ] =
         width;
+
+
+        /*
+           Đánh dấu đây là width
+           do user tự resize.
+        */
+
+        manuallyResizedColumns[
+            resizeState.index
+        ] =
+        true;
 
 
         document
