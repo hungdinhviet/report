@@ -6625,42 +6625,55 @@ function updateGlobalSearchUI(){
 /*
    Nhập tìm kiếm.
 */
-let globalSearchTimer = null;
-
 globalSearchInput.addEventListener(
     "input",
     () => {
 
+        /*
+           Lấy nội dung ngay khi người dùng gõ
+        */
         globalSearch =
         globalSearchInput.value;
 
+
+        /*
+           Cập nhật nút X
+        */
         updateGlobalSearchUI();
 
-        clearTimeout(
-            globalSearchTimer
-        );
 
-        globalSearchTimer =
-        setTimeout(
-            () => {
+        /*
+           Lưu trạng thái
+        */
+        saveState();
 
-                saveState();
 
-                renderBody();
+        /*
+           LỌC BẢNG NGAY LẬP TỨC
+        */
+        renderBody();
 
-                updateHeaderStates();
 
-                if(
-                    openFilterIndex !== null
-                ){
-                    refreshOpenFilterMenu(
-                        true
-                    );
-                }
+        /*
+           Cập nhật trạng thái header
+        */
+        updateHeaderStates();
 
-            },
-            250
-        );
+
+        /*
+           Nếu đang mở menu filter
+           thì cập nhật luôn.
+        */
+        if(
+            openFilterIndex !== null
+        ){
+
+            refreshOpenFilterMenu(
+                true
+            );
+
+        }
+
     }
 );
 
