@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -75,6 +76,7 @@ body{
     color:#666;
     white-space:nowrap;
 }
+
 /* =========================================================
    GLOBAL SEARCH
 ========================================================= */
@@ -82,11 +84,13 @@ body{
 .global-search-wrap{
     position:relative;
 
-    width:260px;
+    width:340px;
     height:32px;
 
     display:flex;
     align-items:center;
+
+    flex-shrink:0;
 }
 
 .global-search-icon{
@@ -157,6 +161,65 @@ body{
     border-radius:3px;
 }
 
+/* =========================================================
+   AI SEARCH BUTTON
+========================================================= */
+
+.ai-search-btn{
+    height:32px !important;
+
+    padding:0 11px !important;
+
+    border:1px solid #8ab4f8 !important;
+
+    background:#eef5ff !important;
+
+    color:#174ea6;
+
+    font-family:Arial,sans-serif;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    white-space:nowrap;
+}
+
+.ai-search-btn:hover{
+    background:#dbe9ff !important;
+}
+
+.ai-search-btn.loading{
+    opacity:.7;
+
+    cursor:wait;
+}
+
+.ai-search-status{
+    position:absolute;
+
+    left:0;
+    right:0;
+    top:35px;
+
+    display:none;
+
+    padding:4px 8px;
+
+    border:1px solid #c8d9f5;
+
+    border-radius:4px;
+
+    background:#fff;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.12);
+
+    color:#555;
+
+    font-size:12px;
+
+    z-index:11000;
+}
 
 /* =========================================================
    FREEZE TOOLBAR
@@ -218,10 +281,6 @@ body{
 
     background:#fff;
 
-    /*
-       Đây phải là scroll container duy nhất
-       của bảng.
-    */
     isolation:isolate;
 }
 
@@ -258,9 +317,6 @@ thead th{
     background:#f1f3f5;
 }
 
-/*
-   Header chính.
-*/
 .header-cell{
     position:sticky !important;
 
@@ -273,9 +329,6 @@ thead th{
     background:#f1f3f5 !important;
 }
 
-/*
-   Dòng search.
-*/
 .search-cell{
     position:sticky !important;
 
@@ -288,10 +341,6 @@ thead th{
     background:#fafafa !important;
 }
 
-/*
-   Header + frozen column.
-   Cao nhất.
-*/
 .header-cell.frozen-column{
     position:sticky !important;
 
@@ -419,9 +468,6 @@ tbody td{
     word-break:break-word;
 }
 
-/*
-   Frozen body.
-*/
 tbody td.frozen-column{
     position:sticky !important;
 
@@ -430,9 +476,6 @@ tbody td.frozen-column{
     background:#fff;
 }
 
-/*
-   Ranh giới cột frozen cuối.
-*/
 .frozen-last{
     box-shadow:
         4px 0 7px rgba(0,0,0,.12);
@@ -527,10 +570,6 @@ tbody td.frozen-column{
     font-size:14px;
 }
 
-/* =========================================================
-   FILTER SEARCH
-========================================================= */
-
 .filter-search{
     width:100%;
 
@@ -549,10 +588,6 @@ tbody td.frozen-column{
 .filter-search:focus{
     border-color:#4285f4;
 }
-
-/* =========================================================
-   FILTER ACTIONS
-========================================================= */
 
 .filter-actions{
     display:flex;
@@ -577,10 +612,6 @@ tbody td.frozen-column{
 .menu-button:hover{
     background:#eef5ff;
 }
-
-/* =========================================================
-   FILTER VALUES
-========================================================= */
 
 .filter-values{
     border-top:1px solid #ddd;
@@ -964,10 +995,20 @@ tbody td.frozen-column{
                 ×
             </button>
 
+            <div
+                id="aiSearchStatus"
+                class="ai-search-status"
+            ></div>
+
         </div>
 
-
-        
+        <button
+            id="aiSearchBtn"
+            class="ai-search-btn"
+            title="Tìm kiếm bằng AI - Ctrl + Enter"
+        >
+            ✨ AI
+        </button>
 
         <span
             id="status"
@@ -1126,6 +1167,30 @@ const CSV_URL =
 
 
 /* =========================================================
+   AI SEARCH
+========================================================= */
+
+const AI_SEARCH_URL =
+"https://dinhviethung-ai-search.hung-dinhviet1997.workers.dev";
+
+
+/*
+   Trạng thái tìm kiếm AI.
+
+   AI KHÔNG thay thế globalSearch.
+   Nó là một lớp filter bổ sung.
+*/
+
+let aiQuery = "";
+
+let aiConditions = [];
+
+let aiSort = null;
+
+let aiSearchLoading = false;
+
+
+/* =========================================================
    STORAGE
 ========================================================= */
 
@@ -1187,9 +1252,6 @@ let searches = {};
 
 let sorts = {};
 
-/*
-Tìm kiếm toàn bộ bảng.
-*/
 let globalSearch = "";
 
 let columnWidths = {};
@@ -1201,7 +1263,7 @@ let renamedHeaders = {
     "TOTAL PRICE": "Giá gói",
     "REVENUE": "Chu kỳ",
     "Cách tính chu kỳ": "1 chu kỳ",
-    "Packageprice": "Giá/kỳ" 
+    "Packageprice": "Giá/kỳ"
 };
 
 let freezeCount = 9;
@@ -1299,6 +1361,31 @@ document.getElementById(
     "renameList"
 );
 
+const toolbarFreezeCount =
+document.getElementById(
+    "toolbarFreezeCount"
+);
+
+const globalSearchInput =
+document.getElementById(
+    "globalSearchInput"
+);
+
+const clearGlobalSearchBtn =
+document.getElementById(
+    "clearGlobalSearchBtn"
+);
+
+const aiSearchBtn =
+document.getElementById(
+    "aiSearchBtn"
+);
+
+const aiSearchStatus =
+document.getElementById(
+    "aiSearchStatus"
+);
+
 
 /* =========================================================
    LOAD STATE
@@ -1363,16 +1450,36 @@ function loadState(){
     searches =
     saved.searches || {};
 
-    sorts =
-    saved.sorts || {};
-
     /*
-   Tìm kiếm toàn bảng.
+       Tìm kiếm toàn bảng.
     */
+
     globalSearch =
     String(
         saved.globalSearch || ""
     );
+
+
+    columnWidths =
+    saved.columnWidths || {};
+
+    columnFormats =
+    saved.columnFormats || {};
+
+    renamedHeaders = {
+        ...(saved.renamedHeaders || {}),
+        "Package": "Gói cước",
+        "TOTAL PRICE": "Giá gói",
+        "REVENUE": "Chu kỳ",
+        "Cách tính chu kỳ": "1 chu kỳ",
+        "Packageprice": "Giá/kỳ"
+    };
+
+
+    freezeCount =
+    saved.freezeCount !== undefined
+        ? Number(saved.freezeCount)
+        : 9;
 
 
     /*
@@ -1383,6 +1490,8 @@ function loadState(){
        3. Thoại nội mạng     → Giảm dần
        4. Thoại ngoại mạng   → Tăng dần
     */
+
+    sorts = {};
 
     const packagePriceIndex =
     headers.indexOf(
@@ -1403,9 +1512,6 @@ function loadState(){
     headers.indexOf(
         "Thoại ngoại mạng"
     );
-
-
-    sorts = {};
 
 
     if(
@@ -1456,31 +1562,20 @@ function loadState(){
     }
 
 
-    columnWidths =
-    saved.columnWidths || {};
-
-    columnFormats =
-    saved.columnFormats || {};
-
-    renamedHeaders = {
-        ...(saved.renamedHeaders || {}),
-        "Package": "Gói cước",
-        "TOTAL PRICE": "Giá gói",
-        "REVENUE": "Chu kỳ",
-        "Cách tính chu kỳ": "1 chu kỳ",
-        "Packageprice": "Giá/kỳ"
-    };
-    freezeCount =
-    saved.freezeCount !== undefined
-        ? Number(saved.freezeCount)
-        : 6;
-
-    
-
-
     /*
-       Không tự đánh lại priority.
+       AI không lưu trong LocalStorage.
+
+       Lý do:
+       mỗi lần tải trang, AI query cũ
+       không nên tự động lọc lại dữ liệu.
     */
+
+    aiQuery = "";
+
+    aiConditions = [];
+
+    aiSort = null;
+
 }
 
 
@@ -1502,7 +1597,7 @@ function saveState(){
                 searches,
 
                 sorts,
-                
+
                 globalSearch,
 
                 columnWidths,
@@ -1755,8 +1850,16 @@ async function loadData(){
         renderTable();
 
 
-        statusEl.textContent =
-        `${rows.length.toLocaleString("vi-VN")} dòng • cập nhật ${new Date().toLocaleTimeString("vi-VN")}`;
+        updateGlobalSearchUI();
+
+
+        updateToolbarFreezeCount();
+
+
+        setupAutoRefresh();
+
+
+        updateStatus();
 
 
     }
@@ -1812,6 +1915,30 @@ async function loadData(){
 
 
 /* =========================================================
+   STATUS
+========================================================= */
+
+function updateStatus(){
+
+    const count =
+    getVisibleRows().length;
+
+
+    if(aiQuery){
+
+        statusEl.textContent =
+        `${count.toLocaleString("vi-VN")} dòng • ✨ AI: ${aiQuery}`;
+
+        return;
+    }
+
+
+    statusEl.textContent =
+    `${count.toLocaleString("vi-VN")} dòng • cập nhật ${new Date().toLocaleTimeString("vi-VN")}`;
+}
+
+
+/* =========================================================
    DEFAULT FILTER
 ========================================================= */
 
@@ -1835,7 +1962,7 @@ function initializeDefaults(){
        1. Packageprice      → Tăng dần
        2. DATA              → Giảm dần
        3. Thoại nội mạng    → Giảm dần
-       4. Thoại ngoại mạng  → Tăng dần
+       4. Thoại ngoại mạng  → Giảm dần
     */
 
     const packagePriceIndex =
@@ -2004,15 +2131,93 @@ function getDisplayHeader(
 
 
 /* =========================================================
+   NORMALIZE TEXT
+========================================================= */
+
+function normalizeText(value){
+
+    return String(
+        value ?? ""
+    )
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    );
+}
+
+
+/* =========================================================
    NUMBER
 ========================================================= */
 
 function parseVNNumber(value){
 
-    const s =
+    let s =
     String(
         value ?? ""
     ).trim();
+
+
+    if(!s){
+        return null;
+    }
+
+
+    /*
+       Hỗ trợ AI:
+
+       150k
+       150K
+       1.5 GB
+       1,5 GB
+       120.000đ
+       120.000 đồng
+       2GB/ngày
+    */
+
+    s =
+    s
+    .toLowerCase()
+    .replace(
+        /đ|₫|vnd|đồng/g,
+        ""
+    )
+    .trim();
+
+
+    let multiplier = 1;
+
+
+    if(
+        /k$/.test(s)
+    ){
+
+        multiplier = 1000;
+
+        s =
+        s.replace(
+            /k$/,
+            ""
+        ).trim();
+    }
+
+
+    s =
+    s.replace(
+        /[a-zA-ZÀ-ỹ]+\/.*$/u,
+        ""
+    )
+    .trim();
+
+
+    s =
+    s.replace(
+        /[^0-9,.\-]/g,
+        ""
+    );
 
 
     if(!s){
@@ -2029,7 +2234,7 @@ function parseVNNumber(value){
             s
             .replace(/\./g,"")
             .replace(",",".")
-        );
+        ) * multiplier;
     }
 
 
@@ -2040,7 +2245,7 @@ function parseVNNumber(value){
 
         return Number(
             s.replace(",",".")
-        );
+        ) * multiplier;
     }
 
 
@@ -2049,7 +2254,7 @@ function parseVNNumber(value){
         .test(s)
     ){
 
-        return Number(s);
+        return Number(s) * multiplier;
     }
 
 
@@ -2275,17 +2480,558 @@ function getSortValue(
         type:"text",
 
         value:
-        String(
-            value ?? ""
-        )
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
+        normalizeText(value)
 
     };
+}
+
+
+/* =========================================================
+   AI CONDITION HELPERS
+========================================================= */
+
+function resolveAIConditionIndex(condition){
+
+    if(!condition){
+        return -1;
+    }
+
+
+    /*
+       Ưu tiên index nếu Worker trả về index.
+    */
+
+    if(
+        condition.columnIndex !== undefined &&
+        Number.isFinite(
+            Number(condition.columnIndex)
+        )
+    ){
+
+        const index =
+        Number(
+            condition.columnIndex
+        );
+
+
+        if(
+            index >= 0 &&
+            index < headers.length
+        ){
+
+            return index;
+        }
+    }
+
+
+    if(
+        condition.index !== undefined &&
+        Number.isFinite(
+            Number(condition.index)
+        )
+    ){
+
+        const index =
+        Number(
+            condition.index
+        );
+
+
+        if(
+            index >= 0 &&
+            index < headers.length
+        ){
+
+            return index;
+        }
+    }
+
+
+    /*
+       Nếu AI trả tên cột gốc.
+    */
+
+    const candidates = [
+
+        condition.column,
+
+        condition.columnName,
+
+        condition.name,
+
+        condition.header,
+
+        condition.displayName
+
+    ];
+
+
+    for(
+        const candidate of candidates
+    ){
+
+        if(
+            candidate === undefined ||
+            candidate === null
+        ){
+
+            continue;
+        }
+
+
+        const text =
+        String(candidate).trim();
+
+
+        let index =
+        headers.indexOf(text);
+
+
+        if(index >= 0){
+            return index;
+        }
+
+
+        /*
+           Thử theo tên hiển thị.
+        */
+
+        index =
+        headers.findIndex(
+            header =>
+            getDisplayHeader(header) === text
+        );
+
+
+        if(index >= 0){
+            return index;
+        }
+
+
+        /*
+           So sánh không dấu,
+           không phân biệt hoa thường.
+        */
+
+        const normalized =
+        normalizeText(text);
+
+
+        index =
+        headers.findIndex(
+            header =>
+            normalizeText(header) ===
+            normalized
+        );
+
+
+        if(index >= 0){
+            return index;
+        }
+
+
+        index =
+        headers.findIndex(
+            header =>
+            normalizeText(
+                getDisplayHeader(header)
+            ) === normalized
+        );
+
+
+        if(index >= 0){
+            return index;
+        }
+    }
+
+
+    return -1;
+}
+
+
+/* =========================================================
+   AI VALUE NUMBER
+========================================================= */
+
+function getAINumericValue(value){
+
+    const number =
+    parseVNNumber(value);
+
+
+    if(number !== null){
+        return number;
+    }
+
+
+    const text =
+    normalizeText(value);
+
+
+    /*
+       Hỗ trợ:
+
+       2gb
+       2 gb
+       2gb/ngay
+       1.5gb/ngay
+    */
+
+    const match =
+    text.match(
+        /-?\d+(?:[.,]\d+)/
+    );
+
+
+    if(match){
+
+        return parseVNNumber(
+            match[0]
+        );
+    }
+
+
+    return null;
+}
+
+
+/* =========================================================
+   AI CONDITION MATCH
+========================================================= */
+
+function aiConditionMatches(
+    row,
+    condition
+){
+
+    const index =
+    resolveAIConditionIndex(
+        condition
+    );
+
+
+    /*
+       Nếu AI trả điều kiện cho cột
+       không tồn tại thì bỏ qua điều kiện
+       thay vì làm chết toàn bộ bảng.
+    */
+
+    if(index < 0){
+        return true;
+    }
+
+
+    const operator =
+    String(
+        condition.operator || "contains"
+    )
+    .trim()
+    .toLowerCase();
+
+
+    const rawTarget =
+    condition.value !== undefined
+        ? condition.value
+        : condition.target;
+
+
+    const cellValue =
+    String(
+        row[index] ?? ""
+    );
+
+
+    /*
+       Có thể AI trả value dạng number.
+    */
+
+    const targetValue =
+    String(
+        rawTarget ?? ""
+    );
+
+
+    const cellNumber =
+    getAINumericValue(
+        cellValue
+    );
+
+
+    const targetNumber =
+    getAINumericValue(
+        targetValue
+    );
+
+
+    /*
+       So sánh số cho các toán tử
+       > >= < <= =
+       !=
+    */
+
+    if(
+        [
+            "=",
+            "==",
+            "!=",
+            ">",
+            ">=",
+            "<",
+            "<="
+        ].includes(operator)
+    ){
+
+        if(
+            cellNumber !== null &&
+            targetNumber !== null
+        ){
+
+            switch(operator){
+
+                case "=":
+                case "==":
+                    return (
+                        cellNumber ===
+                        targetNumber
+                    );
+
+                case "!=":
+                    return (
+                        cellNumber !==
+                        targetNumber
+                    );
+
+                case ">":
+                    return (
+                        cellNumber >
+                        targetNumber
+                    );
+
+                case ">=":
+                    return (
+                        cellNumber >=
+                        targetNumber
+                    );
+
+                case "<":
+                    return (
+                        cellNumber <
+                        targetNumber
+                    );
+
+                case "<=":
+                    return (
+                        cellNumber <=
+                        targetNumber
+                    );
+
+            }
+        }
+    }
+
+
+    const cellText =
+    normalizeText(
+        cellValue
+    );
+
+
+    const targetText =
+    normalizeText(
+        targetValue
+    );
+
+
+    switch(operator){
+
+        case "=":
+        case "==":
+            return cellText === targetText;
+
+        case "!=":
+            return cellText !== targetText;
+
+        case "contains":
+            return cellText.includes(
+                targetText
+            );
+
+        case "not_contains":
+        case "not contains":
+            return !cellText.includes(
+                targetText
+            );
+
+        case ">":
+        case ">=":
+        case "<":
+        case "<=":
+
+            /*
+               Nếu không chuyển được thành số,
+               thử so sánh text.
+            */
+
+            return (
+                operator === ">"
+                    ? cellText > targetText
+                    : operator === ">="
+                        ? cellText >= targetText
+                        : operator === "<"
+                            ? cellText < targetText
+                            : cellText <= targetText
+            );
+
+        default:
+            return cellText.includes(
+                targetText
+            );
+    }
+}
+
+
+/* =========================================================
+   AI FILTER
+========================================================= */
+
+function rowMatchesAIConditions(row){
+
+    if(
+        !Array.isArray(aiConditions) ||
+        aiConditions.length === 0
+    ){
+
+        return true;
+    }
+
+
+    return aiConditions.every(
+        condition =>
+        aiConditionMatches(
+            row,
+            condition
+        )
+    );
+}
+
+
+/* =========================================================
+   AI SORT
+========================================================= */
+
+function applyAISort(result){
+
+    if(
+        !aiSort
+    ){
+
+        return result;
+    }
+
+
+    const sortIndex =
+    resolveAIConditionIndex(
+        aiSort
+    );
+
+
+    if(sortIndex < 0){
+
+        return result;
+    }
+
+
+    const direction =
+    String(
+        aiSort.direction ||
+        aiSort.order ||
+        "asc"
+    ).toLowerCase();
+
+
+    result.sort(
+        (a,b) => {
+
+            const av =
+            getSortValue(
+                a.row,
+                sortIndex
+            );
+
+
+            const bv =
+            getSortValue(
+                b.row,
+                sortIndex
+            );
+
+
+            let compare = 0;
+
+
+            if(
+                av.type === "number" &&
+                bv.type === "number"
+            ){
+
+                compare =
+                av.value -
+                bv.value;
+            }
+
+
+            else if(
+                av.type === "date" &&
+                bv.type === "date"
+            ){
+
+                compare =
+                av.value -
+                bv.value;
+            }
+
+
+            else{
+
+                compare =
+                String(av.value)
+                .localeCompare(
+                    String(bv.value),
+                    "vi",
+                    {
+                        numeric:true,
+                        sensitivity:"base"
+                    }
+                );
+            }
+
+
+            if(
+                direction === "desc" ||
+                direction === "descending" ||
+                direction === "giảm dần"
+            ){
+
+                compare =
+                -compare;
+            }
+
+
+            if(compare !== 0){
+
+                return compare;
+            }
+
+
+            return (
+                a.originalIndex -
+                b.originalIndex
+            );
+        }
+    );
+
+
+    return result;
 }
 
 
@@ -2359,100 +3105,28 @@ function rowMatchesFilters(
             return false;
         }
     }
-    /* =========================================================
-   FREEZE COUNT - TOOLBAR
-========================================================= */
-
-const toolbarFreezeCount =
-document.getElementById(
-    "toolbarFreezeCount"
-);
 
 
-/*
-   Cập nhật ô trên toolbar.
-*/
-function updateToolbarFreezeCount(){
+    /*
+       =====================================================
+       AI SEARCH
+       =====================================================
 
-    if(!toolbarFreezeCount){
-        return;
+       AI filter được áp dụng sau filter cột.
+
+       Khi đang mở danh sách filter của một cột,
+       AI vẫn được giữ lại.
+    */
+
+    if(
+        !rowMatchesAIConditions(row)
+    ){
+
+        return false;
     }
 
 
-    toolbarFreezeCount.value =
-    Number(freezeCount) || 0;
-}
-
-
-/*
-   Khi nhập số cột.
-*/
-toolbarFreezeCount.addEventListener(
-    "change",
-    () => {
-
-        let value =
-        Number(
-            toolbarFreezeCount.value
-        );
-
-
-        if(
-            !Number.isFinite(value)
-        ){
-
-            value = 6;
-        }
-
-
-        value =
-        Math.max(
-            0,
-            Math.min(
-                Math.floor(value),
-                getVisibleHeaderIndexes().length
-            )
-        );
-
-
-        freezeCount =
-        value;
-
-
-        toolbarFreezeCount.value =
-        value;
-
-
-        saveState();
-
-
-        /*
-           Áp dụng ngay.
-        */
-        applyFreezeColumns();
-    }
-);
-
-
-/*
-   Enter cũng áp dụng ngay.
-*/
-toolbarFreezeCount.addEventListener(
-    "keydown",
-    event => {
-
-        if(
-            event.key === "Enter"
-        ){
-
-            event.preventDefault();
-
-            toolbarFreezeCount.blur();
-        }
-    }
-);
-
-        /*
+    /*
        =====================================================
        GLOBAL SEARCH
        =====================================================
@@ -2462,27 +3136,11 @@ toolbarFreezeCount.addEventListener(
        Không phân biệt:
        - Hoa / thường
        - Có / không dấu tiếng Việt
-
-       Ví dụ:
-
-       C99N
-       120.000
-       5G
-       doanh nghiệp
-       1GB
-       ...
     */
 
     const globalQuery =
-    String(
-        globalSearch || ""
-    )
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(
-        /[\u0300-\u036f]/g,
-        ""
+    normalizeText(
+        globalSearch
     );
 
 
@@ -2492,15 +3150,7 @@ toolbarFreezeCount.addEventListener(
         row
         .map(
             value =>
-            String(
-                value ?? ""
-            )
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(
-                /[\u0300-\u036f]/g,
-                ""
-            )
+            normalizeText(value)
         )
         .join(" ");
 
@@ -2537,11 +3187,9 @@ toolbarFreezeCount.addEventListener(
 
 
         const query =
-        String(
-            searches[key] ?? ""
-        )
-        .trim()
-        .toLowerCase();
+        normalizeText(
+            searches[key]
+        );
 
 
         if(!query){
@@ -2550,10 +3198,9 @@ toolbarFreezeCount.addEventListener(
 
 
         const value =
-        String(
-            row[index] ?? ""
-        )
-        .toLowerCase();
+        normalizeText(
+            row[index]
+        );
 
 
         if(
@@ -2578,12 +3225,10 @@ function getFilterValuesForColumn(
 ){
 
     /*
-       Rất quan trọng:
-       bỏ qua filter/search của chính
+       Bỏ qua filter/search của chính
        cột đang mở.
 
-       Nhưng áp dụng toàn bộ filter/search
-       của các cột khác.
+       AI vẫn được áp dụng.
     */
 
     const source =
@@ -2680,91 +3325,99 @@ function getVisibleRows(){
 
 
     if(
-        activeSorts.length === 0
+        activeSorts.length > 0
     ){
 
-        return result;
+        result.sort(
+            (a,b) => {
+
+                for(
+                    const sort of activeSorts
+                ){
+
+                    const av =
+                    getSortValue(
+                        a.row,
+                        sort.index
+                    );
+
+
+                    const bv =
+                    getSortValue(
+                        b.row,
+                        sort.index
+                    );
+
+
+                    let compare = 0;
+
+
+                    if(
+                        av.type === "number" &&
+                        bv.type === "number"
+                    ){
+
+                        compare =
+                        av.value -
+                        bv.value;
+                    }
+
+
+                    else if(
+                        av.type === "date" &&
+                        bv.type === "date"
+                    ){
+
+                        compare =
+                        av.value -
+                        bv.value;
+                    }
+
+
+                    else{
+
+                        compare =
+                        String(av.value)
+                        .localeCompare(
+                            String(bv.value),
+                            "vi",
+                            {
+                                numeric:true,
+                                sensitivity:"base"
+                            }
+                        );
+                    }
+
+
+                    if(compare !== 0){
+
+                        return (
+                            sort.direction === "desc"
+                                ? -compare
+                                : compare
+                        );
+                    }
+                }
+
+
+                return (
+                    a.originalIndex -
+                    b.originalIndex
+                );
+            }
+        );
     }
 
 
-    result.sort(
-        (a,b) => {
+    /*
+       Nếu AI có sort thì áp dụng sau sort
+       của người dùng.
 
-            for(
-                const sort of activeSorts
-            ){
+       Như vậy AI vẫn có thể yêu cầu:
+       "tìm gói dưới 150k, sắp xếp giá tăng dần".
+    */
 
-                const av =
-                getSortValue(
-                    a.row,
-                    sort.index
-                );
-
-
-                const bv =
-                getSortValue(
-                    b.row,
-                    sort.index
-                );
-
-
-                let compare = 0;
-
-
-                if(
-                    av.type === "number" &&
-                    bv.type === "number"
-                ){
-
-                    compare =
-                    av.value -
-                    bv.value;
-                }
-
-
-                else if(
-                    av.type === "date" &&
-                    bv.type === "date"
-                ){
-
-                    compare =
-                    av.value -
-                    bv.value;
-                }
-
-
-                else{
-
-                    compare =
-                    String(av.value)
-                    .localeCompare(
-                        String(bv.value),
-                        "vi",
-                        {
-                            numeric:true,
-                            sensitivity:"base"
-                        }
-                    );
-                }
-
-
-                if(compare !== 0){
-
-                    return (
-                        sort.direction === "desc"
-                            ? -compare
-                            : compare
-                    );
-                }
-            }
-
-
-            return (
-                a.originalIndex -
-                b.originalIndex
-            );
-        }
-    );
+    applyAISort(result);
 
 
     return result;
@@ -2804,13 +3457,6 @@ function getVisibleHeaderIndexes(){
    WIDTH
 ========================================================= */
 
-/* =========================================================
-   WIDTH
-========================================================= */
-
-/*
-   Đo độ rộng chữ bằng Canvas.
-*/
 function measureHeaderText(
     text,
     font = "bold 14px Arial"
@@ -2831,40 +3477,18 @@ function measureHeaderText(
 }
 
 
-/*
-   Tính chiều rộng header.
-
-   Bao gồm:
-   - Tên header hiện tại
-   - Mũi tên Sort
-   - Nút Filter
-   - Padding
-*/
 function calculateHeaderWidth(index){
 
     const originalHeader =
     headers[index];
 
 
-    /*
-       QUAN TRỌNG:
-       Lấy tên đang hiển thị.
-
-       Ví dụ:
-       REVENUE -> Chu kỳ
-
-       thì sẽ tính theo "Chu kỳ",
-       không tính theo "REVENUE".
-    */
     const displayHeader =
     getDisplayHeader(
         originalHeader
     );
 
 
-    /*
-       Độ rộng tên header.
-    */
     const titleWidth =
     measureHeaderText(
         displayHeader,
@@ -2872,19 +3496,6 @@ function calculateHeaderWidth(index){
     );
 
 
-    /*
-       Độ rộng nút Sort.
-
-       Dùng chính icon hiện tại,
-       nên nếu Sort có priority:
-
-       ▲
-       ▲1
-       ▲1.5
-       ▼10
-
-       đều được tính.
-    */
     const sortIcon =
     getSortIcon(index);
 
@@ -2899,9 +3510,6 @@ function calculateHeaderWidth(index){
     );
 
 
-    /*
-       Độ rộng nút Filter.
-    */
     const filterWidth =
     Math.max(
         24,
@@ -2912,10 +3520,6 @@ function calculateHeaderWidth(index){
     );
 
 
-    /*
-       Padding trái + phải
-       và một khoảng an toàn nhỏ.
-    */
     const paddingWidth =
     20;
 
@@ -2927,9 +3531,6 @@ function calculateHeaderWidth(index){
     paddingWidth;
 
 
-    /*
-       Không cho nhỏ hơn 70px.
-    */
     return Math.max(
         70,
         Math.ceil(totalWidth)
@@ -2937,36 +3538,26 @@ function calculateHeaderWidth(index){
 }
 
 
-/*
-   Lấy chiều rộng cột.
-*/
 function getColumnWidth(index){
 
     const originalHeader =
     headers[index];
 
-    // ==============================
-    // CỘT CÓ KÍCH THƯỚC ĐẶC BIỆT
-    // ==============================
 
-    // Phạm vi cung cấp = 2 lần mặc định
     if(originalHeader === "Phạm vi cung cấp"){
         return 150 * 2;
     }
 
-    // Free truy cập = 2 lần mặc định
+
     if(originalHeader === "Free truy cập"){
         return 150 * 2;
     }
 
-    // Đối tượng áp dụng = 4 lần mặc định
+
     if(originalHeader === "Đối tượng áp dụng"){
         return 150 * 4;
     }
 
-    // ==============================
-    // CÁC CỘT AUTO WIDTH THEO HEADER
-    // ==============================
 
     if(
         originalHeader === "Package" ||
@@ -2980,12 +3571,10 @@ function getColumnWidth(index){
         originalHeader === "Loại gói cước" ||
         originalHeader === "Tự động gia hạn"
     ){
+
         return calculateHeaderWidth(index);
     }
 
-    // ==============================
-    // CÁC CỘT BÌNH THƯỜNG
-    // ==============================
 
     return (
         Number(
@@ -3005,10 +3594,6 @@ function getColumnFormat(index){
     headers[index];
 
 
-    /*
-       FORMAT MẶC ĐỊNH
-    */
-
     const format = {
 
         align:"left",
@@ -3027,19 +3612,10 @@ function getColumnFormat(index){
 
         background:"#ffffff",
 
-        /*
-           Cho phép giữ các định dạng
-           mà người dùng đã lưu.
-        */
         ...(columnFormats[index] || {})
 
     };
 
-
-    /* =====================================================
-       CANH PHẢI
-       DỰA THEO TÊN GỐC CỦA CỘT
-       ===================================================== */
 
     if(
         originalHeader === "TOTAL PRICE" ||
@@ -3051,11 +3627,6 @@ function getColumnFormat(index){
 
     }
 
-
-    /* =====================================================
-       CANH GIỮA
-       DỰA THEO TÊN GỐC CỦA CỘT
-       ===================================================== */
 
     if(
         originalHeader === "REVENUE" ||
@@ -3073,6 +3644,8 @@ function getColumnFormat(index){
 
     return format;
 }
+
+
 function applyFormatToCell(
     cell,
     index
@@ -3240,11 +3813,6 @@ function renderHeader(){
             );
 
 
-            /*
-               Double click title
-               = đổi tên nhanh.
-            */
-
             title.addEventListener(
                 "dblclick",
                 event => {
@@ -3293,11 +3861,6 @@ function renderHeader(){
                     event.preventDefault();
                     event.stopPropagation();
 
-
-                    /*
-                       Mở cùng menu filter,
-                       trong đó có Sort By.
-                    */
 
                     openFilterMenu(
                         index,
@@ -3472,15 +4035,6 @@ function renderHeader(){
             searches[index] || "";
 
 
-            /*
-               QUAN TRỌNG:
-               không renderHeader()
-               khi nhập.
-
-               Chỉ render body.
-               => focus không mất.
-            */
-
             input.addEventListener(
                 "input",
                 () => {
@@ -3498,10 +4052,8 @@ function renderHeader(){
                     updateHeaderStates();
 
 
-                    /*
-                       Nếu menu filter đang mở,
-                       refresh danh sách.
-                    */
+                    updateStatus();
+
 
                     if(
                         openFilterIndex !== null
@@ -3597,6 +4149,9 @@ function renderBody(){
         );
 
 
+        updateStatus();
+
+
         return;
     }
 
@@ -3665,6 +4220,9 @@ function renderBody(){
     requestAnimationFrame(
         applyFreezeColumns
     );
+
+
+    updateStatus();
 }
 
 
@@ -3770,10 +4328,6 @@ function isEffectiveFilter(index){
     const allValues =
     getAllColumnValues(index);
 
-
-    /*
-       Chọn toàn bộ = không active.
-    */
 
     if(
         selected.length ===
@@ -4373,11 +4927,9 @@ function renderFilterValuesOnly(
 
 
     const query =
-    String(
-        filterValueSearch || ""
-    )
-    .trim()
-    .toLowerCase();
+    normalizeText(
+        filterValueSearch
+    );
 
 
     const values =
@@ -4389,18 +4941,14 @@ function renderFilterValuesOnly(
             }
 
 
-            return String(value)
-            .toLowerCase()
+            return normalizeText(
+                value
+            )
             .includes(query);
 
         }
     );
 
-
-    /*
-       Nếu chưa có filter:
-       coi như tất cả được chọn.
-    */
 
     const selected =
     filters[index] === undefined
@@ -4495,21 +5043,11 @@ function renderFilterValuesOnly(
                     saveState();
 
 
-                    /*
-                       LỌC NGAY.
-                    */
-
                     renderBody();
 
 
                     updateHeaderStates();
 
-
-                    /*
-                       Không đóng menu.
-                       Cập nhật lại danh sách filter
-                       theo trạng thái mới.
-                    */
 
                     const savedSearch =
                     filterValueSearch;
@@ -4621,10 +5159,6 @@ function createSortSection(index){
     );
 
 
-    /*
-       Helper sort info
-    */
-
     const originalHeader =
     headers[index];
 
@@ -4699,10 +5233,6 @@ function createSortSection(index){
     priority.type =
     "number";
 
-
-    /*
-       Cho số thập phân.
-    */
 
     priority.step =
     "any";
@@ -4941,11 +5471,6 @@ function createSortSection(index){
 
                     sorts[index] = {
 
-                        /*
-                           Giữ nguyên số user nhập
-                           dưới dạng number.
-                        */
-
                         priority:number,
 
                         direction:
@@ -4967,10 +5492,6 @@ function createSortSection(index){
 
             updateHeaderStates();
 
-
-            /*
-               Cập nhật icon nhưng giữ menu.
-            */
 
             renderFilterMenu(
                 index
@@ -5216,7 +5737,7 @@ function createFormatSection(index){
 
 
             font.appendChild(
-                option
+            option
             );
 
         }
@@ -5615,11 +6136,6 @@ function createFormatSection(index){
             saveState();
 
 
-            /*
-               Chỉ body.
-               Không render header.
-            */
-
             renderBody();
 
             updateHeaderStates();
@@ -5737,37 +6253,63 @@ function closeFilterMenu(){
 ========================================================= */
 
 function openRenamePrompt(index){
-    const original = headers[index];
-    const current = getDisplayHeader(original);
 
-    const newName = prompt(
+    const original =
+    headers[index];
+
+
+    const current =
+    getDisplayHeader(
+        original
+    );
+
+
+    const newName =
+    prompt(
         "Tên mới của cột:",
         current
     );
 
-    if(newName === null) return;
 
-    const trimmed = newName.trim();
+    if(newName === null){
+        return;
+    }
+
+
+    const trimmed =
+    newName.trim();
+
 
     if(trimmed === ""){
-        delete renamedHeaders[original];
+
+        delete renamedHeaders[
+            original
+        ];
+
     }
     else{
-        renamedHeaders[original] = trimmed;
+
+        renamedHeaders[
+            original
+        ] =
+        trimmed;
     }
 
-    // Nếu là REVENUE hoặc Kỳ thì
-    // luôn tính lại kích thước theo tên mới
+
     if(
         original === "REVENUE" ||
         original === "Kỳ"
     ){
+
         delete columnWidths[index];
     }
 
+
     saveState();
+
     renderTable();
 }
+
 
 /* =========================================================
    SETTINGS RENAME LIST
@@ -5903,29 +6445,15 @@ document
 
         freezeCountInput.value =
         freezeCount;
+
+
         updateToolbarFreezeCount();
+
+
         updateGlobalSearchUI();
 
 
-        /*
-           Nếu đã load dữ liệu.
-        */
-
         renderRenameList();
-
-
-        /*
-           Auto refresh.
-        */
-
-        if(
-            autoRefreshTimer
-        ){
-
-            /*
-               Không cần đọc ngược timer.
-            */
-        }
 
 
         settingsOverlay.style.display =
@@ -6068,10 +6596,6 @@ settingsOverlay.addEventListener(
 
 function applyFreezeColumns(){
 
-    /*
-       Xóa trạng thái cũ.
-    */
-
     document
     .querySelectorAll(
         ".frozen-column"
@@ -6166,11 +6690,6 @@ function applyFreezeColumns(){
                     `${left}px`;
 
 
-                    /*
-                       Đảm bảo header có top
-                       độc lập với left.
-                    */
-
                     if(
                         cell.classList.contains(
                             "header-cell"
@@ -6215,6 +6734,82 @@ function applyFreezeColumns(){
         }
     );
 }
+
+
+/* =========================================================
+   TOOLBAR FREEZE COUNT
+========================================================= */
+
+function updateToolbarFreezeCount(){
+
+    if(!toolbarFreezeCount){
+        return;
+    }
+
+
+    toolbarFreezeCount.value =
+    Number(freezeCount) || 0;
+}
+
+
+toolbarFreezeCount.addEventListener(
+    "change",
+    () => {
+
+        let value =
+        Number(
+            toolbarFreezeCount.value
+        );
+
+
+        if(
+            !Number.isFinite(value)
+        ){
+
+            value = 9;
+        }
+
+
+        value =
+        Math.max(
+            0,
+            Math.min(
+                Math.floor(value),
+                getVisibleHeaderIndexes().length
+            )
+        );
+
+
+        freezeCount =
+        value;
+
+
+        toolbarFreezeCount.value =
+        value;
+
+
+        saveState();
+
+
+        applyFreezeColumns();
+    }
+);
+
+
+toolbarFreezeCount.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            toolbarFreezeCount.blur();
+        }
+    }
+);
 
 
 /* =========================================================
@@ -6282,11 +6877,6 @@ document.addEventListener(
         ] =
         width;
 
-
-        /*
-           Không render table.
-           Chỉ update width.
-        */
 
         document
         .querySelectorAll(
@@ -6357,9 +6947,16 @@ function resetUserState(){
 
     globalSearch = "";
 
-    if(globalSearchInput){
-    globalSearchInput.value = "";
-    }
+    globalSearchInput.value =
+    "";
+
+
+    /*
+       Xóa AI search.
+    */
+
+    clearAISearch();
+
 
     sorts = {};
 
@@ -6380,6 +6977,9 @@ function resetUserState(){
 
 
     renderTable();
+
+
+    updateGlobalSearchUI();
 }
 
 
@@ -6574,24 +7174,11 @@ window.addEventListener(
     }
 );
 
-    /* =========================================================
-   GLOBAL SEARCH
+
+/* =========================================================
+   GLOBAL SEARCH UI
 ========================================================= */
 
-const globalSearchInput =
-document.getElementById(
-    "globalSearchInput"
-);
-
-const clearGlobalSearchBtn =
-document.getElementById(
-    "clearGlobalSearchBtn"
-);
-
-
-/*
-   Cập nhật trạng thái nút X.
-*/
 function updateGlobalSearchUI(){
 
     if(!globalSearchInput){
@@ -6619,51 +7206,389 @@ function updateGlobalSearchUI(){
         "none";
 
     }
+
+
+    /*
+       Khi đang có AI search,
+       hiển thị trạng thái trên nút.
+    */
+
+    if(aiSearchBtn){
+
+        if(aiSearchLoading){
+
+            aiSearchBtn.textContent =
+            "⏳ AI";
+
+            aiSearchBtn.classList.add(
+                "loading"
+            );
+
+        }
+        else if(aiQuery){
+
+            aiSearchBtn.textContent =
+            "✨ AI ✓";
+
+            aiSearchBtn.classList.remove(
+                "loading"
+            );
+
+        }
+        else{
+
+            aiSearchBtn.textContent =
+            "✨ AI";
+
+            aiSearchBtn.classList.remove(
+                "loading"
+            );
+        }
+    }
 }
 
 
-/*
-   Nhập tìm kiếm.
-*/
+/* =========================================================
+   AI STATUS
+========================================================= */
+
+function showAIStatus(
+    message
+){
+
+    if(!aiSearchStatus){
+        return;
+    }
+
+
+    if(!message){
+
+        aiSearchStatus.textContent =
+        "";
+
+        aiSearchStatus.style.display =
+        "none";
+
+        return;
+    }
+
+
+    aiSearchStatus.textContent =
+    message;
+
+
+    aiSearchStatus.style.display =
+    "block";
+}
+
+
+/* =========================================================
+   AI SEARCH CLEAR
+========================================================= */
+
+function clearAISearch(){
+
+    aiQuery =
+    "";
+
+    aiConditions =
+    [];
+
+    aiSort =
+    null;
+
+
+    aiSearchLoading =
+    false;
+
+
+    showAIStatus(
+        ""
+    );
+
+
+    updateGlobalSearchUI();
+}
+
+
+/* =========================================================
+   AI COLUMN METADATA
+========================================================= */
+
+function getAIColumnMetadata(){
+
+    return getVisibleHeaderIndexes()
+    .map(
+        index => ({
+
+            index,
+
+            name:
+            headers[index],
+
+            displayName:
+            getDisplayHeader(
+                headers[index]
+            )
+
+        })
+    );
+}
+
+
+/* =========================================================
+   AI REQUEST
+========================================================= */
+
+async function runAISearch(){
+
+    const question =
+    String(
+        globalSearchInput.value || ""
+    ).trim();
+
+
+    if(!question){
+
+        showAIStatus(
+            "Hãy nhập câu hỏi tìm kiếm trước."
+        );
+
+        globalSearchInput.focus();
+
+        return;
+    }
+
+
+    if(aiSearchLoading){
+        return;
+    }
+
+
+    aiSearchLoading =
+    true;
+
+
+    updateGlobalSearchUI();
+
+
+    showAIStatus(
+        "✨ AI đang phân tích yêu cầu..."
+    );
+
+
+    /*
+       Khi dùng AI:
+       globalSearch được xóa.
+
+       AI sẽ trở thành lớp filter riêng,
+       tránh việc câu "dưới 150k"
+       bị áp dụng thêm như text search.
+    */
+
+    globalSearch =
+    "";
+
+
+    try{
+
+        const response =
+        await fetch(
+            AI_SEARCH_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body:JSON.stringify({
+
+                    question,
+
+                    columns:
+                    getAIColumnMetadata()
+
+                })
+            }
+        );
+
+
+        const data =
+        await response.json()
+        .catch(
+            () => ({})
+        );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                `HTTP ${response.status}`
+            );
+        }
+
+
+        if(
+            !data ||
+            data.ok === false
+        ){
+
+            throw new Error(
+                data?.message ||
+                data?.error ||
+                "AI không trả về kết quả hợp lệ."
+            );
+        }
+
+
+        /*
+           Lưu kết quả AI.
+        */
+
+        aiQuery =
+        question;
+
+
+        aiConditions =
+        Array.isArray(
+            data.conditions
+        )
+            ? data.conditions
+            : [];
+
+
+        aiSort =
+        data.sort || null;
+
+
+        /*
+           Nếu AI không tạo được điều kiện
+           thì vẫn cho phép message hiển thị.
+        */
+
+        const conditionCount =
+        aiConditions.length;
+
+
+        const resultCount =
+        rows.filter(
+            row =>
+            rowMatchesFilters(
+                row
+            )
+        ).length;
+
+
+        renderBody();
+
+
+        updateHeaderStates();
+
+
+        updateGlobalSearchUI();
+
+
+        showAIStatus(
+            data.message ||
+            (
+                conditionCount
+                    ? `✨ AI đã áp dụng ${conditionCount} điều kiện • ${resultCount.toLocaleString("vi-VN")} dòng`
+                    : "✨ AI đã xử lý yêu cầu."
+            )
+        );
+
+
+    }
+    catch(error){
+
+        console.error(
+            "AI Search Error:",
+            error
+        );
+
+
+        /*
+           Không làm mất các filter
+           người dùng đang có.
+        */
+
+        aiQuery =
+        "";
+
+        aiConditions =
+        [];
+
+        aiSort =
+        null;
+
+
+        updateGlobalSearchUI();
+
+
+        showAIStatus(
+            "❌ AI lỗi: " +
+            error.message
+        );
+
+
+        renderBody();
+
+    }
+    finally{
+
+        aiSearchLoading =
+        false;
+
+
+        updateGlobalSearchUI();
+
+    }
+}
+
+
+/* =========================================================
+   GLOBAL SEARCH INPUT
+========================================================= */
+
 globalSearchInput.addEventListener(
     "input",
     () => {
 
         /*
-           Lấy nội dung ngay khi người dùng gõ
+           Nếu người dùng sửa nội dung sau
+           khi đã chạy AI:
+
+           -> hủy kết quả AI cũ
+           -> nội dung hiện tại trở thành
+              global search bình thường.
         */
+
+        if(aiQuery){
+
+            clearAISearch();
+        }
+
+
         globalSearch =
         globalSearchInput.value;
 
 
-        /*
-           Cập nhật nút X
-        */
         updateGlobalSearchUI();
 
 
-        /*
-           Lưu trạng thái
-        */
         saveState();
 
 
-        /*
-           LỌC BẢNG NGAY LẬP TỨC
-        */
         renderBody();
 
 
-        /*
-           Cập nhật trạng thái header
-        */
         updateHeaderStates();
 
 
-        /*
-           Nếu đang mở menu filter
-           thì cập nhật luôn.
-        */
         if(
             openFilterIndex !== null
         ){
@@ -6677,9 +7602,67 @@ globalSearchInput.addEventListener(
     }
 );
 
-/*
-   Xóa tìm kiếm.
-*/
+
+/* =========================================================
+   GLOBAL SEARCH ENTER
+========================================================= */
+
+globalSearchInput.addEventListener(
+    "keydown",
+    event => {
+
+        /*
+           Ctrl + Enter = AI Search
+        */
+
+        if(
+            event.key === "Enter" &&
+            event.ctrlKey
+        ){
+
+            event.preventDefault();
+
+            runAISearch();
+
+            return;
+        }
+
+
+        /*
+           Enter bình thường:
+           giữ nguyên tìm kiếm text hiện tại.
+        */
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+        }
+    }
+);
+
+
+/* =========================================================
+   AI BUTTON
+========================================================= */
+
+aiSearchBtn.addEventListener(
+    "click",
+    event => {
+
+        event.preventDefault();
+
+        runAISearch();
+    }
+);
+
+
+/* =========================================================
+   CLEAR GLOBAL SEARCH
+========================================================= */
+
 clearGlobalSearchBtn.addEventListener(
     "click",
     event => {
@@ -6694,6 +7677,9 @@ clearGlobalSearchBtn.addEventListener(
 
         globalSearchInput.value =
         "";
+
+
+        clearAISearch();
 
 
         saveState();
@@ -6719,11 +7705,14 @@ clearGlobalSearchBtn.addEventListener(
 
 loadState();
 
+updateToolbarFreezeCount();
+
+updateGlobalSearchUI();
+
 loadData();
 
 </script>
 
 </body>
 </html>
-
-
+```
