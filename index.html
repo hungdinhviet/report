@@ -102,6 +102,27 @@ body{
     z-index:2;
 }
 
+.global-search-ai-badge{
+    position:absolute;
+    left:26px;
+    top:8px;
+    height:16px;
+    min-width:20px;
+    padding:0 4px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #7b61ff;
+    border-radius:3px;
+    background:#f4f0ff;
+    color:#6848d8;
+    font-size:10px;
+    font-weight:bold;
+    line-height:16px;
+    pointer-events:none;
+    z-index:2;
+}
+
 .global-search{
     width:100%;
     height:32px;
@@ -109,7 +130,7 @@ body{
     border:1px solid #bbb;
     border-radius:4px;
 
-    padding:0 30px 0 30px;
+    padding:0 30px 0 52px;
 
     outline:none;
 
@@ -922,11 +943,18 @@ tbody td.frozen-column{
                 🔎
             </span>
 
+            <span
+                class="global-search-ai-badge"
+                title="Bạn có thể đặt câu hỏi bằng tiếng Việt"
+            >
+                AI
+            </span>
+
             <input
                 id="globalSearchInput"
                 class="global-search"
                 type="text"
-                placeholder="Tìm kiếm thông tin..."
+                placeholder="Tìm kiếm thông tin hoặc hỏi AI..."
             >
 
             <button
@@ -1095,6 +1123,12 @@ const CSV_URL =
 
 const AI_SEARCH_URL =
 "https://dinhviethung-ai-search.hung-dinhviet1997.workers.dev";
+
+/*
+   AI được tích hợp trực tiếp vào ô tìm kiếm tổng.
+   Câu hỏi tự nhiên sẽ được gửi tới Cloudflare Worker
+   cùng metadata cột và dữ liệu hiện tại của Google Sheet.
+*/
 
 
 /*
@@ -2533,6 +2567,7 @@ function applyAIResult(data, question){
     */
 
     let result =
+    data?.result ||
     data?.response ||
     data;
 
@@ -2545,6 +2580,17 @@ function applyAIResult(data, question){
 
         result =
         result.response;
+
+    }
+
+    if(
+        result &&
+        result.result &&
+        typeof result.result === "object"
+    ){
+
+        result =
+        result.result;
 
     }
 
@@ -3057,7 +3103,7 @@ async function runAISearch(
 
 
     statusEl.textContent =
-    "🤖 AI đang phân tích...";
+    "🤖 AI đang phân tích dữ liệu Google Sheet...";
 
 
     try{
@@ -3085,16 +3131,25 @@ async function runAISearch(
                     columns:
                         getAIColumnMetadata(),
 
-                    /*
-                       Gửi toàn bộ dữ liệu hiện tại của Google Sheet
-                       cho Worker để bước tiếp theo Worker có thể
-                       phân tích dữ liệu thực tế.
-
-                       Không thay đổi dữ liệu hiển thị trên bảng.
-                       Chỉ bổ sung dữ liệu vào request AI.
-                    */
                     rows:
-                        rows
+                        rows.map(
+                            row => {
+
+                                const item = {};
+
+                                headers.forEach(
+                                    (header,index) => {
+
+                                        item[header] =
+                                        row[index] ?? "";
+
+                                    }
+                                );
+
+                                return item;
+
+                            }
+                        )
 
                 })
 
