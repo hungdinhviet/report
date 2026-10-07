@@ -1783,6 +1783,10 @@ async function loadData(){
         });
 
 
+        /* Chuẩn bị cache cho Hỏi AI một lần duy nhất. */
+        rebuildAIRowCache();
+
+
         initializeDefaults();
 
         renderTable();
@@ -3091,89 +3095,108 @@ function aiValueMatches(
    Chỉ lấy những dòng phù hợp nhất với câu hỏi và dừng khi
    tổng dữ liệu gửi đi đạt giới hạn ký tự an toàn.
 */
-const AI_MAX_CONTEXT_CHARS = 60000;
-const AI_MAX_CONTEXT_ROWS = 120;
-const AI_MAX_CELL_CHARS = 250;
+const AI_MAX_CONTEXT_CHARS = 30000;
+const AI_MAX_CONTEXT_ROWS = 40;
+const AI_MAX_CELL_CHARS = 200;
 
-function buildAIContextRows(question){
+/*
+   Cache dữ liệu AI một lần sau khi Google Sheet tải xong.
+   Nhờ vậy mỗi lần hỏi AI không phải normalize toàn bộ Sheet lại.
+*/
+let aiRowCache = [];
 
-    if(!Array.isArray(rows) || !rows.length){
-        return [];
-    }
+function rebuildAIRowCache(){
+    aiRowCache = rows.map((row, originalIndex) => {
+        const normalizedCells = row.map(value =>
+            normalizeSearchText(value)
+        );
 
-    const q = normalizeSearchText(question);
+        return {
+            row,
+            originalIndex,
+            fullText: normalizedCells.join(" "),
+            packageValue: normalizedCells[headers.findIndex(h =>
+                normalizeSearchText(h) === "package"
+            )] || ""
+        };
+    });
+}
 
+function getAIQuestionTokens(question){
     const stopWords = new Set([
         "cho","toi","tôi","biet","biết","tim","tìm",
         "giup","giúp","voi","với","la","là","co","có",
         "bao","nhiêu","nhieu","nao","nào","the","thế",
         "gi","gì","cua","của","ve","về","goi","gói",
-        "cuoc","cước","hay","va","và","trong","tren","trên"
+        "cuoc","cước","hay","va","và","trong","tren","trên",
+        "xin","hãy","hay","mot","một","nhung","những"
     ]);
 
-    const tokens = q
+    return normalizeSearchText(question)
         .replace(/[^\p{L}\p{N}%.,<>!=+\-]+/gu, " ")
         .split(/\s+/)
         .filter(x => x.length >= 2 && !stopWords.has(x));
+}
 
-    const scored = rows.map((row, originalIndex) => {
+function buildAIContextRows(question){
+    if(!rows.length){
+        return [];
+    }
 
-        const values = headers.map((header,index) =>
-            normalizeSearchText(`${header} ${row[index] ?? ""}`)
-        );
+    if(aiRowCache.length !== rows.length){
+        rebuildAIRowCache();
+    }
 
-        const fullText = values.join(" ");
+    const q = normalizeSearchText(question);
+    const tokens = getAIQuestionTokens(question);
+    const scored = [];
+
+    /*
+       Tìm nhanh trên cache đã normalize sẵn.
+       Nếu có mã/gói xuất hiện nguyên câu thì ưu tiên rất cao.
+    */
+    for(const item of aiRowCache){
         let score = 0;
 
-        if(q.length >= 3 && fullText.includes(q)){
+        if(q.length >= 3 && item.fullText.includes(q)){
             score += 1000;
         }
 
         for(const token of tokens){
-            if(fullText.includes(token)){
+            if(item.fullText.includes(token)){
                 score += token.length >= 5 ? 12 : 5;
             }
         }
 
-        headers.forEach((header,index) => {
-            const value = normalizeSearchText(row[index] ?? "");
-            if(!value) return;
+        if(item.packageValue && q.includes(item.packageValue)){
+            score += 300;
+        }
 
-            for(const token of tokens){
-                if(value.includes(token)) score += 8;
-            }
-
-            if(
-                normalizeSearchText(header) === "package" &&
-                value && q.includes(value)
-            ){
-                score += 100;
-            }
-        });
-
-        return {row, originalIndex, score};
-    });
-
-    let selected = scored
-        .filter(x => x.score > 0)
-        .sort((a,b) => b.score - a.score || a.originalIndex - b.originalIndex)
-        .slice(0, AI_MAX_CONTEXT_ROWS);
-
-    /* Không tìm thấy từ khóa: chỉ gửi một mẫu nhỏ, tuyệt đối không gửi toàn bộ. */
-    if(!selected.length){
-        selected = scored.slice(0, Math.min(20, AI_MAX_CONTEXT_ROWS));
+        if(score > 0){
+            scored.push({item, score});
+        }
     }
+
+    scored.sort((a,b) =>
+        b.score - a.score ||
+        a.item.originalIndex - b.item.originalIndex
+    );
+
+    /*
+       Chỉ gửi tối đa 40 dòng. Nếu không có kết quả thì không gửi
+       mẫu 20 dòng đầu nữa, vì mẫu ngẫu nhiên làm AI chậm mà ít ích lợi.
+    */
+    const selected = scored.slice(0, AI_MAX_CONTEXT_ROWS);
 
     const result = [];
     let totalChars = 0;
 
-    for(const item of selected){
-
+    for(const entry of selected){
         const obj = {};
         let rowChars = 0;
 
         headers.forEach((header,index) => {
-            let value = String(item.row[index] ?? "");
+            let value = String(entry.item.row[index] ?? "");
 
             if(value.length > AI_MAX_CELL_CHARS){
                 value = value.slice(0, AI_MAX_CELL_CHARS) + "…";
@@ -3183,11 +3206,7 @@ function buildAIContextRows(question){
             rowChars += header.length + value.length + 6;
         });
 
-        /* Đảm bảo tổng context luôn nhỏ, không phụ thuộc số dòng của Sheet. */
-        if(
-            result.length > 0 &&
-            totalChars + rowChars > AI_MAX_CONTEXT_CHARS
-        ){
+        if(result.length > 0 && totalChars + rowChars > AI_MAX_CONTEXT_CHARS){
             break;
         }
 
@@ -3220,7 +3239,7 @@ async function runAISearch(
 
 
     statusEl.textContent =
-    "🤖 AI đang tìm dữ liệu liên quan trong Google Sheet...";
+    "🤖 AI đang phân tích dữ liệu phù hợp...";
 
 
     try{
