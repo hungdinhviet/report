@@ -1283,6 +1283,8 @@ let aiSearching = false;
 let aiSearchTimer = null;
 
 let aiRequestId = 0;
+let aiAbortController = null;
+const AI_REQUEST_TIMEOUT_MS = 30000;
 
 
 /* =========================================================
@@ -3233,107 +3235,93 @@ async function runAISearch(
     question
 ){
 
-    const requestId =
-    ++aiRequestId;
+    /*
+       Mỗi lần hỏi chỉ có 1 request AI.
+       Nếu request cũ còn treo, hủy ngay trước khi tạo request mới.
+    */
+    if(aiAbortController){
+        try{
+            aiAbortController.abort();
+        }catch(error){}
+    }
 
+    const controller = new AbortController();
+    aiAbortController = controller;
+
+    const requestId = ++aiRequestId;
 
     aiSearching = true;
-
 
     globalSearchInput.classList.add(
         "ai-active"
     );
 
-
     statusEl.textContent =
-    "🤖 AI đang phân tích dữ liệu phù hợp...";
+    "🤖 AI đang tìm dữ liệu liên quan...";
 
+    let timeoutId = null;
 
     try{
 
+        /*
+           Không để fetch treo vô thời hạn.
+           Sau 30 giây sẽ tự hủy và trả quyền điều khiển
+           cho ô tìm kiếm.
+        */
+        timeoutId = setTimeout(() => {
+            try{
+                controller.abort();
+            }catch(error){}
+        }, AI_REQUEST_TIMEOUT_MS);
+
+        const contextRows =
+            buildAIContextRows(question);
+
         const response =
         await fetch(
-
             AI_SEARCH_URL,
-
             {
-
-                method:
-                    "POST",
-
+                method: "POST",
                 headers:{
                     "Content-Type":
-                        "application/json"
+                    "application/json"
                 },
-
-                body:
-                JSON.stringify({
-
+                signal: controller.signal,
+                body: JSON.stringify({
                     question,
-
-                    columns:
-                        getAIColumnMetadata(),
-
-                    /*
-                       QUAN TRỌNG:
-                       Chỉ gửi context đã được lọc/chấm điểm.
-                       Không còn gửi toàn bộ rows của Google Sheet.
-                    */
-                    rows:
-                        buildAIContextRows(
-                            question
-                        )
-
+                    columns: getAIColumnMetadata(),
+                    rows: contextRows
                 })
-
             }
-
         );
 
-
-        if(
-            requestId !== aiRequestId
-        ){
-
+        if(requestId !== aiRequestId){
             return;
-
         }
-
 
         let data = null;
 
-
         try{
-
-            data =
-            await response.json();
-
+            data = await response.json();
         }
         catch(error){
-
             throw new Error(
                 "Worker AI trả về dữ liệu không hợp lệ."
             );
-
         }
 
-
         if(!response.ok){
-
             throw new Error(
                 data?.message ||
                 data?.error ||
                 `HTTP ${response.status}`
             );
-
         }
-
 
         applyAIResult(
             data,
             question
         );
-
 
     }
     catch(error){
@@ -3343,48 +3331,54 @@ async function runAISearch(
             error
         );
 
+        /* Request này đã bị một câu hỏi mới thay thế. */
+        if(requestId !== aiRequestId){
+            return;
+        }
+
+        let message =
+            error?.message ||
+            "không xác định";
+
+        if(error?.name === "AbortError"){
+            message =
+                "AI không phản hồi trong 30 giây";
+        }
 
         /*
-           Nếu AI lỗi thì quay lại
-           tìm kiếm thông thường.
+           Nếu AI lỗi thì quay lại tìm kiếm thông thường.
         */
-
         aiQuery = "";
-
         aiConditions = [];
-
         aiSort = [];
 
-
-        globalSearch =
-        question;
-
+        globalSearch = question;
 
         updateGlobalSearchUI();
-
         renderBody();
-
         updateHeaderStates();
-
 
         statusEl.textContent =
         "⚠ AI lỗi: " +
-        (error?.message || "không xác định") +
+        message +
         " • đang tìm kiếm thông thường";
 
     }
     finally{
 
-        if(
-            requestId === aiRequestId
-        ){
+        if(timeoutId !== null){
+            clearTimeout(timeoutId);
+        }
 
+        if(aiAbortController === controller){
+            aiAbortController = null;
+        }
+
+        if(requestId === aiRequestId){
             aiSearching = false;
-
             globalSearchInput.classList.remove(
                 "ai-active"
             );
-
         }
 
     }
@@ -3949,7 +3943,6 @@ function getColumnWidth(index){
         originalHeader === "Kỳ" ||
         originalHeader === "Cách tính chu kỳ" ||
         originalHeader === "Packageprice" ||
-        originalHeader === "Thoại nội mạng" ||
         originalHeader === "Thoại ngoại mạng" ||
         originalHeader === "Hạ băng thông" ||
         originalHeader === "Loại gói cước" ||
