@@ -3183,10 +3183,17 @@ function buildAIContextRows(question){
     );
 
     /*
-       Chỉ gửi tối đa 40 dòng. Nếu không có kết quả thì không gửi
-       mẫu 20 dòng đầu nữa, vì mẫu ngẫu nhiên làm AI chậm mà ít ích lợi.
+       Chỉ gửi tối đa 40 dòng.
+       Nếu câu hỏi không chứa từ khóa trùng trực tiếp với dữ liệu,
+       vẫn gửi một mẫu nhỏ để Worker/AI không bị nhận context rỗng.
     */
-    const selected = scored.slice(0, AI_MAX_CONTEXT_ROWS);
+    let selected = scored.slice(0, AI_MAX_CONTEXT_ROWS);
+
+    if(!selected.length){
+        selected = aiRowCache
+            .slice(0, Math.min(10, AI_MAX_CONTEXT_ROWS))
+            .map(item => ({ item, score: 0 }));
+    }
 
     const result = [];
     let totalChars = 0;
