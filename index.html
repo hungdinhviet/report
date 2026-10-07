@@ -3083,6 +3083,123 @@ function aiValueMatches(
 
 
 /* =========================================================
+   AI CONTEXT SELECTION
+========================================================= */
+
+/*
+   KHÔNG gửi toàn bộ Google Sheet cho AI.
+   Chỉ lấy những dòng phù hợp nhất với câu hỏi và dừng khi
+   tổng dữ liệu gửi đi đạt giới hạn ký tự an toàn.
+*/
+const AI_MAX_CONTEXT_CHARS = 60000;
+const AI_MAX_CONTEXT_ROWS = 120;
+const AI_MAX_CELL_CHARS = 250;
+
+function buildAIContextRows(question){
+
+    if(!Array.isArray(rows) || !rows.length){
+        return [];
+    }
+
+    const q = normalizeSearchText(question);
+
+    const stopWords = new Set([
+        "cho","toi","tôi","biet","biết","tim","tìm",
+        "giup","giúp","voi","với","la","là","co","có",
+        "bao","nhiêu","nhieu","nao","nào","the","thế",
+        "gi","gì","cua","của","ve","về","goi","gói",
+        "cuoc","cước","hay","va","và","trong","tren","trên"
+    ]);
+
+    const tokens = q
+        .replace(/[^\p{L}\p{N}%.,<>!=+\-]+/gu, " ")
+        .split(/\s+/)
+        .filter(x => x.length >= 2 && !stopWords.has(x));
+
+    const scored = rows.map((row, originalIndex) => {
+
+        const values = headers.map((header,index) =>
+            normalizeSearchText(`${header} ${row[index] ?? ""}`)
+        );
+
+        const fullText = values.join(" ");
+        let score = 0;
+
+        if(q.length >= 3 && fullText.includes(q)){
+            score += 1000;
+        }
+
+        for(const token of tokens){
+            if(fullText.includes(token)){
+                score += token.length >= 5 ? 12 : 5;
+            }
+        }
+
+        headers.forEach((header,index) => {
+            const value = normalizeSearchText(row[index] ?? "");
+            if(!value) return;
+
+            for(const token of tokens){
+                if(value.includes(token)) score += 8;
+            }
+
+            if(
+                normalizeSearchText(header) === "package" &&
+                value && q.includes(value)
+            ){
+                score += 100;
+            }
+        });
+
+        return {row, originalIndex, score};
+    });
+
+    let selected = scored
+        .filter(x => x.score > 0)
+        .sort((a,b) => b.score - a.score || a.originalIndex - b.originalIndex)
+        .slice(0, AI_MAX_CONTEXT_ROWS);
+
+    /* Không tìm thấy từ khóa: chỉ gửi một mẫu nhỏ, tuyệt đối không gửi toàn bộ. */
+    if(!selected.length){
+        selected = scored.slice(0, Math.min(20, AI_MAX_CONTEXT_ROWS));
+    }
+
+    const result = [];
+    let totalChars = 0;
+
+    for(const item of selected){
+
+        const obj = {};
+        let rowChars = 0;
+
+        headers.forEach((header,index) => {
+            let value = String(item.row[index] ?? "");
+
+            if(value.length > AI_MAX_CELL_CHARS){
+                value = value.slice(0, AI_MAX_CELL_CHARS) + "…";
+            }
+
+            obj[header] = value;
+            rowChars += header.length + value.length + 6;
+        });
+
+        /* Đảm bảo tổng context luôn nhỏ, không phụ thuộc số dòng của Sheet. */
+        if(
+            result.length > 0 &&
+            totalChars + rowChars > AI_MAX_CONTEXT_CHARS
+        ){
+            break;
+        }
+
+        result.push(obj);
+        totalChars += rowChars;
+    }
+
+    return result;
+}
+
+
+/* =========================================================
    AI SEARCH
 ========================================================= */
 
@@ -3103,7 +3220,7 @@ async function runAISearch(
 
 
     statusEl.textContent =
-    "🤖 AI đang phân tích dữ liệu Google Sheet...";
+    "🤖 AI đang tìm dữ liệu liên quan trong Google Sheet...";
 
 
     try{
@@ -3131,24 +3248,14 @@ async function runAISearch(
                     columns:
                         getAIColumnMetadata(),
 
+                    /*
+                       QUAN TRỌNG:
+                       Chỉ gửi context đã được lọc/chấm điểm.
+                       Không còn gửi toàn bộ rows của Google Sheet.
+                    */
                     rows:
-                        rows.map(
-                            row => {
-
-                                const item = {};
-
-                                headers.forEach(
-                                    (header,index) => {
-
-                                        item[header] =
-                                        row[index] ?? "";
-
-                                    }
-                                );
-
-                                return item;
-
-                            }
+                        buildAIContextRows(
+                            question
                         )
 
                 })
