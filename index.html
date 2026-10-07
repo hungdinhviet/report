@@ -3083,7 +3083,18 @@ async function runAISearch(
                     question,
 
                     columns:
-                        getAIColumnMetadata()
+                        getAIColumnMetadata(),
+
+                    /*
+                       Gửi toàn bộ dữ liệu hiện tại của Google Sheet
+                       cho Worker để bước tiếp theo Worker có thể
+                       phân tích dữ liệu thực tế.
+
+                       Không thay đổi dữ liệu hiển thị trên bảng.
+                       Chỉ bổ sung dữ liệu vào request AI.
+                    */
+                    rows:
+                        rows
 
                 })
 
