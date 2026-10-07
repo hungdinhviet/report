@@ -3235,7 +3235,9 @@ async function runAISearch(
 
 
         statusEl.textContent =
-        "⚠ AI không phản hồi • đang tìm kiếm thông thường";
+        "⚠ AI lỗi: " +
+        (error?.message || "không xác định") +
+        " • đang tìm kiếm thông thường";
 
     }
     finally{
@@ -7476,6 +7478,60 @@ function updateGlobalSearchUI(){
    GLOBAL SEARCH
 ========================================================= */
 
+/* =========================================================
+   GLOBAL SEARCH - AI ENTER
+========================================================= */
+
+globalSearchInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key !== "Enter"
+        ){
+
+            return;
+
+        }
+
+
+        const value =
+        globalSearchInput.value.trim();
+
+
+        if(
+            !value ||
+            !shouldUseAI(value)
+        ){
+
+            return;
+
+        }
+
+
+        event.preventDefault();
+
+
+        clearTimeout(
+            aiSearchTimer
+        );
+
+
+        aiRequestId++;
+
+        aiConditions = [];
+        aiSort = [];
+        aiQuery = "";
+
+
+        runAISearch(
+            value
+        );
+
+    }
+);
+
+
 globalSearchInput.addEventListener(
     "input",
     () => {
@@ -7539,28 +7595,19 @@ globalSearchInput.addEventListener(
 
 
         /*
-           Nếu là câu hỏi AI:
-           chờ người dùng ngừng gõ.
+           Câu hỏi AI KHÔNG tự động gửi khi đang gõ.
+           Người dùng nhấn Enter để gọi AI.
+
+           Trong lúc đang gõ, vẫn hiển thị kết quả tìm kiếm
+           thông thường để giao diện không bị đứng/chờ AI.
         */
 
         if(
             shouldUseAI(value)
         ){
 
-            aiSearchTimer =
-            setTimeout(
-                () => {
-
-                    runAISearch(
-                        value.trim()
-                    );
-
-                },
-                650
-            );
-
-
-            return;
+            statusEl.textContent =
+            "🤖 Câu hỏi AI • nhấn Enter để tìm";
 
         }
 
