@@ -1449,7 +1449,7 @@ function loadState(){
     ){
 
         sorts[ngoaiMangIndex] = {
-            direction: "asc",
+            direction: "desc",
             priority: 4
         };
 
@@ -1835,7 +1835,7 @@ function initializeDefaults(){
        1. Packageprice      → Tăng dần
        2. DATA              → Giảm dần
        3. Thoại nội mạng    → Giảm dần
-       4. Thoại ngoại mạng  → Tăng dần
+       4. Thoại ngoại mạng  → Giảm dần
     */
 
     const packagePriceIndex =
@@ -2975,7 +2975,9 @@ function getColumnWidth(index){
         originalHeader === "Kỳ" ||
         originalHeader === "Cách tính chu kỳ" ||
         originalHeader === "Packageprice" ||
+        originalHeader === "Thoại nội mạng" ||
         originalHeader === "Thoại ngoại mạng" ||
+        originalHeader === "Facebook/Youtube/Tiktok" ||
         originalHeader === "Hạ băng thông" ||
         originalHeader === "Loại gói cước" ||
         originalHeader === "Tự động gia hạn"
