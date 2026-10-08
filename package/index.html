@@ -2780,11 +2780,10 @@ function getFilterValuesForColumn(
 ){
 
     /*
-       Rất quan trọng:
-       bỏ qua filter/search của chính
+       Bỏ qua filter/search của chính
        cột đang mở.
 
-       Nhưng áp dụng toàn bộ filter/search
+       Nhưng vẫn áp dụng filter/search
        của các cột khác.
     */
 
@@ -2804,10 +2803,37 @@ function getFilterValuesForColumn(
 
     source.forEach(row => {
 
+        let value =
+        String(
+            row[index] ?? ""
+        );
+
+
+        /*
+           Cột "Ngày update":
+           Hiển thị trong Filter giống
+           hệt như trong bảng:
+           
+           00 tháng
+           01 tháng
+           02 tháng
+           ...
+        */
+
+        if(
+            headers[index] === "Ngày update"
+        ){
+
+            value =
+            displayDateRelative(
+                row[index]
+            );
+
+        }
+
+
         set.add(
-            String(
-                row[index] ?? ""
-            )
+            value
         );
 
     });
