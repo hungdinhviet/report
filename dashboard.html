@@ -1,124 +1,431 @@
+```html
 <!DOCTYPE html>
 <html lang="vi">
-<style>
-    /* Không cho bôi đen nội dung */
-    * {
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-    }
-
-    /* Không cho kéo thả */
-    * {
-        -webkit-user-drag: none !important;
-        user-drag: none !important;
-    }
-</style>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>DINHVIETHUNG</title>
+
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif}
-body{background:#f5f5f5;color:#222}
+*{
+    box-sizing:border-box;
+    user-select:none !important;
+    -webkit-user-select:none !important;
+    -moz-user-select:none !important;
+    -ms-user-select:none !important;
+
+    -webkit-user-drag:none !important;
+    user-drag:none !important;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f5f5;
+    color:#222;
+}
+
 .top{
-    height:54px;background:#111;color:#d4af37;
-    display:flex;align-items:center;padding:0 18px;
+    height:54px;
+    background:#111;
+    color:#d4af37;
+    display:flex;
+    align-items:center;
+    padding:0 18px;
     border-bottom:1px solid #8e7628;
 }
-.brand{font:700 21px "Times New Roman",serif;letter-spacing:.1em}
-.user{margin-left:auto;color:#bbb;font-size:13px}
-.logout{margin-left:14px;background:transparent;color:#d4af37;border:1px solid #8e7628;
-    padding:7px 12px;border-radius:3px;cursor:pointer}
-.layout{display:flex;height:calc(100vh - 54px)}
+
+.brand{
+    font:700 21px "Times New Roman",serif;
+    letter-spacing:.1em;
+}
+
+.user{
+    margin-left:auto;
+    color:#bbb;
+    font-size:13px;
+}
+
+.logout{
+    margin-left:14px;
+    background:transparent;
+    color:#d4af37;
+    border:1px solid #8e7628;
+    padding:7px 12px;
+    border-radius:3px;
+    cursor:pointer;
+}
+
+.layout{
+    display:flex;
+    height:calc(100vh - 54px);
+}
+
 .sidebar{
-    width:210px;background:#181818;color:#ddd;
-    border-right:1px solid #333;padding:12px 8px;
+    width:210px;
+    background:#181818;
+    color:#ddd;
+    border-right:1px solid #333;
+    padding:12px 8px;
 }
-.menu-title{font-size:11px;color:#777;padding:8px 10px;letter-spacing:.12em}
+
+.menu-title{
+    font-size:11px;
+    color:#777;
+    padding:8px 10px;
+    letter-spacing:.12em;
+}
+
 .menu{
-    display:block;width:100%;padding:12px 10px;margin:3px 0;
-    background:transparent;color:#ddd;border:0;text-align:left;
-    border-radius:4px;cursor:pointer;font-size:14px;
+    display:block;
+    width:100%;
+    padding:12px 10px;
+    margin:3px 0;
+    background:transparent;
+    color:#ddd;
+    border:0;
+    text-align:left;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:14px;
 }
-.menu:hover,.menu.active{background:#2b2614;color:#d4af37}
-.content{flex:1;min-width:0}
+
+.menu:hover,
+.menu.active{
+    background:#2b2614;
+    color:#d4af37;
+}
+
+.content{
+    flex:1;
+    min-width:0;
+}
+
 .placeholder{
-    height:100%;display:flex;align-items:center;justify-content:center;
-    color:#999;font-size:18px;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#999;
+    font-size:18px;
+}
+
+/* =====================================================
+   CHỐNG COPY / CHỐNG KÉO THẢ
+   ===================================================== */
+
+/* Không cho chọn text */
+body,
+body *{
+    user-select:none !important;
+    -webkit-user-select:none !important;
+    -moz-user-select:none !important;
+    -ms-user-select:none !important;
+}
+
+/* Không cho kéo nội dung */
+img,
+a,
+div,
+span,
+table,
+td,
+th{
+    -webkit-user-drag:none !important;
+    user-drag:none !important;
 }
 </style>
 </head>
+
 <body>
+
 <header class="top">
     <div class="brand">DINHVIETHUNG</div>
-    <div class="user" id="userEmail">Đang kiểm tra...</div>
-    <button class="logout" id="logout">Đăng xuất</button>
+
+    <div class="user" id="userEmail">
+        Đang kiểm tra...
+    </div>
+
+    <button class="logout" id="logout">
+        Đăng xuất
+    </button>
 </header>
 
 <div class="layout">
+
     <aside class="sidebar">
-        <div class="menu-title">MENU</div>
-        <button class="menu active" id="packageBtn">📦 PACKAGE</button>
-    </aside>
-    <main class="content">
-        <div class="placeholder" id="welcome">
-            Chọn <b style="margin-left:5px">PACKAGE</b> để mở bảng gói cước.
+
+        <div class="menu-title">
+            MENU
         </div>
+
+        <button class="menu active" id="packageBtn">
+            📦 PACKAGE
+        </button>
+
+    </aside>
+
+    <main class="content">
+
+        <div class="placeholder" id="welcome">
+            Chọn
+            <b style="margin-left:5px">
+                PACKAGE
+            </b>
+            để mở bảng gói cước.
+        </div>
+
     </main>
+
 </div>
 
 <script>
 "use strict";
+
+/* =====================================================
+   GOOGLE APPS SCRIPT API
+   ===================================================== */
+
 const AUTH_API_URL =
     localStorage.getItem("DINHVIETHUNG_AUTH_API") ||
-    "https://script.google.com/macros/s/AKfycbwsbDrDRHxzWAF_ifM1zBZX-F0B8BIP3UEo4V5i4GDJHzb8nUOHWCPcI4j4xssNY8wN/exec";
+    "https://script.google.com/macros/s/AKfycby72edbr1JQTceebi3NQPAb3ABhd-q2bQWpm0YwIBq5ryVPyCsG49nW8MR-UIlSfFkI/exec";
 
-const token=localStorage.getItem("DINHVIETHUNG_SESSION");
+
+/* =====================================================
+   SESSION
+   ===================================================== */
+
+const token =
+    localStorage.getItem("DINHVIETHUNG_SESSION");
+
+
+/* =====================================================
+   KIỂM TRA SESSION
+   ===================================================== */
 
 async function verify(){
-    if(!AUTH_API_URL || AUTH_API_URL.includes("DAN_URL_") || !token){
-        location.replace("login.html"); return;
+
+    if(
+        !AUTH_API_URL ||
+        AUTH_API_URL.includes("DAN_URL_") ||
+        !token
+    ){
+        location.replace("login.html");
+        return;
     }
+
     try{
-        const r=await fetch(AUTH_API_URL,{
-            method:"POST",
-            headers:{"Content-Type":"text/plain;charset=utf-8"},
-            body:JSON.stringify({action:"verifySession",token})
-        });
-        const d=await r.json();
+
+        const r = await fetch(
+            AUTH_API_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:JSON.stringify({
+                    action:"verifySession",
+                    token:token
+                })
+            }
+        );
+
+        const d = await r.json();
+
         if(!d.ok){
-            localStorage.removeItem("DINHVIETHUNG_SESSION");
+
+            localStorage.removeItem(
+                "DINHVIETHUNG_SESSION"
+            );
+
             location.replace("login.html");
+
             return;
         }
-        document.getElementById("userEmail").textContent=d.email || "";
-    }catch(e){
-        document.getElementById("userEmail").textContent="Không kết nối được máy chủ";
+
+        document.getElementById(
+            "userEmail"
+        ).textContent = d.email || "";
+
+    }
+    catch(e){
+
+        document.getElementById(
+            "userEmail"
+        ).textContent =
+            "Không kết nối được máy chủ";
+
     }
 }
 
-document.getElementById("packageBtn").addEventListener("click",()=>{
-    location.href="package/index.html";
+
+/* =====================================================
+   MỞ PACKAGE
+   ===================================================== */
+
+document
+.getElementById("packageBtn")
+.addEventListener("click",function(){
+
+    location.href = "package/index.html";
+
 });
 
-document.getElementById("logout").addEventListener("click",async()=>{
+
+/* =====================================================
+   ĐĂNG XUẤT
+   ===================================================== */
+
+document
+.getElementById("logout")
+.addEventListener("click",async function(){
+
     try{
-        if(AUTH_API_URL && !AUTH_API_URL.includes("DAN_URL_")){
-            await fetch(AUTH_API_URL,{
-                method:"POST",
-                headers:{"Content-Type":"text/plain;charset=utf-8"},
-                body:JSON.stringify({action:"logout",token})
-            });
+
+        if(
+            AUTH_API_URL &&
+            !AUTH_API_URL.includes("DAN_URL_")
+        ){
+
+            await fetch(
+                AUTH_API_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:JSON.stringify({
+                        action:"logout",
+                        token:token
+                    })
+                }
+            );
+
         }
-    }catch(e){}
-    localStorage.removeItem("DINHVIETHUNG_SESSION");
+
+    }
+    catch(e){
+
+        // Không làm gián đoạn đăng xuất
+    }
+
+
+    localStorage.removeItem(
+        "DINHVIETHUNG_SESSION"
+    );
+
     location.replace("login.html");
+
 });
+
+
+/* =====================================================
+   CHỐNG CHUỘT PHẢI
+   ===================================================== */
+
+document.addEventListener(
+    "contextmenu",
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+
+/* =====================================================
+   CHỐNG COPY
+   ===================================================== */
+
+document.addEventListener(
+    "copy",
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+
+/* =====================================================
+   CHỐNG CUT
+   ===================================================== */
+
+document.addEventListener(
+    "cut",
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+
+/* =====================================================
+   CHỐNG KÉO THẢ
+   ===================================================== */
+
+document.addEventListener(
+    "dragstart",
+    function(e){
+
+        e.preventDefault();
+
+    }
+);
+
+
+/* =====================================================
+   CHẶN PHÍM TẮT COPY / CUT / VIEW SOURCE
+   ===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        const key =
+            e.key.toLowerCase();
+
+        /*
+         * Ctrl + C
+         * Ctrl + X
+         * Ctrl + U
+         */
+        if(
+            (e.ctrlKey || e.metaKey) &&
+            ["c","x","u"].includes(key)
+        ){
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            return false;
+        }
+
+    },
+    true
+);
+
+
+/* =====================================================
+   CHẠY KIỂM TRA SESSION
+   ===================================================== */
 
 verify();
+
 </script>
+
 </body>
 </html>
+```
