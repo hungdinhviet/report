@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DINHVIETHUNG</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif}
+body{background:#f5f5f5;color:#222}
+.top{
+    height:54px;background:#111;color:#d4af37;
+    display:flex;align-items:center;padding:0 18px;
+    border-bottom:1px solid #8e7628;
+}
+.brand{font:700 21px "Times New Roman",serif;letter-spacing:.1em}
+.user{margin-left:auto;color:#bbb;font-size:13px}
+.logout{margin-left:14px;background:transparent;color:#d4af37;border:1px solid #8e7628;
+    padding:7px 12px;border-radius:3px;cursor:pointer}
+.layout{display:flex;height:calc(100vh - 54px)}
+.sidebar{
+    width:210px;background:#181818;color:#ddd;
+    border-right:1px solid #333;padding:12px 8px;
+}
+.menu-title{font-size:11px;color:#777;padding:8px 10px;letter-spacing:.12em}
+.menu{
+    display:block;width:100%;padding:12px 10px;margin:3px 0;
+    background:transparent;color:#ddd;border:0;text-align:left;
+    border-radius:4px;cursor:pointer;font-size:14px;
+}
+.menu:hover,.menu.active{background:#2b2614;color:#d4af37}
+.content{flex:1;min-width:0}
+.placeholder{
+    height:100%;display:flex;align-items:center;justify-content:center;
+    color:#999;font-size:18px;
+}
+</style>
+</head>
+<body>
+<header class="top">
+    <div class="brand">DINHVIETHUNG</div>
+    <div class="user" id="userEmail">Đang kiểm tra...</div>
+    <button class="logout" id="logout">Đăng xuất</button>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="menu-title">MENU</div>
+        <button class="menu active" id="packageBtn">📦 PACKAGE</button>
+    </aside>
+    <main class="content">
+        <div class="placeholder" id="welcome">
+            Chọn <b style="margin-left:5px">PACKAGE</b> để mở bảng gói cước.
+        </div>
+    </main>
+</div>
+
+<script>
+"use strict";
+const AUTH_API_URL =
+    localStorage.getItem("DINHVIETHUNG_AUTH_API") ||
+    "https://script.google.com/macros/s/AKfycbwsbDrDRHxzWAF_ifM1zBZX-F0B8BIP3UEo4V5i4GDJHzb8nUOHWCPcI4j4xssNY8wN/exec";
+
+const token=localStorage.getItem("DINHVIETHUNG_SESSION");
+
+async function verify(){
+    if(!AUTH_API_URL || AUTH_API_URL.includes("DAN_URL_") || !token){
+        location.replace("login.html"); return;
+    }
+    try{
+        const r=await fetch(AUTH_API_URL,{
+            method:"POST",
+            headers:{"Content-Type":"text/plain;charset=utf-8"},
+            body:JSON.stringify({action:"verifySession",token})
+        });
+        const d=await r.json();
+        if(!d.ok){
+            localStorage.removeItem("DINHVIETHUNG_SESSION");
+            location.replace("login.html");
+            return;
+        }
+        document.getElementById("userEmail").textContent=d.email || "";
+    }catch(e){
+        document.getElementById("userEmail").textContent="Không kết nối được máy chủ";
+    }
+}
+
+document.getElementById("packageBtn").addEventListener("click",()=>{
+    location.href="package/index.html";
+});
+
+document.getElementById("logout").addEventListener("click",async()=>{
+    try{
+        if(AUTH_API_URL && !AUTH_API_URL.includes("DAN_URL_")){
+            await fetch(AUTH_API_URL,{
+                method:"POST",
+                headers:{"Content-Type":"text/plain;charset=utf-8"},
+                body:JSON.stringify({action:"logout",token})
+            });
+        }
+    }catch(e){}
+    localStorage.removeItem("DINHVIETHUNG_SESSION");
+    location.replace("login.html");
+});
+
+verify();
+</script>
+</body>
+</html>

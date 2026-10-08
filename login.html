@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DINHVIETHUNG - Login</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%}
+body{
+    background:#080808;
+    color:#eee;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:Arial,sans-serif;
+}
+.card{
+    width:min(430px,92vw);
+    background:#111;
+    border:1px solid #8e7628;
+    box-shadow:0 18px 60px rgba(0,0,0,.6);
+    padding:34px;
+}
+.logo{
+    color:#d4af37;
+    font:700 30px "Times New Roman",serif;
+    letter-spacing:.12em;
+    text-align:center;
+    margin-bottom:8px;
+}
+.subtitle{
+    text-align:center;color:#999;font-size:13px;margin-bottom:28px;
+}
+label{display:block;color:#bbb;font-size:13px;margin:14px 0 6px}
+input{
+    width:100%;height:42px;padding:0 12px;
+    border:1px solid #444;background:#0a0a0a;color:#fff;
+    outline:none;border-radius:3px;
+}
+input:focus{border-color:#d4af37}
+button{
+    width:100%;height:42px;margin-top:14px;
+    border:1px solid #d4af37;background:#d4af37;color:#080808;
+    font-weight:700;cursor:pointer;border-radius:3px;
+}
+button:hover{background:#e7c65a}
+button.secondary{background:#222;color:#d4af37}
+.hidden{display:none!important}
+.msg{
+    margin-top:16px;padding:10px;border:1px solid #333;
+    font-size:13px;line-height:1.45;white-space:pre-wrap;
+}
+.error{color:#ff8e8e;border-color:#6b3333}
+.ok{color:#9fe6a0;border-color:#355b36}
+.small{font-size:12px;color:#777;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="card">
+    <div class="logo">DINHVIETHUNG</div>
+    <div class="subtitle">HỆ THỐNG BÁO CÁO</div>
+
+    <div id="emailStep">
+        <label for="email">Email MobiFone</label>
+        <input id="email" type="email" autocomplete="email"
+               placeholder="ten.nguoidung@mobifone.vn">
+        <button id="sendOtp">GỬI OTP</button>
+        <div class="small">Chỉ chấp nhận email có đuôi <b>@mobifone.vn</b>.</div>
+    </div>
+
+    <div id="otpStep" class="hidden">
+        <label for="otp">Mã OTP</label>
+        <input id="otp" inputmode="numeric" maxlength="6"
+               placeholder="Nhập OTP 6 số" autocomplete="one-time-code">
+        <button id="verifyOtp">XÁC NHẬN OTP</button>
+        <button id="backBtn" class="secondary">ĐỔI EMAIL</button>
+    </div>
+
+    <div id="message" class="msg hidden"></div>
+</div>
+
+<script>
+"use strict";
+
+/*
+ * SAU KHI DEPLOY GOOGLE APPS SCRIPT:
+ * dán URL Web App vào biến này.
+ */
+const AUTH_API_URL =
+    localStorage.getItem("DINHVIETHUNG_AUTH_API") ||
+    "https://script.google.com/macros/s/AKfycbwsbDrDRHxzWAF_ifM1zBZX-F0B8BIP3UEo4V5i4GDJHzb8nUOHWCPcI4j4xssNY8wN/exec";
+
+function showMessage(text, type=""){
+    const el=document.getElementById("message");
+    el.textContent=text;
+    el.className="msg "+type;
+    el.classList.remove("hidden");
+}
+
+function validEmail(email){
+    return /^[^@\s]+@mobifone\.vn$/i.test(email.trim());
+}
+
+async function api(payload){
+    if(!AUTH_API_URL || AUTH_API_URL.includes("DAN_URL_")){
+        throw new Error("Chưa cấu hình URL Google Apps Script.");
+    }
+    const response=await fetch(AUTH_API_URL,{
+        method:"POST",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify(payload)
+    });
+    return await response.json();
+}
+
+const emailInput=document.getElementById("email");
+const otpInput=document.getElementById("otp");
+const emailStep=document.getElementById("emailStep");
+const otpStep=document.getElementById("otpStep");
+const sendOtp=document.getElementById("sendOtp");
+const verifyOtp=document.getElementById("verifyOtp");
+const backBtn=document.getElementById("backBtn");
+
+sendOtp.addEventListener("click", async ()=>{
+    const email=emailInput.value.trim().toLowerCase();
+
+    if(!validEmail(email)){
+        showMessage("Email không hợp lệ. Phải có đuôi @mobifone.vn.","error");
+        return;
+    }
+
+    sendOtp.disabled=true;
+    sendOtp.textContent="ĐANG GỬI...";
+
+    try{
+        const data=await api({action:"requestOtp",email});
+
+        if(!data.ok){
+            showMessage(data.message || "Không thể gửi OTP.","error");
+            return;
+        }
+
+        emailStep.classList.add("hidden");
+        otpStep.classList.remove("hidden");
+        showMessage(
+            "OTP đã được gửi tới:\n"+email+
+            "\n\nOTP có hiệu lực trong 5 phút.",
+            "ok"
+        );
+        otpInput.focus();
+
+    }catch(error){
+        showMessage(error.message || "Lỗi kết nối.","error");
+    }finally{
+        sendOtp.disabled=false;
+        sendOtp.textContent="GỬI OTP";
+    }
+});
+
+verifyOtp.addEventListener("click", async ()=>{
+    const email=emailInput.value.trim().toLowerCase();
+    const otp=otpInput.value.trim();
+
+    if(!/^\d{6}$/.test(otp)){
+        showMessage("OTP phải gồm 6 chữ số.","error");
+        return;
+    }
+
+    verifyOtp.disabled=true;
+    verifyOtp.textContent="ĐANG XÁC NHẬN...";
+
+    try{
+        const data=await api({action:"verifyOtp",email,otp});
+
+        if(!data.ok){
+            showMessage(data.message || "OTP không đúng.","error");
+            return;
+        }
+
+        if(data.status==="PENDING"){
+            showMessage(
+                "OTP đúng.\n\nTài khoản đã được tạo và đang chờ quản trị viên duyệt.\n"+
+                "Bạn sẽ nhận được thông báo sau khi được duyệt.",
+                "ok"
+            );
+            return;
+        }
+
+        if(data.sessionToken){
+            localStorage.setItem(
+                "DINHVIETHUNG_SESSION",
+                data.sessionToken
+            );
+        }
+
+        window.location.href="dashboard.html";
+
+    }catch(error){
+        showMessage(error.message || "Lỗi kết nối.","error");
+    }finally{
+        verifyOtp.disabled=false;
+        verifyOtp.textContent="XÁC NHẬN OTP";
+    }
+});
+
+backBtn.addEventListener("click",()=>{
+    otpInput.value="";
+    otpStep.classList.add("hidden");
+    emailStep.classList.remove("hidden");
+    document.getElementById("message").classList.add("hidden");
+    emailInput.focus();
+});
+</script>
+</body>
+</html>
