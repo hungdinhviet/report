@@ -152,7 +152,31 @@ sendOtp.addEventListener("click", async ()=>{
         otpInput.focus();
 
     }catch(error){
-        showMessage(error.message || "Lỗi kết nối.","error");
+
+        const message = String(
+            error?.message || error || ""
+        );
+
+        if(
+            message.includes("Unexpected token '<'") ||
+            message.includes("<!DOCTYPE") ||
+            message.includes("JSON") ||
+            message.includes("404") ||
+            message.includes("Failed to fetch")
+        ){
+            showMessage(
+                "⚠️ Máy chủ xác thực đang phản hồi chậm.\n\n" +
+                "Vui lòng chờ vài giây rồi thử lại.",
+                "error"
+            );
+        }
+        else{
+            showMessage(
+                message || "⚠️ Có lỗi xảy ra. Vui lòng thử lại.",
+                "error"
+            );
+        }
+
     }finally{
         sendOtp.disabled=false;
         sendOtp.textContent="GỬI OTP";
