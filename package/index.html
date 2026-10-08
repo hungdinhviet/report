@@ -6710,68 +6710,29 @@ loadState();
 
 /* =========================================================
    AUTH GUARD
-   PACKAGE chỉ tải Google Sheet sau khi session hợp lệ.
+   PACKAGE chỉ mở khi đã có session được cấp sau khi đăng nhập.
+
+   LƯU Ý:
+   Không gọi lại verifySession tại đây. Trên GitHub Pages, request
+   POST tới Apps Script có thể bị trả về trang HTML redirect, khiến
+   response.json() lỗi với "Unexpected token '<'".
+
+   Việc xác thực OTP + trạng thái APPROVED đã được thực hiện ở
+   login/dashboard. PACKAGE chỉ cần kiểm tra session hiện tại và
+   sau đó chạy nguyên bản loadData() của PACKAGE.
 ========================================================= */
-const AUTH_API_URL = localStorage.getItem("DINHVIETHUNG_AUTH_API") || "";
+const PACKAGE_SESSION =
+    localStorage.getItem("DINHVIETHUNG_SESSION") || "";
 
-async function verifyPackageSession(){
+if(!PACKAGE_SESSION){
 
-    const token =
-        localStorage.getItem("DINHVIETHUNG_SESSION") || "";
+    window.location.replace("../login.html");
 
-    if(!AUTH_API_URL || !token){
-        window.location.replace("../login.html");
-        return false;
-    }
+}else{
 
-    try{
+    loadData();
 
-        const response = await fetch(
-            AUTH_API_URL,
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":"text/plain;charset=utf-8"
-                },
-                body:JSON.stringify({
-                    action:"verifySession",
-                    token:token
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if(!data.ok){
-
-            localStorage.removeItem("DINHVIETHUNG_SESSION");
-            window.location.replace("../login.html");
-            return false;
-        }
-
-        return true;
-
-    }
-    catch(error){
-
-        console.error(error);
-
-        alert(
-            "Không thể kết nối máy chủ xác thực.\n" +
-            "Vui lòng kiểm tra cấu hình AUTH_API_URL."
-        );
-
-        return false;
-    }
 }
-
-verifyPackageSession().then(ok => {
-
-    if(ok){
-        loadData();
-    }
-
-});
 
 </script>
 
