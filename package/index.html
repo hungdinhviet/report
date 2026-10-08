@@ -1396,7 +1396,76 @@ tbody.addEventListener(
 
     }
 );
+/* =========================================================
+   CHẶN CTRL+C / CTRL+X TRÊN DỮ LIỆU
+   KHÔNG CHẶN SEARCH / FILTER / SETTINGS
+========================================================= */
 
+document.addEventListener(
+    "keydown",
+    event => {
+
+        const target =
+        event.target;
+
+
+        /*
+           Nếu đang nhập liệu thì cho phép
+           copy / cut bình thường.
+        */
+
+        if(
+            target &&
+            (
+                target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA" ||
+                target.tagName === "SELECT" ||
+                target.isContentEditable
+            )
+        ){
+
+            return;
+
+        }
+
+
+        /*
+           Kiểm tra con trỏ có đang nằm
+           trong BODY của bảng hay không.
+        */
+
+        const dataCell =
+        target &&
+        target.closest(
+            "#dataTable tbody"
+        );
+
+
+        if(!dataCell){
+
+            return;
+
+        }
+
+
+        /*
+           Chặn Ctrl+C / Ctrl+X
+        */
+
+        if(
+            (event.ctrlKey || event.metaKey) &&
+            (
+                event.key.toLowerCase() === "c" ||
+                event.key.toLowerCase() === "x"
+            )
+        ){
+
+            event.preventDefault();
+
+        }
+
+    }
+);
 const tableWrapper =
 document.getElementById(
     "tableWrapper"
