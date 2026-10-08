@@ -4584,26 +4584,158 @@ function renderFilterValuesOnly(
     .toLowerCase();
 
 
+    /*
+       =====================================================
+       TẠO NHÓM GIÁ TRỊ HIỂN THỊ
+       
+       Riêng "Ngày update":
+       nhiều ngày khác nhau nhưng cùng số tháng
+       sẽ được gom thành 1 nhóm.
+       =====================================================
+    */
+
+    let groups = [];
+
+
+    if(
+        headers[index] === "Ngày update"
+    ){
+
+        const map =
+        new Map();
+
+
+        allValues.forEach(
+            value => {
+
+                const rawValue =
+                String(
+                    value ?? ""
+                );
+
+
+                let displayValue;
+
+
+                if(
+                    rawValue.trim() === ""
+                ){
+
+                    displayValue =
+                    "(Trống)";
+
+                }
+                else{
+
+                    displayValue =
+                    displayDateRelative(
+                        rawValue
+                    );
+
+                }
+
+
+                if(
+                    !map.has(
+                        displayValue
+                    )
+                ){
+
+                    map.set(
+                        displayValue,
+                        []
+                    );
+
+                }
+
+
+                map.get(
+                    displayValue
+                ).push(
+                    rawValue
+                );
+
+            }
+        );
+
+
+        groups =
+        Array.from(
+            map.entries()
+        )
+        .map(
+            ([display, values]) => {
+
+                return {
+                    display:
+                    display,
+
+                    values:
+                    values
+                };
+
+            }
+        );
+
+    }
+    else{
+
+        groups =
+        allValues.map(
+            value => {
+
+                return {
+                    display:
+                    value === ""
+                        ? "(Trống)"
+                        : value,
+
+                    values:
+                    [
+                        String(
+                            value ?? ""
+                        )
+                    ]
+                };
+
+            }
+        );
+
+    }
+
+
+    /*
+       =====================================================
+       SEARCH
+       =====================================================
+    */
+
     const values =
-    allValues.filter(
-        value => {
+    groups.filter(
+        group => {
 
             if(!query){
                 return true;
             }
 
 
-            return String(value)
+            return String(
+                group.display
+            )
             .toLowerCase()
-            .includes(query);
+            .includes(
+                query
+            );
 
         }
     );
 
 
     /*
-       Nếu chưa có filter:
-       coi như tất cả được chọn.
+       =====================================================
+       NẾU CHƯA CÓ FILTER
+       COI NHƯ TẤT CẢ ĐƯỢC CHỌN
+       =====================================================
     */
 
     const selected =
@@ -4612,8 +4744,14 @@ function renderFilterValuesOnly(
         : filters[index];
 
 
+    /*
+       =====================================================
+       TẠO CHECKBOX
+       =====================================================
+    */
+
     values.forEach(
-        value => {
+        group => {
 
             const row =
             document.createElement(
@@ -4635,9 +4773,17 @@ function renderFilterValuesOnly(
             "checkbox";
 
 
+            /*
+               Chỉ tích khi TẤT CẢ giá trị
+               gốc trong nhóm đang được chọn.
+            */
+
             checkbox.checked =
-            selected.includes(
-                value
+            group.values.every(
+                value =>
+                selected.includes(
+                    value
+                )
             );
 
 
@@ -4663,32 +4809,53 @@ function renderFilterValuesOnly(
 
                         current =
                         filters[index].slice();
+
                     }
 
+
+                    /*
+                       CHỌN NHÓM
+                    */
 
                     if(
                         checkbox.checked
                     ){
 
-                        if(
-                            !current.includes(
-                                value
-                            )
-                        ){
+                        group.values.forEach(
+                            value => {
 
-                            current.push(
-                                value
-                            );
-                        }
+                                if(
+                                    !current.includes(
+                                        value
+                                    )
+                                ){
+
+                                    current.push(
+                                        value
+                                    );
+
+                                }
+
+                            }
+                        );
 
                     }
+
+
+                    /*
+                       BỎ CHỌN NHÓM
+                    */
+
                     else{
 
                         current =
                         current.filter(
                             item =>
-                            item !== value
+                            !group.values.includes(
+                                item
+                            )
                         );
+
                     }
 
 
@@ -4700,7 +4867,7 @@ function renderFilterValuesOnly(
 
 
                     /*
-                       LỌC NGAY.
+                       LỌC NGAY
                     */
 
                     renderBody();
@@ -4710,9 +4877,7 @@ function renderFilterValuesOnly(
 
 
                     /*
-                       Không đóng menu.
-                       Cập nhật lại danh sách filter
-                       theo trạng thái mới.
+                       Không đóng menu
                     */
 
                     const savedSearch =
@@ -4738,6 +4903,7 @@ function renderFilterValuesOnly(
 
                         searchInput.value =
                         savedSearch;
+
                     }
 
 
@@ -4754,33 +4920,9 @@ function renderFilterValuesOnly(
                 "label"
             );
 
-            let displayValue;
 
-if(
-    headers[index] === "Ngày update" &&
-    value !== ""
-){
-
-    displayValue =
-    displayDateRelative(
-        value
-    );
-
-}
-else{
-
-    displayValue =
-    value === ""
-        ? "(Trống)"
-        : value;
-
-}
-
-
-label.textContent =
-displayValue;
-
-
+            label.textContent =
+            group.display;
 
 
             label.addEventListener(
@@ -4809,6 +4951,7 @@ displayValue;
 
         }
     );
+
 }
 
 
