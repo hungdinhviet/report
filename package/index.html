@@ -901,6 +901,40 @@ tbody td.frozen-column{
     color:#777;
 }
 </style>
+
+/* =========================================================
+   CHỐNG COPY DỮ LIỆU
+   Không ảnh hưởng ô Search / Filter / Settings
+========================================================= */
+
+#dataTable tbody td {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: default;
+}
+
+/* Không chặn thao tác nhập liệu trong các ô điều khiển */
+#dataTable input,
+#dataTable select,
+#dataTable button,
+.filter-menu input,
+.filter-menu select,
+.filter-menu button,
+.settings-panel input,
+.settings-panel select,
+.settings-panel button {
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+}
+
+/* Không cho kéo nội dung ô dữ liệu */
+#dataTable tbody td {
+    -webkit-user-drag: none;
+}    
 </head>
 
 <body>
@@ -1262,6 +1296,104 @@ table.querySelector(
 const tbody =
 table.querySelector(
     "tbody"
+);
+
+/* =========================================================
+   CHỐNG COPY DỮ LIỆU
+   Chỉ áp dụng cho BODY của bảng.
+   Không ảnh hưởng Search / Filter / Settings.
+========================================================= */
+
+tbody.addEventListener(
+    "copy",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+tbody.addEventListener(
+    "cut",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+tbody.addEventListener(
+    "contextmenu",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+tbody.addEventListener(
+    "dragstart",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+tbody.addEventListener(
+    "selectstart",
+    event => {
+
+        event.preventDefault();
+
+    }
+);
+
+
+/*
+   Chặn Ctrl+C / Ctrl+X khi con trỏ đang
+   ở vùng dữ liệu.
+
+   Không chặn nếu người dùng đang nhập
+   vào input / textarea / select.
+*/
+tbody.addEventListener(
+    "keydown",
+    event => {
+
+        const target =
+        event.target;
+
+        if(
+            target &&
+            (
+                target.tagName === "INPUT" ||
+                target.tagName === "TEXTAREA" ||
+                target.tagName === "SELECT"
+            )
+        ){
+
+            return;
+        }
+
+
+        if(
+            (event.ctrlKey || event.metaKey) &&
+            (
+                event.key.toLowerCase() === "c" ||
+                event.key.toLowerCase() === "x"
+            )
+        ){
+
+            event.preventDefault();
+
+        }
+
+    }
 );
 
 const tableWrapper =
