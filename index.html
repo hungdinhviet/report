@@ -75,7 +75,6 @@ body{
     color:#666;
     white-space:nowrap;
 }
-
 /* =========================================================
    GLOBAL SEARCH
 ========================================================= */
@@ -102,27 +101,6 @@ body{
     z-index:2;
 }
 
-.global-search-ai-badge{
-    position:absolute;
-    left:26px;
-    top:8px;
-    height:16px;
-    min-width:20px;
-    padding:0 4px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid #7b61ff;
-    border-radius:3px;
-    background:#f4f0ff;
-    color:#6848d8;
-    font-size:10px;
-    font-weight:bold;
-    line-height:16px;
-    pointer-events:none;
-    z-index:2;
-}
-
 .global-search{
     width:100%;
     height:32px;
@@ -130,7 +108,7 @@ body{
     border:1px solid #bbb;
     border-radius:4px;
 
-    padding:0 30px 0 52px;
+    padding:0 30px 0 30px;
 
     outline:none;
 
@@ -145,13 +123,6 @@ body{
 
     box-shadow:
         0 0 0 1px #4285f4;
-}
-
-.global-search.ai-active{
-    border-color:#7b61ff;
-
-    box-shadow:
-        0 0 0 1px #7b61ff;
 }
 
 .global-search-clear{
@@ -185,6 +156,7 @@ body{
 
     border-radius:3px;
 }
+
 
 /* =========================================================
    FREEZE TOOLBAR
@@ -246,6 +218,10 @@ body{
 
     background:#fff;
 
+    /*
+       Đây phải là scroll container duy nhất
+       của bảng.
+    */
     isolation:isolate;
 }
 
@@ -282,6 +258,9 @@ thead th{
     background:#f1f3f5;
 }
 
+/*
+   Header chính.
+*/
 .header-cell{
     position:sticky !important;
 
@@ -294,6 +273,9 @@ thead th{
     background:#f1f3f5 !important;
 }
 
+/*
+   Dòng search.
+*/
 .search-cell{
     position:sticky !important;
 
@@ -306,6 +288,10 @@ thead th{
     background:#fafafa !important;
 }
 
+/*
+   Header + frozen column.
+   Cao nhất.
+*/
 .header-cell.frozen-column{
     position:sticky !important;
 
@@ -433,6 +419,9 @@ tbody td{
     word-break:break-word;
 }
 
+/*
+   Frozen body.
+*/
 tbody td.frozen-column{
     position:sticky !important;
 
@@ -441,6 +430,9 @@ tbody td.frozen-column{
     background:#fff;
 }
 
+/*
+   Ranh giới cột frozen cuối.
+*/
 .frozen-last{
     box-shadow:
         4px 0 7px rgba(0,0,0,.12);
@@ -535,6 +527,10 @@ tbody td.frozen-column{
     font-size:14px;
 }
 
+/* =========================================================
+   FILTER SEARCH
+========================================================= */
+
 .filter-search{
     width:100%;
 
@@ -553,6 +549,10 @@ tbody td.frozen-column{
 .filter-search:focus{
     border-color:#4285f4;
 }
+
+/* =========================================================
+   FILTER ACTIONS
+========================================================= */
 
 .filter-actions{
     display:flex;
@@ -577,6 +577,10 @@ tbody td.frozen-column{
 .menu-button:hover{
     background:#eef5ff;
 }
+
+/* =========================================================
+   FILTER VALUES
+========================================================= */
 
 .filter-values{
     border-top:1px solid #ddd;
@@ -917,6 +921,7 @@ tbody td.frozen-column{
             ⚙ Cài đặt
         </button>
 
+        <!-- CỐ ĐỊNH CỘT -->
         <div class="freeze-toolbar">
 
             <span>
@@ -937,24 +942,18 @@ tbody td.frozen-column{
 
         </div>
 
+        <!-- TÌM KIẾM TOÀN BẢNG -->
         <div class="global-search-wrap">
 
             <span class="global-search-icon">
                 🔎
             </span>
 
-            <span
-                class="global-search-ai-badge"
-                title="Bạn có thể đặt câu hỏi bằng tiếng Việt"
-            >
-                AI
-            </span>
-
             <input
                 id="globalSearchInput"
                 class="global-search"
                 type="text"
-                placeholder="Tìm kiếm thông tin hoặc hỏi AI..."
+                placeholder="Tìm kiếm thông tin..."
             >
 
             <button
@@ -967,6 +966,9 @@ tbody td.frozen-column{
 
         </div>
 
+
+        
+
         <span
             id="status"
             class="toolbar-status"
@@ -976,12 +978,14 @@ tbody td.frozen-column{
 
     </div>
 
+
     <div
         id="loading"
         class="loading"
     >
         Đang tải dữ liệu...
     </div>
+
 
     <div
         id="tableWrapper"
@@ -1019,6 +1023,7 @@ tbody td.frozen-column{
             ⚙ Cài đặt bảng
         </div>
 
+
         <div class="settings-row">
 
             <label>
@@ -1029,10 +1034,11 @@ tbody td.frozen-column{
                 id="freezeCountInput"
                 type="number"
                 min="0"
-                value="6"
+                value="0"
             >
 
         </div>
+
 
         <div class="settings-row">
 
@@ -1064,6 +1070,7 @@ tbody td.frozen-column{
 
         </div>
 
+
         <div class="settings-row">
 
             <label>
@@ -1076,6 +1083,7 @@ tbody td.frozen-column{
             ></div>
 
         </div>
+
 
         <div
             style="
@@ -1115,72 +1123,6 @@ tbody td.frozen-column{
 
 const CSV_URL =
 "https://docs.google.com/spreadsheets/d/19-O0i9-K-_wnXCMdWJHRczsE8ckRZ7mS/gviz/tq?tqx=out%3Acsv&gid=616860962";
-
-
-/* =========================================================
-   CLOUDFLARE AI SEARCH
-========================================================= */
-
-const AI_SEARCH_URL =
-"https://dinhviethung-ai-search.hung-dinhviet1997.workers.dev";
-
-/*
-   AI được tích hợp trực tiếp vào ô tìm kiếm tổng.
-   Câu hỏi tự nhiên sẽ được gửi tới Cloudflare Worker
-   cùng metadata cột và dữ liệu hiện tại của Google Sheet.
-*/
-
-
-/*
-   Các từ/cụm từ thường cho thấy người dùng đang hỏi AI
-   thay vì chỉ tìm một từ khóa trong bảng.
-*/
-const AI_TRIGGER_WORDS = [
-    "tìm",
-    "tim",
-    "có gói",
-    "co goi",
-    "gói nào",
-    "goi nao",
-    "giá dưới",
-    "gia duoi",
-    "giá trên",
-    "gia tren",
-    "rẻ hơn",
-    "re hon",
-    "đắt hơn",
-    "dat hon",
-    "thấp hơn",
-    "thap hon",
-    "cao hơn",
-    "cao hon",
-    "ít nhất",
-    "it nhat",
-    "nhiều nhất",
-    "nhieu nhat",
-    "từ thấp đến cao",
-    "tu thap den cao",
-    "từ cao đến thấp",
-    "tu cao den thap",
-    "sắp xếp",
-    "sap xep",
-    "tương đương",
-    "tuong duong",
-    "lớn hơn",
-    "lon hon",
-    "nhỏ hơn",
-    "nho hon",
-    "bằng",
-    "bang",
-    "dưới",
-    "duoi",
-    "trên",
-    "tren",
-    ">= ",
-    "<= ",
-    "bao nhiêu",
-    "bao nhieu"
-];
 
 
 /* =========================================================
@@ -1245,6 +1187,9 @@ let searches = {};
 
 let sorts = {};
 
+/*
+Tìm kiếm toàn bộ bảng.
+*/
 let globalSearch = "";
 
 let columnWidths = {};
@@ -1252,39 +1197,14 @@ let columnWidths = {};
 let columnFormats = {};
 
 let renamedHeaders = {
-
     "Package": "Gói cước",
-
     "TOTAL PRICE": "Giá gói",
-
     "REVENUE": "Chu kỳ",
-
     "Cách tính chu kỳ": "1 chu kỳ",
-
-    "Packageprice": "Giá/kỳ"
-
+    "Packageprice": "Giá/kỳ" 
 };
 
 let freezeCount = 6;
-
-
-/* =========================================================
-   AI STATE
-========================================================= */
-
-let aiQuery = "";
-
-let aiConditions = [];
-
-let aiSort = [];
-
-let aiSearching = false;
-
-let aiSearchTimer = null;
-
-let aiRequestId = 0;
-let aiAbortController = null;
-const AI_REQUEST_TIMEOUT_MS = 30000;
 
 
 /* =========================================================
@@ -1379,21 +1299,6 @@ document.getElementById(
     "renameList"
 );
 
-const toolbarFreezeCount =
-document.getElementById(
-    "toolbarFreezeCount"
-);
-
-const globalSearchInput =
-document.getElementById(
-    "globalSearchInput"
-);
-
-const clearGlobalSearchBtn =
-document.getElementById(
-    "clearGlobalSearchBtn"
-);
-
 
 /* =========================================================
    LOAD STATE
@@ -1411,12 +1316,8 @@ function loadState(){
         );
 
         if(current){
-
             saved =
-            JSON.parse(
-                current
-            );
-
+            JSON.parse(current);
         }
 
 
@@ -1434,9 +1335,7 @@ function loadState(){
                 if(old){
 
                     saved =
-                    JSON.parse(
-                        old
-                    );
+                    JSON.parse(old);
 
                     break;
                 }
@@ -1450,12 +1349,10 @@ function loadState(){
             "Không đọc được LocalStorage",
             error
         );
-
     }
 
 
     if(!saved){
-
         return;
     }
 
@@ -1466,10 +1363,98 @@ function loadState(){
     searches =
     saved.searches || {};
 
+    sorts =
+    saved.sorts || {};
+
+    /*
+   Tìm kiếm toàn bảng.
+    */
     globalSearch =
     String(
         saved.globalSearch || ""
     );
+
+
+    /*
+       SORT mặc định mỗi lần tải website:
+
+       1. Packageprice       → Tăng dần
+       2. DATA               → Giảm dần
+       3. Thoại nội mạng     → Giảm dần
+       4. Thoại ngoại mạng   → Tăng dần
+    */
+
+    const packagePriceIndex =
+    headers.indexOf(
+        "Packageprice"
+    );
+
+    const dataIndex =
+    headers.indexOf(
+        "DATA"
+    );
+
+    const noiMangIndex =
+    headers.indexOf(
+        "Thoại nội mạng"
+    );
+
+    const ngoaiMangIndex =
+    headers.indexOf(
+        "Thoại ngoại mạng"
+    );
+
+
+    sorts = {};
+
+
+    if(
+        packagePriceIndex >= 0
+    ){
+
+        sorts[packagePriceIndex] = {
+            direction: "asc",
+            priority: 1
+        };
+
+    }
+
+
+    if(
+        dataIndex >= 0
+    ){
+
+        sorts[dataIndex] = {
+            direction: "desc",
+            priority: 2
+        };
+
+    }
+
+
+    if(
+        noiMangIndex >= 0
+    ){
+
+        sorts[noiMangIndex] = {
+            direction: "desc",
+            priority: 3
+        };
+
+    }
+
+
+    if(
+        ngoaiMangIndex >= 0
+    ){
+
+        sorts[ngoaiMangIndex] = {
+            direction: "asc",
+            priority: 4
+        };
+
+    }
+
 
     columnWidths =
     saved.columnWidths || {};
@@ -1478,32 +1463,24 @@ function loadState(){
     saved.columnFormats || {};
 
     renamedHeaders = {
-
         ...(saved.renamedHeaders || {}),
-
-        "Package":
-            "Gói cước",
-
-        "TOTAL PRICE":
-            "Giá gói",
-
-        "REVENUE":
-            "Chu kỳ",
-
-        "Cách tính chu kỳ":
-            "1 chu kỳ",
-
-        "Packageprice":
-            "Giá/kỳ"
-
+        "Package": "Gói cước",
+        "TOTAL PRICE": "Giá gói",
+        "REVENUE": "Chu kỳ",
+        "Cách tính chu kỳ": "1 chu kỳ",
+        "Packageprice": "Giá/kỳ"
     };
-
-
     freezeCount =
     saved.freezeCount !== undefined
         ? Number(saved.freezeCount)
         : 6;
 
+    
+
+
+    /*
+       Không tự đánh lại priority.
+    */
 }
 
 
@@ -1516,7 +1493,6 @@ function saveState(){
     try{
 
         localStorage.setItem(
-
             STORAGE_KEY,
 
             JSON.stringify({
@@ -1526,7 +1502,7 @@ function saveState(){
                 searches,
 
                 sorts,
-
+                
                 globalSearch,
 
                 columnWidths,
@@ -1538,7 +1514,6 @@ function saveState(){
                 freezeCount
 
             })
-
         );
 
     }
@@ -1548,9 +1523,7 @@ function saveState(){
             "Không lưu được LocalStorage",
             error
         );
-
     }
-
 }
 
 
@@ -1598,10 +1571,10 @@ function parseCSV(text){
 
                 inQuotes =
                 !inQuotes;
-
             }
 
         }
+
 
         else if(
             c === "," &&
@@ -1611,8 +1584,8 @@ function parseCSV(text){
             row.push(cell);
 
             cell = "";
-
         }
+
 
         else if(
             (
@@ -1628,7 +1601,6 @@ function parseCSV(text){
             ){
 
                 i++;
-
             }
 
 
@@ -1643,20 +1615,17 @@ function parseCSV(text){
             ){
 
                 result.push(row);
-
             }
 
 
             row = [];
-
         }
+
 
         else{
 
             cell += c;
-
         }
-
     }
 
 
@@ -1668,12 +1637,10 @@ function parseCSV(text){
         row.push(cell);
 
         result.push(row);
-
     }
 
 
     return result;
-
 }
 
 
@@ -1695,15 +1662,12 @@ async function loadData(){
 
         const response =
         await fetch(
-
             CSV_URL +
             "&cachebust=" +
             Date.now(),
-
             {
                 cache:"no-store"
             }
-
         );
 
 
@@ -1713,7 +1677,6 @@ async function loadData(){
                 "HTTP " +
                 response.status
             );
-
         }
 
 
@@ -1726,7 +1689,6 @@ async function loadData(){
             throw new Error(
                 "Google Sheet trả về rỗng."
             );
-
         }
 
 
@@ -1742,7 +1704,6 @@ async function loadData(){
             throw new Error(
                 "Không tìm thấy header."
             );
-
         }
 
 
@@ -1776,26 +1737,22 @@ async function loadData(){
                     : String(
                         sourceRow[i]
                     );
-
             }
 
 
             return row;
-
         });
 
 
-        /* Chuẩn bị cache cho Hỏi AI một lần duy nhất. */
-        rebuildAIRowCache();
-
+        /*
+           Nếu Google Sheet có thêm cột mới,
+           vẫn không phá state cũ.
+        */
 
         initializeDefaults();
 
+
         renderTable();
-
-        updateToolbarFreezeCount();
-
-        updateGlobalSearchUI();
 
 
         statusEl.textContent =
@@ -1819,7 +1776,6 @@ async function loadData(){
 
         const tr =
         document.createElement("tr");
-
 
         const td =
         document.createElement("td");
@@ -1851,9 +1807,7 @@ async function loadData(){
         loading.classList.add(
             "hidden"
         );
-
     }
-
 }
 
 
@@ -1868,13 +1822,21 @@ function initializeDefaults(){
     ){
 
         return;
-
     }
 
 
     defaultFiltersInitialized =
     true;
 
+
+    /*
+       SORT mặc định:
+
+       1. Packageprice      → Tăng dần
+       2. DATA              → Giảm dần
+       3. Thoại nội mạng    → Giảm dần
+       4. Thoại ngoại mạng  → Tăng dần
+    */
 
     const packagePriceIndex =
     headers.indexOf(
@@ -1905,13 +1867,8 @@ function initializeDefaults(){
     ){
 
         sorts[packagePriceIndex] = {
-
-            direction:
-                "asc",
-
-            priority:
-                1
-
+            direction: "asc",
+            priority: 1
         };
 
     }
@@ -1922,13 +1879,8 @@ function initializeDefaults(){
     ){
 
         sorts[dataIndex] = {
-
-            direction:
-                "desc",
-
-            priority:
-                2
-
+            direction: "desc",
+            priority: 2
         };
 
     }
@@ -1939,13 +1891,8 @@ function initializeDefaults(){
     ){
 
         sorts[noiMangIndex] = {
-
-            direction:
-                "desc",
-
-            priority:
-                3
-
+            direction: "desc",
+            priority: 3
         };
 
     }
@@ -1956,13 +1903,8 @@ function initializeDefaults(){
     ){
 
         sorts[ngoaiMangIndex] = {
-
-            direction:
-                "asc",
-
-            priority:
-                4
-
+            direction: "asc",
+            priority: 4
         };
 
     }
@@ -1980,6 +1922,11 @@ function initializeDefaults(){
     );
 
 
+    /*
+       Ngày update:
+       chọn non-blank.
+    */
+
     if(
         dateIndex >= 0 &&
         filters[dateIndex] === undefined
@@ -1993,23 +1940,24 @@ function initializeDefaults(){
             value =>
             String(value).trim() !== ""
         );
-
     }
 
+
+    /*
+       Dừng gói:
+       chỉ chọn blank.
+    */
 
     if(
         stopIndex >= 0 &&
         filters[stopIndex] === undefined
     ){
 
-        filters[stopIndex] =
-        [""];
-
+        filters[stopIndex] = [""];
     }
 
 
     saveState();
-
 }
 
 
@@ -2035,7 +1983,6 @@ function getAllColumnValues(index){
 
 
     return Array.from(set);
-
 }
 
 
@@ -2053,7 +2000,6 @@ function getDisplayHeader(
         ] ||
         originalHeader
     );
-
 }
 
 
@@ -2070,9 +2016,7 @@ function parseVNNumber(value){
 
 
     if(!s){
-
         return null;
-
     }
 
 
@@ -2082,12 +2026,10 @@ function parseVNNumber(value){
     ){
 
         return Number(
-
             s
             .replace(/\./g,"")
             .replace(",",".")
         );
-
     }
 
 
@@ -2099,7 +2041,6 @@ function parseVNNumber(value){
         return Number(
             s.replace(",",".")
         );
-
     }
 
 
@@ -2109,64 +2050,10 @@ function parseVNNumber(value){
     ){
 
         return Number(s);
-
-    }
-
-
-    /*
-       Hỗ trợ các giá trị như:
-       100k
-       1.5k
-       1M
-    */
-
-    const compact =
-    s
-    .toLowerCase()
-    .replace(/\s+/g,"");
-
-
-    const compactMatch =
-    compact.match(
-        /^(-?\d+(?:[.,]\d+)?)\s*(k|m|tr|triệu|gb|mb)?$/i
-    );
-
-
-    if(compactMatch){
-
-        let number =
-        Number(
-            compactMatch[1]
-            .replace(",",".")
-        );
-
-
-        if(
-            compactMatch[2] === "k"
-        ){
-
-            number *= 1000;
-
-        }
-
-        else if(
-            compactMatch[2] === "m" ||
-            compactMatch[2] === "tr" ||
-            compactMatch[2] === "triệu"
-        ){
-
-            number *= 1000000;
-
-        }
-
-
-        return number;
-
     }
 
 
     return null;
-
 }
 
 
@@ -2189,19 +2076,15 @@ function parseVietnameseDate(value){
 
 
     if(!match){
-
         return null;
-
     }
 
 
     const day =
     Number(match[1]);
 
-
     const month =
     Number(match[2]) - 1;
-
 
     const year =
     Number(match[3]);
@@ -2222,12 +2105,10 @@ function parseVietnameseDate(value){
     ){
 
         return null;
-
     }
 
 
     return date;
-
 }
 
 
@@ -2242,9 +2123,7 @@ function displayDateRelative(value){
 
 
     if(!date){
-
         return value;
-
     }
 
 
@@ -2274,7 +2153,6 @@ function displayDateRelative(value){
     if(n === 0){
 
         return "0 tháng";
-
     }
 
 
@@ -2282,7 +2160,6 @@ function displayDateRelative(value){
         String(n).padStart(2,"0") +
         " tháng"
     );
-
 }
 
 
@@ -2302,14 +2179,12 @@ function getDisplayValue(
         return displayDateRelative(
             value
         );
-
     }
 
 
     return String(
         value ?? ""
     );
-
 }
 
 
@@ -2325,6 +2200,12 @@ function getSortValue(
     const originalHeader =
     headers[index];
 
+
+    /*
+       DATA → Sort_DATA
+       Nội mạng → Sort_NM
+       Ngoại mạng → Sort_NgM
+    */
 
     const helperHeader =
     SORT_BY_MAP[
@@ -2353,9 +2234,7 @@ function getSortValue(
 
             value =
             row[helperIndex];
-
         }
-
     }
 
 
@@ -2372,7 +2251,6 @@ function getSortValue(
             value:number
 
         };
-
     }
 
 
@@ -2386,11 +2264,9 @@ function getSortValue(
 
             type:"date",
 
-            value:
-            date.getTime()
+            value:date.getTime()
 
         };
-
     }
 
 
@@ -2410,979 +2286,6 @@ function getSortValue(
         )
 
     };
-
-}
-
-
-/* =========================================================
-   NORMALIZE SEARCH TEXT
-========================================================= */
-
-function normalizeSearchText(value){
-
-    return String(
-        value ?? ""
-    )
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(
-        /[\u0300-\u036f]/g,
-        ""
-    )
-    .trim();
-
-}
-
-
-/* =========================================================
-   AI TRIGGER
-========================================================= */
-
-function shouldUseAI(query){
-
-    const normalized =
-    normalizeSearchText(
-        query
-    );
-
-
-    if(!normalized){
-
-        return false;
-
-    }
-
-
-    /*
-       Câu hỏi có từ khóa tự nhiên.
-    */
-
-    if(
-        AI_TRIGGER_WORDS.some(
-            word =>
-            normalized.includes(
-                normalizeSearchText(word)
-            )
-        )
-    ){
-
-        return true;
-
-    }
-
-
-    /*
-       Các biểu thức so sánh.
-    */
-
-    if(
-        /(?:<=|>=|<|>|\b\d+\s*k\b|\b\d+\s*tr\b|\b\d+\s*gb\b|\b\d+\s*mb\b)/i
-        .test(normalized)
-    ){
-
-        return true;
-
-    }
-
-
-    /*
-       Câu dài nhiều từ thường là câu hỏi.
-    */
-
-    const words =
-    normalized.split(/\s+/)
-    .filter(Boolean);
-
-
-    return words.length >= 5;
-
-}
-
-
-/* =========================================================
-   AI COLUMN METADATA
-========================================================= */
-
-function getAIColumnMetadata(){
-
-    return headers
-    .map(
-        (header,index) => {
-
-            return {
-
-                index,
-
-                name:
-                header,
-
-                displayName:
-                getDisplayHeader(
-                    header
-                )
-
-            };
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   AI CLEAR CONDITIONS
-========================================================= */
-
-function clearAIConditions(){
-
-    aiQuery = "";
-
-    aiConditions = [];
-
-    aiSort = [];
-
-}
-
-
-/* =========================================================
-   AI APPLY RESULT
-========================================================= */
-
-function applyAIResult(data, question){
-
-    /*
-       Worker có thể trả:
-
-       {
-          response: {
-             success,
-             message,
-             filters,
-             sort
-          }
-       }
-
-       hoặc trực tiếp:
-
-       {
-          success,
-          message,
-          filters,
-          sort
-       }
-    */
-
-    let result =
-    data?.result ||
-    data?.response ||
-    data;
-
-
-    if(
-        result &&
-        result.response &&
-        typeof result.response === "object"
-    ){
-
-        result =
-        result.response;
-
-    }
-
-    if(
-        result &&
-        result.result &&
-        typeof result.result === "object"
-    ){
-
-        result =
-        result.result;
-
-    }
-
-
-    if(
-        !result ||
-        result.success === false
-    ){
-
-        throw new Error(
-            result?.message ||
-            result?.error ||
-            "AI không trả về kết quả hợp lệ."
-        );
-
-    }
-
-
-    const conditions =
-    Array.isArray(
-        result.filters
-    )
-        ? result.filters
-        : [];
-
-
-    const sortsFromAI =
-    Array.isArray(
-        result.sort
-    )
-        ? result.sort
-        : [];
-
-
-    aiQuery =
-    question;
-
-
-    aiConditions =
-    conditions;
-
-
-    aiSort =
-    sortsFromAI;
-
-
-    /*
-       Áp dụng filter AI.
-       Không xóa filter thủ công của
-       các cột khác nếu AI không đụng tới.
-    */
-
-    conditions.forEach(
-        condition => {
-
-            applyAICondition(
-                condition
-            );
-
-        }
-    );
-
-
-    /*
-       Áp dụng sort AI.
-    */
-
-    if(
-        sortsFromAI.length > 0
-    ){
-
-        /*
-           Chỉ thay sort ở các cột
-           mà AI yêu cầu.
-        */
-
-        sortsFromAI.forEach(
-            (sortItem, index) => {
-
-                const columnIndex =
-                resolveAIColumnIndex(
-                    sortItem.column
-                );
-
-
-                if(
-                    columnIndex < 0
-                ){
-
-                    return;
-
-                }
-
-
-                sorts[columnIndex] = {
-
-                    direction:
-                    sortItem.direction === "desc"
-                        ? "desc"
-                        : "asc",
-
-                    priority:
-                    index + 1
-
-                };
-
-            }
-        );
-
-    }
-
-
-    /*
-       Xóa global search thường,
-       vì AI đã tiếp quản câu hỏi.
-    */
-
-    globalSearch = "";
-
-
-    if(globalSearchInput){
-
-        globalSearchInput.value =
-        question;
-
-    }
-
-
-    saveState();
-
-    renderBody();
-
-    updateHeaderStates();
-
-    updateGlobalSearchUI();
-
-
-    const matched =
-    getVisibleRows().length;
-
-
-    statusEl.textContent =
-    `🤖 AI: ${result.message || "Đã áp dụng"} • ${matched.toLocaleString("vi-VN")} dòng`;
-
-}
-
-
-/* =========================================================
-   RESOLVE AI COLUMN
-========================================================= */
-
-function resolveAIColumnIndex(
-    column
-){
-
-    if(
-        typeof column === "number"
-    ){
-
-        return (
-            column >= 0 &&
-            column < headers.length
-        )
-            ? column
-            : -1;
-
-    }
-
-
-    const text =
-    String(
-        column ?? ""
-    ).trim();
-
-
-    if(!text){
-
-        return -1;
-
-    }
-
-
-    /*
-       Tên gốc.
-    */
-
-    let index =
-    headers.findIndex(
-        header =>
-        normalizeSearchText(header) ===
-        normalizeSearchText(text)
-    );
-
-
-    if(index >= 0){
-
-        return index;
-
-    }
-
-
-    /*
-       Tên hiển thị.
-    */
-
-    index =
-    headers.findIndex(
-        header =>
-        normalizeSearchText(
-            getDisplayHeader(header)
-        ) ===
-        normalizeSearchText(text)
-    );
-
-
-    if(index >= 0){
-
-        return index;
-
-    }
-
-
-    /*
-       Cho phép AI trả tên gần đúng.
-    */
-
-    index =
-    headers.findIndex(
-        header => {
-
-            const a =
-            normalizeSearchText(
-                header
-            );
-
-            const b =
-            normalizeSearchText(
-                text
-            );
-
-            return (
-                a.includes(b) ||
-                b.includes(a)
-            );
-
-        }
-    );
-
-
-    return index;
-
-}
-
-
-/* =========================================================
-   AI APPLY CONDITION
-========================================================= */
-
-function applyAICondition(
-    condition
-){
-
-    if(!condition){
-
-        return;
-
-    }
-
-
-    const index =
-    resolveAIColumnIndex(
-        condition.column
-    );
-
-
-    if(index < 0){
-
-        return;
-
-    }
-
-
-    const operator =
-    String(
-        condition.operator || "equals"
-    );
-
-
-    const target =
-    String(
-        condition.value ?? ""
-    );
-
-
-    const matchingValues =
-    getAllColumnValues(
-        index
-    )
-    .filter(
-        value =>
-        aiValueMatches(
-            value,
-            operator,
-            target,
-            index
-        )
-    );
-
-
-    /*
-       AI filter tác động lên column.
-    */
-
-    filters[index] =
-    matchingValues;
-
-}
-
-
-/* =========================================================
-   AI VALUE MATCH
-========================================================= */
-
-function aiValueMatches(
-    actual,
-    operator,
-    expected,
-    index
-){
-
-    const actualText =
-    normalizeSearchText(
-        actual
-    );
-
-
-    const expectedText =
-    normalizeSearchText(
-        expected
-    );
-
-
-    /*
-       equals
-    */
-
-    if(
-        operator === "equals"
-    ){
-
-        /*
-           Với số:
-           100000 = 100.000
-        */
-
-        const actualNumber =
-        parseVNNumber(actual);
-
-
-        const expectedNumber =
-        parseVNNumber(expected);
-
-
-        if(
-            actualNumber !== null &&
-            expectedNumber !== null
-        ){
-
-            return (
-                actualNumber ===
-                expectedNumber
-            );
-
-        }
-
-
-        return (
-            actualText ===
-            expectedText
-        );
-
-    }
-
-
-    if(
-        operator === "not_equals"
-    ){
-
-        return !aiValueMatches(
-            actual,
-            "equals",
-            expected,
-            index
-        );
-
-    }
-
-
-    if(
-        operator === "contains"
-    ){
-
-        return actualText.includes(
-            expectedText
-        );
-
-    }
-
-
-    if(
-        operator === "not_contains"
-    ){
-
-        return !actualText.includes(
-            expectedText
-        );
-
-    }
-
-
-    const actualNumber =
-    parseVNNumber(actual);
-
-
-    const expectedNumber =
-    parseVNNumber(expected);
-
-
-    if(
-        actualNumber === null ||
-        expectedNumber === null
-    ){
-
-        return false;
-
-    }
-
-
-    if(
-        operator === "greater_than"
-    ){
-
-        return (
-            actualNumber >
-            expectedNumber
-        );
-
-    }
-
-
-    if(
-        operator === "greater_or_equal"
-    ){
-
-        return (
-            actualNumber >=
-            expectedNumber
-        );
-
-    }
-
-
-    if(
-        operator === "less_than"
-    ){
-
-        return (
-            actualNumber <
-            expectedNumber
-        );
-
-    }
-
-
-    if(
-        operator === "less_or_equal"
-    ){
-
-        return (
-            actualNumber <=
-            expectedNumber
-        );
-
-    }
-
-
-    return false;
-
-}
-
-
-/* =========================================================
-   AI CONTEXT SELECTION
-========================================================= */
-
-/*
-   KHÔNG gửi toàn bộ Google Sheet cho AI.
-   Chỉ lấy những dòng phù hợp nhất với câu hỏi và dừng khi
-   tổng dữ liệu gửi đi đạt giới hạn ký tự an toàn.
-*/
-const AI_MAX_CONTEXT_CHARS = 30000;
-const AI_MAX_CONTEXT_ROWS = 40;
-const AI_MAX_CELL_CHARS = 200;
-
-/*
-   Cache dữ liệu AI một lần sau khi Google Sheet tải xong.
-   Nhờ vậy mỗi lần hỏi AI không phải normalize toàn bộ Sheet lại.
-*/
-let aiRowCache = [];
-
-function rebuildAIRowCache(){
-    aiRowCache = rows.map((row, originalIndex) => {
-        const normalizedCells = row.map(value =>
-            normalizeSearchText(value)
-        );
-
-        return {
-            row,
-            originalIndex,
-            fullText: normalizedCells.join(" "),
-            packageValue: normalizedCells[headers.findIndex(h =>
-                normalizeSearchText(h) === "package"
-            )] || ""
-        };
-    });
-}
-
-function getAIQuestionTokens(question){
-    const stopWords = new Set([
-        "cho","toi","tôi","biet","biết","tim","tìm",
-        "giup","giúp","voi","với","la","là","co","có",
-        "bao","nhiêu","nhieu","nao","nào","the","thế",
-        "gi","gì","cua","của","ve","về","goi","gói",
-        "cuoc","cước","hay","va","và","trong","tren","trên",
-        "xin","hãy","hay","mot","một","nhung","những"
-    ]);
-
-    return normalizeSearchText(question)
-        .replace(/[^\p{L}\p{N}%.,<>!=+\-]+/gu, " ")
-        .split(/\s+/)
-        .filter(x => x.length >= 2 && !stopWords.has(x));
-}
-
-function buildAIContextRows(question){
-    if(!rows.length){
-        return [];
-    }
-
-    if(aiRowCache.length !== rows.length){
-        rebuildAIRowCache();
-    }
-
-    const q = normalizeSearchText(question);
-    const tokens = getAIQuestionTokens(question);
-    const scored = [];
-
-    /*
-       Tìm nhanh trên cache đã normalize sẵn.
-       Nếu có mã/gói xuất hiện nguyên câu thì ưu tiên rất cao.
-    */
-    for(const item of aiRowCache){
-        let score = 0;
-
-        if(q.length >= 3 && item.fullText.includes(q)){
-            score += 1000;
-        }
-
-        for(const token of tokens){
-            if(item.fullText.includes(token)){
-                score += token.length >= 5 ? 12 : 5;
-            }
-        }
-
-        if(item.packageValue && q.includes(item.packageValue)){
-            score += 300;
-        }
-
-        if(score > 0){
-            scored.push({item, score});
-        }
-    }
-
-    scored.sort((a,b) =>
-        b.score - a.score ||
-        a.item.originalIndex - b.item.originalIndex
-    );
-
-    /*
-       Chỉ gửi tối đa 40 dòng.
-       Nếu câu hỏi không chứa từ khóa trùng trực tiếp với dữ liệu,
-       vẫn gửi một mẫu nhỏ để Worker/AI không bị nhận context rỗng.
-    */
-    let selected = scored.slice(0, AI_MAX_CONTEXT_ROWS);
-
-    if(!selected.length){
-        selected = aiRowCache
-            .slice(0, Math.min(10, AI_MAX_CONTEXT_ROWS))
-            .map(item => ({ item, score: 0 }));
-    }
-
-    const result = [];
-    let totalChars = 0;
-
-    for(const entry of selected){
-        const obj = {};
-        let rowChars = 0;
-
-        headers.forEach((header,index) => {
-            let value = String(entry.item.row[index] ?? "");
-
-            if(value.length > AI_MAX_CELL_CHARS){
-                value = value.slice(0, AI_MAX_CELL_CHARS) + "…";
-            }
-
-            obj[header] = value;
-            rowChars += header.length + value.length + 6;
-        });
-
-        if(result.length > 0 && totalChars + rowChars > AI_MAX_CONTEXT_CHARS){
-            break;
-        }
-
-        result.push(obj);
-        totalChars += rowChars;
-    }
-
-    return result;
-}
-
-
-/* =========================================================
-   AI SEARCH
-========================================================= */
-
-async function runAISearch(
-    question
-){
-
-    /*
-       Mỗi lần hỏi chỉ có 1 request AI.
-       Nếu request cũ còn treo, hủy ngay trước khi tạo request mới.
-    */
-    if(aiAbortController){
-        try{
-            aiAbortController.abort();
-        }catch(error){}
-    }
-
-    const controller = new AbortController();
-    aiAbortController = controller;
-
-    const requestId = ++aiRequestId;
-
-    aiSearching = true;
-
-    globalSearchInput.classList.add(
-        "ai-active"
-    );
-
-    statusEl.textContent =
-    "🤖 AI đang tìm dữ liệu liên quan...";
-
-    let timeoutId = null;
-
-    try{
-
-        /*
-           Không để fetch treo vô thời hạn.
-           Sau 30 giây sẽ tự hủy và trả quyền điều khiển
-           cho ô tìm kiếm.
-        */
-        timeoutId = setTimeout(() => {
-            try{
-                controller.abort();
-            }catch(error){}
-        }, AI_REQUEST_TIMEOUT_MS);
-
-        const contextRows =
-            buildAIContextRows(question);
-
-        const response =
-        await fetch(
-            AI_SEARCH_URL,
-            {
-                method: "POST",
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-                signal: controller.signal,
-                body: JSON.stringify({
-                    question,
-                    columns: getAIColumnMetadata(),
-                    rows: contextRows
-                })
-            }
-        );
-
-        if(requestId !== aiRequestId){
-            return;
-        }
-
-        let data = null;
-
-        try{
-            data = await response.json();
-        }
-        catch(error){
-            throw new Error(
-                "Worker AI trả về dữ liệu không hợp lệ."
-            );
-        }
-
-        if(!response.ok){
-            throw new Error(
-                data?.message ||
-                data?.error ||
-                `HTTP ${response.status}`
-            );
-        }
-
-        applyAIResult(
-            data,
-            question
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "AI SEARCH ERROR:",
-            error
-        );
-
-        /* Request này đã bị một câu hỏi mới thay thế. */
-        if(requestId !== aiRequestId){
-            return;
-        }
-
-        let message =
-            error?.message ||
-            "không xác định";
-
-        if(error?.name === "AbortError"){
-            message =
-                "AI không phản hồi trong 30 giây";
-        }
-
-        /*
-           Nếu AI lỗi thì quay lại tìm kiếm thông thường.
-        */
-        aiQuery = "";
-        aiConditions = [];
-        aiSort = [];
-
-        globalSearch = question;
-
-        updateGlobalSearchUI();
-        renderBody();
-        updateHeaderStates();
-
-        statusEl.textContent =
-        "⚠ AI lỗi: " +
-        message +
-        " • đang tìm kiếm thông thường";
-
-    }
-    finally{
-
-        if(timeoutId !== null){
-            clearTimeout(timeoutId);
-        }
-
-        if(aiAbortController === controller){
-            aiAbortController = null;
-        }
-
-        if(requestId === aiRequestId){
-            aiSearching = false;
-            globalSearchInput.classList.remove(
-                "ai-active"
-            );
-        }
-
-    }
-
 }
 
 
@@ -3412,7 +2315,6 @@ function rowMatchesFilters(
         ){
 
             continue;
-
         }
 
 
@@ -3425,7 +2327,6 @@ function rowMatchesFilters(
         ){
 
             continue;
-
         }
 
 
@@ -3440,7 +2341,6 @@ function rowMatchesFilters(
         ){
 
             return false;
-
         }
 
 
@@ -3457,14 +2357,120 @@ function rowMatchesFilters(
         ){
 
             return false;
-
         }
+    }
+    /* =========================================================
+   FREEZE COUNT - TOOLBAR
+========================================================= */
 
+const toolbarFreezeCount =
+document.getElementById(
+    "toolbarFreezeCount"
+);
+
+
+/*
+   Cập nhật ô trên toolbar.
+*/
+function updateToolbarFreezeCount(){
+
+    if(!toolbarFreezeCount){
+        return;
     }
 
 
-    /*
+    toolbarFreezeCount.value =
+    Number(freezeCount) || 0;
+}
+
+
+/*
+   Khi nhập số cột.
+*/
+toolbarFreezeCount.addEventListener(
+    "change",
+    () => {
+
+        let value =
+        Number(
+            toolbarFreezeCount.value
+        );
+
+
+        if(
+            !Number.isFinite(value)
+        ){
+
+            value = 6;
+        }
+
+
+        value =
+        Math.max(
+            0,
+            Math.min(
+                Math.floor(value),
+                getVisibleHeaderIndexes().length
+            )
+        );
+
+
+        freezeCount =
+        value;
+
+
+        toolbarFreezeCount.value =
+        value;
+
+
+        saveState();
+
+
+        /*
+           Áp dụng ngay.
+        */
+        applyFreezeColumns();
+    }
+);
+
+
+/*
+   Enter cũng áp dụng ngay.
+*/
+toolbarFreezeCount.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Enter"
+        ){
+
+            event.preventDefault();
+
+            toolbarFreezeCount.blur();
+        }
+    }
+);
+
+        /*
+       =====================================================
        GLOBAL SEARCH
+       =====================================================
+
+       Tìm trên TOÀN BỘ thông tin của dòng.
+
+       Không phân biệt:
+       - Hoa / thường
+       - Có / không dấu tiếng Việt
+
+       Ví dụ:
+
+       C99N
+       120.000
+       5G
+       doanh nghiệp
+       1GB
+       ...
     */
 
     const globalQuery =
@@ -3506,14 +2512,12 @@ function rowMatchesFilters(
         ){
 
             return false;
-
         }
-
     }
 
 
     /*
-       SEARCH CỘT
+       SEARCH
     */
 
     for(
@@ -3529,7 +2533,6 @@ function rowMatchesFilters(
         ){
 
             continue;
-
         }
 
 
@@ -3542,9 +2545,7 @@ function rowMatchesFilters(
 
 
         if(!query){
-
             continue;
-
         }
 
 
@@ -3560,14 +2561,11 @@ function rowMatchesFilters(
         ){
 
             return false;
-
         }
-
     }
 
 
     return true;
-
 }
 
 
@@ -3578,6 +2576,15 @@ function rowMatchesFilters(
 function getFilterValuesForColumn(
     index
 ){
+
+    /*
+       Rất quan trọng:
+       bỏ qua filter/search của chính
+       cột đang mở.
+
+       Nhưng áp dụng toàn bộ filter/search
+       của các cột khác.
+    */
 
     const source =
     rows.filter(
@@ -3605,7 +2612,6 @@ function getFilterValuesForColumn(
 
 
     return Array.from(set);
-
 }
 
 
@@ -3619,11 +2625,8 @@ function getVisibleRows(){
     rows
     .map(
         (row,originalIndex) => ({
-
             row,
-
             originalIndex
-
         })
     )
     .filter(
@@ -3633,6 +2636,11 @@ function getVisibleRows(){
         )
     );
 
+
+    /*
+       SORTS
+       Priority hoàn toàn linh hoạt.
+    */
 
     const activeSorts =
     Object.keys(sorts)
@@ -3676,7 +2684,6 @@ function getVisibleRows(){
     ){
 
         return result;
-
     }
 
 
@@ -3712,8 +2719,8 @@ function getVisibleRows(){
                     compare =
                     av.value -
                     bv.value;
-
                 }
+
 
                 else if(
                     av.type === "date" &&
@@ -3723,8 +2730,8 @@ function getVisibleRows(){
                     compare =
                     av.value -
                     bv.value;
-
                 }
+
 
                 else{
 
@@ -3738,7 +2745,6 @@ function getVisibleRows(){
                             sensitivity:"base"
                         }
                     );
-
                 }
 
 
@@ -3749,9 +2755,7 @@ function getVisibleRows(){
                             ? -compare
                             : compare
                     );
-
                 }
-
             }
 
 
@@ -3759,13 +2763,11 @@ function getVisibleRows(){
                 a.originalIndex -
                 b.originalIndex
             );
-
         }
     );
 
 
     return result;
-
 }
 
 
@@ -3788,7 +2790,6 @@ function getVisibleHeaderIndexes(){
             ){
 
                 result.push(index);
-
             }
 
         }
@@ -3796,56 +2797,74 @@ function getVisibleHeaderIndexes(){
 
 
     return result;
-
 }
 
 
 /* =========================================================
-   HEADER WIDTH
+   WIDTH
 ========================================================= */
 
+/* =========================================================
+   WIDTH
+========================================================= */
+
+/*
+   Đo độ rộng chữ bằng Canvas.
+*/
 function measureHeaderText(
     text,
     font = "bold 14px Arial"
 ){
 
     const canvas =
-    document.createElement(
-        "canvas"
-    );
-
+    document.createElement("canvas");
 
     const context =
     canvas.getContext("2d");
 
-
     context.font =
     font;
-
 
     return context.measureText(
         String(text ?? "")
     ).width;
-
 }
 
 
-/* =========================================================
-   CALCULATE HEADER WIDTH
-========================================================= */
+/*
+   Tính chiều rộng header.
 
+   Bao gồm:
+   - Tên header hiện tại
+   - Mũi tên Sort
+   - Nút Filter
+   - Padding
+*/
 function calculateHeaderWidth(index){
 
     const originalHeader =
     headers[index];
 
 
+    /*
+       QUAN TRỌNG:
+       Lấy tên đang hiển thị.
+
+       Ví dụ:
+       REVENUE -> Chu kỳ
+
+       thì sẽ tính theo "Chu kỳ",
+       không tính theo "REVENUE".
+    */
     const displayHeader =
     getDisplayHeader(
         originalHeader
     );
 
 
+    /*
+       Độ rộng tên header.
+    */
     const titleWidth =
     measureHeaderText(
         displayHeader,
@@ -3853,6 +2872,19 @@ function calculateHeaderWidth(index){
     );
 
 
+    /*
+       Độ rộng nút Sort.
+
+       Dùng chính icon hiện tại,
+       nên nếu Sort có priority:
+
+       ▲
+       ▲1
+       ▲1.5
+       ▼10
+
+       đều được tính.
+    */
     const sortIcon =
     getSortIcon(index);
 
@@ -3867,6 +2899,9 @@ function calculateHeaderWidth(index){
     );
 
 
+    /*
+       Độ rộng nút Filter.
+    */
     const filterWidth =
     Math.max(
         24,
@@ -3877,6 +2912,10 @@ function calculateHeaderWidth(index){
     );
 
 
+    /*
+       Padding trái + phải
+       và một khoảng an toàn nhỏ.
+    */
     const paddingWidth =
     20;
 
@@ -3888,53 +2927,46 @@ function calculateHeaderWidth(index){
     paddingWidth;
 
 
+    /*
+       Không cho nhỏ hơn 70px.
+    */
     return Math.max(
         70,
         Math.ceil(totalWidth)
     );
-
 }
 
 
-/* =========================================================
-   COLUMN WIDTH
-========================================================= */
-
+/*
+   Lấy chiều rộng cột.
+*/
 function getColumnWidth(index){
 
     const originalHeader =
     headers[index];
 
+    // ==============================
+    // CỘT CÓ KÍCH THƯỚC ĐẶC BIỆT
+    // ==============================
 
-    if(
-        originalHeader ===
-        "Phạm vi cung cấp"
-    ){
-
+    // Phạm vi cung cấp = 2 lần mặc định
+    if(originalHeader === "Phạm vi cung cấp"){
         return 150 * 2;
-
     }
 
-
-    if(
-        originalHeader ===
-        "Free truy cập"
-    ){
-
+    // Free truy cập = 2 lần mặc định
+    if(originalHeader === "Free truy cập"){
         return 150 * 2;
-
     }
 
-
-    if(
-        originalHeader ===
-        "Đối tượng áp dụng"
-    ){
-
+    // Đối tượng áp dụng = 4 lần mặc định
+    if(originalHeader === "Đối tượng áp dụng"){
         return 150 * 4;
-
     }
 
+    // ==============================
+    // CÁC CỘT AUTO WIDTH THEO HEADER
+    // ==============================
 
     if(
         originalHeader === "Package" ||
@@ -3948,20 +2980,18 @@ function getColumnWidth(index){
         originalHeader === "Loại gói cước" ||
         originalHeader === "Tự động gia hạn"
     ){
-
-        return calculateHeaderWidth(
-            index
-        );
-
+        return calculateHeaderWidth(index);
     }
 
+    // ==============================
+    // CÁC CỘT BÌNH THƯỜNG
+    // ==============================
 
     return (
         Number(
             columnWidths[index]
         ) || 150
     );
-
 }
 
 
@@ -3974,6 +3004,10 @@ function getColumnFormat(index){
     const originalHeader =
     headers[index];
 
+
+    /*
+       FORMAT MẶC ĐỊNH
+    */
 
     const format = {
 
@@ -3993,10 +3027,19 @@ function getColumnFormat(index){
 
         background:"#ffffff",
 
+        /*
+           Cho phép giữ các định dạng
+           mà người dùng đã lưu.
+        */
         ...(columnFormats[index] || {})
 
     };
 
+
+    /* =====================================================
+       CANH PHẢI
+       DỰA THEO TÊN GỐC CỦA CỘT
+       ===================================================== */
 
     if(
         originalHeader === "TOTAL PRICE" ||
@@ -4008,6 +3051,11 @@ function getColumnFormat(index){
 
     }
 
+
+    /* =====================================================
+       CANH GIỮA
+       DỰA THEO TÊN GỐC CỦA CỘT
+       ===================================================== */
 
     if(
         originalHeader === "REVENUE" ||
@@ -4024,14 +3072,7 @@ function getColumnFormat(index){
 
 
     return format;
-
 }
-
-
-/* =========================================================
-   APPLY FORMAT
-========================================================= */
-
 function applyFormatToCell(
     cell,
     index
@@ -4095,9 +3136,7 @@ function applyFormatToCell(
 
         cell.style.wordBreak =
         "normal";
-
     }
-
 }
 
 
@@ -4121,7 +3160,6 @@ function renderTable(){
 
         }
     );
-
 }
 
 
@@ -4138,9 +3176,12 @@ function renderHeader(){
     getVisibleHeaderIndexes();
 
 
+    /*
+       HEADER ROW
+    */
+
     const headerRow =
     document.createElement("tr");
-
 
     headerRow.className =
     "header-row";
@@ -4178,14 +3219,16 @@ function renderHeader(){
             const content =
             document.createElement("div");
 
-
             content.className =
             "header-content";
 
 
+            /*
+               TITLE
+            */
+
             const title =
             document.createElement("div");
-
 
             title.className =
             "header-title";
@@ -4197,6 +3240,11 @@ function renderHeader(){
             );
 
 
+            /*
+               Double click title
+               = đổi tên nhanh.
+            */
+
             title.addEventListener(
                 "dblclick",
                 event => {
@@ -4206,30 +3254,33 @@ function renderHeader(){
                     openRenamePrompt(
                         index
                     );
-
                 }
             );
 
 
+            /*
+               ACTIONS
+            */
+
             const actions =
             document.createElement("div");
-
 
             actions.className =
             "header-actions";
 
 
+            /*
+               SORT ICON
+            */
+
             const sortButton =
             document.createElement("button");
-
 
             sortButton.className =
             "header-button";
 
-
             sortButton.textContent =
             getSortIcon(index);
-
 
             sortButton.title =
             "Sort By";
@@ -4240,30 +3291,34 @@ function renderHeader(){
                 event => {
 
                     event.preventDefault();
-
                     event.stopPropagation();
 
+
+                    /*
+                       Mở cùng menu filter,
+                       trong đó có Sort By.
+                    */
 
                     openFilterMenu(
                         index,
                         th
                     );
-
                 }
             );
 
 
+            /*
+               FILTER
+            */
+
             const filterButton =
             document.createElement("button");
-
 
             filterButton.className =
             "header-button";
 
-
             filterButton.textContent =
             "▼";
-
 
             filterButton.title =
             "Filter / Sort / Định dạng";
@@ -4274,15 +3329,12 @@ function renderHeader(){
                 event => {
 
                     event.preventDefault();
-
                     event.stopPropagation();
-
 
                     openFilterMenu(
                         index,
                         th
                     );
-
                 }
             );
 
@@ -4290,7 +3342,6 @@ function renderHeader(){
             actions.appendChild(
                 sortButton
             );
-
 
             actions.appendChild(
                 filterButton
@@ -4300,7 +3351,6 @@ function renderHeader(){
             content.appendChild(
                 title
             );
-
 
             content.appendChild(
                 actions
@@ -4312,9 +3362,12 @@ function renderHeader(){
             );
 
 
+            /*
+               RESIZE
+            */
+
             const resize =
             document.createElement("div");
-
 
             resize.className =
             "resize-handle";
@@ -4325,15 +3378,12 @@ function renderHeader(){
                 event => {
 
                     event.preventDefault();
-
                     event.stopPropagation();
-
 
                     startResize(
                         event,
                         index
                     );
-
                 }
             );
 
@@ -4356,9 +3406,12 @@ function renderHeader(){
     );
 
 
+    /*
+       SEARCH ROW
+    */
+
     const searchRow =
     document.createElement("tr");
-
 
     searchRow.className =
     "search-row";
@@ -4396,14 +3449,12 @@ function renderHeader(){
             const inner =
             document.createElement("div");
 
-
             inner.className =
             "search-inner";
 
 
             const input =
             document.createElement("input");
-
 
             input.className =
             "column-search";
@@ -4421,6 +3472,15 @@ function renderHeader(){
             searches[index] || "";
 
 
+            /*
+               QUAN TRỌNG:
+               không renderHeader()
+               khi nhập.
+
+               Chỉ render body.
+               => focus không mất.
+            */
+
             input.addEventListener(
                 "input",
                 () => {
@@ -4431,10 +3491,17 @@ function renderHeader(){
 
                     saveState();
 
+
                     renderBody();
+
 
                     updateHeaderStates();
 
+
+                    /*
+                       Nếu menu filter đang mở,
+                       refresh danh sách.
+                    */
 
                     if(
                         openFilterIndex !== null
@@ -4443,7 +3510,6 @@ function renderHeader(){
                         refreshOpenFilterMenu(
                             true
                         );
-
                     }
 
                 }
@@ -4474,7 +3540,6 @@ function renderHeader(){
 
 
     updateHeaderStates();
-
 }
 
 
@@ -4524,7 +3589,6 @@ function renderBody(){
 
         tr.appendChild(td);
 
-
         tbody.appendChild(tr);
 
 
@@ -4534,7 +3598,6 @@ function renderBody(){
 
 
         return;
-
     }
 
 
@@ -4602,7 +3665,6 @@ function renderBody(){
     requestAnimationFrame(
         applyFreezeColumns
     );
-
 }
 
 
@@ -4664,12 +3726,10 @@ function updateHeaderStates(){
 
                 sortButton.textContent =
                 getSortIcon(index);
-
             }
 
         }
     );
-
 }
 
 
@@ -4684,7 +3744,6 @@ function isEffectiveFilter(index){
     ){
 
         return false;
-
     }
 
 
@@ -4697,7 +3756,6 @@ function isEffectiveFilter(index){
     ){
 
         return false;
-
     }
 
 
@@ -4706,7 +3764,6 @@ function isEffectiveFilter(index){
     ){
 
         return true;
-
     }
 
 
@@ -4714,18 +3771,20 @@ function isEffectiveFilter(index){
     getAllColumnValues(index);
 
 
+    /*
+       Chọn toàn bộ = không active.
+    */
+
     if(
         selected.length ===
         allValues.length
     ){
 
         return false;
-
     }
 
 
     return true;
-
 }
 
 
@@ -4740,7 +3799,6 @@ function getSortIcon(index){
     ){
 
         return "↕";
-
     }
 
 
@@ -4764,7 +3822,6 @@ function getSortIcon(index){
             ? String(priority)
             : ""
     );
-
 }
 
 
@@ -4811,7 +3868,6 @@ function openFilterMenu(
     positionMenu(
         anchor
     );
-
 }
 
 
@@ -4827,7 +3883,6 @@ function positionMenu(anchor){
     ){
 
         return;
-
     }
 
 
@@ -4863,7 +3918,6 @@ function positionMenu(anchor){
                 window.innerWidth -
                 width -
                 10;
-
             }
 
 
@@ -4876,7 +3930,6 @@ function positionMenu(anchor){
                 rect.top -
                 height -
                 4;
-
             }
 
 
@@ -4903,7 +3956,6 @@ function positionMenu(anchor){
 
         }
     );
-
 }
 
 
@@ -4918,7 +3970,6 @@ function renderFilterMenu(index){
     ){
 
         return;
-
     }
 
 
@@ -4935,6 +3986,10 @@ function renderFilterMenu(index){
     inner.className =
     "filter-menu-inner";
 
+
+    /*
+       TITLE
+    */
 
     const title =
     document.createElement(
@@ -4956,6 +4011,10 @@ function renderFilterMenu(index){
         title
     );
 
+
+    /*
+       FILTER SEARCH
+    */
 
     const filterSearch =
     document.createElement(
@@ -4981,7 +4040,6 @@ function renderFilterMenu(index){
 
             event.stopPropagation();
 
-
             filterValueSearch =
             filterSearch.value;
 
@@ -4989,7 +4047,6 @@ function renderFilterMenu(index){
             renderFilterValuesOnly(
                 index
             );
-
         }
     );
 
@@ -4998,6 +4055,10 @@ function renderFilterMenu(index){
         filterSearch
     );
 
+
+    /*
+       FILTER BUTTONS
+    */
 
     const actions =
     document.createElement(
@@ -5028,7 +4089,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -5040,9 +4100,12 @@ function renderFilterMenu(index){
 
             saveState();
 
+
             renderBody();
 
+
             updateHeaderStates();
+
 
             renderFilterValuesOnly(
                 index
@@ -5071,7 +4134,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -5081,9 +4143,12 @@ function renderFilterMenu(index){
 
             saveState();
 
+
             renderBody();
 
+
             updateHeaderStates();
+
 
             renderFilterValuesOnly(
                 index
@@ -5108,6 +4173,10 @@ function renderFilterMenu(index){
     );
 
 
+    /*
+       VALUES
+    */
+
     const valuesContainer =
     document.createElement(
         "div"
@@ -5127,6 +4196,10 @@ function renderFilterMenu(index){
     );
 
 
+    /*
+       SORT
+    */
+
     const sortSection =
     createSortSection(
         index
@@ -5138,6 +4211,10 @@ function renderFilterMenu(index){
     );
 
 
+    /*
+       FORMAT
+    */
+
     const formatSection =
     createFormatSection(
         index
@@ -5148,6 +4225,10 @@ function renderFilterMenu(index){
         formatSection
     );
 
+
+    /*
+       FOOTER
+    */
 
     const footer =
     document.createElement(
@@ -5178,7 +4259,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -5187,9 +4267,12 @@ function renderFilterMenu(index){
 
             saveState();
 
+
             renderBody();
 
+
             updateHeaderStates();
+
 
             renderFilterValuesOnly(
                 index
@@ -5218,7 +4301,6 @@ function renderFilterMenu(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
             closeFilterMenu();
@@ -5250,7 +4332,6 @@ function renderFilterMenu(index){
     renderFilterValuesOnly(
         index
     );
-
 }
 
 
@@ -5267,7 +4348,6 @@ function renderFilterValuesOnly(
     ){
 
         return;
-
     }
 
 
@@ -5278,9 +4358,7 @@ function renderFilterValuesOnly(
 
 
     if(!container){
-
         return;
-
     }
 
 
@@ -5307,9 +4385,7 @@ function renderFilterValuesOnly(
         value => {
 
             if(!query){
-
                 return true;
-
             }
 
 
@@ -5320,6 +4396,11 @@ function renderFilterValuesOnly(
         }
     );
 
+
+    /*
+       Nếu chưa có filter:
+       coi như tất cả được chọn.
+    */
 
     const selected =
     filters[index] === undefined
@@ -5378,7 +4459,6 @@ function renderFilterValuesOnly(
 
                         current =
                         filters[index].slice();
-
                     }
 
 
@@ -5395,7 +4475,6 @@ function renderFilterValuesOnly(
                             current.push(
                                 value
                             );
-
                         }
 
                     }
@@ -5406,7 +4485,6 @@ function renderFilterValuesOnly(
                             item =>
                             item !== value
                         );
-
                     }
 
 
@@ -5416,10 +4494,22 @@ function renderFilterValuesOnly(
 
                     saveState();
 
+
+                    /*
+                       LỌC NGAY.
+                    */
+
                     renderBody();
+
 
                     updateHeaderStates();
 
+
+                    /*
+                       Không đóng menu.
+                       Cập nhật lại danh sách filter
+                       theo trạng thái mới.
+                    */
 
                     const savedSearch =
                     filterValueSearch;
@@ -5444,7 +4534,6 @@ function renderFilterValuesOnly(
 
                         searchInput.value =
                         savedSearch;
-
                     }
 
 
@@ -5494,7 +4583,6 @@ function renderFilterValuesOnly(
 
         }
     );
-
 }
 
 
@@ -5532,6 +4620,10 @@ function createSortSection(index){
         title
     );
 
+
+    /*
+       Helper sort info
+    */
 
     const originalHeader =
     headers[index];
@@ -5571,9 +4663,12 @@ function createSortSection(index){
         section.appendChild(
             info
         );
-
     }
 
+
+    /*
+       PRIORITY
+    */
 
     const priorityRow =
     document.createElement(
@@ -5605,6 +4700,10 @@ function createSortSection(index){
     "number";
 
 
+    /*
+       Cho số thập phân.
+    */
+
     priority.step =
     "any";
 
@@ -5619,7 +4718,6 @@ function createSortSection(index){
 
         priority.value =
         sorts[index].priority;
-
     }
 
 
@@ -5637,6 +4735,10 @@ function createSortSection(index){
         priorityRow
     );
 
+
+    /*
+       DIRECTION
+    */
 
     const directionRow =
     document.createElement(
@@ -5778,6 +4880,10 @@ function createSortSection(index){
     );
 
 
+    /*
+       BUTTONS
+    */
+
     const buttons =
     document.createElement(
         "div"
@@ -5811,7 +4917,6 @@ function createSortSection(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -5836,8 +4941,12 @@ function createSortSection(index){
 
                     sorts[index] = {
 
-                        priority:
-                            number,
+                        /*
+                           Giữ nguyên số user nhập
+                           dưới dạng number.
+                        */
+
+                        priority:number,
 
                         direction:
                         desc.checked
@@ -5847,15 +4956,21 @@ function createSortSection(index){
                     };
 
                 }
-
             }
 
 
             saveState();
 
+
             renderBody();
 
+
             updateHeaderStates();
+
+
+            /*
+               Cập nhật icon nhưng giữ menu.
+            */
 
             renderFilterMenu(
                 index
@@ -5884,7 +4999,6 @@ function createSortSection(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -5893,9 +5007,12 @@ function createSortSection(index){
 
             saveState();
 
+
             renderBody();
 
+
             updateHeaderStates();
+
 
             renderFilterMenu(
                 index
@@ -5921,7 +5038,6 @@ function createSortSection(index){
 
 
     return section;
-
 }
 
 
@@ -5965,6 +5081,10 @@ function createFormatSection(index){
         index
     );
 
+
+    /*
+       ALIGN
+    */
 
     const alignRow =
     document.createElement(
@@ -6040,6 +5160,10 @@ function createFormatSection(index){
         alignRow
     );
 
+
+    /*
+       FONT
+    */
 
     const fontRow =
     document.createElement(
@@ -6118,6 +5242,10 @@ function createFormatSection(index){
     );
 
 
+    /*
+       FONT SIZE
+    */
+
     const sizeRow =
     document.createElement(
         "div"
@@ -6174,6 +5302,10 @@ function createFormatSection(index){
         sizeRow
     );
 
+
+    /*
+       CHECKBOX
+    */
 
     const checks =
     document.createElement(
@@ -6301,6 +5433,10 @@ function createFormatSection(index){
     );
 
 
+    /*
+       TEXT COLOR
+    */
+
     const textColorRow =
     document.createElement(
         "div"
@@ -6355,6 +5491,10 @@ function createFormatSection(index){
         textColorRow
     );
 
+
+    /*
+       BACKGROUND
+    */
 
     const backgroundRow =
     document.createElement(
@@ -6411,6 +5551,10 @@ function createFormatSection(index){
     );
 
 
+    /*
+       APPLY
+    */
+
     const apply =
     document.createElement(
         "button"
@@ -6434,7 +5578,6 @@ function createFormatSection(index){
         event => {
 
             event.preventDefault();
-
             event.stopPropagation();
 
 
@@ -6471,6 +5614,12 @@ function createFormatSection(index){
 
             saveState();
 
+
+            /*
+               Chỉ body.
+               Không render header.
+            */
+
             renderBody();
 
             updateHeaderStates();
@@ -6485,7 +5634,6 @@ function createFormatSection(index){
 
 
     return section;
-
 }
 
 
@@ -6499,7 +5647,6 @@ function validColor(value){
         typeof value === "string" &&
         /^#[0-9a-fA-F]{6}$/.test(value)
     );
-
 }
 
 
@@ -6517,7 +5664,6 @@ function refreshOpenFilterMenu(
     ){
 
         return;
-
     }
 
 
@@ -6550,16 +5696,13 @@ function refreshOpenFilterMenu(
 
             input.value =
             oldSearch;
-
         }
 
 
         renderFilterValuesOnly(
             index
         );
-
     }
-
 }
 
 
@@ -6577,7 +5720,6 @@ function closeFilterMenu(){
 
         filterMenuElement =
         null;
-
     }
 
 
@@ -6587,7 +5729,6 @@ function closeFilterMenu(){
 
     filterValueSearch =
     "";
-
 }
 
 
@@ -6596,68 +5737,37 @@ function closeFilterMenu(){
 ========================================================= */
 
 function openRenamePrompt(index){
+    const original = headers[index];
+    const current = getDisplayHeader(original);
 
-    const original =
-    headers[index];
-
-
-    const current =
-    getDisplayHeader(
-        original
-    );
-
-
-    const newName =
-    prompt(
+    const newName = prompt(
         "Tên mới của cột:",
         current
     );
 
+    if(newName === null) return;
 
-    if(newName === null){
-
-        return;
-
-    }
-
-
-    const trimmed =
-    newName.trim();
-
+    const trimmed = newName.trim();
 
     if(trimmed === ""){
-
-        delete renamedHeaders[
-            original
-        ];
-
+        delete renamedHeaders[original];
     }
     else{
-
-        renamedHeaders[
-            original
-        ] =
-        trimmed;
-
+        renamedHeaders[original] = trimmed;
     }
 
-
+    // Nếu là REVENUE hoặc Kỳ thì
+    // luôn tính lại kích thước theo tên mới
     if(
         original === "REVENUE" ||
         original === "Kỳ"
     ){
-
         delete columnWidths[index];
-
     }
 
-
     saveState();
-
     renderTable();
-
 }
-
 
 /* =========================================================
    SETTINGS RENAME LIST
@@ -6679,7 +5789,6 @@ function renderRenameList(){
             ){
 
                 return;
-
             }
 
 
@@ -6755,7 +5864,6 @@ function renderRenameList(){
                             header
                         ] =
                         value;
-
                     }
 
                 }
@@ -6778,7 +5886,6 @@ function renderRenameList(){
 
         }
     );
-
 }
 
 
@@ -6796,18 +5903,33 @@ document
 
         freezeCountInput.value =
         freezeCount;
-
-
         updateToolbarFreezeCount();
-
         updateGlobalSearchUI();
+
+
+        /*
+           Nếu đã load dữ liệu.
+        */
 
         renderRenameList();
 
 
+        /*
+           Auto refresh.
+        */
+
+        if(
+            autoRefreshTimer
+        ){
+
+            /*
+               Không cần đọc ngược timer.
+            */
+        }
+
+
         settingsOverlay.style.display =
         "block";
-
     }
 );
 
@@ -6824,6 +5946,10 @@ document
     "click",
     () => {
 
+        /*
+           Freeze
+        */
+
         const requested =
         Number(
             freezeCountInput.value
@@ -6834,13 +5960,15 @@ document
         Math.max(
             0,
             Math.min(
-                Number.isFinite(requested)
-                    ? Math.floor(requested)
-                    : 6,
+                requested,
                 getVisibleHeaderIndexes().length
             )
         );
 
+
+        /*
+           Rename
+        */
 
         renameList
         .querySelectorAll(
@@ -6879,7 +6007,6 @@ document
                         original
                     ] =
                     value;
-
                 }
 
             }
@@ -6888,14 +6015,15 @@ document
 
         saveState();
 
+
         renderTable();
+
 
         setupAutoRefresh();
 
 
         settingsOverlay.style.display =
         "none";
-
     }
 );
 
@@ -6914,7 +6042,6 @@ document
 
         settingsOverlay.style.display =
         "none";
-
     }
 );
 
@@ -6930,9 +6057,7 @@ settingsOverlay.addEventListener(
 
             settingsOverlay.style.display =
             "none";
-
         }
-
     }
 );
 
@@ -6941,89 +6066,11 @@ settingsOverlay.addEventListener(
    FREEZE COLUMNS
 ========================================================= */
 
-function updateToolbarFreezeCount(){
-
-    if(!toolbarFreezeCount){
-
-        return;
-
-    }
-
-
-    toolbarFreezeCount.value =
-    Number(freezeCount) || 0;
-
-}
-
-
-toolbarFreezeCount.addEventListener(
-    "change",
-    () => {
-
-        let value =
-        Number(
-            toolbarFreezeCount.value
-        );
-
-
-        if(
-            !Number.isFinite(value)
-        ){
-
-            value = 6;
-
-        }
-
-
-        value =
-        Math.max(
-            0,
-            Math.min(
-                Math.floor(value),
-                getVisibleHeaderIndexes().length
-            )
-        );
-
-
-        freezeCount =
-        value;
-
-
-        toolbarFreezeCount.value =
-        value;
-
-
-        saveState();
-
-        applyFreezeColumns();
-
-    }
-);
-
-
-toolbarFreezeCount.addEventListener(
-    "keydown",
-    event => {
-
-        if(
-            event.key === "Enter"
-        ){
-
-            event.preventDefault();
-
-            toolbarFreezeCount.blur();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   APPLY FREEZE
-========================================================= */
-
 function applyFreezeColumns(){
+
+    /*
+       Xóa trạng thái cũ.
+    */
 
     document
     .querySelectorAll(
@@ -7068,7 +6115,6 @@ function applyFreezeColumns(){
     ){
 
         return;
-
     }
 
 
@@ -7113,13 +6159,17 @@ function applyFreezeColumns(){
                         cell.classList.add(
                             "frozen-last"
                         );
-
                     }
 
 
                     cell.style.left =
                     `${left}px`;
 
+
+                    /*
+                       Đảm bảo header có top
+                       độc lập với left.
+                    */
 
                     if(
                         cell.classList.contains(
@@ -7135,6 +6185,7 @@ function applyFreezeColumns(){
 
                     }
 
+
                     else if(
                         cell.classList.contains(
                             "search-cell"
@@ -7149,11 +6200,11 @@ function applyFreezeColumns(){
 
                     }
 
+
                     else{
 
                         cell.style.zIndex =
                         "100";
-
                     }
 
                 }
@@ -7161,10 +6212,8 @@ function applyFreezeColumns(){
 
 
             left += width;
-
         }
     );
-
 }
 
 
@@ -7196,7 +6245,6 @@ function startResize(
 
     document.body.style.userSelect =
     "none";
-
 }
 
 
@@ -7213,7 +6261,6 @@ document.addEventListener(
         ){
 
             return;
-
         }
 
 
@@ -7236,6 +6283,11 @@ document.addEventListener(
         width;
 
 
+        /*
+           Không render table.
+           Chỉ update width.
+        */
+
         document
         .querySelectorAll(
             `[data-column="${resizeState.index}"]`
@@ -7251,7 +6303,6 @@ document.addEventListener(
 
                 cell.style.maxWidth =
                 `${width}px`;
-
             }
         );
 
@@ -7275,7 +6326,6 @@ document.addEventListener(
         ){
 
             return;
-
         }
 
 
@@ -7307,28 +6357,15 @@ function resetUserState(){
 
     globalSearch = "";
 
-    clearTimeout(
-        aiSearchTimer
-    );
-
-    aiRequestId++;
-
-    aiQuery = "";
-
-    aiConditions = [];
-
-    aiSort = [];
-
-
     if(globalSearchInput){
-
-        globalSearchInput.value =
-        "";
-
+    globalSearchInput.value = "";
     }
 
-
     sorts = {};
+
+    /*
+       Giữ default filter.
+    */
 
     filters = {};
 
@@ -7338,12 +6375,11 @@ function resetUserState(){
 
     initializeDefaults();
 
+
     saveState();
 
+
     renderTable();
-
-    updateGlobalSearchUI();
-
 }
 
 
@@ -7360,7 +6396,6 @@ document
     async () => {
 
         await loadData();
-
     }
 );
 
@@ -7378,7 +6413,6 @@ document
     () => {
 
         resetUserState();
-
     }
 );
 
@@ -7400,7 +6434,6 @@ function setupAutoRefresh(){
 
         autoRefreshTimer =
         null;
-
     }
 
 
@@ -7415,7 +6448,6 @@ function setupAutoRefresh(){
     ){
 
         return;
-
     }
 
 
@@ -7430,7 +6462,6 @@ function setupAutoRefresh(){
         60 *
         1000
     );
-
 }
 
 
@@ -7443,7 +6474,6 @@ autoRefreshSelect.addEventListener(
     () => {
 
         setupAutoRefresh();
-
     }
 );
 
@@ -7461,7 +6491,6 @@ document.addEventListener(
         ){
 
             return;
-
         }
 
 
@@ -7472,7 +6501,6 @@ document.addEventListener(
         ){
 
             return;
-
         }
 
 
@@ -7483,7 +6511,6 @@ document.addEventListener(
         ){
 
             return;
-
         }
 
 
@@ -7510,9 +6537,7 @@ document.addEventListener(
 
             settingsOverlay.style.display =
             "none";
-
         }
-
     }
 );
 
@@ -7544,41 +6569,38 @@ window.addEventListener(
                 positionMenu(
                     header
                 );
-
             }
-
         }
-
     }
 );
 
-
-/* =========================================================
-   GLOBAL SEARCH UI
+    /* =========================================================
+   GLOBAL SEARCH
 ========================================================= */
 
+const globalSearchInput =
+document.getElementById(
+    "globalSearchInput"
+);
+
+const clearGlobalSearchBtn =
+document.getElementById(
+    "clearGlobalSearchBtn"
+);
+
+
+/*
+   Cập nhật trạng thái nút X.
+*/
 function updateGlobalSearchUI(){
 
     if(!globalSearchInput){
-
         return;
-
     }
 
 
-    /*
-       Nếu AI đang xử lý thì giữ nguyên
-       nội dung người dùng nhập.
-    */
-
-    if(
-        !aiSearching
-    ){
-
-        globalSearchInput.value =
-        globalSearch || "";
-
-    }
+    globalSearchInput.value =
+    globalSearch;
 
 
     if(
@@ -7597,163 +6619,28 @@ function updateGlobalSearchUI(){
         "none";
 
     }
-
 }
 
 
-/* =========================================================
-   GLOBAL SEARCH
-========================================================= */
-
-/* =========================================================
-   GLOBAL SEARCH - AI ENTER
-========================================================= */
-
-globalSearchInput.addEventListener(
-    "keydown",
-    event => {
-
-        if(
-            event.key !== "Enter"
-        ){
-
-            return;
-
-        }
-
-
-        const value =
-        globalSearchInput.value.trim();
-
-
-        if(
-            !value ||
-            !shouldUseAI(value)
-        ){
-
-            return;
-
-        }
-
-
-        event.preventDefault();
-
-
-        clearTimeout(
-            aiSearchTimer
-        );
-
-
-        aiRequestId++;
-
-        aiConditions = [];
-        aiSort = [];
-        aiQuery = "";
-
-
-        runAISearch(
-            value
-        );
-
-    }
-);
-
+/*
+   Nhập tìm kiếm.
+*/
+let globalSearchTimer = null;
 
 globalSearchInput.addEventListener(
     "input",
     () => {
 
-        const value =
+        globalSearch =
         globalSearchInput.value;
 
-
-        globalSearch =
-        value;
-
+        updateGlobalSearchUI();
 
         clearTimeout(
-            aiSearchTimer
+            globalSearchTimer
         );
 
-
-        /*
-           Nếu người dùng xóa hết.
-        */
-
-        if(
-            !value.trim()
-        ){
-
-            aiRequestId++;
-
-            aiQuery = "";
-
-            aiConditions = [];
-
-            aiSort = [];
-
-
-            saveState();
-
-            renderBody();
-
-            updateHeaderStates();
-
-            updateGlobalSearchUI();
-
-
-            if(
-                openFilterIndex !== null
-            ){
-
-                refreshOpenFilterMenu(
-                    true
-                );
-
-            }
-
-
-            statusEl.textContent =
-            `${rows.length.toLocaleString("vi-VN")} dòng`;
-
-            return;
-
-        }
-
-
-        /*
-           Câu hỏi AI KHÔNG tự động gửi khi đang gõ.
-           Người dùng nhấn Enter để gọi AI.
-
-           Trong lúc đang gõ, vẫn hiển thị kết quả tìm kiếm
-           thông thường để giao diện không bị đứng/chờ AI.
-        */
-
-        if(
-            shouldUseAI(value)
-        ){
-
-            statusEl.textContent =
-            "🤖 Câu hỏi AI • nhấn Enter để tìm";
-
-        }
-
-
-        /*
-           Từ khóa bình thường:
-           tìm trực tiếp.
-        */
-
-        aiRequestId++;
-
-        aiQuery = "";
-
-        aiConditions = [];
-
-        aiSort = [];
-
-
-        aiSearchTimer =
+        globalSearchTimer =
         setTimeout(
             () => {
 
@@ -7763,55 +6650,33 @@ globalSearchInput.addEventListener(
 
                 updateHeaderStates();
 
-
                 if(
                     openFilterIndex !== null
                 ){
-
                     refreshOpenFilterMenu(
                         true
                     );
-
                 }
 
             },
             250
         );
-
     }
 );
 
-
-/* =========================================================
-   CLEAR GLOBAL SEARCH
-========================================================= */
-
+/*
+   Xóa tìm kiếm.
+*/
 clearGlobalSearchBtn.addEventListener(
     "click",
     event => {
 
         event.preventDefault();
-
         event.stopPropagation();
-
-
-        clearTimeout(
-            aiSearchTimer
-        );
-
-
-        aiRequestId++;
 
 
         globalSearch =
         "";
-
-
-        aiQuery = "";
-
-        aiConditions = [];
-
-        aiSort = [];
 
 
         globalSearchInput.value =
@@ -7820,19 +6685,17 @@ clearGlobalSearchBtn.addEventListener(
 
         saveState();
 
+
         renderBody();
 
+
         updateHeaderStates();
+
 
         updateGlobalSearchUI();
 
 
-        statusEl.textContent =
-        `${rows.length.toLocaleString("vi-VN")} dòng`;
-
-
         globalSearchInput.focus();
-
     }
 );
 
@@ -7849,3 +6712,5 @@ loadData();
 
 </body>
 </html>
+
+
