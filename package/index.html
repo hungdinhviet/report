@@ -4754,11 +4754,33 @@ function renderFilterValuesOnly(
                 "label"
             );
 
+            let displayValue;
 
-            label.textContent =
-            value === ""
-                ? "(Trống)"
-                : value;
+if(
+    headers[index] === "Ngày update" &&
+    value !== ""
+){
+
+    displayValue =
+    displayDateRelative(
+        value
+    );
+
+}
+else{
+
+    displayValue =
+    value === ""
+        ? "(Trống)"
+        : value;
+
+}
+
+
+label.textContent =
+displayValue;
+
+
 
 
             label.addEventListener(
