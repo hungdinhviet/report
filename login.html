@@ -75,6 +75,7 @@ button.secondary{background:#222;color:#d4af37}
         <input id="otp" inputmode="numeric" maxlength="6"
                placeholder="Nhập OTP 6 số" autocomplete="one-time-code">
         <button id="verifyOtp">XÁC NHẬN OTP</button>
+        <button id="resendOtp" class="secondary">GỬI LẠI OTP</button>
         <button id="backBtn" class="secondary">ĐỔI EMAIL</button>
     </div>
 
@@ -122,6 +123,7 @@ const otpStep=document.getElementById("otpStep");
 const sendOtp=document.getElementById("sendOtp");
 const verifyOtp=document.getElementById("verifyOtp");
 const backBtn=document.getElementById("backBtn");
+const resendOtp=document.getElementById("resendOtp");
 
 sendOtp.addEventListener("click", async ()=>{
     const email=emailInput.value.trim().toLowerCase();
@@ -265,7 +267,64 @@ otpInput.addEventListener("keydown", (e) => {
         }
     }
 });
-    
+
+ // NHẤN ENTER Ở Ô OTP = XÁC NHẬN OTP
+otpInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        if (!verifyOtp.disabled) {
+            verifyOtp.click();
+        }
+    }
+});
+
+// GỬI LẠI OTP
+resendOtp.addEventListener("click", async () => {
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!validEmail(email)) {
+        showMessage("Email không hợp lệ. Vui lòng kiểm tra lại.", "error");
+        return;
+    }
+
+    resendOtp.disabled = true;
+    resendOtp.textContent = "ĐANG GỬI LẠI...";
+
+    try {
+        const data = await api({
+            action: "requestOtp",
+            email: email
+        });
+
+        if (!data.ok) {
+            showMessage(
+                data.message || "Không thể gửi lại OTP. Vui lòng thử lại.",
+                "error"
+            );
+            return;
+        }
+
+        otpInput.value = "";
+        otpInput.focus();
+
+        showMessage(
+            "Đã gửi OTP mới tới:\n" + email +
+            "\n\nMã OTP mới có hiệu lực trong 5 phút.",
+            "ok"
+        );
+
+    } catch (error) {
+        showMessage(
+            error.message || "Lỗi kết nối khi gửi lại OTP.",
+            "error"
+        );
+    } finally {
+        resendOtp.disabled = false;
+        resendOtp.textContent = "GỬI LẠI OTP";
+    }
+});
+</script>
+   
     
     
 </script>
