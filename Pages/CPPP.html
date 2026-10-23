@@ -188,7 +188,11 @@ body {
 <body>
 
 <header class="top">
-    <div class="brand">DINHVIETHUNG</div>
+    <a class="brand" href="../dashboard.html"
+       style="text-decoration:none;color:inherit;cursor:pointer;">
+        DINHVIETHUNG
+    </a>
+
     <nav class="navigation" aria-label="Điều hướng">
         <a class="nav-btn" href="Package.html">PACKAGE</a>
         <a class="nav-btn" href="Simcard.html">SIMCARD</a>
@@ -197,7 +201,6 @@ body {
 
     <div class="actions">
         <button class="btn" id="reloadBtn" type="button">↻ Tải lại</button>
-        <button class="btn" id="backBtn" type="button">← Dashboard</button>
     </div>
 </header>
 
@@ -269,10 +272,6 @@ function reloadDocument() {
     frame.src = documentUrl;
     lastRefresh = Date.now();
 }
-
-document.getElementById("backBtn").addEventListener("click", function () {
-    location.href = "../dashboard.html";
-});
 
 document.getElementById("reloadBtn").addEventListener("click", function () {
     reloadDocument();
