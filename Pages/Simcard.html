@@ -1,1 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link rel="icon" type="image/png" href="../favicon_2.png">
+
+<title>SIMCARD - DINHVIETHUNG</title>
+
+<style>
+/* =====================================================
+   GIAO DIỆN CHUNG
+   ===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* =====================================================
+   THANH TIÊU ĐỀ
+   ===================================================== */
+
+.top {
+    height: 54px;
+    min-height: 54px;
+    background: #111;
+    color: #d4af37;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    border-bottom: 1px solid #8e7628;
+    gap: 12px;
+    position: relative;
+    z-index: 20;
+}
+
+.brand {
+    font: 700 21px "Times New Roman", serif;
+    letter-spacing: .1em;
+    white-space: nowrap;
+}
+
+.page-title {
+    color: #ddd;
+    font-size: 14px;
+    margin-left: 12px;
+}
+
+.actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    background: transparent;
+    color: #d4af37;
+    border: 1px solid #8e7628;
+    padding: 7px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn:hover {
+    background: #2b2614;
+}
+
+/* =====================================================
+   KHU VỰC TÀI LIỆU
+   ===================================================== */
+
+.document-area {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    background: #e8e8e8;
+    overflow: hidden;
+}
+
+.document-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+    background: #fff;
+    z-index: 1;
+}
+
+/* =====================================================
+   WATERMARK DINHVIETHUNG
+   ===================================================== */
+
+.watermark-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.watermark-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transform: rotate(-28deg);
+
+    color: #8e7628;
+    opacity: 0.20;
+
+    font-family: "Times New Roman", serif;
+    font-size: clamp(12px, 1.5vw, 21px);
+    font-weight: bold;
+    letter-spacing: 2px;
+
+    white-space: nowrap;
+    text-align: center;
+    text-shadow: 0 0 1px rgba(255,255,255,0.2);
+}
+
+/* =====================================================
+   THÔNG BÁO KHI TẢI TÀI LIỆU
+   ===================================================== */
+
+.loading {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+    background: #f5f5f5;
+    color: #555;
+    text-align: center;
+    padding: 24px;
+
+    pointer-events: none;
+}
+
+.loading-title {
+    font-family: "Times New Roman", serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #8e7628;
+}
+
+.loading-note {
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 520px;
+}
+
+/* =====================================================
+   CHÂN TRANG
+   ===================================================== */
+
+.footer {
+    min-height: 28px;
+    background: #111;
+    color: #888;
+    border-top: 1px solid #333;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 12px;
+    font-size: 11px;
+
+    position: relative;
+    z-index: 20;
+}
+
+/* =====================================================
+   HẠN CHẾ CHỌN VĂN BẢN TRÊN TRANG BÊN NGOÀI IFRAME
+   ===================================================== */
+
+body,
+body * {
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-user-drag: none !important;
+}
+
+/* Cho phép nút thao tác bình thường */
+button {
+    cursor: pointer;
+}
+
+/* =====================================================
+   GIAO DIỆN ĐIỆN THOẠI
+   ===================================================== */
+
+@media (max-width: 600px) {
+    .top {
+        padding: 0 10px;
+        gap: 6px;
+    }
+
+    .brand {
+        font-size: 15px;
+        letter-spacing: .05em;
+    }
+
+    .page-title {
+        font-size: 12px;
+        margin-left: 2px;
+    }
+
+    .btn {
+        padding: 7px 8px;
+        font-size: 11px;
+    }
+
+    .actions {
+        gap: 5px;
+    }
+
+    .watermark-layer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(6, minmax(0, 1fr));
+    }
+
+    .watermark-item {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     THANH TIÊU ĐỀ
+     ===================================================== -->
+
+<header class="top">
+
+    <div class="brand">DINHVIETHUNG</div>
+
+    <div class="page-title">SIMCARD</div>
+
+    <div class="actions">
+
+        <button
+            class="btn"
+            id="reloadBtn"
+            type="button">
+            ↻ Tải lại
+        </button>
+
+        <button
+            class="btn"
+            id="backBtn"
+            type="button">
+            ← Dashboard
+        </button>
+
+    </div>
+
+</header>
+
+<!-- =====================================================
+     NỘI DUNG TÀI LIỆU
+     ===================================================== -->
+
+<main class="document-area">
+
+    <iframe
+        class="document-frame"
+        id="documentFrame"
+        title="Tài liệu SIMCARD"
+        src="https://docs.google.com/document/d/1R2k1RFY4VbpilXF0qgYz1_qgiJapBBfo/preview"
+        loading="eager"
+        allowfullscreen>
+    </iframe>
+
+    <!-- WATERMARK PHỦ TRÊN KHU VỰC TÀI LIỆU -->
+
+    <div
+        class="watermark-layer"
+        id="watermarkLayer"
+        aria-hidden="true">
+
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+
+    </div>
+
+    <!-- THÔNG BÁO TẢI -->
+
+    <div class="loading" id="loadingMessage">
+
+        <div class="loading-title">
+            DINHVIETHUNG
+        </div>
+
+        <div class="loading-note">
+            Đang mở tài liệu SIMCARD...<br>
+            Nếu tài liệu không hiển thị, liên hệ DINHVIETHUNG.
+        </div>
+
+    </div>
+
+</main>
+
+<footer class="footer">
+    DINHVIETHUNG · SIMCARD
+</footer>
+
+<script>
+"use strict";
+
+/* =====================================================
+   QUAY LẠI DASHBOARD
+   ===================================================== */
+
+document
+.getElementById("backBtn")
+.addEventListener("click", function () {
+
+    location.href = "../dashboard.html";
+
+});
+
+/* =====================================================
+   TẢI LẠI TÀI LIỆU
+   ===================================================== */
+
+document
+.getElementById("reloadBtn")
+.addEventListener("click", function () {
+
+    const frame =
+        document.getElementById("documentFrame");
+
+    document.getElementById(
+        "loadingMessage"
+    ).style.display = "flex";
+
+    frame.src =
+        "https://docs.google.com/document/d/1R2k1RFY4VbpilXF0qgYz1_qgiJapBBfo/preview";
+
+});
+
+/* =====================================================
+   ẨN THÔNG BÁO KHI IFRAME TẢI XONG
+   ===================================================== */
+
+document
+.getElementById("documentFrame")
+.addEventListener("load", function () {
+
+    document.getElementById(
+        "loadingMessage"
+    ).style.display = "none";
+
+});
+
+/* =====================================================
+   HẠN CHẾ CHUỘT PHẢI TRÊN TRANG BÊN NGOÀI IFRAME
+   ===================================================== */
+
+document.addEventListener(
+    "contextmenu",
+    function (e) {
+        e.preventDefault();
+    }
+);
+
+/* =====================================================
+   HẠN CHẾ COPY VÀ CUT TRÊN TRANG BÊN NGOÀI IFRAME
+   ===================================================== */
+
+document.addEventListener(
+    "copy",
+    function (e) {
+        e.preventDefault();
+    }
+);
+
+document.addEventListener(
+    "cut",
+    function (e) {
+        e.preventDefault();
+    }
+);
+
+/* =====================================================
+   HẠN CHẾ KÉO THẢ
+   ===================================================== */
+
+document.addEventListener(
+    "dragstart",
+    function (e) {
+        e.preventDefault();
+    }
+);
+
+/* =====================================================
+   HẠN CHẾ MỘT SỐ PHÍM TẮT THÔNG DỤNG
+   ===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function (e) {
+
+        const key = e.key.toLowerCase();
+
+        if (
+            (e.ctrlKey || e.metaKey) &&
+            ["c", "x", "u", "s", "p"].includes(key)
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+    },
+    true
+);
+</script>
+
+</body>
+</html>
