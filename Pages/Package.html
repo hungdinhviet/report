@@ -933,7 +933,92 @@ tbody td.frozen-column{
 /* Không cho kéo nội dung ô dữ liệu */
 #dataTable tbody td {
     -webkit-user-drag: none;
-}        
+}
+
+
+/* THANH TIÊU ĐỀ GIỐNG SIMCARD VÀ CPPP */
+.package-top {
+    min-height: 54px;
+    background: #111;
+    color: #d4af37;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 7px 14px;
+    border-bottom: 1px solid #8e7628;
+    gap: 10px;
+    position: relative;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+.package-top .brand {
+    font: 700 20px "Times New Roman", serif;
+    letter-spacing: .08em;
+    white-space: nowrap;
+    text-decoration: none;
+    color: inherit;
+}
+
+.package-top .navigation {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.package-top .nav-btn,
+.package-top .btn {
+    background: transparent;
+    color: #d4af37;
+    border: 1px solid #8e7628;
+    padding: 7px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.package-top .nav-btn:hover,
+.package-top .btn:hover {
+    background: #2b2614;
+}
+
+.package-top .nav-btn.active {
+    background: #d4af37;
+    color: #111;
+    font-weight: bold;
+}
+
+.package-top .actions {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+}
+
+@media (max-width: 700px) {
+    .package-top {
+        gap: 6px;
+        padding: 7px 8px;
+    }
+
+    .package-top .brand {
+        font-size: 15px;
+    }
+
+    .package-top .nav-btn,
+    .package-top .btn {
+        padding: 6px 7px;
+        font-size: 11px;
+    }
+
+    .package-top .actions {
+        margin-left: 0;
+    }
+}
+
+    
 </style>
 
 
