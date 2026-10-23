@@ -21,16 +21,19 @@ html,body{
     font-size:14px;
 }
 
-body{
-    background:#fff;
+body {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-#app{
-    position:relative;
-    width:100%;
-    height:calc(100vh - 54px);
-    overflow:hidden;
-    flex-shrink:0;
+#app {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
 /* =========================================================
@@ -936,92 +939,11 @@ tbody td.frozen-column{
     -webkit-user-drag: none;
 }
 
-
-/* THANH TIÊU ĐỀ GIỐNG SIMCARD VÀ CPPP */
-.package-top {
-    min-height: 54px;
-    background: #111;
-    color: #d4af37;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 7px 14px;
-    border-bottom: 1px solid #8e7628;
-    gap: 10px;
-    position: relative;
-    z-index: 20;
-    flex-shrink: 0;
-}
-
-.package-top .brand {
-    font: 700 20px "Times New Roman", serif;
-    letter-spacing: .08em;
-    white-space: nowrap;
-    text-decoration: none;
-    color: inherit;
-}
-
-.package-top .navigation {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.package-top .nav-btn,
-.package-top .btn {
-    background: transparent;
-    color: #d4af37;
-    border: 1px solid #8e7628;
-    padding: 7px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.package-top .nav-btn:hover,
-.package-top .btn:hover {
-    background: #2b2614;
-}
-
-.package-top .nav-btn.active {
-    background: #d4af37;
-    color: #111;
-    font-weight: bold;
-}
-
-.package-top .actions {
-    margin-left: auto;
-    display: flex;
-    gap: 6px;
-}
-
-@media (max-width: 700px) {
-    .package-top {
-        gap: 6px;
-        padding: 7px 8px;
-    }
-
-    .package-top .brand {
-        font-size: 15px;
-    }
-
-    .package-top .nav-btn,
-    .package-top .btn {
-        padding: 6px 7px;
-        font-size: 11px;
-    }
-
-    .package-top .actions {
-        margin-left: 0;
-    }
-}
 /* THANH TIÊU ĐỀ PACKAGE */
 header.package-top {
     width: 100%;
     min-height: 54px;
+    box-sizing: border-box;
     flex-shrink: 0;
     display: flex;
     flex-direction: row;
@@ -1064,6 +986,10 @@ header.package-top .nav-btn {
     white-space: nowrap;
 }
 
+header.package-top .nav-btn:hover {
+    background: #2b2614;
+}
+
 header.package-top .nav-btn.active {
     background: #d4af37;
     color: #111;
@@ -1084,8 +1010,7 @@ header.package-top .nav-btn.active {
         padding: 6px 7px;
         font-size: 11px;
     }
-}
-    
+} 
 </style>
 
 
