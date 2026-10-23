@@ -236,6 +236,38 @@ backBtn.addEventListener("click",()=>{
     document.getElementById("message").classList.add("hidden");
     emailInput.focus();
 });
+
+
+backBtn.addEventListener("click",()=>{
+    otpInput.value="";
+    otpStep.classList.add("hidden");
+    emailStep.classList.remove("hidden");
+    document.getElementById("message").classList.add("hidden");
+    emailInput.focus();
+});
+
+// NHẤN ENTER Ở Ô EMAIL = GỬI OTP
+emailInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        if (!sendOtp.disabled) {
+            sendOtp.click();
+        }
+    }
+});
+
+// NHẤN ENTER Ở Ô OTP = XÁC NHẬN OTP
+otpInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        if (!verifyOtp.disabled) {
+            verifyOtp.click();
+        }
+    }
+});
+    
+    
+    
 </script>
 </body>
 </html>
