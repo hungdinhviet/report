@@ -243,6 +243,22 @@ body {
 <script>
 "use strict";
 
+
+/* =========================================================
+   AUTH GUARD
+   Chưa có session thì chuyển về trang đăng nhập.
+   Giữ nguyên toàn bộ chức năng CPPP hiện tại.
+========================================================= */
+(function () {
+    const session =
+        localStorage.getItem("DINHVIETHUNG_SESSION") || "";
+
+    if (!session) {
+        window.location.replace("../login.html");
+    }
+})();
+
+
 const documentUrl =
     "https://docs.google.com/document/d/1R2k1RFY4VbpilXF0qgYz1_qgiJapBBfo/preview";
 
