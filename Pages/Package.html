@@ -28,8 +28,9 @@ body{
 #app{
     position:relative;
     width:100%;
-    height:100vh;
+    height:calc(100vh - 54px);
     overflow:hidden;
+    flex-shrink:0;
 }
 
 /* =========================================================
@@ -1017,7 +1018,73 @@ tbody td.frozen-column{
         margin-left: 0;
     }
 }
+/* THANH TIÊU ĐỀ PACKAGE */
+header.package-top {
+    width: 100%;
+    min-height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 7px 14px;
+    background: #111;
+    color: #d4af37;
+    border-bottom: 1px solid #8e7628;
+    position: relative;
+    z-index: 20000;
+}
 
+header.package-top .brand {
+    color: #d4af37;
+    text-decoration: none;
+    font: 700 20px "Times New Roman", serif;
+    letter-spacing: .08em;
+    white-space: nowrap;
+}
+
+header.package-top .navigation {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+header.package-top .nav-btn {
+    display: inline-block;
+    background: transparent;
+    color: #d4af37;
+    border: 1px solid #8e7628;
+    padding: 7px 10px;
+    border-radius: 3px;
+    font: 12px Arial, sans-serif;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+header.package-top .nav-btn.active {
+    background: #d4af37;
+    color: #111;
+    font-weight: bold;
+}
+
+@media (max-width: 700px) {
+    header.package-top {
+        gap: 6px;
+        padding: 7px 8px;
+    }
+
+    header.package-top .brand {
+        font-size: 15px;
+    }
+
+    header.package-top .nav-btn {
+        padding: 6px 7px;
+        font-size: 11px;
+    }
+}
     
 </style>
 
