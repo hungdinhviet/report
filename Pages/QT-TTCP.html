@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../favicon_2.png">
+<title>QT-TTCP - DINHVIETHUNG</title>
+
+<style>
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f5f5;
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.top {
+    min-height: 54px;
+    background: #111;
+    color: #d4af37;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 7px 14px;
+    border-bottom: 1px solid #8e7628;
+    gap: 10px;
+    position: relative;
+    z-index: 20;
+}
+
+.brand {
+    font: 700 20px "Times New Roman", serif;
+    letter-spacing: .08em;
+    white-space: nowrap;
+}
+
+.page-title {
+    color: #ddd;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.nav-btn, .btn {
+    background: transparent;
+    color: #d4af37;
+    border: 1px solid #8e7628;
+    padding: 7px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.nav-btn:hover, .btn:hover {
+    background: #2b2614;
+}
+
+.nav-btn.active {
+    background: #d4af37;
+    color: #111;
+    font-weight: bold;
+}
+
+.actions {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+}
+
+.document-area {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+    background: #e8e8e8;
+    overflow: hidden;
+}
+
+.document-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+    background: #fff;
+    z-index: 1;
+}
+
+.watermark-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+}
+
+.watermark-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-28deg);
+    color: #8e7628;
+    opacity: .20;
+    font-family: "Times New Roman", serif;
+    font-size: clamp(12px, 1.5vw, 21px);
+    font-weight: bold;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+.loading {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: #f5f5f5;
+    color: #555;
+    text-align: center;
+    padding: 24px;
+    pointer-events: none;
+}
+
+.loading-title {
+    font: bold 24px "Times New Roman", serif;
+    color: #8e7628;
+}
+
+.loading-note {
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 520px;
+}
+
+.footer {
+    min-height: 28px;
+    background: #111;
+    color: #888;
+    border-top: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 11px;
+}
+
+@media (max-width: 700px) {
+    .top { gap: 6px; padding: 7px 8px; }
+    .brand { font-size: 15px; }
+    .page-title { font-size: 11px; }
+    .nav-btn, .btn { padding: 6px 7px; font-size: 11px; }
+    .actions { margin-left: 0; }
+    .watermark-layer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(6, minmax(0, 1fr));
+    }
+    .watermark-item { font-size: 12px; letter-spacing: 1px; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+    <a class="brand" href="../dashboard.html"
+       style="text-decoration:none;color:inherit;cursor:pointer;">
+        DINHVIETHUNG
+    </a>
+
+    <nav class="navigation" aria-label="Điều hướng">
+        <a class="nav-btn" href="Package.html">PACKAGE</a>
+        <a class="nav-btn" href="Simcard.html">SIMCARD</a>
+        <a class="nav-btn" href="CPPP.html">CPPP</a>
+        <a class="nav-btn" href="CSPT.html">CSPT</a>
+        <a class="nav-btn active" href="QT-TTCP.html" aria-current="page">QT-TTCP</a>
+    </nav>
+
+    <div class="actions">
+        <button class="btn" id="reloadBtn" type="button">↻ Tải lại</button>
+    </div>
+</header>
+
+<main class="document-area">
+    <iframe
+        class="document-frame"
+        id="documentFrame"
+        title="Tài liệu CPPP"
+        src="https://docs.google.com/document/d/1x7QZzEnHkDxb0rYw1nfRBrudu3p10ShS/preview"
+        loading="eager"
+        allowfullscreen>
+    </iframe>
+
+    <div class="watermark-layer" aria-hidden="true">
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+        <div class="watermark-item">DINHVIETHUNG</div>
+    </div>
+
+    <div class="loading" id="loadingMessage">
+        <div class="loading-title">DINHVIETHUNG</div>
+        <div class="loading-note">
+            Đang mở tài liệu QT-TTCP...<br>
+            Nếu tài liệu không hiển thị, liên hệ DINHVIETHUNG.
+        </div>
+    </div>
+</main>
+
+<footer class="footer">DINHVIETHUNG · QT-TTCP</footer>
+
+<script>
+"use strict";
+/* =========================================================
+   AUTH GUARD
+   Chưa có session thì chuyển về trang đăng nhập.
+   Giữ nguyên toàn bộ chức năng QT-TTCP hiện tại.
+========================================================= */
+(function () {
+    const session =
+        localStorage.getItem("DINHVIETHUNG_SESSION") || "";
+
+    if (!session) {
+        window.location.replace("../login.html");
+    }
+})();
+
+const documentUrl =
+    "https://docs.google.com/document/d/1x7QZzEnHkDxb0rYw1nfRBrudu3p10ShS/preview";
+
+const frame = document.getElementById("documentFrame");
+const loading = document.getElementById("loadingMessage");
+
+let lastRefresh = Date.now();
+
+function reloadDocument() {
+    loading.style.display = "flex";
+    frame.src = documentUrl;
+    lastRefresh = Date.now();
+}
+
+document.getElementById("reloadBtn").addEventListener("click", function () {
+    reloadDocument();
+});
+
+frame.addEventListener("load", function () {
+    loading.style.display = "none";
+});
+
+/* Tự tải lại mỗi 60 giây */
+setInterval(function () {
+    reloadDocument();
+}, 60000);
+
+/* Tải lại khi quay về tab nếu đã quá 60 giây */
+document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && Date.now() - lastRefresh >= 60000) {
+        reloadDocument();
+    }
+});
+
+/* Hạn chế thao tác trên lớp giao diện bên ngoài iframe */
+document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("copy", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("cut", function (e) {
+    e.preventDefault();
+});
+
+document.addEventListener("dragstart", function (e) {
+    e.preventDefault();
+});
+</script>
+
+</body>
+</html>
+
